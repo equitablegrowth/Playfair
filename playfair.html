@@ -172,8 +172,8 @@
 							</div>
 							<div class="col-md-6">
 								<div class="input-group full-width">
-								  <span class="input-group-addon">Source:</span>
-								  <input type="text" class="form-control" placeholder="Where this data came from" id='source' onchange='isvalid()'>
+								  <span class="input-group-addon">Subhead:</span>
+								  <input type="text" class="form-control" placeholder="More detail about this great chart" id='dek' onchange='isvalid()'>
 								</div>
 							</div>
 						</div>
@@ -181,14 +181,29 @@
 						<div class='row'>
 							<div class="col-md-6">
 								<div class="input-group full-width">
-								  <span class="input-group-addon">Subhead:</span>
-								  <input type="text" class="form-control" placeholder="More detail about this great chart" id='dek' onchange='isvalid()'>
+								  <span class="input-group-addon">Source:</span>
+								  <input type="text" class="form-control" placeholder="Where this data came from" id='source' onchange='isvalid()'>
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="input-group full-width">
 								  <span class="input-group-addon">Note:</span>
 								  <input type="text" class="form-control" placeholder="Another thing you should know" id='note' onchange='isvalid()'>
+								</div>
+							</div>
+						</div>
+
+						<div class='row'>
+							<div class="col-md-6">
+								<div class="input-group full-width">
+								  <span class="input-group-addon">X label:</span>
+								  <input type="text" class="form-control" placeholder="A label for the x-axis" id='xlabel' onchange='isvalid()'>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="input-group full-width">
+								  <span class="input-group-addon">Y label:</span>
+								  <input type="text" class="form-control" placeholder="A label for the y-axis" id='ylabel' onchange='isvalid()'>
 								</div>
 							</div>
 						</div>
@@ -276,30 +291,6 @@
 								<label class='checkbox-inline active'><input type="checkbox" name="bartype" value="stacked">Stacked Bars</label>
 							</div>
 						</div>					
-					</div>
-				</div>
-			</div>
-
-			<div class="panel panel-custom">
-				<div class="panel-heading" role="tab" id="textelements">
-					<h5 class="panel-title"><a role="button" data-toggle="collapse" data-parent="#baraccordion" href="#textelements_c" aria-expanded="true" aria-controls="textelements_c">Text Elements</a></h5>
-				</div>
-				<div id="textelements_c" class="panel-collapse collapse" role="tabpanel" aria-labelledby="textelements">
-					<div class="panel-body">
-						<div class="row">
-							<div class='col-md-6'>
-								<div class="input-group">
-									<span class="input-group-addon">Y-axis:</span>
-									<input type="text" class="form-control" placeholder="">
-								</div>
-							</div>
-							<div class='col-md-6'>
-								<div class="input-group">
-									<span class="input-group-addon">X-axis:</span>
-									<input type="text" class="form-control" placeholder="">
-								</div>	
-							</div>
-						</div>			
 					</div>
 				</div>
 			</div>
@@ -711,10 +702,13 @@ function isvalid() {
 	group_var=$(".group_select").val()
 	facet_var=$(".facet_select").val()
 
+	// grab all text elements from the design tab
 	hed=$("#hed").val()
 	dek=$("#dek").val()
 	source=$("#source").val()
 	note=$("#note").val()
+	xlabel=$("#xlabel").val()
+	ylabel=$("#ylabel").val()
 
 	if (x_var!='none' && y_var!='none') {
 
@@ -732,13 +726,18 @@ function isvalid() {
 		// initialize styling, the header, and the footer. The footer loads an image (the logo)
 		// and so callouts after it need to be written as callbacks to the footer function.
 		chartobject.style()
+
+		// initialize axes
+		chartobject.xaxis(0,0,0,0,0,0,xlabel)
+		chartobject.yaxis(0,0,0,0,0,0,ylabel)
+
 		chartobject.header(hed,dek)
 		chartobject.footer(eglogo,source,note,function(){
 
 			// draw the initial graph, dependent on current value of graph_type
 			if (graph_type=='Bar Chart') {
 				console.log(chartobject)
-				chartobject.barchart('Vertical')
+				chartobject.barchart('vertical')
 			}
 
 		})
@@ -763,7 +762,6 @@ function edit_text(ev) {
 		active_element=selected_text
 		try{text_element_fill=selected_text.node.attributes.fill.value}
 		catch(err){text_element_fill='black'}
-		console.log(text_element_fill)
 
 		// highlight text with a box to visually indicate selection, change text color to white
 		coords=selected_text.getBBox()
@@ -820,7 +818,6 @@ var down_listener=function(ev) {
 	high_coords=high_box.getBBox()
 	var keycode = (ev.keyCode)
 	// up and down movement and font sizing
-	console.log(coords.y,coords.y+1)
 	if(keycode==40 && ev.shiftKey==false){selected_text.attr({y:coords.y+1});high_box.attr({y:high_coords.y+1})}
 	if(keycode==38 && ev.shiftKey==false){selected_text.attr({y:parseFloat(coords.y)-1});high_box.attr({y:high_coords.y-1})}
 	if(keycode==40 && ev.shiftKey==true){
@@ -907,7 +904,6 @@ var down_listener=function(ev) {
 // listener for text
 var press_listener=function(ev) {
 	var keycode = (ev.charCode)
-	// console.log(keycode,ev)
 	string=string+String.fromCharCode(keycode)
 	selected_text.node.textContent=string
 
