@@ -103,6 +103,7 @@
 		<li onclick=endpath(clickedevent)>End Path</li>
 		<hr>
 		<li onclick=addtext(clickedevent)>Add Text</li>
+		<hr>
 	</ul>
 	<ul id='colormenu'>
 		<li><span class='colorbox' style='background-color:#205946' onclick=change_color(clickedevent,'#205946')></span><span class='colorbox' style='background-color:#33836A' onclick=change_color(clickedevent,'#33836A')></span><span class='colorbox' style='background-color:#67c2a5' onclick=change_color(clickedevent,'#67c2a5')></span><span class='colorbox' style='background-color:#b7dfd1' onclick=change_color(clickedevent,'#b7dfd1')></span><span class='colorbox' style='background-color:#e2f2ed' onclick=change_color(clickedevent,'#e2f2ed')></span></span><span class='colorbox' style='background-color:#ffffff' onclick=change_color(clickedevent,'#ffffff')></span></li>
@@ -1050,7 +1051,21 @@ function change_color(target,color) {
 		var item=Snap(target)
 		item.attr({fill:color})	
 	}
-	
+}
+
+function labeldata(target) {
+	var item=Snap(target)
+	if(item.attr('data_type')=='bar'){
+		coords=item.getBBox()
+		if(item.attr('data_label')<0){
+			var datalabel=grapharea.text(coords.x+coords.width/2,coords.y2,item.attr('data_label')).attr({ident:'foot','font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'middle'})
+		} else{
+			var datalabel=grapharea.text(coords.x+coords.width/2,coords.y-parseInt(chartobject.datasize)*1.15,item.attr('data_label')).attr({ident:'foot','font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'middle'})
+		}
+	}
+	else {
+
+	}
 }
 
 ///////////////////// END CONTEXTUAL MENUS /////////////////////////////
