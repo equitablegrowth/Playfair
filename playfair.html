@@ -59,11 +59,13 @@
 	.panel-heading:hover {background:#0063cd;color:white;}
 	.vspace {margin-top:30;}
 	.unselectable {-webkit-touch-callout: none;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;}
-	.contextmenucontainer {display: none; position: fixed; border: 1px solid #c8c8c8;background: #f0f0f0; width:150px; z-index: 100;-webkit-border-radius: 3px;-khtml-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;box-shadow:0px 0px 12px #e0e0e0;opacity:.98}
+	.contextmenucontainer {display: none; position: fixed; border: 1px solid #c8c8c8;background: #f0f0f0; width:150px; z-index: 100;-webkit-border-radius: 3px;-khtml-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;box-shadow:0px 0px 12px rgba(176,176,176,.3);opacity:.98}
 	.contextmenucontainer .contextmenu {list-style: none; padding: 0px; margin-top:5px;margin-bottom:5px; font-size: 15px;}
 	.contextmenucontainer .contextmenu li {font-size: 14px; cursor: pointer; padding-top: 4px;padding-left: 10px;padding-bottom: 4px;font-family: Raleway;font-weight:600;}
 	.contextmenucontainer .contextmenu li:hover {color:white;background-color:#0063cd}
-	.contextmenucontainer .contextmenu .colors {padding:0px;margin:0px;font-size:0px;}
+	.contextmenucontainer #colormenu {padding:0px;margin:0px;font-size:0px;margin-top:5px;margin-bottom:5px;}
+	.contextmenucontainer #colormenu li {padding-left:10px;padding-bottom:4px;}
+	.contextmenucontainer #colormenu li:hover {color:white;background-color:#0063cd;opacity:1;}
 	.contextmenucontainer hr {border:0;background:#999;color:#999;height:1px;margin-top:3px;margin-bottom:3px}
 	.panel-heading {font-size:10px;}
 
@@ -85,6 +87,13 @@
 		<hr>
 		<li onclick=fadein(clickedevent)>Fade In</li>
 		<li onclick=fadeout(clickedevent)>Fade Out</li>
+		<hr>
+	</ul>
+	<ul id='colormenu'>
+		<li><span class='colorbox' style='background-color:#205946' onclick=change_color(clickedevent,'#205946')></span><span class='colorbox' style='background-color:#33836A' onclick=change_color(clickedevent,'#33836A')></span><span class='colorbox' style='background-color:#67c2a5' onclick=change_color(clickedevent,'#67c2a5')></span><span class='colorbox' style='background-color:#b7dfd1' onclick=change_color(clickedevent,'#b7dfd1')></span><span class='colorbox' style='background-color:#e2f2ed' onclick=change_color(clickedevent,'#e2f2ed')></span></span><span class='colorbox' style='background-color:#ffffff' onclick=change_color(clickedevent,'#ffffff')></span></li>
+		<li><span class='colorbox' style='background-color:#8e2a1d' onclick=change_color(clickedevent,'#8e2a1d')></span><span class='colorbox' style='background-color:#c63f26' onclick=change_color(clickedevent,'#c63f26')></span><span class='colorbox' style='background-color:#f58c63' onclick=change_color(clickedevent,'#f58c63')></span><span class='colorbox' style='background-color:#fbcdbb' onclick=change_color(clickedevent,'#fbcdbb')></span><span class='colorbox' style='background-color:#fef1eb' onclick=change_color(clickedevent,'#fef1eb')></span></span><span class='colorbox' style='background-color:#000000' onclick=change_color(clickedevent,'#000000')></span></li>
+		<li><span class='colorbox' style='background-color:#24385B' onclick=change_color(clickedevent,'#24385B')></span><span class='colorbox' style='background-color:#3F578C' onclick=change_color(clickedevent,'#3F578C')></span><span class='colorbox' style='background-color:#8c9fca' onclick=change_color(clickedevent,'#8c9fca')></span><span class='colorbox' style='background-color:#ccdaf0' onclick=change_color(clickedevent,'#ccdaf0')></span><span class='colorbox' style='background-color:#f1f3f9' onclick=change_color(clickedevent,'#f1f3f9')></span></span><span class='colorbox' style='background-color:#a3a3a3' onclick=change_color(clickedevent,'#a3a3a3')></span></li>
+		<li><span class='colorbox' style='background-color:#e78ac3' onclick=change_color(clickedevent,'#e78ac3')></span><span class='colorbox' style='background-color:#a6d854' onclick=change_color(clickedevent,'#a6d854')></span><span class='colorbox' style='background-color:#ffd92f' onclick=change_color(clickedevent,'#ffd92f')></span><span class='colorbox' style='background-color:#e5c494' onclick=change_color(clickedevent,'#e5c494')></span><span class='colorbox' style='background-color:#e3e3e3' onclick=change_color(clickedevent,'#e3e3e3')></span></span><span class='colorbox' style='background-color:#c3c3c3' onclick=change_color(clickedevent,'#c3c3c3')></span></li>
 	</ul>
 </div>
 
@@ -95,22 +104,28 @@
 		<hr>
 		<li onclick=addtext(clickedevent)>Add Text</li>
 	</ul>
+	<ul id='colormenu'>
+		<li><span class='colorbox' style='background-color:#205946' onclick=change_color(clickedevent,'#205946')></span><span class='colorbox' style='background-color:#33836A' onclick=change_color(clickedevent,'#33836A')></span><span class='colorbox' style='background-color:#67c2a5' onclick=change_color(clickedevent,'#67c2a5')></span><span class='colorbox' style='background-color:#b7dfd1' onclick=change_color(clickedevent,'#b7dfd1')></span><span class='colorbox' style='background-color:#e2f2ed' onclick=change_color(clickedevent,'#e2f2ed')></span></span><span class='colorbox' style='background-color:#ffffff' onclick=change_color(clickedevent,'#ffffff')></span></li>
+		<li><span class='colorbox' style='background-color:#8e2a1d' onclick=change_color(clickedevent,'#8e2a1d')></span><span class='colorbox' style='background-color:#c63f26' onclick=change_color(clickedevent,'#c63f26')></span><span class='colorbox' style='background-color:#f58c63' onclick=change_color(clickedevent,'#f58c63')></span><span class='colorbox' style='background-color:#fbcdbb' onclick=change_color(clickedevent,'#fbcdbb')></span><span class='colorbox' style='background-color:#fef1eb' onclick=change_color(clickedevent,'#fef1eb')></span></span><span class='colorbox' style='background-color:#000000' onclick=change_color(clickedevent,'#000000')></span></li>
+		<li><span class='colorbox' style='background-color:#24385B' onclick=change_color(clickedevent,'#24385B')></span><span class='colorbox' style='background-color:#3F578C' onclick=change_color(clickedevent,'#3F578C')></span><span class='colorbox' style='background-color:#8c9fca' onclick=change_color(clickedevent,'#8c9fca')></span><span class='colorbox' style='background-color:#ccdaf0' onclick=change_color(clickedevent,'#ccdaf0')></span><span class='colorbox' style='background-color:#f1f3f9' onclick=change_color(clickedevent,'#f1f3f9')></span></span><span class='colorbox' style='background-color:#a3a3a3' onclick=change_color(clickedevent,'#a3a3a3')></span></li>
+		<li><span class='colorbox' style='background-color:#e78ac3' onclick=change_color(clickedevent,'#e78ac3')></span><span class='colorbox' style='background-color:#a6d854' onclick=change_color(clickedevent,'#a6d854')></span><span class='colorbox' style='background-color:#ffd92f' onclick=change_color(clickedevent,'#ffd92f')></span><span class='colorbox' style='background-color:#e5c494' onclick=change_color(clickedevent,'#e5c494')></span><span class='colorbox' style='background-color:#e3e3e3' onclick=change_color(clickedevent,'#e3e3e3')></span></span><span class='colorbox' style='background-color:#c3c3c3' onclick=change_color(clickedevent,'#c3c3c3')></span></li>
+	</ul>
 </div>
 
 <div class="contextMenuContainer" id='data_context_menu'>
 	<ul class="contextMenu">
-		<div class='colors'>
-			<li><span class='colorbox' style='background-color:#205946' onclick=change_color('#205946')></span><span class='colorbox' style='background-color:#33836A' onclick=change_color('#33836A')></span><span class='colorbox' style='background-color:#67c2a5' onclick=change_color('#67c2a5')></span><span class='colorbox' style='background-color:#b7dfd1' onclick=change_color('#b7dfd1')></span><span class='colorbox' style='background-color:#e2f2ed' onclick=change_color('#e2f2ed')></span></span><span class='colorbox' style='background-color:#ffffff' onclick=change_color('#ffffff')></span></li>
-			<li><span class='colorbox' style='background-color:#8e2a1d' onclick=change_color('#8e2a1d')></span><span class='colorbox' style='background-color:#c63f26' onclick=change_color('#c63f26')></span><span class='colorbox' style='background-color:#f58c63' onclick=change_color('#f58c63')></span><span class='colorbox' style='background-color:#fbcdbb' onclick=change_color('#fbcdbb')></span><span class='colorbox' style='background-color:#fef1eb' onclick=change_color('#fef1eb')></span></span><span class='colorbox' style='background-color:#000000' onclick=change_color('#000000')></span></li>
-			<li><span class='colorbox' style='background-color:#24385B' onclick=change_color('#24385B')></span><span class='colorbox' style='background-color:#3F578C' onclick=change_color('#3F578C')></span><span class='colorbox' style='background-color:#8c9fca' onclick=change_color('#8c9fca')></span><span class='colorbox' style='background-color:#ccdaf0' onclick=change_color('#ccdaf0')></span><span class='colorbox' style='background-color:#f1f3f9' onclick=change_color('#f1f3f9')></span></span><span class='colorbox' style='background-color:#a3a3a3' onclick=change_color('#a3a3a3')></span></li>
-			<li><span class='colorbox' style='background-color:#e78ac3' onclick=change_color('#e78ac3')></span><span class='colorbox' style='background-color:#a6d854' onclick=change_color('#a6d854')></span><span class='colorbox' style='background-color:#ffd92f' onclick=change_color('#ffd92f')></span><span class='colorbox' style='background-color:#e5c494' onclick=change_color('#e5c494')></span><span class='colorbox' style='background-color:#e3e3e3' onclick=change_color('#e3e3e3')></span></span><span class='colorbox' style='background-color:#c3c3c3' onclick=change_color('#c3c3c3')></span></li>
-		</div>
-		<hr>
 		<li onclick=labeldata(clickedevent)>Label Data</li>
 		<li onclick=addtext(clickedevent)>Add Text</li>
 		<hr>
 		<li onclick=startpath(clickedevent)>Start Path</li>
 		<li onclick=endpath(clickedevent)>End Path</li>
+		<hr>
+	</ul>
+	<ul id='colormenu'>
+		<li><span class='colorbox' style='background-color:#205946' onclick=change_color(clickedevent,'#205946')></span><span class='colorbox' style='background-color:#33836A' onclick=change_color(clickedevent,'#33836A')></span><span class='colorbox' style='background-color:#67c2a5' onclick=change_color(clickedevent,'#67c2a5')></span><span class='colorbox' style='background-color:#b7dfd1' onclick=change_color(clickedevent,'#b7dfd1')></span><span class='colorbox' style='background-color:#e2f2ed' onclick=change_color(clickedevent,'#e2f2ed')></span></span><span class='colorbox' style='background-color:#ffffff' onclick=change_color(clickedevent,'#ffffff')></span></li>
+		<li><span class='colorbox' style='background-color:#8e2a1d' onclick=change_color(clickedevent,'#8e2a1d')></span><span class='colorbox' style='background-color:#c63f26' onclick=change_color(clickedevent,'#c63f26')></span><span class='colorbox' style='background-color:#f58c63' onclick=change_color(clickedevent,'#f58c63')></span><span class='colorbox' style='background-color:#fbcdbb' onclick=change_color(clickedevent,'#fbcdbb')></span><span class='colorbox' style='background-color:#fef1eb' onclick=change_color(clickedevent,'#fef1eb')></span></span><span class='colorbox' style='background-color:#000000' onclick=change_color(clickedevent,'#000000')></span></li>
+		<li><span class='colorbox' style='background-color:#24385B' onclick=change_color(clickedevent,'#24385B')></span><span class='colorbox' style='background-color:#3F578C' onclick=change_color(clickedevent,'#3F578C')></span><span class='colorbox' style='background-color:#8c9fca' onclick=change_color(clickedevent,'#8c9fca')></span><span class='colorbox' style='background-color:#ccdaf0' onclick=change_color(clickedevent,'#ccdaf0')></span><span class='colorbox' style='background-color:#f1f3f9' onclick=change_color(clickedevent,'#f1f3f9')></span></span><span class='colorbox' style='background-color:#a3a3a3' onclick=change_color(clickedevent,'#a3a3a3')></span></li>
+		<li><span class='colorbox' style='background-color:#e78ac3' onclick=change_color(clickedevent,'#e78ac3')></span><span class='colorbox' style='background-color:#a6d854' onclick=change_color(clickedevent,'#a6d854')></span><span class='colorbox' style='background-color:#ffd92f' onclick=change_color(clickedevent,'#ffd92f')></span><span class='colorbox' style='background-color:#e5c494' onclick=change_color(clickedevent,'#e5c494')></span><span class='colorbox' style='background-color:#e3e3e3' onclick=change_color(clickedevent,'#e3e3e3')></span></span><span class='colorbox' style='background-color:#c3c3c3' onclick=change_color(clickedevent,'#c3c3c3')></span></li>
 	</ul>
 </div>
 
@@ -474,10 +489,10 @@ $('.variable_select').selectpicker({dropupAuto:true});
 
 // Initial graph state
 function placeholder(){
-	var bounding_box=grapharea.rect(0,0,745,450).attr({fill:'none','stroke':'lightgray','stroke-width':5.5,'stroke-dasharray':'10,10'})
+	var bounding_box=grapharea.rect(0,0,745,450).attr({class:'background',fill:'none','stroke':'lightgray','stroke-width':5.5,'stroke-dasharray':'10,10'})
 	var x1=grapharea.line(0,0,745,450).attr({'stroke':'lightgray','stroke-width':2.75,'stroke-dasharray':'10,10'})
 	var x2=grapharea.line(0,450,745,0).attr({'stroke':'lightgray','stroke-width':2.75,'stroke-dasharray':'10,10'})
-	var init_text=grapharea.text(372.5,225,'graphing area').attr({'class':'dataelement','font-family':'Lato','font-size':50,'text-anchor':'middle','fill':'gray','font-weight':700,'dominant-baseline':'text-before-edge',cursor:'pointer'})
+	var init_text=grapharea.text(372.5,225,'graphing area').attr({'font-family':'Lato','font-size':50,'text-anchor':'middle','fill':'gray','font-weight':700,'dominant-baseline':'text-before-edge',cursor:'pointer'})
 	center_baseline(init_text)
 }
 
@@ -934,7 +949,7 @@ $(function() {
 	$(svgarea).on("contextmenu", function (e) {
 		if(doubleClicked == false) {
 			console.log(e.target.className)
-			if(e.target.nodeName=='BALLS'){
+			if(e.target.nodeName=='text'){
 				clickedevent=e.target
 				e.preventDefault();
 				$("#text_context_menu").css("left", e.clientX);
@@ -942,13 +957,14 @@ $(function() {
 				$("#text_context_menu").fadeIn(50, FocusContextOut());
 				doubleClicked = true;
 			} else if(e.target.className.baseVal=='dataelement'){
+				clickedevent=e.target
 				e.preventDefault();
 				$("#data_context_menu").css("left", e.clientX);
 				$("#data_context_menu").css("top", e.clientY);
 				$("#data_context_menu").fadeIn(50, FocusContextOut());
 				doubleClicked = true;
 			} else {
-				clickedevent=e
+				clickedevent=e.target
 				e.preventDefault();
 				$("#other_context_menu").css("left", e.clientX);
 				$("#other_context_menu").css("top", e.clientY);
@@ -1024,6 +1040,12 @@ function fadeout(target) {
 
 function addtext(target) {
 	var text=grapharea.text(target.offsetX,target.offsetY,'new text').attr({'font-family':'Lato','font-size':16,'text-anchor':'start','fill':'black','font-weight':400,'dominant-baseline':'text-before-edge',cursor:'pointer'})
+}
+
+function change_color(target,color) {
+	var item=Snap(target)
+	console.log(target,item,item.attr('fill'))
+	item.attr({fill:color})
 }
 
 ///////////////////// END CONTEXTUAL MENUS /////////////////////////////
