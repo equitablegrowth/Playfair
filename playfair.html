@@ -300,8 +300,8 @@
 								<div class="input-group"> <span class="input-group-addon pickvar">Category Values</span>
 									<select class="variable_select y_select" id='bar_select_values' data-width='100%' data-dropup-auto=false onchange=y_vars(this) disabled><option value='none'></option></select>
 								</div>
-								<div class="input-group"> <span class="input-group-addon pickvar">Group Variable</span>
-									<select class="variable_select" id='bar_select_grouping' data-width='100%' data-dropup-auto=false disabled><option value='none'></option></select>
+								<div class="input-group"> <span class="input-group-addon pickvar">Sub-Categories</span>
+									<select class="variable_select group_select" id='bar_select_grouping' data-width='100%' data-dropup-auto=false onchange=group_vars(this) disabled><option value='none'></option></select>
 								</div>
 							</div>
 							<div class='col-md-6'>
@@ -722,6 +722,7 @@ function isvalid() {
 	x_var=$(".x_select").val()
 	y_var=$(".y_select").val()
 	group_var=$(".group_select").val()
+	console.log(group_var)
 	facet_var=$(".facet_select").val()
 
 	// grab all text elements from the design tab
@@ -949,7 +950,6 @@ $(function() {
 	var doubleClicked = false;
 	$(svgarea).on("contextmenu", function (e) {
 		if(doubleClicked == false) {
-			console.log(e.target.className)
 			if(e.target.nodeName=='text'){
 				clickedevent=e.target
 				e.preventDefault();
@@ -1141,6 +1141,14 @@ function y_vars(select) {
 	var value = select.value; 
 	$(".y_select").val(value);
 	$(".y_select").selectpicker('refresh')
+	isvalid()
+}
+
+function group_vars(select) {
+	// When a y-variable is selected, update it across all graph types
+	var value = select.value; 
+	$(".group_select").val(value);
+	$(".group_select").selectpicker('refresh')
 	isvalid()
 }
 
