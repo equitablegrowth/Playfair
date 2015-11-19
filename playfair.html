@@ -236,7 +236,7 @@
 
 			<div class="panel panel-custom">
 				<div class="panel-heading" role="tab" id="designstyling">
-					<h5 class="panel-title"><a role="button" data-toggle="collapse" data-parent="#designaccordion" href="#designstyling_c" aria-expanded="false" aria-controls="designstyling_c">Styling</a></h5>
+					<h5 class="panel-title"><a role="button" data-toggle="collapse" data-parent="#designaccordion" href="#designstyling_c" aria-expanded="false" aria-controls="designstyling_c">Overall Style</a></h5>
 				</div>
 				<div id="designstyling_c" class="panel-collapse collapse" role="tabpanel" aria-labelledby="designstyling_c">
 					<div class="panel-body">
@@ -271,6 +271,25 @@
 								<label class='radio-inline active'><input type="radio" name="key" value="topkey" checked>Top</label>
 								<label class='radio-inline'><input type="radio" name="key" value="rightkey">Right</label>
 								<label class='radio-inline'><input type="radio" name="key" value="floatkey">Float</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="panel panel-custom">
+				<div class="panel-heading" role="tab" id="barstyling">
+					<h5 class="panel-title"><a role="button" data-toggle="collapse" data-parent="#designaccordion" href="#designgrid_c" aria-expanded="true" aria-controls="designgrid_c">Grid Style</a></h5>
+				</div>
+				<div id="designgrid_c" class="panel-collapse collapse" role="tabpanel" aria-labelledby="designgrid_c">
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-4">
+								<label class='checkbox-inline'><input type="checkbox" class='text-right' id="xgrid" data-toggle="toggle" data-size='mini'></label>&nbsp X gridlines<br>
+								<label class='checkbox-inline'><input type="checkbox" class='text-right' id="ygrid" data-toggle="toggle" data-size='mini' checked></label>&nbsp Y gridlines
+							</div>
+							<div class="col-md-4">
+								<label class='checkbox-inline'><input type="checkbox" class='text-right' id="xminorgrid" data-toggle="toggle" data-size='mini'></label>&nbsp X minor gridlines<br>
+								<label class='checkbox-inline'><input type="checkbox" class='text-right' id="yminorgrid" data-toggle="toggle" data-size='mini'></label>&nbsp Y minor gridlines
 							</div>
 						</div>
 					</div>
@@ -320,23 +339,13 @@
 
 			<div class="panel panel-custom">
 				<div class="panel-heading" role="tab" id="barstyling">
-					<h5 class="panel-title"><a role="button" data-toggle="collapse" data-parent="#baraccordion" href="#barstyling_c" aria-expanded="true" aria-controls="barstyling_c">Styling</a></h5>
+					<h5 class="panel-title"><a role="button" data-toggle="collapse" data-parent="#baraccordion" href="#barstyling_c" aria-expanded="true" aria-controls="barstyling_c">Bar Chart Specific Style</a></h5>
 				</div>
 				<div id="barstyling_c" class="panel-collapse collapse" role="tabpanel" aria-labelledby="barstyling_c">
 					<div class="panel-body">
 						<div class="row">
 							<div class="col-md-12">
 								<input type="checkbox" id="spacing" data-toggle="toggle" data-size='mini' checked></label>&nbsp Space between bars<label class='checkbox-inline'>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-md-4 botrow">
-								<label class='checkbox-inline'><input type="checkbox" class='text-right' id="spacing" data-toggle="toggle" data-size='mini'></label>&nbsp X gridlines<br>
-								<label class='checkbox-inline'><input type="checkbox" class='text-right' id="spacing" data-toggle="toggle" data-size='mini' checked></label>&nbsp Y gridlines
-							</div>
-							<div class="col-md-4 botrow">
-								<label class='checkbox-inline'><input type="checkbox" class='text-right' id="spacing" data-toggle="toggle" data-size='mini'></label>&nbsp X minor gridlines<br>
-								<label class='checkbox-inline'><input type="checkbox" class='text-right' id="spacing" data-toggle="toggle" data-size='mini'></label>&nbsp Y minor gridlines
 							</div>
 						</div>
 					</div>
@@ -740,7 +749,6 @@ function isvalid() {
 	x_var=$(".x_select").val()
 	y_var=$(".y_select").val()
 	group_var=$(".group_select").val()
-	console.log(group_var)
 	facet_var=$(".facet_select").val()
 
 	// grab all text elements from the design tab
@@ -767,6 +775,25 @@ function isvalid() {
 		// initialize styling, the header, and the footer. The footer loads an image (the logo)
 		// and so callouts after it need to be written as callbacks to the footer function.
 		chartobject.style()
+
+		// get state of all UI style toggles and apply to style of graph
+		// grids
+		xgrid=document.getElementById('xgrid').checked
+		ygrid=document.getElementById('ygrid').checked
+		xminorgrid=document.getElementById('xminorgrid').checked
+		yminorgrid=document.getElementById('yminorgrid').checked
+
+		style={}
+
+		grids=[xgrid,ygrid,xminorgrid,yminorgrid]
+		attributes=['xgrid_opacity','ygrid_opacity','xgrid_minoropacity','ygrid_minoropacity']
+		for(var i=0;i<grids.length;i++){
+			if(grids[i]==true){style[attributes[i]]=1}
+			else{console.log('check',attributes[i]);style[attributes[i]]=0}
+		}
+
+		// now apply the style object
+		chartobject.style(style)
 
 		// initialize axes
 		chartobject.xaxis(0,0,0,0,0,0,xlabel)
