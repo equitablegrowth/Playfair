@@ -29,6 +29,7 @@
 	textarea {margin-top:0px;resize:none;display:block;margin-right:auto;margin-left:auto;width:100%;padding:8px;border:1px solid #cccccc;font-family:"Courier";font-size:90%;}
 	hr {border-width:1px;border-color:#dddddd;margin-top:27;}
 	a {color:#0063cd;}
+	.toggle {margin-bottom:2px;margin-top:2px;}
 	svg text {-moz-user-select: none;-ms-user-select: none;-khtml-user-select: none;-webkit-user-select: none;-webkit-touch-callout: none}
 
 	.container {margin-top:50px;margin-bottom:70px;}
@@ -189,13 +190,13 @@
 							<div class="col-md-6">
 								<div class="input-group full-width">
 								  <span class="input-group-addon">Headline:</span>
-								  <input type="text" class="form-control" placeholder="A Great Chart" id='hed' onchange='isvalid()'>
+								  <input type="text" class="form-control" placeholder="A Great Chart" id='hed'>
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="input-group full-width">
 								  <span class="input-group-addon">Subhead:</span>
-								  <input type="text" class="form-control" placeholder="More detail about this great chart" id='dek' onchange='isvalid()'>
+								  <input type="text" class="form-control" placeholder="More detail about this great chart" id='dek'>
 								</div>
 							</div>
 						</div>
@@ -204,13 +205,13 @@
 							<div class="col-md-6">
 								<div class="input-group full-width">
 								  <span class="input-group-addon">Source:</span>
-								  <input type="text" class="form-control" placeholder="Where this data came from" id='source' onchange='isvalid()'>
+								  <input type="text" class="form-control" placeholder="Where this data came from" id='source'>
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="input-group full-width">
 								  <span class="input-group-addon">Note:</span>
-								  <input type="text" class="form-control" placeholder="Another thing you should know" id='note' onchange='isvalid()'>
+								  <input type="text" class="form-control" placeholder="Another thing you should know" id='note'>
 								</div>
 							</div>
 						</div>
@@ -219,13 +220,13 @@
 							<div class="col-md-6">
 								<div class="input-group full-width">
 								  <span class="input-group-addon">X label:</span>
-								  <input type="text" class="form-control" placeholder="A label for the x-axis" id='xlabel' onchange='isvalid()'>
+								  <input type="text" class="form-control" placeholder="A label for the x-axis" id='xlabel'>
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="input-group full-width">
 								  <span class="input-group-addon">Y label:</span>
-								  <input type="text" class="form-control" placeholder="A label for the y-axis" id='ylabel' onchange='isvalid()'>
+								  <input type="text" class="form-control" placeholder="A label for the y-axis" id='ylabel'>
 								</div>
 							</div>
 						</div>
@@ -269,6 +270,7 @@
 								<label class='radio-inline'><input type="radio" name="key" value="nokey">None</label>
 								<label class='radio-inline active'><input type="radio" name="key" value="topkey" checked>Top</label>
 								<label class='radio-inline'><input type="radio" name="key" value="rightkey">Right</label>
+								<label class='radio-inline'><input type="radio" name="key" value="floatkey">Float</label>
 							</div>
 						</div>
 					</div>
@@ -322,9 +324,21 @@
 				</div>
 				<div id="barstyling_c" class="panel-collapse collapse" role="tabpanel" aria-labelledby="barstyling_c">
 					<div class="panel-body">
-						<h3>Space between bars &nbsp&nbsp<label class='checkbox-inline'><input type="checkbox" id="spacing" data-toggle="toggle" data-size='mini' checked></label></h3>
-						<h3>X-gridlines &nbsp&nbsp<label class='checkbox-inline'><input type="checkbox" class='text-right' id="spacing" data-toggle="toggle" data-size='mini'></label></h3>
-						<h3>Y-gridlines &nbsp&nbsp<label class='checkbox-inline'><input type="checkbox" class='text-right' id="spacing" data-toggle="toggle" data-size='mini' checked></label></h3>
+						<div class="row">
+							<div class="col-md-12">
+								<input type="checkbox" id="spacing" data-toggle="toggle" data-size='mini' checked></label>&nbsp Space between bars<label class='checkbox-inline'>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-4 botrow">
+								<label class='checkbox-inline'><input type="checkbox" class='text-right' id="spacing" data-toggle="toggle" data-size='mini'></label>&nbsp X gridlines<br>
+								<label class='checkbox-inline'><input type="checkbox" class='text-right' id="spacing" data-toggle="toggle" data-size='mini' checked></label>&nbsp Y gridlines
+							</div>
+							<div class="col-md-4 botrow">
+								<label class='checkbox-inline'><input type="checkbox" class='text-right' id="spacing" data-toggle="toggle" data-size='mini'></label>&nbsp X minor gridlines<br>
+								<label class='checkbox-inline'><input type="checkbox" class='text-right' id="spacing" data-toggle="toggle" data-size='mini'></label>&nbsp Y minor gridlines
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -406,7 +420,12 @@
 
 </div>
 <hr>
+
 <div class='text-center' id='graphdiv'>
+
+<button type="button" title='Reset the interactive' class="btn btn-default btn" onclick='isvalid()'>
+	<span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Draw/refresh graph
+</button><br><br>
 
 <svg id='grapharea' width='745px' height='450px'>
 	<defs>
@@ -1104,10 +1123,11 @@ function savesettings() {
 // This section contains playfair interface functions that do not merit
 // their own section and are not part of the graphic package itself.
 
-$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-  // run isvalid whenever tab is changed
-  isvalid()
-})
+// $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+//   // run isvalid whenever tab is changed
+//   // turns out this is a pretty bad interface idea - disabled for now
+//   isvalid()
+// })
 
 function hidedata() {
 	// Hide the data and alert boxes when requested by hidebutton
@@ -1132,7 +1152,7 @@ function x_vars(select) {
 	var value = select.value; 
 	$(".x_select").val(value);
 	$(".x_select").selectpicker('refresh')
-	isvalid()
+	// isvalid()
 }
 
 function y_vars(select) {
@@ -1140,7 +1160,7 @@ function y_vars(select) {
 	var value = select.value; 
 	$(".y_select").val(value);
 	$(".y_select").selectpicker('refresh')
-	isvalid()
+	// isvalid()
 }
 
 function group_vars(select) {
@@ -1148,7 +1168,7 @@ function group_vars(select) {
 	var value = select.value; 
 	$(".group_select").val(value);
 	$(".group_select").selectpicker('refresh')
-	isvalid()
+	// isvalid()
 }
 
 $('.panel-custom').on('show.bs.collapse', function () {
