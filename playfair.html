@@ -789,7 +789,6 @@ function isvalid() {
 		attributes=['xgrid_opacity','ygrid_opacity','xgrid_minoropacity','ygrid_minoropacity']
 		for(var i=0;i<grids.length;i++){
 			if(grids[i]==true){style[attributes[i]]=1}
-			else{console.log('check',attributes[i]);style[attributes[i]]=0}
 		}
 
 		// now apply the style object
@@ -1092,9 +1091,21 @@ function change_color(target,color) {
 	if(target.nodeName=='line'){
 		var item=Snap(target)
 		item.attr({stroke:color})	
+		if(item.attr('ident')=='key'){
+			console.log('check')
+			group=item.attr('group')
+			snapobj.selectAll("[group="+group+"]").attr({fill:color})
+			console.log(snapobj.selectAll("[group="+group+"]"))
+		}
 	} else{
 		var item=Snap(target)
 		item.attr({fill:color})	
+		if(item.attr('ident')=='key'){
+			console.log('check')
+			group=item.attr('group')
+			snapobj.selectAll("[group="+group+"]").attr({fill:color})
+			console.log(snapobj.selectAll("[group="+group+"]"))
+		}
 	}
 }
 
