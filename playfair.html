@@ -29,10 +29,10 @@
 	textarea {margin-top:0px;resize:none;display:block;margin-right:auto;margin-left:auto;width:100%;padding:8px;border:1px solid #cccccc;font-family:"Courier";font-size:90%;}
 	hr {border-width:1px;border-color:#dddddd;margin-top:27;}
 	a {color:#0063cd;}
-	.toggle {margin-bottom:2px;margin-top:2px;}
 	svg text {-moz-user-select: none;-ms-user-select: none;-khtml-user-select: none;-webkit-user-select: none;-webkit-touch-callout: none}
 	text { -webkit-font-smoothing: subpixel-antialiased; }
 
+	.toggle {margin-bottom:2px;margin-top:2px;}
 	.container {margin-top:50px;margin-bottom:70px;}
 	.topel {margin-top:7px;}
 	.nav-tabs {margin-top:10px;}
@@ -70,6 +70,10 @@
 	.contextmenucontainer #colormenu li:hover {color:white;background-color:#0063cd;opacity:1;}
 	.contextmenucontainer hr {border:0;background:#999;color:#999;height:1px;margin-top:3px;margin-bottom:3px}
 	.panel-heading {font-size:10px;}
+	.pointtriangle {width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:12px solid black;display:inline-block;vertical-align:middle}
+	.pointcircle {width:12px;height:12px;background:black;border:2px solid black;-webkit-border-radius:6px;border-radius:6px;display:inline-block;vertical-align:middle}
+	.pointsquare {width:12px;height:12px;background:black;border:2px solid black;display:inline-block;vertical-align:middle;}
+	.dead{width:0px;height:12px;background:white;border:0px solid white;display:inline-block;vertical-align:middle}
 
 	#bad_data{display:none;}
 	#png_save{display:none;}
@@ -392,17 +396,17 @@
 
 			<div class="panel panel-custom">
 				<div class="panel-heading" role="tab" id="linestyling">
-					<h5 class="panel-title"><a role="button" data-toggle="collapse" data-parent="#lineaccordion" href="#linestyling_c" aria-expanded="true" aria-controls="linestyling_c">Bar Chart Specific Style</a></h5>
+					<h5 class="panel-title"><a role="button" data-toggle="collapse" data-parent="#lineaccordion" href="#linestyling_c" aria-expanded="true" aria-controls="linestyling_c">Line Chart Specific Style</a></h5>
 				</div>
 				<div id="linestyling_c" class="panel-collapse collapse" role="tabpanel" aria-labelledby="linestyling_c">
 					<div class="panel-body">
 						<div class="row">
 							<div class="col-md-12">
 								<h3>Label Points</h3>
-								<label class='radio-inline'><input type="radio" name="key" value="none">None</label>
-								<label class='radio-inline active'><input type="radio" name="key" value="top" checked>Top</label>
-								<label class='radio-inline'><input type="radio" name="key" value="right" disabled>Right</label>
-								<label class='radio-inline'><input type="radio" name="key" value="float">Float</label>							
+								<label class='radio-inline'><input type="radio" name="linepoint" value="none" checked><span class='pointcircle'></span></label>
+								<label class='radio-inline'><input type="radio" name="linepoint" value="top" checked><span class='pointsquare'></span></label>
+								<label class='radio-inline'><input type="radio" name="linepoint" value="right" disabled><span class='pointtriangle'></span></label>
+								<label class='radio-inline'><input type="radio" name="linepoint" value="float"><span class='dead'></span>By Group</label>							
 							</div>
 						</div>
 					</div>
