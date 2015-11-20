@@ -23,7 +23,7 @@
 
 	h1 {font-family:Lancelot;font-size:50;margin:0;line-height:75%;}
 	h4 {font-family:Raleway;font-weight:300;margin-bottom:30;}
-	h3 {font-size:15px;margin-top:11px;margin-bottom:5px;font-family:Raleway;font-weight:500;}
+	h3 {font-size:15px;margin-top:0px;margin-bottom:5px;font-family:Raleway;font-weight:500;}
 	h5 {font-size:24px;font-family:Raleway;font-weight:500;fill:'white';}
 	body {font-family:"Open Sans";-webkit-font-smoothing: antialiased}
 	textarea {margin-top:0px;resize:none;display:block;margin-right:auto;margin-left:auto;width:100%;padding:8px;border:1px solid #cccccc;font-family:"Courier";font-size:90%;}
@@ -31,6 +31,7 @@
 	a {color:#0063cd;}
 	.toggle {margin-bottom:2px;margin-top:2px;}
 	svg text {-moz-user-select: none;-ms-user-select: none;-khtml-user-select: none;-webkit-user-select: none;-webkit-touch-callout: none}
+	text { -webkit-font-smoothing: subpixel-antialiased; }
 
 	.container {margin-top:50px;margin-bottom:70px;}
 	.topel {margin-top:7px;}
@@ -244,13 +245,13 @@
 							<div class="col-md-6 botrow">
 								<h3>Theme</h3>
 								<div class='select'>
-								<select class="selectpicker" id='theme' data-width='300px' data-dropup-auto=false>
+								<select class="selectpicker" id='theme' data-width='300px' data-dropup-auto=false disabled>
 									<option value='standard'>Standard (White on Gray)</option>
 									<option value='bw'>Black on White</option>
 								</select>
-								</div>
+								</div><br>
 								<h3>Logo</h3>
-								<label class='radio-inline'><input type="radio" name="logo" value="nologo">None</label>
+								<label class='radio-inline'><input type="radio" name="logo" value="nologo" disabled>None</label>
 								<!-- <label class='radio-inline'><input type="radio" name="logo" value="trlogo">Top-right</label> -->
 								<label class='radio-inline'><input type="radio" name="logo" value="brlogo" checked>Bottom-right</label>
 							</div>
@@ -258,19 +259,19 @@
 							<div class="col-md-6">
 							<h3>Size</h3>
 								<div class='select'>
-								<select class="selectpicker" id='sector1' data-width='300px' data-dropup-auto=false>
+								<select class="selectpicker" id='sector1' data-width='300px' data-dropup-auto=false disabled>
 									<option value='standard'>Standard (rectangular)</option>
 									<option value='square'>Square</option>
 									<option value='tall'>Tall</option>
 									<option value='wide'>Wide</option>
 									<option value='custom'>Custom</option>
 								</select>
-								</div>
+								</div><br>
 								<h3>Key</h3>
-								<label class='radio-inline'><input type="radio" name="key" value="nokey">None</label>
-								<label class='radio-inline active'><input type="radio" name="key" value="topkey" checked>Top</label>
-								<label class='radio-inline'><input type="radio" name="key" value="rightkey">Right</label>
-								<label class='radio-inline'><input type="radio" name="key" value="floatkey">Float</label>
+								<label class='radio-inline'><input type="radio" name="key" value="none">None</label>
+								<label class='radio-inline active'><input type="radio" name="key" value="top" checked>Top</label>
+								<label class='radio-inline'><input type="radio" name="key" value="right" disabled>Right</label>
+								<label class='radio-inline'><input type="radio" name="key" value="float">Float</label>
 							</div>
 						</div>
 					</div>
@@ -313,24 +314,18 @@
 					<div class="panel-body">
 						<div class='row'>
 							<div class='col-md-6'>
-								<h3>Variables</h3>
 								<div class="input-group"> <span class="input-group-addon pickvar">Bar Categories</span>
 									<select class="variable_select x_select" id='bar_select_category' data-width='100%' data-dropup-auto=false onchange=x_vars(this) disabled><option value='none'></option></select>
 								</div>
 								<div class="input-group"> <span class="input-group-addon pickvar">Category Values</span>
 									<select class="variable_select y_select" id='bar_select_values' data-width='100%' data-dropup-auto=false onchange=y_vars(this) disabled><option value='none'></option></select>
 								</div>
-								<div class="input-group"> <span class="input-group-addon pickvar">Sub-Categories</span>
-									<select class="variable_select group_select" id='bar_select_grouping' data-width='100%' data-dropup-auto=false onchange=group_vars(this) disabled><option value='none'></option></select>
-								</div>
+
 							</div>
 							<div class='col-md-6'>
-								<h3>Orientation</h3>
-								<label class='radio-inline active'><input type="radio" name="barorient" value="vertical" checked>Vertical</label>
-								<label class='radio-inline active'><input type="radio" name="barorient" value="horizontal">Horizontal</label>
-								<h3>Chart Type</h3>
-								<!-- <label class='checkbox-inline active'><input type="checkbox" name="bartype" value="grouped">Grouped Bars</label> -->
-								<label class='checkbox-inline active'><input type="checkbox" name="bartype" value="stacked">Stacked Bars</label>
+								<div class="input-group"> <span class="input-group-addon pickvar">Sub-Categories</span>
+									<select class="variable_select group_select" id='bar_select_grouping' data-width='100%' data-dropup-auto=false onchange=group_vars(this) disabled><option value='none'></option></select>
+								</div>							
 							</div>
 						</div>					
 					</div>
@@ -344,7 +339,16 @@
 				<div id="barstyling_c" class="panel-collapse collapse" role="tabpanel" aria-labelledby="barstyling_c">
 					<div class="panel-body">
 						<div class="row">
-							<div class="col-md-12">
+							<div class="col-md-6">
+								<h3>Orientation</h3>
+								<label class='radio-inline active'><input type="radio" name="barorient" value="vertical" checked>Vertical</label>
+								<label class='radio-inline active'><input type="radio" name="barorient" value="horizontal" disabled>Horizontal</label>
+								<br><br>
+								<h3>Chart Type</h3>
+								<!-- <label class='checkbox-inline active'><input type="checkbox" name="bartype" value="grouped">Grouped Bars</label> -->
+								<label class='checkbox-inline active'><input type="checkbox" name="bartype" value="stacked" disabled>Stacked Bars</label>
+							</div>
+							<div class='col-md-6'>
 								<input type="checkbox" id="spacing" data-toggle="toggle" data-size='mini' checked></label>&nbsp Space between bars<label class='checkbox-inline'>
 							</div>
 						</div>
@@ -357,11 +361,11 @@
 <!-- ********************************************************************** -->
 <!-- *********************** LINECHART STARTS HERE ************************ -->
 <!-- ********************************************************************** -->
-	<div id="linechart" class="tab-pane fade">
+	<div id="linechart" class="tab-pane fade in">
 
 		<div class="panel-group" id="lineaccordion" role="tablist" aria-multiselectable="true">
 
-			<div class="panel panel-primary">
+			<div class="panel panel-custom fun">
 				<div class="panel-heading" role="tab" id="linedata">
 					<h5 class="panel-title"><a role="button" data-toggle="collapse" data-parent="#lineaccordion" href="#linedata_c" aria-expanded="true" aria-controls="linedata_c">Data</a></h5>
 				</div>
@@ -369,18 +373,38 @@
 					<div class="panel-body">
 						<div class='row'>
 							<div class='col-md-6'>
-								<h3>Variables</h3>
-								<!-- <select class="variable_select x_select" id='line_select_category' data-width='100%' data-dropup-auto=false onchange=x_vars() disabled><option value='none'>X-axis</option></select>
-								<select class="variable_select y_select" id='line_select_values' data-width='100%' data-dropup-auto=false onchange=y_vars() disabled><option value='none'>Y-axis</option></select>
-							 --></div>
-<!-- 							<div class='col-md-6'>
-								<h3>Orientation</h3>
-								<label class='radio-inline active'><input type="radio" name="barorient" value="vertical" checked>Vertical</label>
-								<label class='radio-inline active'><input type="radio" name="barorient" value="horizontal">Horizontal</label>
-								<h3>Chart Type</h3>
-								<label class='checkbox-inline active'><input type="checkbox" name="bartype" value="stacked">Stacked Bars</label>
-							</div> -->
+								<div class="input-group"> <span class="input-group-addon pickvar">X Variable</span>
+									<select class="variable_select x_select" id='line_select_category' data-width='100%' data-dropup-auto=false onchange=x_vars(this) disabled><option value='none'></option></select>
+								</div>
+								<div class="input-group"> <span class="input-group-addon pickvar">Y Variable</span>
+									<select class="variable_select y_select" id='line_select_values' data-width='100%' data-dropup-auto=false onchange=y_vars(this) disabled><option value='none'></option></select>
+								</div>
+							</div>
+							<div class='col-md-6'>
+								<div class="input-group"> <span class="input-group-addon pickvar">Group Variable</span>
+									<select class="variable_select group_select" id='line_select_grouping' data-width='100%' data-dropup-auto=false onchange=group_vars(this) disabled><option value='none'></option></select>
+								</div>
+							</div>
 						</div>					
+					</div>
+				</div>
+			</div>
+
+			<div class="panel panel-custom">
+				<div class="panel-heading" role="tab" id="linestyling">
+					<h5 class="panel-title"><a role="button" data-toggle="collapse" data-parent="#lineaccordion" href="#linestyling_c" aria-expanded="true" aria-controls="linestyling_c">Bar Chart Specific Style</a></h5>
+				</div>
+				<div id="linestyling_c" class="panel-collapse collapse" role="tabpanel" aria-labelledby="linestyling_c">
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-12">
+								<h3>Label Points</h3>
+								<label class='radio-inline'><input type="radio" name="key" value="none">None</label>
+								<label class='radio-inline active'><input type="radio" name="key" value="top" checked>Top</label>
+								<label class='radio-inline'><input type="radio" name="key" value="right" disabled>Right</label>
+								<label class='radio-inline'><input type="radio" name="key" value="float">Float</label>							
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -432,7 +456,7 @@
 
 <div class='text-center' id='graphdiv'>
 
-<button type="button" title='Reset the interactive' class="btn btn-default btn" onclick='isvalid()'>
+<button type="button" title='Reset the interactive' class="btn btn-default btn-sm" onclick='isvalid()'>
 	<span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Draw/refresh graph
 </button><br><br>
 
@@ -783,6 +807,13 @@ function isvalid() {
 		xminorgrid=document.getElementById('xminorgrid').checked
 		yminorgrid=document.getElementById('yminorgrid').checked
 
+		// legend
+		legendloc=$('input[name=key]:checked').val()
+
+		// barchart specific
+		barspace=document.getElementById('spacing').checked
+
+		// create the style object
 		style={}
 
 		grids=[xgrid,ygrid,xminorgrid,yminorgrid]
@@ -790,6 +821,9 @@ function isvalid() {
 		for(var i=0;i<grids.length;i++){
 			if(grids[i]==true){style[attributes[i]]=1}
 		}
+
+		if(barspace==false){style['barchart_width']=1}
+		style['legend_location']=legendloc
 
 		// now apply the style object
 		chartobject.style(style)
@@ -805,6 +839,11 @@ function isvalid() {
 			if (graph_type=='Bar Chart') {
 				console.log(chartobject)
 				chartobject.barchart('vertical')
+			}
+
+			if (graph_type=='Line Chart') {
+				console.log(chartobject)
+				chartobject.linechart('vertical')
 			}
 
 		})
@@ -1092,19 +1131,15 @@ function change_color(target,color) {
 		var item=Snap(target)
 		item.attr({stroke:color})	
 		if(item.attr('ident')=='key'){
-			console.log('check')
 			group=item.attr('group')
 			snapobj.selectAll("[group="+group+"]").attr({fill:color})
-			console.log(snapobj.selectAll("[group="+group+"]"))
 		}
 	} else{
 		var item=Snap(target)
 		item.attr({fill:color})	
 		if(item.attr('ident')=='key'){
-			console.log('check')
 			group=item.attr('group')
 			snapobj.selectAll("[group="+group+"]").attr({fill:color})
-			console.log(snapobj.selectAll("[group="+group+"]"))
 		}
 	}
 }
