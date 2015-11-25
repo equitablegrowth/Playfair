@@ -420,12 +420,12 @@
 						<div class="row">
 							<div class="col-md-4">
 								<div class="input-group"> <span class="input-group-addon">Slope</span>
-									<input type="text" class="form-control" placeholder="">
+									<input type="text" class="form-control" placeholder="" id='slope'>
 								</div>
 							</div>
 							<div class='col-md-4'>
 								<div class="input-group"> <span class="input-group-addon">Intercept</span>
-									<input type="text" class="form-control" placeholder="">
+									<input type="text" class="form-control" placeholder="" id='intercept'>
 								</div>
 							</div>
 							<div class="col-md-4">
@@ -661,7 +661,6 @@ function loadData() {
 	var alpha=/[A-Za-z]/
 	var column_types=[]
 
-
 	// loop through columns and data points, check each one for alpha characters. Flag them as
 	// text if any are found, otherwise numeric.
 	for (var i=0; i<columns;i++) {
@@ -868,8 +867,15 @@ function isvalid() {
 			}
 
 			if (graph_type=='Line/Scatter') {
+				options={}
+
+				slope=document.getElementById('slope').value
+				intercept=document.getElementById('intercept').value
+
+				options['abline']=[parseFloat(slope),parseFloat(intercept)]
+
 				console.log(chartobject)
-				chartobject.linechart('vertical')
+				chartobject.linechart(options)
 			}
 		})
 	}
