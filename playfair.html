@@ -388,6 +388,9 @@
 								<div class="input-group"> <span class="input-group-addon pickvar">Group Variable</span>
 									<select class="variable_select group_select" id='line_select_grouping' data-width='100%' data-dropup-auto=false onchange=group_vars(this) disabled><option value='none'></option></select>
 								</div>
+								<div class="input-group"> <span class="input-group-addon pickvar">Line Order</span>
+									<select class="variable_select group_select" id='line_select_grouping' data-width='100%' data-dropup-auto=false onchange=group_vars(this) disabled><option value='none'></option></select>
+								</div>
 							</div>
 						</div>					
 					</div>
@@ -396,7 +399,7 @@
 
 			<div class="panel panel-custom">
 				<div class="panel-heading" role="tab" id="linestyling">
-					<h5 class="panel-title"><a role="button" data-toggle="collapse" data-parent="#lineaccordion" href="#linestyling_c" aria-expanded="true" aria-controls="linestyling_c">Line Chart Specific Style</a></h5>
+					<h5 class="panel-title"><a role="button" data-toggle="collapse" data-parent="#lineaccordion" href="#linestyling_c" aria-expanded="true" aria-controls="linestyling_c">Line/Scatter Style</a></h5>
 				</div>
 				<div id="linestyling_c" class="panel-collapse collapse" role="tabpanel" aria-labelledby="linestyling_c">
 					<div class="panel-body">
@@ -407,6 +410,25 @@
 								<label class='radio-inline'><input type="radio" name="linepoint" value="top" checked><span class='pointsquare'></span></label>
 								<label class='radio-inline'><input type="radio" name="linepoint" value="right" disabled><span class='pointtriangle'></span></label>
 								<label class='radio-inline'><input type="radio" name="linepoint" value="float"><span class='dead'></span>By Group</label>							
+							</div>
+						</div><br>
+						<div class="row">
+							<div class="col-md-12">
+								<h3>Add Trend Line</h3>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-4">
+								<div class="input-group"> <span class="input-group-addon">Slope</span>
+									<input type="text" class="form-control" placeholder="">
+								</div>
+							</div>
+							<div class='col-md-4'>
+								<div class="input-group"> <span class="input-group-addon">Intercept</span>
+									<input type="text" class="form-control" placeholder="">
+								</div>
+							</div>
+							<div class="col-md-4">
 							</div>
 						</div>
 					</div>
