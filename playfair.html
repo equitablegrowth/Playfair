@@ -164,8 +164,8 @@
 <ul class="nav nav-tabs" id='maintabs'>
 	<li class="active"><a data-toggle="tab" href="#design">Design</a></li>
 	<li><a data-toggle="tab" href="#barchart">Bar Chart</a></li>
-	<li><a data-toggle="tab" href="#linechart">Line Chart</a></li>
-	<li><a data-toggle="tab" href="#scatterplot">Scatter Plot</a></li>
+	<li><a data-toggle="tab" href="#linechart">Line/Scatter</a></li>
+	<!-- <li><a data-toggle="tab" href="#scatterplot">Scatter Plot</a></li> -->
 	<!-- <li class='disabled'><a href="#dotplot">Dot Plot</a></li> -->
 	<li class='disabled'><a href="#histogram">Histogram</a></li>
 	<li class='disabled'><a href="#waffle">Waffle</a></li>	
@@ -845,11 +845,10 @@ function isvalid() {
 				chartobject.barchart('vertical')
 			}
 
-			if (graph_type=='Line Chart') {
+			if (graph_type=='Line/Scatter') {
 				console.log(chartobject)
 				chartobject.linechart('vertical')
 			}
-
 		})
 	}
 }
