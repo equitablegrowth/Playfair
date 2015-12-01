@@ -390,13 +390,13 @@
 							</div>
 							<div class='col-md-6'>
 								<div class="input-group"> <span class="input-group-addon pickvar" data-toggle='tooltip' data-placement='top' title='Select a variable to label the points in the graph. You must right click a point and choose Label Data to label it.'>Label Points</span>
-									<select class="variable_select label_select" id='line_select_label' data-width='100%' data-dropup-auto=false onchange=group_vars(this) disabled><option value='none'></option></select>
+									<select class="variable_select label_select" id='line_select_label' data-width='100%' data-dropup-auto=false disabled><option value='none'></option></select>
 								</div>
 								<div class="input-group"> <span class="input-group-addon pickvar" data-toggle='tooltip' data-placement='top' title='Select a variable to order your points for connecting them with a line. If you want a standard line graph, select your x-variable here.'>Connect Points</span>
-									<select class="variable_select connect_select" id='line_select_connect' data-width='100%' data-dropup-auto=false onchange=group_vars(this) disabled><option value='none'></option></select>
+									<select class="variable_select connect_select" id='line_select_connect' data-width='100%' data-dropup-auto=false disabled><option value='none'></option></select>
 								</div>
 								<div class="input-group"> <span class="input-group-addon pickvar" data-toggle='tooltip' data-placement='top' title='Select a variable to scale the points in your graph (a bubble graph). If there is a large differential between the largest and smallest values, a log scale will be used.'>Point Size</span>
-									<select class="variable_select" id='line_select_pointsize' data-width='100%' data-dropup-auto=false onchange=y_vars(this) disabled><option value='none'></option></select>
+									<select class="variable_select" id='line_select_pointsize' data-width='100%' data-dropup-auto=false disabled><option value='none'></option></select>
 								</div>
 							</div>
 						</div>					
@@ -850,6 +850,9 @@ function isvalid() {
 
 		// line/scatter specific
 		points=document.getElementById('points').checked
+		label=$("#line_select_label").val()
+		connect=$("#line_select_connect").val()
+		size=$("#line_select_pointsize").val()
 
 		// create the style object
 		style={}
@@ -889,11 +892,25 @@ function isvalid() {
 					options['abline']=[parseFloat(slope),parseFloat(intercept)]
 				}
 
+				if (label!=='none'){
+					options['label']=label
+				}
+
+				if (connect!=='none'){
+					options['connect']=connect
+				}
+
+				if (size!=='none'){
+					options['size']=size
+				}
+
 				if (points==true){
 					options['points']=true
 				} else {
 					options['points']=false
 				}
+
+
 
 				console.log(chartobject)
 				chartobject.linechart(options)
@@ -1211,7 +1228,7 @@ function labeldata(target) {
 	}
 	else {
 		coords=item.getBBox()
-		var datalabel=grapharea.text(coords.x+coords.width/2,coords.y-parseInt(chartobject.datasize),item.attr('data_label')).attr({ident:'foot','font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'middle'})
+		var datalabel=grapharea.text(coords.x+coords.width/2,coords.y-parseInt(chartobject.datasize)-3,item.attr('data_label')).attr({ident:'foot','font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'middle'})
 	}
 }
 
