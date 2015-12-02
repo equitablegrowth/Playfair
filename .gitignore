@@ -14,3 +14,7 @@ Sample Data/3/saez_fig2.png
 Sample Data/4/income_share.csv
 
 Sample Data/4/saez_fig3.png
+
+lib/FileSaver.js
+
+lib/svg_todataurl.js
