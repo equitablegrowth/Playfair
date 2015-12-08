@@ -1200,18 +1200,29 @@ function addtext(target) {
 
 function change_color(target,color) {
 	if(target.nodeName=='line'){
+		console.log(2)
 		var item=Snap(target)
 		item.attr({stroke:color})	
 		if(item.attr('ident')=='key'){
 			group=item.attr('group')
-			snapobj.selectAll("[group='"+group+"']").attr({fill:color})
+			snapobj.selectAll("[group='"+group+"']").attr({stroke:color})
 		}
-	} else{
+	} else if(target.nodeName=='path'){
+		console.log(1)
 		var item=Snap(target)
-		item.attr({fill:color})	
+		item.attr({stroke:color})	
 		if(item.attr('ident')=='key'){
 			group=item.attr('group')
-			snapobj.selectAll("[group='"+group+"']").attr({fill:color})
+			snapobj.selectAll("[group='"+group+"']").attr({stroke:color})
+		}
+	}
+	else{
+		console.log(3)
+		var item=Snap(target)
+		item.attr({fill:color,stroke:color})	
+		if(item.attr('ident')=='key'){
+			group=item.attr('group')
+			snapobj.selectAll("[group='"+group+"']").attr({fill:color,stroke:color})
 		}
 	}
 }
