@@ -831,7 +831,13 @@ function isvalid() {
 
 		// initialize playfair.js. First use init_graph to set up workspace, then call the
 		// data method to set up data and variables.
-		grapharea.clear()
+		// grapharea.clear()
+		grapharea.selectAll('rect').remove()
+		grapharea.selectAll('text').remove()
+		grapharea.selectAll('line').remove()
+		grapharea.selectAll('circle').remove()
+		grapharea.selectAll('path').remove()
+
 		chartobject=playfair.init_graph(grapharea,0,0,width,height)
 		chartobject.data(final_data,x_var,y_var,group_var,facet_var)
 
@@ -942,6 +948,7 @@ function unselect_text(ev) {
 			document.removeEventListener('keypress',press_listener)
 			document.removeEventListener('keydown',down_listener)
 			selected_text.undrag()
+			selected_text.attr({transform:trans})
 			active_element.attr({fill:text_element_fill})
 			selected=0
 		} catch(err){}
@@ -951,8 +958,6 @@ function unselect_text(ev) {
 function edit_text(ev) {
 	// if a text element is clicked, select it and listen for keypresses.
 	if(ev.target.nodeName=='text'){
-		selected_text=Snap(ev.target)
-
 		// Clean up previous selection if applicable
 		try{
 			select_box.remove()
@@ -962,14 +967,16 @@ function edit_text(ev) {
 			active_element.attr({fill:text_element_fill})
 
 			// re-rotate previous selection
-			
+			selected_text.attr({transform:trans})
 		} catch(err){}
 
 		// if text is rotated, un-rotate it
+		selected_text=Snap(ev.target)
 		trans=selected_text.attr('transform')
 		selected_text.attr({transform:''})
 		coords=selected_text.getBBox()
 		if(trans==""){trans=trans.string}
+		console.log(trans)
 
 		// new selection
 		select_box=grapharea.group()
