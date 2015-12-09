@@ -14,6 +14,7 @@
 	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.7.3/css/bootstrap-select.css">
 	<link rel="stylesheet" type="text/css" href="https://gitcdn.github.io/bootstrap-toggle/2.2.0/css/bootstrap-toggle.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
 	<style>
 	@import url(http://fonts.googleapis.com/css?family=Lancelot);
@@ -75,6 +76,8 @@
 	.pointsquare {width:12px;height:12px;border:2px solid #67c2a5;display:inline-block;vertical-align:middle;margin-top:4.5px;}
 	.dead{width:0px;height:12px;background:white;border:0px solid white;display:inline-block;vertical-align:middle}
 	.tooltip-inner {text-align:left;}
+	.btn-file {position:relative;overflow:hidden;}
+	.btn-file input[type=file]{position:absolute;top:0;right:0;min-width:100%;min-height:100%;font-size:100px;text-align:right;filter:alpha(opacity=0);opacity:0;outline:none;background:white;cursor:inherit;display:block;}
 
 	#bad_data{display:none;}
 	#png_save{display:none;}
@@ -320,16 +323,16 @@
 						<div class='row'>
 							<div class='col-md-6'>
 								<div class="input-group"> <span class="input-group-addon pickvar">Bar Categories</span>
-									<select class="variable_select x_select" id='bar_select_category' data-width='100%' data-dropup-auto=false onchange=x_vars(this) disabled><option value='none'></option></select>
+									<select class="variable_select x_select" id='bar_select_category' data-width='100%' data-dropup-auto=false onchange=x_vars(this) disabled><option value='none'>Nothing selected</option></select>
 								</div>
 								<div class="input-group"> <span class="input-group-addon pickvar">Category Values</span>
-									<select class="variable_select y_select" id='bar_select_values' data-width='100%' data-dropup-auto=false onchange=y_vars(this) disabled><option value='none'></option></select>
+									<select class="variable_select y_select" id='bar_select_values' data-width='100%' data-dropup-auto=false onchange=y_vars(this) disabled><option value='none'>Nothing selected</option></select>
 								</div>
 
 							</div>
 							<div class='col-md-6'>
 								<div class="input-group"> <span class="input-group-addon pickvar">Sub-Categories</span>
-									<select class="variable_select group_select" id='bar_select_grouping' data-width='100%' data-dropup-auto=false onchange=group_vars(this) disabled><option value='none'></option></select>
+									<select class="variable_select group_select" id='bar_select_grouping' data-width='100%' data-dropup-auto=false onchange=group_vars(this) disabled><option value='none'>Nothing selected</option></select>
 								</div>							
 							</div>
 						</div>					
@@ -379,24 +382,24 @@
 						<div class='row'>
 							<div class='col-md-6'>
 								<div class="input-group"> <span class="input-group-addon pickvar" data-toggle='tooltip' data-placement='top' title='Select the X variable for your graph.'>X Variable</span>
-									<select class="variable_select x_select" id='line_select_category' data-width='100%' data-dropup-auto=false onchange=x_vars(this) disabled><option value='none'></option></select>
+									<select class="variable_select x_select" id='line_select_category' data-width='100%' data-dropup-auto=false onchange=x_vars(this) disabled><option value='none'>Nothing selected</option></select>
 								</div>
 								<div class="input-group"> <span class="input-group-addon pickvar" data-toggle='tooltip' data-placement='top' title='Select the Y variable for your graph.'>Y Variable</span>
-									<select class="variable_select y_select" id='line_select_values' data-width='100%' data-dropup-auto=false onchange=y_vars(this) disabled><option value='none'></option></select>
+									<select class="variable_select y_select" id='line_select_values' data-width='100%' data-dropup-auto=false onchange=y_vars(this) disabled><option value='none'>Nothing selected</option></select>
 								</div>
 								<div class="input-group"> <span class="input-group-addon pickvar" data-toggle='tooltip' data-placement='top' title='Select a variable that divides your data into groups. Groups will be colored differently and a key will be added.'>Group Variable</span>
-									<select class="variable_select group_select" id='line_select_grouping' data-width='100%' data-dropup-auto=false onchange=group_vars(this) disabled><option value='none'></option></select>
+									<select class="variable_select group_select" id='line_select_grouping' data-width='100%' data-dropup-auto=false onchange=group_vars(this) disabled><option value='none'>Nothing selected</option></select>
 								</div>
 							</div>
 							<div class='col-md-6'>
 								<div class="input-group"> <span class="input-group-addon pickvar" data-toggle='tooltip' data-placement='top' title='Select a variable to label the points in the graph. You must right click a point and choose Label Data to label it.'>Label Points</span>
-									<select class="variable_select label_select" id='line_select_label' data-width='100%' data-dropup-auto=false disabled><option value='none'></option></select>
+									<select class="variable_select label_select" id='line_select_label' data-width='100%' data-dropup-auto=false disabled><option value='none'>Nothing selected</option></select>
 								</div>
 								<div class="input-group"> <span class="input-group-addon pickvar" data-toggle='tooltip' data-placement='top' title='Select a variable to order your points for connecting them with a line. If you want a standard line graph, select your x-variable here.'>Connect Points</span>
-									<select class="variable_select connect_select" id='line_select_connect' data-width='100%' data-dropup-auto=false disabled><option value='none'></option></select>
+									<select class="variable_select connect_select" id='line_select_connect' data-width='100%' data-dropup-auto=false disabled><option value='none'>Nothing selected</option></select>
 								</div>
 								<div class="input-group"> <span class="input-group-addon pickvar" data-toggle='tooltip' data-placement='top' title='Select a variable to scale the points in your graph (a bubble graph). If there is a large differential between the largest and smallest values, a log scale will be used.'>Point Size</span>
-									<select class="variable_select" id='line_select_pointsize' data-width='100%' data-dropup-auto=false disabled><option value='none'></option></select>
+									<select class="variable_select" id='line_select_pointsize' data-width='100%' data-dropup-auto=false disabled><option value='none'>Nothing selected</option></select>
 								</div>
 							</div>
 						</div>					
@@ -490,9 +493,7 @@
 
 <div class='text-center' id='graphdiv'>
 
-<button type="button" title='Reset the interactive' class="btn btn-default btn-sm" onclick='isvalid()'>
-	<span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Draw/refresh graph
-</button><br><br>
+<button type="button" title='Reset the interactive' class="btn btn-default btn" onclick='isvalid()'><i class="fa fa-refresh"></i> Draw/refresh graph</button><br><br>
 
 <div>
 <svg id='grapharea' width='745px' height='450px'>
@@ -540,10 +541,11 @@
 
 <div class='text-center unselectable'>
 <div class="btn-group btnpadding" role="group">
-	<button type="button" class="btn btn-default" id='savesvg' onclick=savesvg()>Save as SVG</button>
-	<button type="button" class="btn btn-default" id='savepng' onclick=savepng()>Save as PNG</button>
-	<button type="button" class="btn btn-default" id='savetext' onclick=savesettings()>Save Settings</button>
+	<button type="button" class="btn btn-default" id='savepng' onclick=savepng()><i class="fa fa-download"></i> Save as PNG</button>
+	<button type="button" class="btn btn-default" id='savesvg' onclick=savesvg()><i class="fa fa-arrows-h"></i> Save as SVG</button>
+	<button type="button" class="btn btn-default" id='savetext' onclick=savesettings()><i class="fa fa-file-text-o"></i> Save Settings</button>
 </div>
+<button type="button" class="btn btn-default btn-file" id='importtext' onclick=importsettings()><input type="file"><i class="fa fa-cloud-upload"></i> Import from text</button>
 <div class='vspace'>
 <small>[<a href='#'>report a bug</a>]</small>
 </div>
@@ -779,16 +781,27 @@ function loadData() {
 }
 
 function populate_variables(final_data) {
-	$('.variable_select').find('option:gt(0)').remove();
+	// $('.variable_select').find('option:gt(0)').remove();
+	// option=document.createElement('option')
+	// option.text='Pick a variable'
+	// option.value='none'
+	// $(".variable_select").append(option)
 
 	for (var key in final_data) {
-		option=document.createElement('option')
-		option.text=key
+		$(".variable_select").append($("<option></option>")
+			.attr("value",key)
+			.text(key));
 
-		$(".variable_select").append(option)
-		$(".variable_select").prop('disabled',false)
-		$(".variable_select").selectpicker('refresh')
+		// option=document.createElement('option')
+		// option.text=key
+
+		// $(".variable_select").append(option)
+		
+		// $(".variable_select").selectpicker('refresh')
 	}
+	$(".variable_select").prop('disabled',false)
+	$('.variable_select option[value="none"]')
+	$(".variable_select").selectpicker('refresh')
 }
 
 ///////////////////////// END LOAD DATA ////////////////////////////////
@@ -832,6 +845,7 @@ function isvalid() {
 		// initialize playfair.js. First use init_graph to set up workspace, then call the
 		// data method to set up data and variables.
 		// grapharea.clear()
+		// Why not just use.clear()? Because it will destroy all the embedded font declarations
 		grapharea.selectAll('rect').remove()
 		grapharea.selectAll('text').remove()
 		grapharea.selectAll('line').remove()
@@ -976,7 +990,6 @@ function edit_text(ev) {
 		selected_text.attr({transform:''})
 		coords=selected_text.getBBox()
 		if(trans==""){trans=trans.string}
-		console.log(trans)
 
 		// new selection
 		select_box=grapharea.group()
@@ -1151,7 +1164,6 @@ $(function() {
 	var doubleClicked = false;
 	$(svgarea).on("contextmenu", function (e) {
 		if(doubleClicked == false) {
-			console.log(e.target.className.baseVal)
 			if(e.target.nodeName=='text'){
 				clickedevent=e
 				e.preventDefault();
@@ -1248,14 +1260,11 @@ function fadeout(target) {
 }
 
 function addtext(target) {
-	console.log(target.clientX,target.clientY)
-
 	var text=grapharea.text(target.offsetX,target.offsetY,'Text Annotation').attr({'font-family':'Lato, Arial, sans-serif','font-size':16,'text-anchor':'start','fill':'black','font-weight':400,'dominant-baseline':'text-before-edge',cursor:'pointer'})
 }
 
 function change_color(target,color) {
 	if(target.nodeName=='line'){
-		console.log(2)
 		var item=Snap(target)
 		item.attr({stroke:color})	
 		if(item.attr('ident')=='key'){
@@ -1263,7 +1272,6 @@ function change_color(target,color) {
 			snapobj.selectAll("[group='"+group+"']").attr({stroke:color})
 		}
 	} else if(target.nodeName=='path'){
-		console.log(1)
 		var item=Snap(target)
 		item.attr({stroke:color})	
 		if(item.attr('ident')=='key'){
@@ -1272,7 +1280,6 @@ function change_color(target,color) {
 		}
 	}
 	else{
-		console.log(3)
 		var item=Snap(target)
 		item.attr({fill:color,stroke:color})	
 		if(item.attr('ident')=='key'){
@@ -1351,7 +1358,27 @@ function savesvg() {
 }
 
 function savesettings() {
-	// figure out a server-side solution for this. And maybe also a client-side solution?
+	// figure out a server-side solution for this. Until then, this makes a text file
+	// that can be imported.
+	console.log(chartobject)
+	var svg = document.getElementById("grapharea").innerHTML
+	var data='['+JSON.stringify(chartobject)+','+svg+','+JSON.stringify(final_data)+']'
+	var url= 'data:text/json;charset=utf8,' + encodeURIComponent(data);
+	// window.location.href=url
+	window.open(url, '_blank');
+	window.focus();
+}
+
+function importsettings() {
+	// Load a text object, update the app using these indices:
+	// 0: the playfair chartobject
+	// 1: SVG innerhtml
+	// 2: the final_data object (used to populate variable dropdowns)
+	console.log(document.getElementById('importtext').value)
+
+	// chartobject=data[0]
+	// document.getElementById("grapharea").innerHTML=data[1]
+	// populate_variables(data[2])
 }
 
 ///////////////////// END SAVE FUNCTIONS ///////////////////////////////
