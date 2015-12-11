@@ -886,6 +886,7 @@ function isvalid() {
 		attributes=['xgrid_opacity','ygrid_opacity','xgrid_minoropacity','ygrid_minoropacity']
 		for(var i=0;i<grids.length;i++){
 			if(grids[i]==true){style[attributes[i]]=1}
+			if(grids[i]==false){style[attributes[i]]=0}	
 		}
 
 		if(barspace==false){style['barchart_width']=1}
