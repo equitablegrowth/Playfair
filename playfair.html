@@ -543,9 +543,9 @@
 <div class="btn-group btnpadding" role="group">
 	<button type="button" class="btn btn-default" id='savepng' onclick=savepng()><i class="fa fa-download"></i> Save as PNG</button>
 	<button type="button" class="btn btn-default" id='savesvg' onclick=savesvg()><i class="fa fa-arrows-h"></i> Save as SVG</button>
-	<button type="button" class="btn btn-default" id='savetext' onclick=savesettings()><i class="fa fa-file-text-o"></i> Save Settings</button>
+	<button type="button" class="btn btn-default" id='savetext' onclick=savesettings() disabled><i class="fa fa-cloud-upload"></i> Save to server</button>
 </div>
-<button type="button" class="btn btn-default btn-file" id='importtext' onclick=importsettings()><input type="file"><i class="fa fa-cloud-upload"></i> Import from text</button>
+<button type="button" class="btn btn-default btn-file" id='importtext' onclick=importsettings() disabled><input type="file"><i class="fa fa-cloud-download"></i> Restore from server</button>
 <div class='vspace'>
 <small>[<a href='#'>report a bug</a>]</small>
 </div>
@@ -1164,6 +1164,7 @@ $(function() {
 	var doubleClicked = false;
 	$(svgarea).on("contextmenu", function (e) {
 		if(doubleClicked == false) {
+			disableScroll()
 			if(e.target.nodeName=='text'){
 				clickedevent=e
 				e.preventDefault();
@@ -1196,6 +1197,7 @@ $(function() {
 		$(document).on("click", function () {
 			doubleClicked = false; 
 			$(".contextMenuContainer").fadeOut(100);
+			enableScroll()
 		});
 	}
 });
@@ -1303,6 +1305,41 @@ function labeldata(target) {
 		coords=item.getBBox()
 		var datalabel=grapharea.text(coords.x+coords.width/2,coords.y-parseInt(chartobject.datasize)-3,item.attr('data_label')).attr({ident:'foot','font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'middle'})
 	}
+}
+
+// courtesy of http://stackoverflow.com/a/4770179/3001940
+function disableScroll() {
+  if (window.addEventListener) // older FF
+      window.addEventListener('DOMMouseScroll', preventDefault, false);
+  window.onwheel = preventDefault; // modern standard
+  window.onmousewheel = document.onmousewheel = preventDefault; // older browsers, IE
+  window.ontouchmove  = preventDefault; // mobile
+  document.onkeydown  = preventDefaultForScrollKeys;
+}
+
+function enableScroll() {
+    if (window.removeEventListener)
+        window.removeEventListener('DOMMouseScroll', preventDefault, false);
+    window.onmousewheel = document.onmousewheel = null; 
+    window.onwheel = null; 
+    window.ontouchmove = null;  
+    document.onkeydown = null;  
+}
+
+var keys = {37: 1, 38: 1, 39: 1, 40: 1};
+
+function preventDefault(e) {
+  e = e || window.event;
+  if (e.preventDefault)
+      e.preventDefault();
+  e.returnValue = false;  
+}
+
+function preventDefaultForScrollKeys(e) {
+    if (keys[e.keyCode]) {
+        preventDefault(e);
+        return false;
+    }
 }
 
 ///////////////////// END CONTEXTUAL MENUS /////////////////////////////
