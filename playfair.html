@@ -129,7 +129,7 @@
 		<li onclick=addtext(clickedevent)>Add Text</li>
 		<hr>
 		<li onclick=startpath(clickedevent)>Start Path</li>
-		<li onclick=endpath(clickedevent)>End Path</li>
+		<li onclick=endpath(clickedevent)>Start Arrow</li>
 		<hr>
 	</ul>
 	<ul id='colormenu'>
@@ -781,26 +781,21 @@ function loadData() {
 }
 
 function populate_variables(final_data) {
-	// $('.variable_select').find('option:gt(0)').remove();
-	// option=document.createElement('option')
-	// option.text='Pick a variable'
-	// option.value='none'
-	// $(".variable_select").append(option)
+	$(".variable_select")
+		.find('option')
+		.remove()
+		.end()
+		.append('<option value="none">Nothing selected</option>')
+		.val('none')
 
 	for (var key in final_data) {
-		$(".variable_select").append($("<option></option>")
+		$(".variable_select")
+			.append($("<option></option>")
 			.attr("value",key)
 			.text(key));
-
-		// option=document.createElement('option')
-		// option.text=key
-
-		// $(".variable_select").append(option)
-		
-		// $(".variable_select").selectpicker('refresh')
 	}
+
 	$(".variable_select").prop('disabled',false)
-	$('.variable_select option[value="none"]')
 	$(".variable_select").selectpicker('refresh')
 }
 
@@ -821,6 +816,15 @@ function populate_variables(final_data) {
 // isvalid will check to see if a graph can be drawn and what type of
 // graph can be drawn, and then execute the appropriate functions.
 
+// on change in tab, set graph_type so when draw/refresh is clicked it draws the appropriate graph
+$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+	if ($('.nav-tabs .active').text()!='Design' && $('.nav-tabs .active').text()!='Settings') {
+		graph_type=$('.nav-tabs .active').text()
+	}
+});
+
+
+// isvalid is the main graphing setup function. Gets variable values and passes them to playfair.js
 function isvalid() {
 	x_var=$(".x_select").val()
 	y_var=$(".y_select").val()
@@ -836,11 +840,6 @@ function isvalid() {
 	ylabel=$("#ylabel").val()
 
 	if (x_var!='none' && y_var!='none') {
-
-		// check to see what tab is open. If it is a graph tab, change the graph_type global
-		if ($('.nav-tabs .active').text()!='Design' && $('.nav-tabs .active').text()!='Settings') {
-			graph_type=$('.nav-tabs .active').text()
-		}
 
 		// initialize playfair.js. First use init_graph to set up workspace, then call the
 		// data method to set up data and variables.
