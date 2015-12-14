@@ -40,6 +40,7 @@
 	.input-group {margin-top:7px;}
 	.tab-pane {width:90%;margin-top:15px;margin-left:auto;margin-right:auto;}
 	.input-group-addon {min-width:90px;}
+	.input-small {min-width:0px;}
 	.longlabel {min-width:150px;}
 	.bootstrap-select {margin-top:7px;margin-bottom:7px;}
 	.full-width {width:100%;}
@@ -287,7 +288,7 @@
 			</div>
 			<div class="panel panel-custom">
 				<div class="panel-heading" role="tab" id="barstyling">
-					<h5 class="panel-title"><a role="button" data-toggle="collapse" data-parent="#designaccordion" href="#designgrid_c" aria-expanded="true" aria-controls="designgrid_c">Grid Style</a></h5>
+					<h5 class="panel-title"><a role="button" data-toggle="collapse" data-parent="#designaccordion" href="#designgrid_c" aria-expanded="true" aria-controls="designgrid_c">Axes</a></h5>
 				</div>
 				<div id="designgrid_c" class="panel-collapse collapse" role="tabpanel" aria-labelledby="designgrid_c">
 					<div class="panel-body">
@@ -299,6 +300,26 @@
 							<div class="col-md-4">
 								<label class='checkbox-inline'><input type="checkbox" class='text-right' id="xminorgrid" data-toggle="toggle" data-size='mini'></label>&nbsp X minor gridlines<br>
 								<label class='checkbox-inline'><input type="checkbox" class='text-right' id="yminorgrid" data-toggle="toggle" data-size='mini'></label>&nbsp Y minor gridlines
+							</div>
+						</div><br>
+						<div class="row">
+							<div class="col-md-3">
+								<h3>Prepend/append to X-values</h3>
+								<div class="input-group full-width">
+								  <input type="text" class="form-control text-center" placeholder="$" id='x_prepend'>
+								  <span class="input-group-addon input-small">x</span>
+								  <input type="text" class="form-control text-center" placeholder="%" id='x_append'>
+								</div>
+							</div>
+							<div class="col-md-1">
+							</div>
+							<div class="col-md-3">
+								<h3>Prepend/append to X-values</h3>
+								<div class="input-group full-width">
+								  <input type="text" class="form-control text-center" placeholder="$" id='x_prepend'>
+								  <span class="input-group-addon input-small">y</span>
+								  <input type="text" class="form-control text-center" placeholder="%" id='x_append'>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -859,11 +880,15 @@ function isvalid() {
 		chartobject.style()
 
 		// get state of all UI style toggles and apply to style of graph
-		// grids
+		// axes
 		xgrid=document.getElementById('xgrid').checked
 		ygrid=document.getElementById('ygrid').checked
 		xminorgrid=document.getElementById('xminorgrid').checked
 		yminorgrid=document.getElementById('yminorgrid').checked
+		xprepend=$("#x_prepend").val()
+		xappend=$("#x_append").val()
+		yprepend=$("#y_prepend").val()
+		yappend=$("#y_append").val()
 
 		// legend
 		legendloc=$('input[name=key]:checked').val()
@@ -895,8 +920,8 @@ function isvalid() {
 		chartobject.style(style)
 
 		// initialize axes
-		chartobject.xaxis(0,0,0,0,0,0,xlabel)
-		chartobject.yaxis(0,0,0,0,0,0,ylabel)
+		chartobject.xaxis({'label':xlabel,'number_of_ticks':5,'decimal':undefined,'format':undefined,'pre':xprepend,'app':xappend})
+		chartobject.yaxis({'label':ylabel,'number_of_ticks':5,'decimal':undefined,'format':undefined,'pre':yprepend,'app':yappend})
 
 		chartobject.header(hed,dek)
 		chartobject.footer(eglogo,source,note,function(){
@@ -1116,10 +1141,10 @@ var down_listener=function(ev) {
 	// Bold/italic handling (control+B, control+I)
 	if(keycode==66 && ev.ctrlKey==true){
 		weight=selected_text.attr('font-weight')
-		if(weight=='bold'){
+		if(weight=='bold' || weight=='700'){
 			selected_text.attr({'font-weight':'400'})
 		}
-		if(weight!='bold'){
+		if(weight!='bold' || weight=='400'){
 			selected_text.attr({'font-weight':'700'})
 		}
 	}
