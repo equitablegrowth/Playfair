@@ -713,9 +713,8 @@ function loadData() {
 	}
 
 	// if we get this far, the delimiter must look ok, next step is to figure out if each column 
-	// is text or numbers and remove formatting crap if they are numbers. For now, the only test
-	// of whether something is text is does it contain an alpha character. Be on the lookout for
-	// instances where this is not true (quintiles?)
+	// is text/date/numbers and remove formatting crap if they are numbers. For now, the only test
+	// of whether something is text is does it contain an alpha character and not date.
 	for (var i=0; i<d.length;i++) {
 		d[i]=d[i].split(delimit)
 	}
@@ -723,15 +722,23 @@ function loadData() {
 	var alpha=/[A-Za-z]/
 	var column_types=[]
 
-	// loop through columns and data points, check each one for alpha characters. Flag them as
-	// text if any are found, otherwise numeric.
+	// loop through columns and data points, check each one for dates. *ALL* datapoints must be
+	// dates to qualify. If the column is not a date, check to see if it is numeric/text. A non-date
+	// column is flagged as text if any alpha characters are found.
 	for (var i=0; i<columns;i++) {
+		date=true
 		type='numeric'
 		for (var j=1;j<d.length;j++) {
+			if (moment(d[j][i], ["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY"],true).isValid()==false){
+				date=false
+			}
 			if (d[j][i].search(alpha)>-1) {type='text'} else{
 				// clean numeric junk
 				d[j][i] = d[j][i].replace(/[^0-9\.-]+/g, "")
 			}
+		}
+		if (date==true){
+			type='date'
 		}
 		column_types.push(type)
 	}
@@ -823,6 +830,7 @@ function loadData() {
 
 	// Call populate_variables to update all variable dropdowns with the variables in the data
 	populate_variables(final_data)
+	console.log(final_data)
 	return final_data
 }
 
@@ -889,7 +897,7 @@ function isvalid() {
 
 		// initialize playfair.js. First use init_graph to set up workspace, then call the
 		// data method to set up data and variables.
-		// grapharea.clear()
+		// 
 		// Why not just use.clear()? Because it will destroy all the embedded font declarations
 		grapharea.selectAll('rect').remove()
 		grapharea.selectAll('text').remove()

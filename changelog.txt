@@ -2,3 +2,22 @@ changelog.txt
 
 V0.1:
 First beta release
+
+V0.2:
+- Date parsing: Playfair can now handle a date data type. The data alert box will inform you
+  you that your column has been parsed as a date. Check and make sure! Only certain formats
+  are recognized as dates. Any of the following should work:
+     02-28-1981
+     02/28/1981
+     02-28-81
+     02/28/81
+     02/1981
+     02-1981
+     1981-02-28 (FRED format)
+     February 1981
+     February 26 1981
+     February 26, 1981
+
+  If there are other formats Playfair should recognize, please log these as bugs. It intentionally
+  does not recognize sequences like 1996,1997 as years - either edit out commas in these sequences
+  manually or format them without columns.
