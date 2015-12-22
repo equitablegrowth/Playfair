@@ -818,10 +818,12 @@ function loadData() {
 	for (i=0;i<d[0].length;i++){
 		final_data[d[0][i]]=[]
 		for (j=1;j<d.length;j++) {
-			if (d[j][i].search(alpha)>-1) {
+			if (column_types[i]=='text'){
 				final_data[d[0][i]].push(d[j][i])
-			} else {
+			} else if (column_types[i]=='numeric') {
 				final_data[d[0][i]].push(parseFloat(d[j][i]))
+			} else if (column_types[i]=='date') {
+				final_data[d[0][i]].push(new Date(d[j][i]))
 			}
 		}
 	}
