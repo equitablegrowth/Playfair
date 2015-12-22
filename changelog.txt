@@ -19,7 +19,10 @@ V0.2:
 
   If there are other formats Playfair should recognize, please log these as bugs. It intentionally
   does not recognize sequences like 1996,1997 as years - either edit out commas in these sequences
-  manually or format them without commas.
+  manually or format them without commas. It also doesn't really handle amounts of time that should
+  be denominated in hours. So if you want to track a stock from 2PM to 2PM the next day, you will
+  want to simply count out the hours (ie your data is 1,2,3,4,...) and then use a custom axis as
+  appropriate.
 
 V0.1:
 - First beta release

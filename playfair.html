@@ -734,7 +734,9 @@ function loadData() {
 			}
 			if (d[j][i].search(alpha)>-1) {type='text'} else{
 				// clean numeric junk
-				d[j][i] = d[j][i].replace(/[^0-9\.-]+/g, "")
+				if(date==false){
+					d[j][i] = d[j][i].replace(/[^0-9\.-]+/g, "")
+				}
 			}
 		}
 		if (date==true){
@@ -823,6 +825,7 @@ function loadData() {
 			} else if (column_types[i]=='numeric') {
 				final_data[d[0][i]].push(parseFloat(d[j][i]))
 			} else if (column_types[i]=='date') {
+				console.log(d[j][i])
 				final_data[d[0][i]].push(new Date(d[j][i]))
 			}
 		}
