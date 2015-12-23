@@ -4,7 +4,7 @@
 	<title>playfair - equitable graphs</title>
 
 	<script src="lib/playfair.js"></script>
-	<script src="lib/svg_todataurl.js"></script>
+	<script src="lib/saveSvgAsPng.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2014-11-29/FileSaver.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -531,8 +531,8 @@
 
 <button type="button" title='Reset the interactive' class="btn btn-default btn" onclick='isvalid()'><i class="fa fa-refresh"></i> Draw/refresh graph</button><br><br>
 
-<div>
-<svg id='grapharea' width='745px' height='450px'>
+<div style='max-width:745;margin-left:auto;margin-right:auto' id='constraint'>
+<svg id='grapharea' width='745px' height='450px' viewbox='0 0 745 450'>
 	<defs>
 	  <style>
 		@font-face {
@@ -1505,15 +1505,19 @@ function endarrow(e) {
 // for future editing in playfair.
 
 function savepng() {
-	var svg = document.getElementById('grapharea')
-	var img = document.getElementById('png_save')
 
-	svg.toDataURL("image/png", {
-		callback: function(data) {
-			img.href=data
-			img.click()
-		}
-	})
+	saveSvgAsPng(document.getElementById('grapharea'),'playfair.png', {scale:2.0})
+
+
+	// var svg = document.getElementById('grapharea')
+	// var img = document.getElementById('png_save')
+
+	// svg.toDataURL("image/png", {
+	// 	callback: function(data) {
+	// 		img.href=data
+	// 		img.click()
+	// 	}
+	// })
 }
 
 function savesvg() {
