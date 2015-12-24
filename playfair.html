@@ -825,7 +825,6 @@ function loadData() {
 			} else if (column_types[i]=='numeric') {
 				final_data[d[0][i]].push(parseFloat(d[j][i]))
 			} else if (column_types[i]=='date') {
-				console.log(d[j][i])
 				final_data[d[0][i]].push(new Date(d[j][i]))
 			}
 		}
@@ -1516,6 +1515,16 @@ function savepng() {
 	// 	callback: function(data) {
 	// 		img.href=data
 	// 		img.click()
+	// 	}
+	// })
+	// var svg = document.getElementById('grapharea')
+	// var img = document.getElementById('png_save')
+	// svg.toDataURL("image/png", {
+	// 	callback: function(data) {
+	// 		img.href=data
+	// 		img.click()
+			// svg.height=height
+			// svg.width=width
 	// 	}
 	// })
 }
