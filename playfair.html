@@ -641,6 +641,7 @@ var text_element_fill
 var selected=0
 grapharea.dblclick(edit_text)
 grapharea.click(unselect_text)
+grapharea.hover(highlight_element,unhighlight_element)
 
 // Prevent default arrow-key scrolling behavior
 window.addEventListener("keydown", function(e) {
@@ -1197,7 +1198,6 @@ var down_listener=function(ev) {
 	// Bold/italic handling (control+B, control+I)
 	if(keycode==66 && ev.ctrlKey==true){
 		fontf=selected_text.attr('font-weight')
-		console.log(fontf)
 		if(fontf==400 || fontf=='normal'){
 			selected_text.attr({'font-weight':600})
 		}
@@ -1250,21 +1250,21 @@ $(function() {
 			if(e.target.nodeName=='text'){
 				clickedevent=e
 				e.preventDefault();
-				$("#text_context_menu").css("left", e.clientX);
+				$("#text_context_menu").css("left", e.clientX+3);
 				$("#text_context_menu").css("top", e.clientY);
 				$("#text_context_menu").fadeIn(50, FocusContextOut());
 				doubleClicked = true;
 			} else if(e.target.className.baseVal=='dataelement'){
 				clickedevent=e
 				e.preventDefault();
-				$("#data_context_menu").css("left", e.clientX);
+				$("#data_context_menu").css("left", e.clientX+3);
 				$("#data_context_menu").css("top", e.clientY);
 				$("#data_context_menu").fadeIn(50, FocusContextOut());
 				doubleClicked = true;
 			} else {
 				clickedevent=e
 				e.preventDefault();
-				$("#other_context_menu").css("left", e.clientX);
+				$("#other_context_menu").css("left", e.clientX+3);
 				$("#other_context_menu").css("top", e.clientY);
 				$("#other_context_menu").fadeIn(50, FocusContextOut());
 				doubleClicked = true;
@@ -1598,6 +1598,54 @@ function importsettings() {
 //   // turns out this is a pretty bad interface idea - disabled for now
 //   isvalid()
 // })
+
+function highlight_element(ev) {
+	console.log(ev.target.attributes)
+	// this should handle basically every case of mousing over a data element and getting a highlight effect
+	try{if(ev.target.nodeName=='path'){
+		item=Snap(ev.target)
+		item.attr({'stroke-width':parseInt(item.attr('stroke-width'))+3,'stroke-opacity':.5})
+	}} catch(err){}
+	try{if(ev.target.nodeName=='circle'){
+		item=Snap(ev.target)
+		item.attr({'r':parseInt(item.attr('r'))+2,'stroke-width':parseInt(item.attr('stroke-width'))+1,'stroke-opacity':.5})
+	}} catch(err){}
+	try{if(ev.target.nodeName=='line' && ev.target.attributes.ident.value=='key'){
+		item=Snap(ev.target)
+		item.attr({'stroke-width':parseInt(item.attr('stroke-width'))+2,'stroke-opacity':.5})
+	}} catch(err){}
+	try{if(ev.target.nodeName=='rect' && ev.target.attributes.ident.value=='key' && ev.target.attributes.ident2.value!='floatkey'){
+		item=Snap(ev.target)
+		item.attr({'stroke-opacity':.5,'fill-opacity':.5,'x':parseInt(item.attr('x'))-2,'y':parseInt(item.attr('y'))-2,'width':parseInt(item.attr('width'))+4,'height':parseInt(item.attr('height'))+4})
+	}} catch(err){}
+	try{if(ev.target.nodeName=='rect' && ev.target.attributes.data_type.value=='bar'){
+		item=Snap(ev.target)
+		item.attr({'stroke-opacity':.5,'fill-opacity':.5,'x':parseInt(item.attr('x'))-2,'y':parseInt(item.attr('y'))-2,'width':parseInt(item.attr('width'))+4,'height':parseInt(item.attr('height'))+4})
+	}} catch(err){}
+}
+
+function unhighlight_element(ev) {
+	try{if(ev.target.nodeName=='path'){
+		item=Snap(ev.target)
+		item.attr({'stroke-width':parseInt(item.attr('stroke-width'))-3,'stroke-opacity':1})
+	}} catch(err){}
+	try{if(ev.target.nodeName=='circle'){
+		item=Snap(ev.target)
+		item.attr({'r':parseInt(item.attr('r'))-2,'stroke-width':parseInt(item.attr('stroke-width'))-1,'stroke-opacity':1})
+	}} catch(err){}
+	try{if(ev.target.nodeName=='line' && ev.target.attributes.ident.value=='key'){
+		item=Snap(ev.target)
+		item.attr({'stroke-width':parseInt(item.attr('stroke-width'))-2,'stroke-opacity':1})
+	}} catch(err){}
+	try{if(ev.target.nodeName=='rect' && ev.target.attributes.ident.value=='key' && ev.target.attributes.ident2.value!='floatkey'){
+		item=Snap(ev.target)
+		item.attr({'stroke-opacity':1,'fill-opacity':1,'x':parseInt(item.attr('x'))+2,'y':parseInt(item.attr('y'))+2,'width':parseInt(item.attr('width'))-4,'height':parseInt(item.attr('height'))-4})
+	}} catch(err){}
+	try{if(ev.target.nodeName=='rect' && ev.target.attributes.class.value=='dataelement'){
+		item=Snap(ev.target)
+		item.attr({'stroke-opacity':1,'fill-opacity':1,'x':parseInt(item.attr('x'))+2,'y':parseInt(item.attr('y'))+2,'width':parseInt(item.attr('width'))-4,'height':parseInt(item.attr('height'))-4})
+	}} catch(err){}
+}
 
 function hidedata() {
 	// Hide the data and alert boxes when requested by hidebutton
