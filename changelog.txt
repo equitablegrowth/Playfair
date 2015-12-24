@@ -23,6 +23,10 @@ V0.2:
   be denominated in hours. So if you want to track a stock from 2PM to 2PM the next day, you will
   want to simply count out the hours (ie your data is 1,2,3,4,...) and then use a custom axis as
   appropriate.
+- When you hover over a data element on a graph, it will now be highlighted, which should make it
+  easier to right-click on an element and alter its color or etc.
+- When you right-click on a line-chart line, you can now change that line to a dashed line using the
+  contextual menu that appears.
 - Various bug fixes
 
 V0.1:
