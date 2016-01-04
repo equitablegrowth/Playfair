@@ -57,7 +57,7 @@
 	.input-group > .input-group-btn:first-child > .selectpicker {border-top-left-radius: 5px;border-bottom-left-radius: 5px;}
 	.pickvar {min-width:130px;}
 	.colorbox {width:16px;height:16px;background:red;border-radius:8px;margin-left:2;margin-right:2;margin-top:4;margin-bottom:0;display:inline-block;}
-	.colorbox:hover{width:18px;height:18px;border-radius:100%;border:2px solid #000000;margin-left:1;margin-right:1;margin-top:3;margin-bottom:-1;}
+	.colorbox:hover {width:18px;height:18px;border-radius:100%;border:2px solid #000000;margin-left:1;margin-right:1;margin-top:3;margin-bottom:-1;}
 	.panel-custom {border-color:#dddddd;}
 	.panel-custom .panel-heading {background:#e8e8e8;border-color: #dddddd;}
 	.fun > .panel-heading {background:#0063cd;color:white;}
@@ -75,8 +75,14 @@
 	.panel-heading {font-size:10px;border-radius:0px 0px 0px 0px;}
 	.pointtriangle {width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:12px solid black;display:inline-block;vertical-align:middle}
 	.pointcircle {width:12px;height:12px;border:2px solid #67c2a5;-webkit-border-radius:6px;border-radius:6px;display:inline-block;vertical-align:middle;margin-top:4.5px;background-color:rgba(103, 194, 165, 0.3)}
+	.pointcirclecontext {margin-left:4;margin-right:4;margin-top:4;margin-bottom:4;width:12px;height:12px;border:2px solid #67c2a5;-webkit-border-radius:6px;border-radius:6px;display:inline-block;vertical-align:middle;background-color:rgba(103, 194, 165, 0.3)}
 	.pointpoint {width:12px;height:12px;border:2px solid #ffffff;-webkit-border-radius:6px;border-radius:6px;display:inline-block;vertical-align:middle;margin-top:4.5px;background-color:rgba(103, 194, 165, 1)}
+	.pointpointcontext {margin-left:4;margin-right:4;margin-top:4;margin-bottom:4;width:12px;height:12px;border:2px solid rgba(103, 194, 165, 0);-webkit-background-clip: padding-box;background-clip: padding-box;-webkit-border-radius:6px;border-radius:6px;display:inline-block;vertical-align:middle;background-color:rgba(103, 194, 165, 1)}
 	.pointcircleopen {width:12px;height:12px;border:2px solid #67c2a5;-webkit-border-radius:6px;border-radius:6px;display:inline-block;vertical-align:middle;margin-top:4.5px;}
+	.pointcircleopencontext {margin-left:4;margin-right:4;margin-top:4;margin-bottom:4;width:12px;height:12px;border:2px solid #67c2a5;-webkit-border-radius:6px;border-radius:6px;display:inline-block;vertical-align:middle;}
+	.pointcirclecontext:hover {margin-left:3;margin-right:3;margin-top:3;margin-bottom:3;width:14px;height:14px;border:2px solid #67c2a5;-webkit-border-radius:7px;border-radius:7px;display:inline-block;vertical-align:middle;background-color:rgba(103, 194, 165, 0.3)}
+	.pointpointcontext:hover {margin-left:3;margin-right:3;margin-top:3;margin-bottom:3;width:14px;height:14px;border:2px solid rgba(103, 194, 165, 0);-webkit-background-clip: padding-box;background-clip: padding-box;-webkit-border-radius:7px;border-radius:7px;display:inline-block;vertical-align:middle;background-color:rgba(103, 194, 165, 1)}
+	.pointcircleopencontext:hover {margin-left:3;margin-right:3;margin-top:3;margin-bottom:3;width:14px;height:14px;border:2px solid #67c2a5;-webkit-border-radius:7px;border-radius:7px;display:inline-block;vertical-align:middle;}
 	.pointsquare {width:12px;height:12px;border:2px solid #67c2a5;display:inline-block;vertical-align:middle;margin-top:4.5px;}
 	.dead{width:0px;height:12px;background:white;border:0px solid white;display:inline-block;vertical-align:middle}
 	.tooltip-inner {text-align:left;}
@@ -174,10 +180,10 @@
 		<li onclick=startpath(clickedevent)>Start Path</li>
 		<li onclick=startarrow(clickedevent)>Start Arrow</li>
 		<hr>
-		<li><span class='pointcircle' onclick=pointtype(clickedevent.target,pointcircle)/><span class='pointpoint' onclick=pointtype(clickedevent.target,pointpoint)/><span class='pointcircleopen' onclick=pointtype(clickedevent.target,pointcircleopen)/></li>
+		<li><span class='pointcirclecontext' onclick=pointtype(clickedevent.target,'pointcircle')></span><span class='pointpointcontext' onclick=pointtype(clickedevent.target,'pointpoint')></span><span class='pointcircleopencontext' onclick=pointtype(clickedevent.target,'pointcircleopen')></span></li>
 		<hr>
-		<li onclick=startpath(clickedevent) onclick=pointsizeup(clickedevent.target)>Bigger</li>
-		<li onclick=startpath(clickedevent) onclick=pointsizedown(clickedevent.target)>Smaller</li>
+		<li onclick=pointsizeup(clickedevent.target)>Bigger</li>
+		<li onclick=pointsizedown(clickedevent.target)>Smaller</li>
 		<hr>
 	</ul>
 	<ul id='colormenu'>
@@ -191,9 +197,6 @@
 <div class="contextMenuContainer" id='callout_context_menu'>
 	<ul class="contextMenu">
 		<li onclick=deleteelement(clickedevent.target)>Delete Line</li>
-		<hr>
-		<li><span class='solid' onclick=dash_line(clickedevent.target,0)></span></li>
-		<li><span class='dashed' onclick=dash_line(clickedevent.target,1)></span></li>
 		<hr>
 	</ul>
 	<ul id='colormenu'>
@@ -543,9 +546,9 @@
 						</div>
 						<div class="row">
 							<div class="col-md-4">
-								<label class='radio-inline'><input type="radio" name="linepoint" value="circle" checked><span class='pointcircle' /></label>
-								<label class='radio-inline'><input type="radio" name="linepoint" value="circle"><span class='pointpoint' /></label>
-								<label class='radio-inline'><input type="radio" name="linepoint" value="circle"><span class='pointcircleopen'></label>
+								<label class='radio-inline'><input type="radio" name="linepoint" value="pointcircle" checked><span class='pointcircle' /></label>
+								<label class='radio-inline'><input type="radio" name="linepoint" value="pointpoint"><span class='pointpoint' /></label>
+								<label class='radio-inline'><input type="radio" name="linepoint" value="pointcircleopen"><span class='pointcircleopen'></label>
 							</div>
 						</div>
 					</div>
@@ -1005,6 +1008,9 @@ function isvalid() {
 		connect=$("#line_select_connect").val()
 		size=$("#line_select_pointsize").val()
 
+		//point type
+		point_type=$('input[name=linepoint]:checked').val()
+
 		// create the style object
 		style={}
 
@@ -1017,6 +1023,20 @@ function isvalid() {
 
 		if(barspace==false){style['barchart_width']=1}
 		style['legend_location']=legendloc
+
+		if (point_type=='pointpoint'){
+			style['point_size']=2
+			style['point_strokewidth']=0
+			style['point_fillopacity']=1
+		} else if (point_type=='pointcircle'){
+			style['point_size']=4
+			style['point_strokewidth']=2
+			style['point_fillopacity']=.2
+		} else if (point_type=='pointcircleopen'){
+			style['point_size']=4
+			style['point_strokewidth']=2
+			style['point_fillopacity']=0
+		}
 
 		// now apply the style object
 		chartobject.style(style)
@@ -1324,7 +1344,7 @@ $(function() {
 				$("#path_context_menu").css("left", e.clientX+3);
 				$("#path_context_menu").css("top", e.clientY);
 				$("#path_context_menu").fadeIn(50, FocusContextOut());
-			} else if (e.target.nodeName=='circle' && e.target.className.baseVal=='dataelement'){
+			} else if (e.target.nodeName=='circle'){
 				clickedevent=e
 				e.preventDefault();
 				$("#point_context_menu").css("left", e.clientX+3);
@@ -1336,6 +1356,13 @@ $(function() {
 				$("#data_context_menu").css("left", e.clientX+3);
 				$("#data_context_menu").css("top", e.clientY);
 				$("#data_context_menu").fadeIn(50, FocusContextOut());
+				doubleClicked = true;	
+			} else if(e.target.className.baseVal=='callout'){
+				clickedevent=e
+				e.preventDefault();
+				$("#callout_context_menu").css("left", e.clientX+3);
+				$("#callout_context_menu").css("top", e.clientY);
+				$("#callout_context_menu").fadeIn(50, FocusContextOut());
 				doubleClicked = true;		
 			} else {
 				clickedevent=e
@@ -1521,7 +1548,7 @@ function startpath(e) {
 
 	drawpath=1
 	pathstart=[e.pageX-svgx,e.pageY-svgy]
-	var circstart=grapharea.circle(pathstart[0],pathstart[1],1.5).attr({stroke:'#ababab','stroke-width':1,'shape-rendering':'geometricPrecision',fill:'none'})
+	var circstart=grapharea.circle(pathstart[0],pathstart[1],1.5).attr({class:'callout',stroke:'#ababab','stroke-width':1,'shape-rendering':'geometricPrecision',fill:'none'})
 	grapharea.click(endpath)
 	grapharea.mousemove(tracker)
 }
@@ -1533,7 +1560,6 @@ function startarrow(e) {
 
 	drawpath=1
 	pathstart=[e.pageX-svgx,e.pageY-svgy]
-	console.log('current: ',e.pageX,e.pageY,'svg: ',svgx,svgy)
 	grapharea.click(endarrow)
 	grapharea.mousemove(tracker)
 }
@@ -1563,8 +1589,10 @@ function endpath(e) {
 		yoffset=-1
 	}
 
-	finalline_1=grapharea.line(pathstart[0],pathstart[1]+yoffset,pathstart[0],e.pageY-svgy).attr({'stroke-width':1,'stroke':'#ababab','shape-rendering':'crispEdges'})
-	finalline_2=grapharea.line(pathstart[0],e.pageY-svgy,e.pageX-svgx,e.pageY-svgy).attr({'stroke-width':1,'stroke':'#ababab','shape-rendering':'crispEdges'})
+	path_string='M'+pathstart[0]+' '+(pathstart[1]+yoffset)+'L'+pathstart[0]+' '+(e.pageY-svgy)+'L'+(e.pageX-svgx)+' '+(e.pageY-svgy)
+	finalline=grapharea.path(path_string).attr({class:'callout','stroke-width':1,'stroke':'#ababab','shape-rendering':'crispEdges',fill:'none'})
+	// finalline_1=grapharea.line(pathstart[0],pathstart[1]+yoffset,pathstart[0],e.pageY-svgy).attr({'stroke-width':1,'stroke':'#ababab','shape-rendering':'crispEdges'})
+	// finalline_2=grapharea.line(pathstart[0],e.pageY-svgy,e.pageX-svgx,e.pageY-svgy).attr({'stroke-width':1,'stroke':'#ababab','shape-rendering':'crispEdges'})
 }
 
 function endarrow(e) {
@@ -1578,8 +1606,43 @@ function endarrow(e) {
 	grapharea.unmousemove(tracker)
 	grapharea.unclick(endarrow)
 	try{trackline.remove()}catch(err){}
-	finalline=grapharea.line(pathstart[0],pathstart[1],e.pageX-svgx,e.pageY-svgy).attr({'stroke-width':2,'stroke':'black','shape-rendering':'auto','marker-end':amarker})
+	finalline=grapharea.line(pathstart[0],pathstart[1],e.pageX-svgx,e.pageY-svgy).attr({class:'callout','stroke-width':2,'stroke':'black','shape-rendering':'auto','marker-end':amarker})
 }
+
+function deleteelement(e) {
+	e.remove()
+}
+
+function pointsizeup(e) {
+	item=Snap(e)
+	item.attr({r:parseInt(item.attr('r'))+1})
+}
+
+function pointsizedown(e) {
+	item=Snap(e)
+	item.attr({r:item.attr('r')-1})
+}
+
+function pointtype(e,type) {
+	item=Snap(e)
+
+	if (type=='pointpoint' && item.attr('stroke-width')!=0){
+		item.attr({'stroke-width':0,r:item.attr('r')-2,'fill-opacity':1})
+	} else if (type=='pointcircle'){
+		if (item.attr('stroke-width')==0){
+			item.attr({'stroke-width':2,r:item.attr('r')+2,'fill-opacity':.2})
+		} else {
+			item.attr({'stroke-width':2,'fill-opacity':.2})
+		}
+	} else if (type=='pointcircleopen') {
+		if (item.attr('stroke-width')==0){
+			item.attr({'stroke-width':2,r:item.attr('r')+2,'fill-opacity':0})
+		} else {
+			item.attr({'stroke-width':2,'fill-opacity':0})
+		}
+	}
+}
+
 
 ///////////////////// END CONTEXTUAL MENUS /////////////////////////////
 ////////////////////////////////////////////////////////////////////////
@@ -1707,6 +1770,10 @@ function highlight_element(ev) {
 		item=Snap(ev.target)
 		item.attr({'stroke-opacity':.5,'fill-opacity':.5,'x':parseInt(item.attr('x'))-2,'y':parseInt(item.attr('y'))-2,'width':parseInt(item.attr('width'))+4,'height':parseInt(item.attr('height'))+4})
 	}} catch(err){}
+	try{if(ev.target.nodeName=='line' && ev.target.attributes.class.value=='callout'){
+		item=Snap(ev.target)
+		item.attr({'stroke-width':parseInt(item.attr('stroke-width'))+2,'stroke-opacity':.5})
+	}} catch(err){}
 }
 
 function unhighlight_element(ev) {
@@ -1729,6 +1796,10 @@ function unhighlight_element(ev) {
 	try{if(ev.target.nodeName=='rect' && ev.target.attributes.class.value=='dataelement'){
 		item=Snap(ev.target)
 		item.attr({'stroke-opacity':1,'fill-opacity':1,'x':parseInt(item.attr('x'))+2,'y':parseInt(item.attr('y'))+2,'width':parseInt(item.attr('width'))-4,'height':parseInt(item.attr('height'))-4})
+	}} catch(err){}
+	try{if(ev.target.nodeName=='line' && ev.target.attributes.class.value=='callout'){
+		item=Snap(ev.target)
+		item.attr({'stroke-width':parseInt(item.attr('stroke-width'))-2,'stroke-opacity':1})
 	}} catch(err){}
 }
 
