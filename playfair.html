@@ -1061,7 +1061,7 @@ function isvalid() {
 				trends=[]
 
 				for (var i=0;i<slopes.length;i++){
-					trends.append([slopes[i],intercepts[i])
+					trends.push([slopes[i].value,intercepts[i].value])
 				}
 
 				options['abline']=trends
@@ -1412,33 +1412,37 @@ function italictext(target) {
 }
 
 function sizeup(target) {
-	high_coords=high_box.getBBox()
+	try{high_coords=high_box.getBBox()}catch(err){}
 	var item=Snap(target)
 	size=item.attr('font-size')
 	item.attr({'font-size':parseInt(size)+1});
-	coords=selected_text.getBBox()
-	high_box.attr({y:coords.y-3,x:coords.x-3,width:coords.width+6,height:coords.height+6})	
+	try{coords=selected_text.getBBox()
+	high_box.attr({y:coords.y-3,x:coords.x-3,width:coords.width+6,height:coords.height+6})}catch(err){}
 }
 
 function sizedown(target) {
-	high_coords=high_box.getBBox()
+	try{high_coords=high_box.getBBox()}catch(err){}
 	var item=Snap(target)
 	size=item.attr('font-size')
 	item.attr({'font-size':parseInt(size)-1});
-	coords=selected_text.getBBox()
-	high_box.attr({y:coords.y-3,x:coords.x-3,width:coords.width+6,height:coords.height+6})
+	try{coords=selected_text.getBBox()
+	high_box.attr({y:coords.y-3,x:coords.x-3,width:coords.width+6,height:coords.height+6})}catch(err){}
 }
 
 function fadein(target) {
 	var item=Snap(target)
 	opacity=parseFloat(item.attr('opacity'))
+	console.log(opacity)
 	item.attr({opacity:opacity+.1})
+	console.log(item.attr('opacity'))
 }
 
 function fadeout(target) {
 	var item=Snap(target)
 	opacity=parseFloat(item.attr('opacity'))
+	console.log(opacity)
 	item.attr({opacity:opacity-.1})
+	console.log(item.attr('opacity'))
 }
 
 function addtext(target) {
@@ -1808,62 +1812,62 @@ function highlight_element(ev) {
 	// this should handle basically every case of mousing over a data element and getting a highlight effect
 	try{if(ev.target.nodeName=='path'){
 		item=Snap(ev.target)
-		item.attr({'stroke-width':parseInt(item.attr('stroke-width'))+3,'stroke-opacity':.5})
+		item.attr({'stroke-width':parseInt(item.attr('stroke-width'))+3,'stroke-opacity':item.attr('opacity')-.5})
 	}} catch(err){}
 	try{if(ev.target.nodeName=='circle'){
 		item=Snap(ev.target)
-		item.attr({'r':parseInt(item.attr('r'))+2,'stroke-width':parseInt(item.attr('stroke-width'))+1,'stroke-opacity':.5})
+		item.attr({'r':parseInt(item.attr('r'))+2,'stroke-width':parseInt(item.attr('stroke-width'))+1,'stroke-opacity':item.attr('stroke-opacity')-.5})
 	}} catch(err){}
 	try{if(ev.target.nodeName=='line' && ev.target.attributes.ident.value=='key'){
 		item=Snap(ev.target)
-		item.attr({'stroke-width':parseInt(item.attr('stroke-width'))+2,'stroke-opacity':.5})
+		item.attr({'stroke-width':parseInt(item.attr('stroke-width'))+2,'stroke-opacity':item.attr('stroke-opacity')-.5})
 	}} catch(err){}
 	try{if(ev.target.nodeName=='rect' && ev.target.attributes.ident.value=='key' && ev.target.attributes.ident2.value!='floatkey'){
 		item=Snap(ev.target)
-		item.attr({'stroke-opacity':.5,'fill-opacity':.5,'x':parseInt(item.attr('x'))-2,'y':parseInt(item.attr('y'))-2,'width':parseInt(item.attr('width'))+4,'height':parseInt(item.attr('height'))+4})
+		item.attr({'stroke-opacity':item.attr('stroke-opacity')-.5,'fill-opacity':item.attr('fill-opacity')-.5,'x':parseInt(item.attr('x'))-2,'y':parseInt(item.attr('y'))-2,'width':parseInt(item.attr('width'))+4,'height':parseInt(item.attr('height'))+4})
 	}} catch(err){}
 	try{if(ev.target.nodeName=='rect' && ev.target.attributes.data_type.value=='bar'){
 		item=Snap(ev.target)
-		item.attr({'stroke-opacity':.5,'fill-opacity':.5,'x':parseInt(item.attr('x'))-2,'y':parseInt(item.attr('y'))-2,'width':parseInt(item.attr('width'))+4,'height':parseInt(item.attr('height'))+4})
+		item.attr({'stroke-opacity':item.attr('stroke-opacity')-.5,'fill-opacity':item.attr('fill-opacity')-.5,'x':parseInt(item.attr('x'))-2,'y':parseInt(item.attr('y'))-2,'width':parseInt(item.attr('width'))+4,'height':parseInt(item.attr('height'))+4})
 	}} catch(err){}
 	try{if(ev.target.nodeName=='line' && ev.target.attributes.class.value=='callout'){
 		item=Snap(ev.target)
-		item.attr({'stroke-width':parseInt(item.attr('stroke-width'))+2,'stroke-opacity':.5})
+		item.attr({'stroke-width':parseInt(item.attr('stroke-width'))+2,'stroke-opacity':item.attr('stroke-opacity')-.5})
 	}} catch(err){}
 	try{if(ev.target.nodeName=='text'){
 		item=Snap(ev.target)
-		item.attr({'font-size':parseInt(item.attr('font-size')),'opacity':.5})
+		item.attr({'font-size':parseInt(item.attr('font-size')),'opacity':(parseFloat(item.attr('opacity'))>.5 ? parseFloat(item.attr('opacity'))-.5 : .2)})
 	}} catch(err){}
 }
 
 function unhighlight_element(ev) {
 	try{if(ev.target.nodeName=='path'){
 		item=Snap(ev.target)
-		item.attr({'stroke-width':parseInt(item.attr('stroke-width'))-3,'stroke-opacity':1})
+		item.attr({'stroke-width':parseInt(item.attr('stroke-width'))-3,'stroke-opacity':item.attr('stroke_opacity')+.5})
 	}} catch(err){}
 	try{if(ev.target.nodeName=='circle'){
 		item=Snap(ev.target)
-		item.attr({'r':parseInt(item.attr('r'))-2,'stroke-width':parseInt(item.attr('stroke-width'))-1,'stroke-opacity':1})
+		item.attr({'r':parseInt(item.attr('r'))-2,'stroke-width':parseInt(item.attr('stroke-width'))-1,'stroke-opacity':item.attr('stroke-opacity')+.5})
 	}} catch(err){}
 	try{if(ev.target.nodeName=='line' && ev.target.attributes.ident.value=='key'){
 		item=Snap(ev.target)
-		item.attr({'stroke-width':parseInt(item.attr('stroke-width'))-2,'stroke-opacity':1})
+		item.attr({'stroke-width':parseInt(item.attr('stroke-width'))-2,'stroke-opacity':item.attr('stroke-opacity')+.5})
 	}} catch(err){}
 	try{if(ev.target.nodeName=='rect' && ev.target.attributes.ident.value=='key' && ev.target.attributes.ident2.value!='floatkey'){
 		item=Snap(ev.target)
-		item.attr({'stroke-opacity':1,'fill-opacity':1,'x':parseInt(item.attr('x'))+2,'y':parseInt(item.attr('y'))+2,'width':parseInt(item.attr('width'))-4,'height':parseInt(item.attr('height'))-4})
+		item.attr({'stroke-opacity':item.attr('stroke-opacity')+.5,'fill-opacity':1,'x':parseInt(item.attr('x'))+2,'y':parseInt(item.attr('y'))+2,'width':parseInt(item.attr('width'))-4,'height':parseInt(item.attr('height'))-4})
 	}} catch(err){}
 	try{if(ev.target.nodeName=='rect' && ev.target.attributes.class.value=='dataelement'){
 		item=Snap(ev.target)
-		item.attr({'stroke-opacity':1,'fill-opacity':1,'x':parseInt(item.attr('x'))+2,'y':parseInt(item.attr('y'))+2,'width':parseInt(item.attr('width'))-4,'height':parseInt(item.attr('height'))-4})
+		item.attr({'stroke-opacity':item.attr('stroke-opacity')+.5,'fill-opacity':item.attr('fill-opacity')+.5,'x':parseInt(item.attr('x'))+2,'y':parseInt(item.attr('y'))+2,'width':parseInt(item.attr('width'))-4,'height':parseInt(item.attr('height'))-4})
 	}} catch(err){}
 	try{if(ev.target.nodeName=='line' && ev.target.attributes.class.value=='callout'){
 		item=Snap(ev.target)
-		item.attr({'stroke-width':parseInt(item.attr('stroke-width'))-2,'stroke-opacity':1})
+		item.attr({'stroke-width':parseInt(item.attr('stroke-width'))-2,'stroke-opacity':item.attr('stroke-opacity')+.5})
 	}} catch(err){}
 	try{if(ev.target.nodeName=='text'){
 		item=Snap(ev.target)
-		item.attr({'font-size':parseInt(item.attr('font-size')),'opacity':1})
+		item.attr({'font-size':parseInt(item.attr('font-size')),'opacity':parseFloat(item.attr('opacity'))+.5})
 	}} catch(err){}
 }
 
