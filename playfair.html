@@ -519,13 +519,15 @@
 				<div id="linestyling_c" class="panel-collapse collapse" role="tabpanel" aria-labelledby="linestyling_c">
 					<div class="panel-body">
 						<div class="row">
-							<div class="col-md-3">
+							<div class="col-md-6">
 								<h3 data-toggle='tooltip' data-placement='top' title='Turn points on and off. For a line graph, turn points off here and choose a connecting variable in data.'><input type="checkbox" id="points" data-toggle="toggle" data-size='mini' checked ></label>&nbsp Draw Points<label class='checkbox-inline'></h3>
-								<h3 data-toggle='tooltip' data-placement='top' title='If a label variable has been specified, turn this on to label all points by default (you can label them manually by left-clicking individual points).'><input type="checkbox" id="labels" data-toggle="toggle" data-size='mini'></label>&nbsp Label all points<label class='checkbox-inline'></h3>
-								<!-- <label class='radio-inline'><input type="radio" name="linepoint" value="circle" checked><span class='pointcircle'></span></label>
-								<label class='ra=dio-inline'><input type="radio" name="linepoint" value="square" disabled><span class='pointsquare'></span></label> -->
-								<!-- <label class='radio-inline'><input type="radio" name="linepoint" value="triangle" disabled><span class='pointtriangle'></span></label> -->
-								<!-- <label class='radio-inline'><input type="radio" name="linepoint" value="group"><span class='dead'></span>By Group</label>	 -->						
+								<h3 data-toggle='tooltip' data-placement='top' title='If a label variable has been specified, turn this on to label all points by default (you can label them manually by left-clicking individual points).'><input type="checkbox" id="labels" data-toggle="toggle" data-size='mini'></label>&nbsp Label all points<label class='checkbox-inline'></h3>					
+							</div>
+							<div class="col-md-6">
+								<h3>Point Type</h3>
+								<label class='radio-inline'><input type="radio" name="linepoint" value="pointcircle" checked><span class='pointcircle' /></label>
+								<label class='radio-inline'><input type="radio" name="linepoint" value="pointpoint"><span class='pointpoint' /></label>
+								<label class='radio-inline'><input type="radio" name="linepoint" value="pointcircleopen"><span class='pointcircleopen'></label>
 							</div>
 						</div><br>
 						<div class="row">
@@ -548,18 +550,23 @@
 								<div class="col-md-4">
 									<span class="add text-center" onclick=newtrend()><i class="fa fa-plus"></i></span>
 								</div>
-							</div><br>
-						</div>
-						<div class="row">
-							<div class="col-md-12">
-								<h3>Point Type</h3>
+							</div>
+						</div><br>
+						<div class='row'>
+							<div class='col-md-12'>
+								<h3>Interval Shading</h3>
 							</div>
 						</div>
-						<div class="row">
-							<div class="col-md-4">
-								<label class='radio-inline'><input type="radio" name="linepoint" value="pointcircle" checked><span class='pointcircle' /></label>
-								<label class='radio-inline'><input type="radio" name="linepoint" value="pointpoint"><span class='pointpoint' /></label>
-								<label class='radio-inline'><input type="radio" name="linepoint" value="pointcircleopen"><span class='pointcircleopen'></label>
+						<div class='row'>
+							<div class='col-md-3'>
+								<h3 data-toggle='tooltip' data-placement='top' title='Shade U.S. recessions according to the x-axis. The x-variable must be a date type.'><input type="checkbox" id="recession_shading" data-toggle="toggle" data-size='mini'></label>&nbsp Shade U.S. recessions<label class='checkbox-inline'></h3>
+							</div>
+						</div>
+						<div class='row'>
+							<div class='col-md-9'>
+								<div class="input-group"> <span class="input-group-addon" data-toggle='tooltip' data-placement='top' title='Intercept of the trend line to add to the plot.'>Arbitrary Shading</span>
+									<input type="text" class="form-control intercept" placeholder="ex: [3,4],[9,10],[20,24]" id='arbitrary_intervals'>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -687,10 +694,10 @@ $('[data-toggle="tooltip"]').tooltip()
 
 // Initial graph state
 function placeholder(){
-	var bounding_box=grapharea.rect(0,0,745,450).attr({class:'background',fill:'none','stroke':'lightgray','stroke-width':5.5,'stroke-dasharray':'10,10'})
-	var x1=grapharea.line(0,0,745,450).attr({'stroke':'lightgray','stroke-width':2.75,'stroke-dasharray':'10,10'})
-	var x2=grapharea.line(0,450,745,0).attr({'stroke':'lightgray','stroke-width':2.75,'stroke-dasharray':'10,10'})
-	var init_text=grapharea.text(372.5,225,'graphing area').attr({'font-family':'Lato, Arial, sans-serif','font-size':50,'text-anchor':'middle','fill':'gray','font-weight':700,'dominant-baseline':'text-before-edge',cursor:'pointer'})
+	var bounding_box=grapharea.rect(0,0,width,height).attr({class:'background',fill:'none','stroke':'lightgray','stroke-width':5.5,'stroke-dasharray':'10,10'})
+	var x1=grapharea.line(0,0,width,height).attr({'stroke':'lightgray','stroke-width':2.75,'stroke-dasharray':'10,10'})
+	var x2=grapharea.line(0,height,width,0).attr({'stroke':'lightgray','stroke-width':2.75,'stroke-dasharray':'10,10'})
+	var init_text=grapharea.text(width/2,height/2,'graphing area').attr({'font-family':'Lato, Arial, sans-serif','font-size':50,'text-anchor':'middle','fill':'gray','font-weight':700,'dominant-baseline':'text-before-edge',cursor:'pointer'})
 	center_baseline(init_text)
 }
 
@@ -942,6 +949,7 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 });
 
 function changedimensions() {
+	// it's kind of weird that this updates in real time instead of waiting for draw/refresh like... everything else above the graph
 	if($('#gwidth').val()!=""){
 		width=$('#gwidth').val()
 	}
@@ -953,6 +961,13 @@ function changedimensions() {
 	$('#grapharea').attr('width',width)
 	$('#constraint').attr('style','max-width:'+width+';margin-left:auto;margin-right:auto')
 
+	grapharea.selectAll('rect').remove()
+	grapharea.selectAll('text').remove()
+	grapharea.selectAll('line').remove()
+	grapharea.selectAll('circle').remove()
+	grapharea.selectAll('path').remove()
+
+	placeholder()
 	isvalid()
 }
 
@@ -1011,6 +1026,8 @@ function isvalid() {
 		// line/scatter specific
 		points=document.getElementById('points').checked
 		labels=document.getElementById('labels').checked
+		us_shading=document.getElementById('recession_shading').checked
+		arbitrary_shading=$('#arbitrary_intervals').val()
 		label=$("#line_select_label").val()
 		connect=$("#line_select_connect").val()
 		size=$("#line_select_pointsize").val()
@@ -1072,6 +1089,26 @@ function isvalid() {
 
 			if (graph_type=='Line/Scatter') {
 				options={}
+
+				if (us_shading==true){
+					shading=[['June 1857','December 1858'],['October 1860','June 1861'],['April 1865','December 1867'],['June 1869','December 1870'],['October 1873','March 1879'],['March 1882','May 1885'],['March 1887','April 1888'],['July 1890','May 1891'],['January 1893','June 1894'],['December 1895','June 1897'],['June 1899','December 1900'],['September 1902','August 1904'],['May 1907','June 1908'],['January 1910','January 1912'],['January 1913','December 1914'],['August 1918','March 1919'],['January 1920','July 1921'],['May 1923','July 1924'],['October 1926','November 1927'],['August 1929','March 1933'],['May 1937','June 1938'],['February 1945','October 1945'],['November 1948','October 1949'],['July 1953','May 1954'],['August 1957','April 1958'],['April 1960','February 1961'],['December 1969','November 1970'],['November 1973','March 1975'],['January 1980','July 1980'],['July 1981','November 1982'],['July 1990','March 1991'],['March 2001','November 2001'],['December 2007','June 2009']]
+				} else if (arbitrary_shading!=''){
+					sa=arbitrary_shading.split('],[')
+					saf=[]
+					for(var i=0;i<sa.length;i++){
+						temp=sa[i].replace('[','')
+						temp=temp.replace(']','')
+						saf.push([temp.split(',')[0],temp.split(',')[1]])
+					}
+					shading=saf
+				}
+
+// if (moment(d[j][i], ["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY"],true).isValid()==false){
+// 	date=false
+// }
+// var temp=new Date(String(mindata.getUTCFullYear()))
+
+				try{console.log('shading: ',shading)}catch(err){}
 
 				slopes=document.getElementsByClassName('slope')
 				intercepts=document.getElementsByClassName('intercept')
@@ -1828,65 +1865,45 @@ function importsettings() {
 
 function highlight_element(ev) {
 	// this should handle basically every case of mousing over a data element and getting a highlight effect
-	try{if(ev.target.nodeName=='path'){
-		item=Snap(ev.target)
-		item.attr({'stroke-width':parseInt(item.attr('stroke-width'))+3,'stroke-opacity':item.attr('opacity')-.5})
-	}} catch(err){}
-	try{if(ev.target.nodeName=='circle'){
-		item=Snap(ev.target)
-		item.attr({'r':parseInt(item.attr('r'))+2,'stroke-width':parseInt(item.attr('stroke-width'))+1,'stroke-opacity':item.attr('stroke-opacity')-.5})
-	}} catch(err){}
-	try{if(ev.target.nodeName=='line' && ev.target.attributes.ident.value=='key'){
-		item=Snap(ev.target)
-		item.attr({'stroke-width':parseInt(item.attr('stroke-width'))+2,'stroke-opacity':item.attr('stroke-opacity')-.5})
-	}} catch(err){}
-	try{if(ev.target.nodeName=='rect' && ev.target.attributes.ident.value=='key' && ev.target.attributes.ident2.value!='floatkey'){
-		item=Snap(ev.target)
-		item.attr({'stroke-opacity':item.attr('stroke-opacity')-.5,'fill-opacity':item.attr('fill-opacity')-.5,'x':parseInt(item.attr('x'))-2,'y':parseInt(item.attr('y'))-2,'width':parseInt(item.attr('width'))+4,'height':parseInt(item.attr('height'))+4})
-	}} catch(err){}
-	try{if(ev.target.nodeName=='rect' && ev.target.attributes.data_type.value=='bar'){
-		item=Snap(ev.target)
-		item.attr({'stroke-opacity':item.attr('stroke-opacity')-.5,'fill-opacity':item.attr('fill-opacity')-.5,'x':parseInt(item.attr('x'))-2,'y':parseInt(item.attr('y'))-2,'width':parseInt(item.attr('width'))+4,'height':parseInt(item.attr('height'))+4})
-	}} catch(err){}
-	try{if(ev.target.nodeName=='line' && ev.target.attributes.class.value=='callout'){
-		item=Snap(ev.target)
-		item.attr({'stroke-width':parseInt(item.attr('stroke-width'))+2,'stroke-opacity':item.attr('stroke-opacity')-.5})
-	}} catch(err){}
-	try{if(ev.target.nodeName=='text'){
-		item=Snap(ev.target)
-		item.attr({'font-size':parseInt(item.attr('font-size')),'opacity':(parseFloat(item.attr('opacity'))>.5 ? parseFloat(item.attr('opacity'))-.5 : .2)})
-	}} catch(err){}
+	item=Snap(ev.target)
+	try{
+		if(ev.target.nodeName=='path'){
+			item.attr({'stroke-width':parseFloat(item.attr('stroke-width'))+3,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))-.5})
+		} else if(ev.target.nodeName=='circle'){
+			item.attr({'r':parseFloat(item.attr('r'))+2,'stroke-width':parseFloat(item.attr('stroke-width'))+1,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))-.5})
+		} else if(ev.target.nodeName=='line' && ev.target.attributes.ident.value=='key'){
+			item.attr({'stroke-width':parseFloat(item.attr('stroke-width'))+2,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))-.5})
+		} else if(ev.target.nodeName=='rect' && ev.target.attributes.ident.value=='key' && ev.target.attributes.ident2.value!='floatkey'){
+			item.attr({'stroke-opacity':parseFloat(item.attr('stroke-opacity'))-.5,'fill-opacity':parseFloat(item.attr('fill-opacity'))-.5,'x':parseFloat(item.attr('x'))-2,'y':parseFloat(item.attr('y'))-2,'width':parseFloat(item.attr('width'))+4,'height':parseFloat(item.attr('height'))+4})
+		} else if(ev.target.nodeName=='rect' && ev.target.attributes.data_type.value=='bar'){
+			item.attr({'stroke-opacity':parseFloat(item.attr('stroke-opacity'))-.5,'fill-opacity':parseFloat(item.attr('fill-opacity'))-.5,'x':parseFloat(item.attr('x'))-2,'y':parseFloat(item.attr('y'))-2,'width':parseFloat(item.attr('width'))+4,'height':parseFloat(item.attr('height'))+4})
+		} else if(ev.target.nodeName=='line' && ev.target.attributes.class.value=='callout'){
+			item.attr({'stroke-width':parseFloat(item.attr('stroke-width'))+2,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))-.5})
+		} else if(ev.target.nodeName=='text'){
+			item.attr({'font-size':parseFloat(item.attr('font-size')),'opacity':(parseFloat(item.attr('opacity'))>.5 ? parseFloat(item.attr('opacity'))-.5 : .2)})
+		}
+	} catch(err){}
 }
 
 function unhighlight_element(ev) {
-	try{if(ev.target.nodeName=='path'){
-		item=Snap(ev.target)
-		item.attr({'stroke-width':parseInt(item.attr('stroke-width'))-3,'stroke-opacity':item.attr('stroke_opacity')+.5})
-	}} catch(err){}
-	try{if(ev.target.nodeName=='circle'){
-		item=Snap(ev.target)
-		item.attr({'r':parseInt(item.attr('r'))-2,'stroke-width':parseInt(item.attr('stroke-width'))-1,'stroke-opacity':item.attr('stroke-opacity')+.5})
-	}} catch(err){}
-	try{if(ev.target.nodeName=='line' && ev.target.attributes.ident.value=='key'){
-		item=Snap(ev.target)
-		item.attr({'stroke-width':parseInt(item.attr('stroke-width'))-2,'stroke-opacity':item.attr('stroke-opacity')+.5})
-	}} catch(err){}
-	try{if(ev.target.nodeName=='rect' && ev.target.attributes.ident.value=='key' && ev.target.attributes.ident2.value!='floatkey'){
-		item=Snap(ev.target)
-		item.attr({'stroke-opacity':item.attr('stroke-opacity')+.5,'fill-opacity':1,'x':parseInt(item.attr('x'))+2,'y':parseInt(item.attr('y'))+2,'width':parseInt(item.attr('width'))-4,'height':parseInt(item.attr('height'))-4})
-	}} catch(err){}
-	try{if(ev.target.nodeName=='rect' && ev.target.attributes.class.value=='dataelement'){
-		item=Snap(ev.target)
-		item.attr({'stroke-opacity':item.attr('stroke-opacity')+.5,'fill-opacity':item.attr('fill-opacity')+.5,'x':parseInt(item.attr('x'))+2,'y':parseInt(item.attr('y'))+2,'width':parseInt(item.attr('width'))-4,'height':parseInt(item.attr('height'))-4})
-	}} catch(err){}
-	try{if(ev.target.nodeName=='line' && ev.target.attributes.class.value=='callout'){
-		item=Snap(ev.target)
-		item.attr({'stroke-width':parseInt(item.attr('stroke-width'))-2,'stroke-opacity':item.attr('stroke-opacity')+.5})
-	}} catch(err){}
-	try{if(ev.target.nodeName=='text'){
-		item=Snap(ev.target)
-		item.attr({'font-size':parseInt(item.attr('font-size')),'opacity':parseFloat(item.attr('opacity'))+.5})
-	}} catch(err){}
+	item=Snap(ev.target)
+	try{
+		if(ev.target.nodeName=='path'){
+			item.attr({'stroke-width':parseFloat(item.attr('stroke-width'))-3,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))+.5})
+		} else if(ev.target.nodeName=='circle'){
+			item.attr({'r':parseFloat(item.attr('r'))-2,'stroke-width':parseFloat(item.attr('stroke-width'))-1,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))+.5})
+		} else if(ev.target.nodeName=='line' && ev.target.attributes.ident.value=='key'){
+			item.attr({'stroke-width':parseFloat(item.attr('stroke-width'))-2,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))+.5})
+		} else if(ev.target.nodeName=='rect' && ev.target.attributes.ident.value=='key' && ev.target.attributes.ident2.value!='floatkey'){
+			item.attr({'stroke-opacity':parseFloat(item.attr('stroke-opacity'))+.5,'fill-opacity':parseFloat(item.attr('fill-opacity'))+.5,'x':parseFloat(item.attr('x'))+2,'y':parseFloat(item.attr('y'))+2,'width':parseFloat(item.attr('width'))-4,'height':parseFloat(item.attr('height'))-4})
+		} else if(ev.target.nodeName=='rect' && ev.target.attributes.class.value=='dataelement'){
+			item.attr({'stroke-opacity':parseFloat(item.attr('stroke-opacity'))+.5,'fill-opacity':parseFloat(item.attr('fill-opacity'))+.5,'x':parseFloat(item.attr('x'))+2,'y':parseFloat(item.attr('y'))+2,'width':parseFloat(item.attr('width'))-4,'height':parseFloat(item.attr('height'))-4})
+		} else if(ev.target.nodeName=='line' && ev.target.attributes.class.value=='callout'){
+			item.attr({'stroke-width':parseFloat(item.attr('stroke-width'))-2,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))+.5})
+		} else if(ev.target.nodeName=='text'){
+			item.attr({'font-size':parseFloat(item.attr('font-size')),'opacity':parseFloat(item.attr('opacity'))+.5})
+		}
+	} catch(err){}
 }
 
 function hidedata() {

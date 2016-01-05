@@ -1,7 +1,7 @@
 changelog.txt
 
 V0.4
-  - 
+  - US recession shading and arbitrary shading can be found in Line/Scatter -> Line/Scatter style. I know, the UI looks terrible. You can only shade on the x-axis (is there a reason you'd want to shade on the y-axis?) To use the default US recession shading, your x-axis *must* be a date data type. For arbitrary shading, you can either specify number intervals (ie [3,4]) or date intervals (ie [01/01/1997,05/01/1997])
 
 
 V0.3:
@@ -25,16 +25,16 @@ V0.3:
 V0.2:
   - Date parsing: Playfair can now handle a date data type. The data alert box will inform you that your column has been parsed as a date. Check and make sure! All rows of the column must parse as a date - one missing observation will prevent proper parsing. Only certain formats are recognized as dates. Any of the following should work:
 
-       02-28-1981
-       02/28/1981
-       02-28-81
-       02/28/81
-       02/1981
-       02-1981
-       1981-02-28 (FRED format)
-       February 1981
-       February 26 1981
-       February 26, 1981
+    1981-02-28 (FRED format)
+    02-28-1981
+    02/28/1981
+    02-28-81
+    02/28/81
+    02/1981
+    02-1981
+    February 1981
+    February 26 1981
+    February 26, 1981
 
   If there are other formats Playfair should recognize, please log these as bugs. It intentionally does not recognize sequences like 1996,1997 as years - either edit out commas in these sequences manually, format them without commas, or format them in your data as 1/1/1996, 1/1/1997, etc.  It also doesn't really handle amounts of time that should be denominated in hours. So if you want to track a stock from 2PM to 2PM the next day, you will want to simply count out the hours (ie your data is 1,2,3,4,...) and then use a custom axis as appropriate. You cannot currently use custom axes with date data.
 
