@@ -338,14 +338,17 @@
 
 							<div class="col-md-6">
 							<h3>Size</h3>
-								<div class='select'>
-								<select class="selectpicker" id='sector1' data-width='300px' data-dropup-auto=false disabled>
-									<option value='standard'>Standard (rectangular)</option>
-									<option value='square'>Square</option>
-									<option value='tall'>Tall</option>
-									<option value='wide'>Wide</option>
-									<option value='custom'>Custom</option>
-								</select>
+								<div class='col-md-6' style='padding-left:0'>
+									<div class="input-group">
+									  <span class="input-group-addon" data-toggle='tooltip' data-placement='top' title='Width of the graph in pixels.'>Width</span>
+									  <input type="text" class="form-control" placeholder="745" id='gwidth' onchange=changedimensions()>
+									</div>
+								</div>
+								<div class='col-md-6' style='padding-left:0'>
+									<div class="input-group">
+									  <span class="input-group-addon" data-toggle='tooltip' data-placement='top' title='Height of the graph in pixels.'>Height</span>
+									  <input type="text" class="form-control" placeholder="450" id='gheight' onchange=changedimensions()>
+									</div>
 								</div><br>
 								<h3>Key</h3>
 								<label class='radio-inline'><input type="radio" name="key" value="none">None</label>
@@ -613,7 +616,7 @@
 <button type="button" title='Reset the interactive' class="btn btn-default btn" onclick='isvalid()'><i class="fa fa-refresh"></i> Draw/refresh graph</button><br><br>
 
 <div style='max-width:745;margin-left:auto;margin-right:auto' id='constraint'>
-<svg id='grapharea' viewbox='0 0 745 450'>
+<svg id='grapharea' height='450px' width='750px'>
 	<defs>
 	  <style>
 		@font-face {
@@ -937,6 +940,21 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 		graph_type=$('.nav-tabs .active').text()
 	}
 });
+
+function changedimensions() {
+	if($('#gwidth').val()!=""){
+		width=$('#gwidth').val()
+	}
+	if($('#gheight').val()!=""){
+		height=$('#gheight').val()
+	}
+
+	$('#grapharea').attr('height',height)
+	$('#grapharea').attr('width',width)
+	$('#constraint').attr('style','max-width:'+width+';margin-left:auto;margin-right:auto')
+
+	isvalid()
+}
 
 
 // isvalid is the main graphing setup function. Gets variable values and passes them to playfair.js
