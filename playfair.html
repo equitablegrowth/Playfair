@@ -1091,24 +1091,32 @@ function isvalid() {
 				options={}
 
 				if (us_shading==true){
-					shading=[['June 1857','December 1858'],['October 1860','June 1861'],['April 1865','December 1867'],['June 1869','December 1870'],['October 1873','March 1879'],['March 1882','May 1885'],['March 1887','April 1888'],['July 1890','May 1891'],['January 1893','June 1894'],['December 1895','June 1897'],['June 1899','December 1900'],['September 1902','August 1904'],['May 1907','June 1908'],['January 1910','January 1912'],['January 1913','December 1914'],['August 1918','March 1919'],['January 1920','July 1921'],['May 1923','July 1924'],['October 1926','November 1927'],['August 1929','March 1933'],['May 1937','June 1938'],['February 1945','October 1945'],['November 1948','October 1949'],['July 1953','May 1954'],['August 1957','April 1958'],['April 1960','February 1961'],['December 1969','November 1970'],['November 1973','March 1975'],['January 1980','July 1980'],['July 1981','November 1982'],['July 1990','March 1991'],['March 2001','November 2001'],['December 2007','June 2009']]
+					shad=[['June 1857','December 1858'],['October 1860','June 1861'],['April 1865','December 1867'],['June 1869','December 1870'],['October 1873','March 1879'],['March 1882','May 1885'],['March 1887','April 1888'],['July 1890','May 1891'],['January 1893','June 1894'],['December 1895','June 1897'],['June 1899','December 1900'],['September 1902','August 1904'],['May 1907','June 1908'],['January 1910','January 1912'],['January 1913','December 1914'],['August 1918','March 1919'],['January 1920','July 1921'],['May 1923','July 1924'],['October 1926','November 1927'],['August 1929','March 1933'],['May 1937','June 1938'],['February 1945','October 1945'],['November 1948','October 1949'],['July 1953','May 1954'],['August 1957','April 1958'],['April 1960','February 1961'],['December 1969','November 1970'],['November 1973','March 1975'],['January 1980','July 1980'],['July 1981','November 1982'],['July 1990','March 1991'],['March 2001','November 2001'],['December 2007','June 2009']]
+					shading=[]
+					for (var i=0;i<shad.length;i++){
+						shading.push([new Date(shad[i][0]),new Date(shad[i][1])])
+					}
 				} else if (arbitrary_shading!=''){
 					sa=arbitrary_shading.split('],[')
 					saf=[]
+					shading=[]
 					for(var i=0;i<sa.length;i++){
 						temp=sa[i].replace('[','')
 						temp=temp.replace(']','')
 						saf.push([temp.split(',')[0],temp.split(',')[1]])
 					}
-					shading=saf
+					if (moment(saf[0][0], ["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY"],true).isValid()==true){
+						for(var i=0;i<saf.length;i++){
+							shading.push([new Date(saf[i][0]),new Date(saf[i][1])])
+						}
+					} else {
+						for(var i=0;i<saf.length;i++){
+							shading.push([parseFloat(saf[i][0]),parseFloat(saf[i][1])])
+						}
+					}
 				}
 
-// if (moment(d[j][i], ["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY"],true).isValid()==false){
-// 	date=false
-// }
-// var temp=new Date(String(mindata.getUTCFullYear()))
-
-				try{console.log('shading: ',shading)}catch(err){}
+				options['shading']=shading
 
 				slopes=document.getElementsByClassName('slope')
 				intercepts=document.getElementsByClassName('intercept')

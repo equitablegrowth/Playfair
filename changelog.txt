@@ -1,7 +1,7 @@
 changelog.txt
 
 V0.4
-  - US recession shading and arbitrary shading can be found in Line/Scatter -> Line/Scatter style. I know, the UI looks terrible. You can only shade on the x-axis (is there a reason you'd want to shade on the y-axis?) To use the default US recession shading, your x-axis *must* be a date data type. For arbitrary shading, you can either specify number intervals (ie [3,4]) or date intervals (ie [01/01/1997,05/01/1997])
+  - US recession shading and arbitrary shading can be found in Line/Scatter -> Line/Scatter style. I know, the UI looks terrible. You can only shade on the x-axis (is there a reason you'd want to shade on the y-axis?) To use the default US recession shading, your x-axis *must* be a date data type. For arbitrary shading, you can either specify number intervals (ie [3,4]) or date intervals (ie [01/01/1997,05/01/1997]). It recognizes all the same date formats that the data parser does.
 
 
 V0.3:
