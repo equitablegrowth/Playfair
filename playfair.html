@@ -455,7 +455,7 @@
 							<div class="col-md-6">
 								<h3>Orientation</h3>
 								<label class='radio-inline active'><input type="radio" name="barorient" value="vertical" checked>Vertical</label>
-								<label class='radio-inline active'><input type="radio" name="barorient" value="horizontal" disabled>Horizontal</label>
+								<label class='radio-inline active'><input type="radio" name="barorient" value="horizontal">Horizontal</label>
 								<br><br>
 								<h3>Chart Type</h3>
 								<!-- <label class='checkbox-inline active'><input type="checkbox" name="bartype" value="grouped">Grouped Bars</label> -->
@@ -1038,6 +1038,7 @@ function isvalid() {
 		// create the style object
 		style={}
 
+		// which grids should be drawn
 		grids=[xgrid,ygrid,xminorgrid,yminorgrid]
 		attributes=['xgrid_opacity','ygrid_opacity','xgrid_minoropacity','ygrid_minoropacity']
 		for(var i=0;i<grids.length;i++){
@@ -1045,6 +1046,7 @@ function isvalid() {
 			if(grids[i]==false){style[attributes[i]]=0}	
 		}
 
+		// point style
 		if(barspace==false){style['barchart_width']=1}
 		style['legend_location']=legendloc
 
@@ -1081,8 +1083,18 @@ function isvalid() {
 				if ($('#customy').val()!='' && $("#customycheck").prop('checked')==true){
 					chartobject.yarray=$('#customy').val().split(',')
 				}
+
+				options={}
+
+				// orientation - 'vertical' or 'horizontal'
+				options['orientation']=$('input[name=barorient]:checked').val()
+
+				// stacked barchart toggle
+				stacked=$("#customxcheck").prop('checked')
+				options['stacked']=stacked
+
 				console.log(chartobject)
-				chartobject.barchart('vertical')
+				chartobject.barchart(options)
 				$('#customx').val(chartobject.xarray)
 				$('#customy').val(chartobject.yarray)
 			}
@@ -1090,6 +1102,7 @@ function isvalid() {
 			if (graph_type=='Line/Scatter') {
 				options={}
 
+				// get shading input from frontend
 				shading=[]
 				if (us_shading==true){
 					shad=[['June 1857','December 1858'],['October 1860','June 1861'],['April 1865','December 1867'],['June 1869','December 1870'],['October 1873','March 1879'],['March 1882','May 1885'],['March 1887','April 1888'],['July 1890','May 1891'],['January 1893','June 1894'],['December 1895','June 1897'],['June 1899','December 1900'],['September 1902','August 1904'],['May 1907','June 1908'],['January 1910','January 1912'],['January 1913','December 1914'],['August 1918','March 1919'],['January 1920','July 1921'],['May 1923','July 1924'],['October 1926','November 1927'],['August 1929','March 1933'],['May 1937','June 1938'],['February 1945','October 1945'],['November 1948','October 1949'],['July 1953','May 1954'],['August 1957','April 1958'],['April 1960','February 1961'],['December 1969','November 1970'],['November 1973','March 1975'],['January 1980','July 1980'],['July 1981','November 1982'],['July 1990','March 1991'],['March 2001','November 2001'],['December 2007','June 2009']]
@@ -1117,6 +1130,7 @@ function isvalid() {
 
 				options['shading']=shading
 
+				// get trendline input from frontend
 				slopes=document.getElementsByClassName('slope')
 				intercepts=document.getElementsByClassName('intercept')
 
@@ -1128,30 +1142,36 @@ function isvalid() {
 
 				options['abline']=trends
 
+				// get info on labelling variable from front end
 				if (label!=='none'){
 					options['label']=label
 				}
 
+				// get info on connecting variable from front end
 				if (connect!=='none'){
 					options['connect']=connect
 				}
 
+				// get info on bubble size variable from front end
 				if (size!=='none'){
 					options['size']=size
 				}
 
+				// get info on whether points should be drawn from front end
 				if (points==true){
 					options['points']=true
 				} else {
 					options['points']=false
 				}
 
+				// get info on whether labels should show by default from front end
 				if (labels==true){
 					options['labels']=true
 				} else {
 					options['labels']=false
 				}
 
+				// custom axes
 				if ($('#customx').val()!='' && $("#customxcheck").prop('checked')==true){
 					chartobject.xarray=$('#customx').val().split(',')
 				}
@@ -1873,43 +1893,53 @@ function importsettings() {
 function highlight_element(ev) {
 	// this should handle basically every case of mousing over a data element and getting a highlight effect
 	item=Snap(ev.target)
-	try{
-		if(ev.target.nodeName=='path'){
+		try{if(ev.target.nodeName=='path'){
 			item.attr({'stroke-width':parseFloat(item.attr('stroke-width'))+3,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))-.5})
-		} else if(ev.target.nodeName=='circle'){
+		}}catch(err){}
+		try{if(ev.target.nodeName=='circle'){
 			item.attr({'r':parseFloat(item.attr('r'))+2,'stroke-width':parseFloat(item.attr('stroke-width'))+1,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))-.5})
-		} else if(ev.target.nodeName=='line' && ev.target.attributes.ident.value=='key'){
+		}}catch(err){} 
+		try{if(ev.target.nodeName=='line' && ev.target.attributes.ident.value=='key'){
 			item.attr({'stroke-width':parseFloat(item.attr('stroke-width'))+2,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))-.5})
-		} else if(ev.target.nodeName=='rect' && ev.target.attributes.ident.value=='key' && ev.target.attributes.ident2.value!='floatkey'){
+		}}catch(err){} 
+		try{if(ev.target.nodeName=='rect' && ev.target.attributes.ident.value=='key' && ev.target.attributes.ident2.value!='floatkey'){
 			item.attr({'stroke-opacity':parseFloat(item.attr('stroke-opacity'))-.5,'fill-opacity':parseFloat(item.attr('fill-opacity'))-.5,'x':parseFloat(item.attr('x'))-2,'y':parseFloat(item.attr('y'))-2,'width':parseFloat(item.attr('width'))+4,'height':parseFloat(item.attr('height'))+4})
-		} else if(ev.target.nodeName=='rect' && ev.target.attributes.data_type.value=='bar'){
+		}}catch(err){} 
+		try{if(ev.target.nodeName=='rect' && ev.target.attributes.data_type.value=='bar'){
 			item.attr({'stroke-opacity':parseFloat(item.attr('stroke-opacity'))-.5,'fill-opacity':parseFloat(item.attr('fill-opacity'))-.5,'x':parseFloat(item.attr('x'))-2,'y':parseFloat(item.attr('y'))-2,'width':parseFloat(item.attr('width'))+4,'height':parseFloat(item.attr('height'))+4})
-		} else if(ev.target.nodeName=='line' && ev.target.attributes.class.value=='callout'){
+		}}catch(err){}  
+		try{if(ev.target.nodeName=='line' && ev.target.attributes.class.value=='callout'){
 			item.attr({'stroke-width':parseFloat(item.attr('stroke-width'))+2,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))-.5})
-		} else if(ev.target.nodeName=='text'){
+		}}catch(err){}  
+		try{if(ev.target.nodeName=='text'){
 			item.attr({'font-size':parseFloat(item.attr('font-size')),'opacity':(parseFloat(item.attr('opacity'))>.5 ? parseFloat(item.attr('opacity'))-.5 : .2)})
-		}
-	} catch(err){}
+		}}catch(err){} 
 }
 
 function unhighlight_element(ev) {
 	item=Snap(ev.target)
 	try{
-		if(ev.target.nodeName=='path'){
+		try{if(ev.target.nodeName=='path'){
 			item.attr({'stroke-width':parseFloat(item.attr('stroke-width'))-3,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))+.5})
-		} else if(ev.target.nodeName=='circle'){
+		}}catch(err){} 
+		try{if(ev.target.nodeName=='circle'){
 			item.attr({'r':parseFloat(item.attr('r'))-2,'stroke-width':parseFloat(item.attr('stroke-width'))-1,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))+.5})
-		} else if(ev.target.nodeName=='line' && ev.target.attributes.ident.value=='key'){
+		}}catch(err){} 
+		try{if(ev.target.nodeName=='line' && ev.target.attributes.ident.value=='key'){
 			item.attr({'stroke-width':parseFloat(item.attr('stroke-width'))-2,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))+.5})
-		} else if(ev.target.nodeName=='rect' && ev.target.attributes.ident.value=='key' && ev.target.attributes.ident2.value!='floatkey'){
+		}}catch(err){} 
+		try{if(ev.target.nodeName=='rect' && ev.target.attributes.ident.value=='key' && ev.target.attributes.ident2.value!='floatkey'){
 			item.attr({'stroke-opacity':parseFloat(item.attr('stroke-opacity'))+.5,'fill-opacity':parseFloat(item.attr('fill-opacity'))+.5,'x':parseFloat(item.attr('x'))+2,'y':parseFloat(item.attr('y'))+2,'width':parseFloat(item.attr('width'))-4,'height':parseFloat(item.attr('height'))-4})
-		} else if(ev.target.nodeName=='rect' && ev.target.attributes.class.value=='dataelement'){
+		}}catch(err){} 
+		try{if(ev.target.nodeName=='rect' && ev.target.attributes.class.value=='dataelement'){
 			item.attr({'stroke-opacity':parseFloat(item.attr('stroke-opacity'))+.5,'fill-opacity':parseFloat(item.attr('fill-opacity'))+.5,'x':parseFloat(item.attr('x'))+2,'y':parseFloat(item.attr('y'))+2,'width':parseFloat(item.attr('width'))-4,'height':parseFloat(item.attr('height'))-4})
-		} else if(ev.target.nodeName=='line' && ev.target.attributes.class.value=='callout'){
+		}}catch(err){} 
+		try{if(ev.target.nodeName=='line' && ev.target.attributes.class.value=='callout'){
 			item.attr({'stroke-width':parseFloat(item.attr('stroke-width'))-2,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))+.5})
-		} else if(ev.target.nodeName=='text'){
+		}}catch(err){} 
+		try{if(ev.target.nodeName=='text'){
 			item.attr({'font-size':parseFloat(item.attr('font-size')),'opacity':parseFloat(item.attr('opacity'))+.5})
-		}
+		}}catch(err){}
 	} catch(err){}
 }
 
