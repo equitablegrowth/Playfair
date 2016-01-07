@@ -29,7 +29,8 @@
 	body {font-family:"Open Sans";-webkit-font-smoothing: antialiased}
 	textarea {margin-top:0px;resize:none;display:block;margin-right:auto;margin-left:auto;width:100%;padding:8px;border:1px solid #cccccc;font-family:"Courier";font-size:90%;}
 	hr {border-width:1px;border-color:#dddddd;margin-top:27;}
-	a {color:#0063cd;}
+	a {color:#205946;}
+	a:hover {color:#67c2a5;}
 	sup {vertical-align:baseline; position:relative;top:-.7em;font-size:60%;}
 	svg text {-moz-user-select: none;-ms-user-select: none;-khtml-user-select: none;-webkit-user-select: none;-webkit-touch-callout: none}
 	text { -webkit-font-smoothing: subpixel-antialiased; }
@@ -39,7 +40,7 @@
 	.topel {margin-top:7px;}
 	.nav-tabs {margin-top:10px;}
 	.input-group {margin-top:7px;}
-	.tab-pane {width:90%;margin-top:15px;margin-left:auto;margin-right:auto;}
+	.tab-pane {width:100%;margin-top:15px;margin-left:auto;margin-right:auto;}
 	.input-group-addon {min-width:90px;}
 	.input-small {min-width:0px;}
 	.longlabel {min-width:150px;}
@@ -88,8 +89,15 @@
 	.tooltip-inner {text-align:left;}
 	.btn-file {position:relative;overflow:hidden;}
 	.btn-file input[type=file]{position:absolute;top:0;right:0;min-width:100%;min-height:100%;font-size:100px;text-align:right;filter:alpha(opacity=0);opacity:0;outline:none;background:white;cursor:inherit;display:block;}
-	.nav>li>a {padding:4px;padding-left:8px;padding-right:8px;}
-	.nav-tabs>li>a {border-radius:0px;}
+	.nav>li>a {padding:4px;padding-left:8px;padding-right:8px;border-bottom:0px;}
+	.nav-tabs {border-bottom:0px;}
+	.nav-tabs>li>a {border-radius:0px;border-bottom:0px;border-top:0px;border-right:0px;border-left:0px;}
+	.nav_tabs>li.active{border-bottom:3px solid #67c2a5;border-top:0px;border-right:0px;border-left:0px}
+	.nav-tabs>li.active>a {border-bottom:3px solid #67c2a5;border-top:0px;border-right:0px;border-left:0px}
+	.nav-tabs>li.active>a:focus {border-bottom:3px solid #67c2a5;border-top:0px;border-right:0px;border-left:0px}
+	.nav-tabs>li.active>a:hover {border-bottom:3px solid #67c2a5;border-top:0px;border-right:0px;border-left:0px;background-color:none;}
+	.nav_tabs>li>a:hover {border-bottom:3px solid #67c2a5;background-color:none}
+	.nav_tabs>li:hover {border-bottom:3px solid #67c2a5}
 	.dashed {height:8px;border-width:2px;margin-left:2;border-bottom: thin black dashed;width:120px;display:inline-block;margin-top:3px;margin-bottom:3px;padding:0;}
 	.solid {height:8px;border-width:2px;margin-left:2;border-bottom: thin black solid;width:120px;display:inline-block;margin-top:3px;margin-bottom:3px;padding:0;}
 	.add {width:18px;height:18px;border:1px solid #b0b0b0;-webkit-border-radius:9px;border-radius:9px;display:inline-block;margin-top:14px;}

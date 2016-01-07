@@ -1,10 +1,13 @@
 changelog.txt
 
+V0.7
+  - 
+
 V0.6
   - Fixed a but that made the logo appear blurry.
 
   - New tools splash screen
-  
+
 
 V0.5
   - Horizontal barcharts are now available.
