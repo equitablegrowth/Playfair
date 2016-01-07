@@ -1,7 +1,11 @@
 changelog.txt
 
 V0.5
-  -
+  - Horizontal barcharts are now available.
+
+  - Stacked barcharts are now available.
+
+  - Fixed a bug that was making our logo appear kinda blurry
 
 
 V0.4
@@ -9,21 +13,21 @@ V0.4
 
 
 V0.3:
-  - You can now choose a custome height and width for you graph. You should generally stick to a width of 745 pixels as this is the width of columns on our website. Height can be anything though. Also of note - reducing the width won't do much for you. We currently lack the ability to flow text around an image, so you can't have a left-aligned graph with text around it. This feature is pretty experimental, see if you can break it maybe?
+  - You can now choose a custom height and width for you graph. You should generally stick to a width of 745 pixels as this is the width of columns on our website. Height can be anything though. Also of note - reducing the width won't do much for you. We currently lack the ability to flow text around an image, so you can't have a left-aligned graph with text around it. This feature is pretty experimental, see if you can break it maybe?
 
   - You can now have multiple trend lines on a graph - just press the '+' button to bring up another one. I know the interface is a bit of a mess right now - bear with me. By default they will all be labeled 'Trend Line' but you can right-click to delete these text elements. You can also now have vertical trend-lines by entering '-' as the slope and the desired  x-intercept as the intercept. As with other line elements, you can right-click a trend line  to make it dashed, thicker or thinner, or change the color.
 
-  - You can now delete callouts and arrows you have placed on the graph by right-clicking on them and picking 'delete'
+  - You can now delete callouts and arrows you have placed on the graph by right-clicking on them and picking 'delete'.
 
   - You can now change the visual appearance of points in scatter/line plots. In particular you can now select a smaller, solid point that looks better in time series. You can select this in the line/scatter styles section or by right-clicking on a point and selecting the point style you want.
 
-  - By right-clicking on a scatter point, you can choose to make the point bigger or smaller
+  - By right-clicking on a scatter point, you can choose to make the point bigger or smaller.
 
-  - By right-clicking on a line in a line plot, you can make that line thicker/thinner
+  - By right-clicking on a line in a line plot, you can make that line thicker/thinner.
 
-  - More elements will now recognize when they are being hovered
+  - More elements will now recognize when they are being hovered.
 
-  - Fixed a bug where you couldn't eliminate the major y-grids
+  - Fixed a bug where you couldn't eliminate the major y-grids.
 
 
 V0.2:
@@ -46,7 +50,7 @@ V0.2:
 
   - When you right-click on a line-chart line, you can now change that line to a dashed line using the contextual menu that appears (or a dashed line to a solid line).
 
-  - Various bug fixes
+  - Various bug fixes.
 
 
 V0.1:
