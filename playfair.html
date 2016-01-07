@@ -459,7 +459,7 @@
 								<br><br>
 								<h3>Chart Type</h3>
 								<!-- <label class='checkbox-inline active'><input type="checkbox" name="bartype" value="grouped">Grouped Bars</label> -->
-								<label class='checkbox-inline active'><input type="checkbox" name="bartype" value="stacked" disabled>Stacked Bars</label>
+								<label class='checkbox-inline active'><input type="checkbox" name="bartype" id="stacked">Stacked Bars</label>
 							</div>
 							<div class='col-md-6'>
 								<input type="checkbox" id="spacing" data-toggle="toggle" data-size='mini' checked></label>&nbsp Space between bars<label class='checkbox-inline'>
@@ -1090,7 +1090,7 @@ function isvalid() {
 				options['orientation']=$('input[name=barorient]:checked').val()
 
 				// stacked barchart toggle
-				stacked=$("#customxcheck").prop('checked')
+				stacked=$("#stacked").prop('checked')
 				options['stacked']=stacked
 
 				console.log(chartobject)
