@@ -5,8 +5,6 @@ V0.5
 
   - Stacked barcharts are now available.
 
-  - Fixed a bug that was making our logo appear kinda blurry.
-
   - Fixed a bug that caused problems for axes with ranges <.01
 
 
