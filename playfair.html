@@ -102,8 +102,16 @@
 	.solid {height:8px;border-width:2px;margin-left:2;border-bottom: thin black solid;width:120px;display:inline-block;margin-top:3px;margin-bottom:3px;padding:0;}
 	.add {width:18px;height:18px;border:1px solid #b0b0b0;-webkit-border-radius:9px;border-radius:9px;display:inline-block;margin-top:14px;}
 	.fa-plus {color:#b0b0b0;margin-top:1px;}
-/*	.nav-tabs>li.active>a{background-color:#ddd;color:black;}
-*/	/*.input-group-sm {margin:0;margin-bottom:3px;}*/
+
+	/* sidetabs */
+	.v-nav{height:auto;margin:0;}
+	.v-nav>ul{float:left;width:180px;display:block;position:relative;top:0;border:1px solid black;border-right-width:0;margin:0;padding:0;}
+	.v-nav>ul>li {font-size:1em;font-family:'Open Sans';width:180px;list-style-type:none;display:block;position:relative;margin:0;padding:7px;background-color:#b7dfd1;cursor:pointer;}
+	.v-nav>ul>li.current{position:relative;background-color:#67c2a5;margin:0}
+	.v-nav>ul>li.first.current{border-bottom:0px solid black;}
+	.v-nav>ul>li.last{border-bottom:3px solid black;margin:0}
+	.v-nav>div.tab-content{margin-left:180px;border:1px solid black;position:relative;z-index:9;display:none;padding-left:20px;padding-top:10px;padding-bottom:20px;padding-right:0px;}
+	/* 'sequential_color':['#205946','#33836A','#67c2a5','#b7dfd1','#e2f2ed'] */
 
 	#bad_data{display:none;}
 	#png_save{display:none;}
@@ -258,154 +266,139 @@
 <!-- ************************* DESIGN STARTS HERE ************************* -->
 <!-- ********************************************************************** -->
 
-	<div id="design" class="tab-pane fade in active">
 
-		<div class="panel-group" id="designaccordion" role="tablist" aria-multiselectable="true">
+	<div id="design" class="tab-pane active">
+		<div class='v-nav'>
+			<ul>
+				<li id='design_first' tab='design_textelements' class='first current'>Text Elements</li>
+				<li tab='design_style'>Style</li>
+				<li tab='design_axes'>Axes</li>
+			</ul>
 
-			<div class="panel panel-custom fun">
-				<div class="panel-heading" role="tab" id="designtext">
-					<h5 class="panel-title"><a role="button" data-toggle="collapse" data-parent="#designaccordion" href="#designtext_c" aria-expanded="true" aria-controls="designtext_c">Text Elements</a></h5>
+			<div class='tab-content'>
+				<div class='row'>
+					<div class="col-md-6">
+						<div class="input-group full-width">
+						  <span class="input-group-addon">Headline:</span>
+						  <input type="text" class="form-control" placeholder="A Great Chart" id='hed'>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="input-group full-width">
+						  <span class="input-group-addon">Subhead:</span>
+						  <input type="text" class="form-control" placeholder="More detail about this great chart" id='dek'>
+						</div>
+					</div>
 				</div>
-				<div id="designtext_c" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="designtext_c">
-					<div class="panel-body">
-						<div class='row'>
-							<div class="col-md-6">
-								<div class="input-group full-width">
-								  <span class="input-group-addon">Headline:</span>
-								  <input type="text" class="form-control" placeholder="A Great Chart" id='hed'>
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="input-group full-width">
-								  <span class="input-group-addon">Subhead:</span>
-								  <input type="text" class="form-control" placeholder="More detail about this great chart" id='dek'>
-								</div>
-							</div>
-						</div>
 
-						<div class='row'>
-							<div class="col-md-6">
-								<div class="input-group full-width">
-								  <span class="input-group-addon">Source:</span>
-								  <input type="text" class="form-control" placeholder="Where this data came from" id='source'>
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="input-group full-width">
-								  <span class="input-group-addon">Note:</span>
-								  <input type="text" class="form-control" placeholder="Another thing you should know" id='note'>
-								</div>
-							</div>
+				<div class='row'>
+					<div class="col-md-6">
+						<div class="input-group full-width">
+						  <span class="input-group-addon">Source:</span>
+						  <input type="text" class="form-control" placeholder="Where this data came from" id='source'>
 						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="input-group full-width">
+						  <span class="input-group-addon">Note:</span>
+						  <input type="text" class="form-control" placeholder="Another thing you should know" id='note'>
+						</div>
+					</div>
+				</div>
 
-						<div class='row'>
-							<div class="col-md-6">
-								<div class="input-group full-width">
-								  <span class="input-group-addon">X label:</span>
-								  <input type="text" class="form-control" placeholder="A label for the x-axis" id='xlabel'>
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="input-group full-width">
-								  <span class="input-group-addon">Y label:</span>
-								  <input type="text" class="form-control" placeholder="A label for the y-axis" id='ylabel'>
-								</div>
-							</div>
+				<div class='row'>
+					<div class="col-md-6">
+						<div class="input-group full-width">
+						  <span class="input-group-addon">X label:</span>
+						  <input type="text" class="form-control" placeholder="A label for the x-axis" id='xlabel'>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="input-group full-width">
+						  <span class="input-group-addon">Y label:</span>
+						  <input type="text" class="form-control" placeholder="A label for the y-axis" id='ylabel'>
 						</div>
 					</div>
 				</div>
 			</div>
 
-			<div class="panel panel-custom">
-				<div class="panel-heading" role="tab" id="designstyling">
-					<h5 class="panel-title"><a role="button" data-toggle="collapse" data-parent="#designaccordion" href="#designstyling_c" aria-expanded="false" aria-controls="designstyling_c">Overall Style</a></h5>
-				</div>
-				<div id="designstyling_c" class="panel-collapse collapse" role="tabpanel" aria-labelledby="designstyling_c">
-					<div class="panel-body">
-						<div class="row">
-							<div class="col-md-6 botrow">
-								<h3>Theme</h3>
-								<div class='select'>
-								<select class="selectpicker" id='theme' data-width='300px' data-dropup-auto=false disabled>
-									<option value='standard'>Standard (White on Gray)</option>
-									<option value='bw'>Black on White</option>
-								</select>
-								</div><br>
-								<h3>Logo</h3>
-								<label class='radio-inline'><input type="radio" name="logo" value="nologo" disabled>None</label>
-								<!-- <label class='radio-inline'><input type="radio" name="logo" value="trlogo">Top-right</label> -->
-								<label class='radio-inline'><input type="radio" name="logo" value="brlogo" checked>Bottom-right</label>
-							</div>
+			<div class='tab-content'>
+				<div class="row">
+					<div class="col-md-6 botrow">
+						<h3>Theme</h3>
+						<div class='select'>
+						<select class="selectpicker" id='theme' data-width='300px' data-dropup-auto=false disabled>
+							<option value='standard'>Standard (White on Gray)</option>
+							<option value='bw'>Black on White</option>
+						</select>
+						</div><br>
+						<h3>Logo</h3>
+						<label class='radio-inline'><input type="radio" name="logo" value="nologo" disabled>None</label>
+						<!-- <label class='radio-inline'><input type="radio" name="logo" value="trlogo">Top-right</label> -->
+						<label class='radio-inline'><input type="radio" name="logo" value="brlogo" checked>Bottom-right</label>
+					</div>
 
-							<div class="col-md-6">
-							<h3>Size</h3>
-								<div class='col-md-6' style='padding-left:0'>
-									<div class="input-group">
-									  <span class="input-group-addon" data-toggle='tooltip' data-placement='top' title='Width of the graph in pixels.'>Width</span>
-									  <input type="text" class="form-control" placeholder="745" id='gwidth' onchange=changedimensions()>
-									</div>
-								</div>
-								<div class='col-md-6' style='padding-left:0'>
-									<div class="input-group">
-									  <span class="input-group-addon" data-toggle='tooltip' data-placement='top' title='Height of the graph in pixels.'>Height</span>
-									  <input type="text" class="form-control" placeholder="450" id='gheight' onchange=changedimensions()>
-									</div>
-								</div><br>
-								<h3>Key</h3>
-								<label class='radio-inline'><input type="radio" name="key" value="none">None</label>
-								<label class='radio-inline active'><input type="radio" name="key" value="top">Top</label>
-								<label class='radio-inline'><input type="radio" name="key" value="right" disabled>Right</label>
-								<label class='radio-inline'><input type="radio" name="key" value="float" checked>Float</label>
+					<div class="col-md-6">
+					<h3>Size</h3>
+						<div class='col-md-6' style='padding-left:0'>
+							<div class="input-group">
+							  <span class="input-group-addon" data-toggle='tooltip' data-placement='top' title='Width of the graph in pixels.'>Width</span>
+							  <input type="text" class="form-control" placeholder="745" id='gwidth' onchange=changedimensions()>
 							</div>
 						</div>
+						<div class='col-md-6' style='padding-left:0'>
+							<div class="input-group">
+							  <span class="input-group-addon" data-toggle='tooltip' data-placement='top' title='Height of the graph in pixels.'>Height</span>
+							  <input type="text" class="form-control" placeholder="450" id='gheight' onchange=changedimensions()>
+							</div>
+						</div><br>
+						<h3>Key</h3>
+						<label class='radio-inline'><input type="radio" name="key" value="none">None</label>
+						<label class='radio-inline active'><input type="radio" name="key" value="top">Top</label>
+						<label class='radio-inline'><input type="radio" name="key" value="right" disabled>Right</label>
+						<label class='radio-inline'><input type="radio" name="key" value="float" checked>Float</label>
 					</div>
 				</div>
 			</div>
-			<div class="panel panel-custom">
-				<div class="panel-heading" role="tab" id="barstyling">
-					<h5 class="panel-title"><a role="button" data-toggle="collapse" data-parent="#designaccordion" href="#designgrid_c" aria-expanded="true" aria-controls="designgrid_c">Axes</a></h5>
-				</div>
-				<div id="designgrid_c" class="panel-collapse collapse" role="tabpanel" aria-labelledby="designgrid_c">
-					<div class="panel-body">
-						<div class="row">
-							<div class="col-md-3">
-								<label class='checkbox-inline'><input type="checkbox" class='text-right' id="xgrid" data-toggle="toggle" data-size='mini'></label>&nbsp X gridlines<br>
-								<label class='checkbox-inline'><input type="checkbox" class='text-right' id="ygrid" data-toggle="toggle" data-size='mini' checked></label>&nbsp Y gridlines
-							</div>
-							<div class="col-md-3">
-								<label class='checkbox-inline'><input type="checkbox" class='text-right' id="xminorgrid" data-toggle="toggle" data-size='mini'></label>&nbsp X minor gridlines<br>
-								<label class='checkbox-inline'><input type="checkbox" class='text-right' id="yminorgrid" data-toggle="toggle" data-size='mini'></label>&nbsp Y minor gridlines
-							</div>
-							<div class="col-md-3">
-								<div class="input-group input-group-sm full-width">
-								  <input type="text" class="form-control text-center" placeholder="prefix" id='x_prepend'>
-								  <span class="input-group-addon input-small">x</span>
-								  <input type="text" class="form-control text-center" placeholder="suffix" id='x_append'>
-								</div>
-							</div>
-							<div class='col-md-3'>
-								<div class="input-group input-group-sm full-width">
-								  <input type="text" class="form-control text-center" placeholder="prefix" id='y_prepend'>
-								  <span class="input-group-addon input-small">y</span>
-								  <input type="text" class="form-control text-center" placeholder="suffix" id='y_append'>
-								</div>
-							</div>
+
+			<div class='tab-content'>
+				<div class="row">
+					<div class="col-md-3">
+						<label class='checkbox-inline'><input type="checkbox" class='text-right' id="xgrid" data-toggle="toggle" data-size='mini'></label>&nbsp X gridlines<br>
+						<label class='checkbox-inline'><input type="checkbox" class='text-right' id="ygrid" data-toggle="toggle" data-size='mini' checked></label>&nbsp Y gridlines
+					</div>
+					<div class="col-md-3">
+						<label class='checkbox-inline'><input type="checkbox" class='text-right' id="xminorgrid" data-toggle="toggle" data-size='mini'></label>&nbsp X minor gridlines<br>
+						<label class='checkbox-inline'><input type="checkbox" class='text-right' id="yminorgrid" data-toggle="toggle" data-size='mini'></label>&nbsp Y minor gridlines
+					</div>
+					<div class="col-md-3">
+						<div class="input-group input-group-sm full-width">
+						  <input type="text" class="form-control text-center" placeholder="prefix" id='x_prepend'>
+						  <span class="input-group-addon input-small">x</span>
+						  <input type="text" class="form-control text-center" placeholder="suffix" id='x_append'>
 						</div>
-						<div class='row'>
-							<div class='col-md-6'>
-								<div class="input-group input-group-sm full-width">
-									<span class="input-group-addon input-small">Custom X-axis</span>
-									<span class="input-group-addon input-small"><input type='checkbox' id='customxcheck'></span>
-									<input type="text" class="form-control" placeholder="e.g. 1,2,3" id='customx'>
-								</div>
-							</div>
-							<div class='col-md-6'>
-								<div class="input-group input-group-sm full-width">
-									<span class="input-group-addon input-small">Custom Y-axis</span>
-									<span class="input-group-addon input-small"><input type='checkbox' id='customycheck'></span>
-									<input type="text" class="form-control" placeholder="e.g. 1,2,3" id='customy'>
-								</div>
-							</div>
+					</div>
+					<div class='col-md-3'>
+						<div class="input-group input-group-sm full-width">
+						  <input type="text" class="form-control text-center" placeholder="prefix" id='y_prepend'>
+						  <span class="input-group-addon input-small">y</span>
+						  <input type="text" class="form-control text-center" placeholder="suffix" id='y_append'>
+						</div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-6'>
+						<div class="input-group input-group-sm full-width">
+							<span class="input-group-addon input-small">Custom X-axis</span>
+							<span class="input-group-addon input-small"><input type='checkbox' id='customxcheck'></span>
+							<input type="text" class="form-control" placeholder="e.g. 1,2,3" id='customx'>
+						</div>
+					</div>
+					<div class='col-md-6'>
+						<div class="input-group input-group-sm full-width">
+							<span class="input-group-addon input-small">Custom Y-axis</span>
+							<span class="input-group-addon input-small"><input type='checkbox' id='customycheck'></span>
+							<input type="text" class="form-control" placeholder="e.g. 1,2,3" id='customy'>
 						</div>
 					</div>
 				</div>
@@ -416,56 +409,45 @@
 <!-- ********************************************************************** -->
 <!-- ************************ BARCHART STARTS HERE ************************ -->
 <!-- ********************************************************************** -->
-	<div id="barchart" class="tab-pane fade in">
+	<div id="barchart" class="tab-pane">
+		<div class='v-nav'>
+			<ul>
+				<li id='barchart_first' tab='barchart_data' class='first current'>Data</li>
+				<li tab='barchart_style'>Style</li>
+			</ul>
 
-		<div class="panel-group" id="baraccordion" role="tablist" aria-multiselectable="true">
+			<div class='tab-content'>
+				<div class='row'>
+					<div class='col-md-6'>
+						<div class="input-group"> <span class="input-group-addon pickvar">Bar Categories</span>
+							<select class="variable_select x_select" id='bar_select_category' data-width='100%' data-dropup-auto=false onchange=x_vars(this) disabled><option value='none'>Nothing selected</option></select>
+						</div>
+						<div class="input-group"> <span class="input-group-addon pickvar">Category Values</span>
+							<select class="variable_select y_select" id='bar_select_values' data-width='100%' data-dropup-auto=false onchange=y_vars(this) disabled><option value='none'>Nothing selected</option></select>
+						</div>
 
-			<div class="panel panel-custom fun">
-				<div class="panel-heading" role="tab" id="bardata">
-					<h5 class="panel-title"><a role="button" data-toggle="collapse" data-parent="#baraccordion" href="#bardata_c" aria-expanded="true" aria-controls="bardata_c">Data</a></h5>
-				</div>
-				<div id="bardata_c" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="bardata_c">
-					<div class="panel-body">
-						<div class='row'>
-							<div class='col-md-6'>
-								<div class="input-group"> <span class="input-group-addon pickvar">Bar Categories</span>
-									<select class="variable_select x_select" id='bar_select_category' data-width='100%' data-dropup-auto=false onchange=x_vars(this) disabled><option value='none'>Nothing selected</option></select>
-								</div>
-								<div class="input-group"> <span class="input-group-addon pickvar">Category Values</span>
-									<select class="variable_select y_select" id='bar_select_values' data-width='100%' data-dropup-auto=false onchange=y_vars(this) disabled><option value='none'>Nothing selected</option></select>
-								</div>
-
-							</div>
-							<div class='col-md-6'>
-								<div class="input-group"> <span class="input-group-addon pickvar">Sub-Categories</span>
-									<select class="variable_select group_select" id='bar_select_grouping' data-width='100%' data-dropup-auto=false onchange=group_vars(this) disabled><option value='none'>Nothing selected</option></select>
-								</div>							
-							</div>
-						</div>					
 					</div>
-				</div>
+					<div class='col-md-6'>
+						<div class="input-group"> <span class="input-group-addon pickvar">Sub-Categories</span>
+							<select class="variable_select group_select" id='bar_select_grouping' data-width='100%' data-dropup-auto=false onchange=group_vars(this) disabled><option value='none'>Nothing selected</option></select>
+						</div>							
+					</div>
+				</div>				
 			</div>
 
-			<div class="panel panel-custom">
-				<div class="panel-heading" role="tab" id="barstyling">
-					<h5 class="panel-title"><a role="button" data-toggle="collapse" data-parent="#baraccordion" href="#barstyling_c" aria-expanded="true" aria-controls="barstyling_c">Bar Chart Specific Style</a></h5>
-				</div>
-				<div id="barstyling_c" class="panel-collapse collapse" role="tabpanel" aria-labelledby="barstyling_c">
-					<div class="panel-body">
-						<div class="row">
-							<div class="col-md-6">
-								<h3>Orientation</h3>
-								<label class='radio-inline active'><input type="radio" name="barorient" value="vertical" checked>Vertical</label>
-								<label class='radio-inline active'><input type="radio" name="barorient" value="horizontal">Horizontal</label>
-								<br><br>
-								<h3>Chart Type</h3>
-								<!-- <label class='checkbox-inline active'><input type="checkbox" name="bartype" value="grouped">Grouped Bars</label> -->
-								<label class='checkbox-inline active'><input type="checkbox" name="bartype" id="stacked">Stacked Bars</label>
-							</div>
-							<div class='col-md-6'>
-								<input type="checkbox" id="spacing" data-toggle="toggle" data-size='mini' checked></label>&nbsp Space between bars<label class='checkbox-inline'>
-							</div>
-						</div>
+			<div class='tab-content'>
+				<div class="row">
+					<div class="col-md-6">
+						<h3>Orientation</h3>
+						<label class='radio-inline active'><input type="radio" name="barorient" value="vertical" checked>Vertical</label>
+						<label class='radio-inline active'><input type="radio" name="barorient" value="horizontal">Horizontal</label>
+						<br><br>
+						<h3>Chart Type</h3>
+						<!-- <label class='checkbox-inline active'><input type="checkbox" name="bartype" value="grouped">Grouped Bars</label> -->
+						<label class='checkbox-inline active'><input type="checkbox" name="bartype" id="stacked">Stacked Bars</label>
+					</div>
+					<div class='col-md-6'>
+						<input type="checkbox" id="spacing" data-toggle="toggle" data-size='mini' checked></label>&nbsp Space between bars<label class='checkbox-inline'>
 					</div>
 				</div>
 			</div>
@@ -475,7 +457,7 @@
 <!-- ********************************************************************** -->
 <!-- *********************** LINECHART STARTS HERE ************************ -->
 <!-- ********************************************************************** -->
-	<div id="linechart" class="tab-pane fade in">
+	<div id="linechart" class="tab-pane">
 
 		<div class="panel-group" id="lineaccordion" role="tablist" aria-multiselectable="true">
 
@@ -747,6 +729,26 @@ $(document).unbind('keydown').bind('keydown', function (event) {
     }
 });
 
+
+///////////////////////// VERTICAL TABS ////////////////////////////////
+// Completely ripped these vertical tabs off from this jsfiddle:
+// http://jsfiddle.net/frabiacca/7pm7h/5/
+// Thanks frabiacca!
+
+$(function() {
+	var items=$('.v-nav>ul>li').each(function() {
+		$(this).click(function(){
+			items.removeClass('current');
+			$(this).addClass('current');
+			$('.v-nav>div.tab-content').hide().eq(items.index($(this))).show();
+		})
+	})
+
+	if(location.hash){
+		$('#design_first').click()
+	}
+})
+
 /////////////////////////// LOAD DATA //////////////////////////////////
 // loadData executes when the data text field changes. It figures out
 // the appropriate delimiter, guesses if each field is text or numeric,
@@ -944,7 +946,12 @@ function populate_variables(final_data) {
 // graph can be drawn, and then execute the appropriate functions.
 
 // on change in tab, set graph_type so when draw/refresh is clicked it draws the appropriate graph
+// also, .click the first vertical tab
 $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+
+	var tab=$('.nav-tabs .active').children()[0].getAttribute('href')
+	$(tab+'_first').click()
+
 	if ($('.nav-tabs .active').text()!='Design' && $('.nav-tabs .active').text()!='Settings') {
 		graph_type=$('.nav-tabs .active').text()
 	}
