@@ -22,15 +22,21 @@
 	@import url(http://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700,800);
 	@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,700,600,300);
 
+	input[type=radio]:not(old){width:2em;margin:0;padding:0;font-size:1em;opacity:0;}
+	input[type=radio]:not(old) + label{display:inline-block;margin-left:-2em;font-weight:400;}
+	input[type=radio]:not(old) + label > span{display:inline-block;width:0.875em;height:0.875em;margin:0.25em 0.25em 0.25em 0.25em;border:1px solid #ccc;background:white;vertical-align:bottom;}
+	input[type=radio]:not(old):checked + label > span{}
+	input[type=radio]:not(old):checked + label > span > span{display:inline-block;width:.75em;height:.75em;background:rgb(153,204,102);border:1px solid white;}
 	h1 {font-family:Lancelot;font-size:50;margin:0;line-height:75%;}
 	h4 {font-family:Raleway;font-weight:300;margin-bottom:20;}
-	h3 {font-size:15px;margin-top:0px;margin-bottom:5px;font-family:Raleway;font-weight:500;}
+	h3 {font-size:15px;margin-top:0px;margin-bottom:0px;font-family:Raleway;font-weight:500;}
 	h5 {font-size:24px;font-family:Raleway;font-weight:500;fill:'white';}
 	body {font-family:"Open Sans";-webkit-font-smoothing: antialiased}
 	textarea {margin-top:0px;resize:none;display:block;margin-right:auto;margin-left:auto;width:100%;padding:8px;border:1px solid #cccccc;font-family:"Courier";font-size:90%;}
 	hr {border-width:1px;border-color:#dddddd;margin-top:27;}
 	a {color:#205946;}
 	a:hover {color:#67c2a5;}
+	label{margin:0;}
 	sup {vertical-align:baseline; position:relative;top:-.7em;font-size:60%;}
 	svg text {-moz-user-select: none;-ms-user-select: none;-khtml-user-select: none;-webkit-user-select: none;-webkit-touch-callout: none}
 	text { -webkit-font-smoothing: subpixel-antialiased; }
@@ -39,7 +45,6 @@
 	.container {margin-top:20px;margin-bottom:70px;}
 	.topel {margin-top:7px;}
 	.nav-tabs {margin-top:10px;}
-	.input-group {margin-top:7px;}
 	.tab-pane {width:100%;margin-top:15px;margin-left:auto;margin-right:auto;}
 	.input-group-addon {min-width:90px;}
 	.input-small {min-width:0px;}
@@ -105,13 +110,20 @@
 
 	/* sidetabs */
 	.v-nav{height:auto;margin:0;}
-	.v-nav>ul{float:left;width:180px;display:block;position:relative;top:0;border:1px solid black;border-right-width:0;margin:0;padding:0;}
-	.v-nav>ul>li {font-size:1em;font-family:'Open Sans';width:180px;list-style-type:none;display:block;position:relative;margin:0;padding:7px;background-color:#b7dfd1;cursor:pointer;}
+	.v-nav>ul{float:left;width:130px;display:block;position:relative;top:0;border:1px solid #aaa;border-right-width:0;margin:0;padding:0;}
+	.v-nav>ul>li {font-size:1em;font-family:'Open Sans';width:130px;list-style-type:none;display:block;position:relative;margin:0;padding:7px;background-color:#b7dfd1;cursor:pointer;}
 	.v-nav>ul>li.current{position:relative;background-color:#67c2a5;margin:0}
 	.v-nav>ul>li.first.current{border-bottom:0px solid black;}
 	.v-nav>ul>li.last{border-bottom:3px solid black;margin:0}
-	.v-nav>div.tab-content{margin-left:180px;border:1px solid black;position:relative;z-index:9;display:none;padding-left:20px;padding-top:10px;padding-bottom:20px;padding-right:0px;}
-	/* 'sequential_color':['#205946','#33836A','#67c2a5','#b7dfd1','#e2f2ed'] */
+	.v-nav>div.tab-content{margin-left:130px;border:1px solid #aaa;position:relative;z-index:9;display:none;padding-left:20px;padding-top:10px;padding-bottom:16px;padding-right:0px;}
+
+	.input-group{margin-top:5px;}
+	.element_group{margin-bottom:5px;}
+	.input-group-addon{border-radius:0px;font-size:1em;padding:5px;}
+	.form-control{border-radius:0px;box-shadow:none;height:auto;line-height:inherit;padding:5px;}
+	.styled-select select {margin-top:0px;background:transparent;width:100%;padding:5px;font-size:1em;border:1px solid #ccc;border-radius:0;height:auto;-webkit-appearance:none;}
+	.uibox {border:1px solid #ccc;padding:5px;margin-top:0px;}
+	.uibox_text{font-size:1.1em;margin-bottom:0px;color:#ccc;font-weight:bold;font-family:'Open Sans';margin-bottom:-5px;margin-left:-1px;}
 
 	#bad_data{display:none;}
 	#png_save{display:none;}
@@ -266,7 +278,6 @@
 <!-- ************************* DESIGN STARTS HERE ************************* -->
 <!-- ********************************************************************** -->
 
-
 	<div id="design" class="tab-pane active">
 		<div class='v-nav'>
 			<ul>
@@ -325,38 +336,45 @@
 			<div class='tab-content'>
 				<div class="row">
 					<div class="col-md-6 botrow">
-						<h3>Theme</h3>
-						<div class='select'>
-						<select class="selectpicker" id='theme' data-width='300px' data-dropup-auto=false disabled>
-							<option value='standard'>Standard (White on Gray)</option>
-							<option value='bw'>Black on White</option>
-						</select>
-						</div><br>
-						<h3>Logo</h3>
-						<label class='radio-inline'><input type="radio" name="logo" value="nologo" disabled>None</label>
-						<!-- <label class='radio-inline'><input type="radio" name="logo" value="trlogo">Top-right</label> -->
-						<label class='radio-inline'><input type="radio" name="logo" value="brlogo" checked>Bottom-right</label>
+						<div class='input-group element_group'>
+						<span class="input-group-addon" data-toggle='tooltip' data-placement='top' title='Width of the graph in pixels.'>Theme:</span>
+						<div class='styled-select'>
+							<select>
+								<option value='standard'>Standard</option>
+								<option value='bw'>Black on White</option>
+							</select>
+						</div>
+						</div>
+						<div class='uibox_text'>Logo</div>
+						<div class='uibox'>
+							<input id='nologo' type='radio' name='logo' value='nologo'><label for='nologo'><span><span></span></span>None</label>
+							<input id='brlogo' type='radio' name='logo' value='brlogo'><label for='brlogo'><span><span></span></span>Bottom-right</label>
+							<!-- <label class='radio-inline'><input type="radio" name="logo" value="nologo" disabled>None</label> -->
+							<!-- <label class='radio-inline'><input type="radio" name="logo" value="trlogo">Top-right</label> -->
+							<!-- <label class='radio-inline'><input type="radio" name="logo" value="brlogo" checked>Bottom-right</label> -->
+						</div>
 					</div>
 
 					<div class="col-md-6">
-					<h3>Size</h3>
 						<div class='col-md-6' style='padding-left:0'>
-							<div class="input-group">
-							  <span class="input-group-addon" data-toggle='tooltip' data-placement='top' title='Width of the graph in pixels.'>Width</span>
+							<div class="input-group element_group">
+							  <span class="input-group-addon" data-toggle='tooltip' data-placement='top' title='Width of the graph in pixels.'>Width:</span>
 							  <input type="text" class="form-control" placeholder="745" id='gwidth' onchange=changedimensions()>
 							</div>
 						</div>
 						<div class='col-md-6' style='padding-left:0'>
 							<div class="input-group">
-							  <span class="input-group-addon" data-toggle='tooltip' data-placement='top' title='Height of the graph in pixels.'>Height</span>
+							  <span class="input-group-addon" data-toggle='tooltip' data-placement='top' title='Height of the graph in pixels.'>Height:</span>
 							  <input type="text" class="form-control" placeholder="450" id='gheight' onchange=changedimensions()>
 							</div>
-						</div><br>
-						<h3>Key</h3>
-						<label class='radio-inline'><input type="radio" name="key" value="none">None</label>
-						<label class='radio-inline active'><input type="radio" name="key" value="top">Top</label>
-						<label class='radio-inline'><input type="radio" name="key" value="right" disabled>Right</label>
-						<label class='radio-inline'><input type="radio" name="key" value="float" checked>Float</label>
+						</div>
+						<div class='uibox_text'>Key</div>
+						<div class='uibox'>
+							<label class='radio-inline'><input type="radio" name="key" value="none">None</label>
+							<label class='radio-inline active'><input type="radio" name="key" value="top">Top</label>
+							<label class='radio-inline'><input type="radio" name="key" value="right" disabled>Right</label>
+							<label class='radio-inline'><input type="radio" name="key" value="float" checked>Float</label>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -447,7 +465,7 @@
 						<label class='checkbox-inline active'><input type="checkbox" name="bartype" id="stacked">Stacked Bars</label>
 					</div>
 					<div class='col-md-6'>
-						<input type="checkbox" id="spacing" data-toggle="toggle" data-size='mini' checked></label>&nbsp Space between bars<label class='checkbox-inline'>
+						<input type="checkbox" id="spacing" data-toggle="toggle" data-size='mini' checked><label class='checkbox-inline'>&nbsp Space between bars</label>
 					</div>
 				</div>
 			</div>
@@ -457,106 +475,99 @@
 <!-- ********************************************************************** -->
 <!-- *********************** LINECHART STARTS HERE ************************ -->
 <!-- ********************************************************************** -->
+
 	<div id="linechart" class="tab-pane">
+		<div class='v-nav'>
+			<ul>
+				<li id='linechart_first' tab='linechart_data' class='first current'>Data</li>
+				<li tab='linechart_style'>Style</li>
+			</ul>
 
-		<div class="panel-group" id="lineaccordion" role="tablist" aria-multiselectable="true">
-
-			<div class="panel panel-custom fun">
-				<div class="panel-heading" role="tab" id="linedata">
-					<h5 class="panel-title"><a role="button" data-toggle="collapse" data-parent="#lineaccordion" href="#linedata_c" aria-expanded="true" aria-controls="linedata_c">Data</a></h5>
-				</div>
-				<div id="linedata_c" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="linedata_c">
-					<div class="panel-body">
-						<div class='row'>
-							<div class='col-md-6'>
-								<div class="input-group"> <span class="input-group-addon pickvar" data-toggle='tooltip' data-placement='top' title='Select the X variable for your graph.'>X Variable</span>
-									<select class="variable_select x_select" id='line_select_category' data-width='100%' data-dropup-auto=false onchange=x_vars(this) disabled><option value='none'>Nothing selected</option></select>
-								</div>
-								<div class="input-group"> <span class="input-group-addon pickvar" data-toggle='tooltip' data-placement='top' title='Select the Y variable for your graph.'>Y Variable</span>
-									<select class="variable_select y_select" id='line_select_values' data-width='100%' data-dropup-auto=false onchange=y_vars(this) disabled><option value='none'>Nothing selected</option></select>
-								</div>
-								<div class="input-group"> <span class="input-group-addon pickvar" data-toggle='tooltip' data-placement='top' title='Select a variable that divides your data into groups. Groups will be colored differently and a key will be added.'>Group Variable</span>
-									<select class="variable_select group_select" id='line_select_grouping' data-width='100%' data-dropup-auto=false onchange=group_vars(this) disabled><option value='none'>Nothing selected</option></select>
-								</div>
-							</div>
-							<div class='col-md-6'>
-								<div class="input-group"> <span class="input-group-addon pickvar" data-toggle='tooltip' data-placement='top' title='Select a variable to label the points in the graph. You must right click a point and choose Label Data to label it.'>Label Points</span>
-									<select class="variable_select label_select" id='line_select_label' data-width='100%' data-dropup-auto=false disabled><option value='none'>Nothing selected</option></select>
-								</div>
-								<div class="input-group"> <span class="input-group-addon pickvar" data-toggle='tooltip' data-placement='top' title='Select a variable to order your points for connecting them with a line. If you want a standard line graph, select your x-variable here.'>Connect Points</span>
-									<select class="variable_select connect_select" id='line_select_connect' data-width='100%' data-dropup-auto=false disabled><option value='none'>Nothing selected</option></select>
-								</div>
-								<div class="input-group"> <span class="input-group-addon pickvar" data-toggle='tooltip' data-placement='top' title='Select a variable to scale the points in your graph (a bubble graph). If there is a large differential between the largest and smallest values, a log scale will be used.'>Point Size</span>
-									<select class="variable_select" id='line_select_pointsize' data-width='100%' data-dropup-auto=false disabled><option value='none'>Nothing selected</option></select>
-								</div>
-							</div>
-						</div>					
+			<div class='tab-content'>
+				<div class='row'>
+					<div class='col-md-6'>
+						<div class="input-group"> <span class="input-group-addon pickvar" data-toggle='tooltip' data-placement='top' title='Select the X variable for your graph.'>X Variable</span>
+							<select class="variable_select x_select" id='line_select_category' data-width='100%' data-dropup-auto=false onchange=x_vars(this) disabled><option value='none'>Nothing selected</option></select>
+						</div>
+						<div class="input-group"> <span class="input-group-addon pickvar" data-toggle='tooltip' data-placement='top' title='Select the Y variable for your graph.'>Y Variable</span>
+							<select class="variable_select y_select" id='line_select_values' data-width='100%' data-dropup-auto=false onchange=y_vars(this) disabled><option value='none'>Nothing selected</option></select>
+						</div>
+						<div class="input-group"> <span class="input-group-addon pickvar" data-toggle='tooltip' data-placement='top' title='Select a variable that divides your data into groups. Groups will be colored differently and a key will be added.'>Group Variable</span>
+							<select class="variable_select group_select" id='line_select_grouping' data-width='100%' data-dropup-auto=false onchange=group_vars(this) disabled><option value='none'>Nothing selected</option></select>
+						</div>
 					</div>
-				</div>
+					<div class='col-md-6'>
+						<div class="input-group"> <span class="input-group-addon pickvar" data-toggle='tooltip' data-placement='top' title='Select a variable to label the points in the graph. You must right click a point and choose Label Data to label it.'>Label Points</span>
+							<select class="variable_select label_select" id='line_select_label' data-width='100%' data-dropup-auto=false disabled><option value='none'>Nothing selected</option></select>
+						</div>
+						<div class="input-group"> <span class="input-group-addon pickvar" data-toggle='tooltip' data-placement='top' title='Select a variable to order your points for connecting them with a line. If you want a standard line graph, select your x-variable here.'>Connect Points</span>
+							<select class="variable_select connect_select" id='line_select_connect' data-width='100%' data-dropup-auto=false disabled><option value='none'>Nothing selected</option></select>
+						</div>
+						<div class="input-group"> <span class="input-group-addon pickvar" data-toggle='tooltip' data-placement='top' title='Select a variable to scale the points in your graph (a bubble graph). If there is a large differential between the largest and smallest values, a log scale will be used.'>Point Size</span>
+							<select class="variable_select" id='line_select_pointsize' data-width='100%' data-dropup-auto=false disabled><option value='none'>Nothing selected</option></select>
+						</div>
+					</div>
+				</div>	
 			</div>
 
-			<div class="panel panel-custom">
-				<div class="panel-heading" role="tab" id="linestyling">
-					<h5 class="panel-title" ><a role="button" data-toggle="collapse" data-parent="#lineaccordion" href="#linestyling_c" aria-expanded="true" aria-controls="linestyling_c" >Line/Scatter Style</a></h5>
+			<div class='tab-content'>
+				<div class="row">
+					<div class="col-md-6">
+						<h3 data-toggle='tooltip' data-placement='top' title='Turn points on and off. For a line graph, turn points off here and choose a connecting variable in data.'><input type="checkbox" id="points" data-toggle="toggle" data-size='mini' checked ><label class='checkbox-inline'>&nbsp Draw Points</label></h3>
+						<h3 data-toggle='tooltip' data-placement='top' title='If a label variable has been specified, turn this on to label all points by default (you can label them manually by left-clicking individual points).'><input type="checkbox" id="labels" data-toggle="toggle" data-size='mini'><label class='checkbox-inline'>&nbsp Label all points</label></h3>					
+					</div>
+					<div class="col-md-6">
+						<h3>Point Type</h3>
+						<label class='radio-inline'><input type="radio" name="linepoint" value="pointcircle" checked><span class='pointcircle'></span></label>
+						<label class='radio-inline'><input type="radio" name="linepoint" value="pointpoint"><span class='pointpoint'></span></label>
+						<label class='radio-inline'><input type="radio" name="linepoint" value="pointcircleopen"><span class='pointcircleopen'></span></label>
+					</div>
+				</div><br>
+				<div class="row">
+					<div class="col-md-12">
+						<h3>Add Trend Line<br><small>Enter - as the slope and the x-intercept for a vertical line</small></h3>
+					</div>
 				</div>
-				<div id="linestyling_c" class="panel-collapse collapse" role="tabpanel" aria-labelledby="linestyling_c">
-					<div class="panel-body">
-						<div class="row">
-							<div class="col-md-6">
-								<h3 data-toggle='tooltip' data-placement='top' title='Turn points on and off. For a line graph, turn points off here and choose a connecting variable in data.'><input type="checkbox" id="points" data-toggle="toggle" data-size='mini' checked ></label>&nbsp Draw Points<label class='checkbox-inline'></h3>
-								<h3 data-toggle='tooltip' data-placement='top' title='If a label variable has been specified, turn this on to label all points by default (you can label them manually by left-clicking individual points).'><input type="checkbox" id="labels" data-toggle="toggle" data-size='mini'></label>&nbsp Label all points<label class='checkbox-inline'></h3>					
-							</div>
-							<div class="col-md-6">
-								<h3>Point Type</h3>
-								<label class='radio-inline'><input type="radio" name="linepoint" value="pointcircle" checked><span class='pointcircle' /></label>
-								<label class='radio-inline'><input type="radio" name="linepoint" value="pointpoint"><span class='pointpoint' /></label>
-								<label class='radio-inline'><input type="radio" name="linepoint" value="pointcircleopen"><span class='pointcircleopen'></label>
-							</div>
-						</div><br>
-						<div class="row">
-							<div class="col-md-12">
-								<h3>Add Trend Line<br><small>Enter - as the slope and the x-intercept for a vertical line</small></h3>
+				<div id='trends'>
+					<div class="row">
+						<div class="col-md-4">
+							<div class="input-group"> <span class="input-group-addon" data-toggle='tooltip' data-placement='top' title='Slope of the trend line to add to the plot.'>Slope</span>
+								<input type="text" class="form-control slope" placeholder="" id='slope'>
 							</div>
 						</div>
-						<div id='trends'>
-							<div class="row">
-								<div class="col-md-4">
-									<div class="input-group"> <span class="input-group-addon" data-toggle='tooltip' data-placement='top' title='Slope of the trend line to add to the plot.'>Slope</span>
-										<input type="text" class="form-control slope" placeholder="" id='slope'>
-									</div>
-								</div>
-								<div class='col-md-4'>
-									<div class="input-group"> <span class="input-group-addon" data-toggle='tooltip' data-placement='top' title='Intercept of the trend line to add to the plot.'>Intercept</span>
-										<input type="text" class="form-control intercept" placeholder="" id='intercept'>
-									</div>
-								</div>
-								<div class="col-md-4">
-									<span class="add text-center" onclick=newtrend()><i class="fa fa-plus"></i></span>
-								</div>
-							</div>
-						</div><br>
-						<div class='row'>
-							<div class='col-md-12'>
-								<h3>Interval Shading</h3>
+						<div class='col-md-4'>
+							<div class="input-group"> <span class="input-group-addon" data-toggle='tooltip' data-placement='top' title='Intercept of the trend line to add to the plot.'>Intercept</span>
+								<input type="text" class="form-control intercept" placeholder="" id='intercept'>
 							</div>
 						</div>
-						<div class='row'>
-							<div class='col-md-3'>
-								<h3 data-toggle='tooltip' data-placement='top' title='Shade U.S. recessions according to the x-axis. The x-variable must be a date type.'><input type="checkbox" id="recession_shading" data-toggle="toggle" data-size='mini'></label>&nbsp Shade U.S. recessions<label class='checkbox-inline'></h3>
-							</div>
+						<div class="col-md-4">
+							<span class="add text-center" onclick=newtrend()><i class="fa fa-plus"></i></span>
 						</div>
-						<div class='row'>
-							<div class='col-md-9'>
-								<div class="input-group"> <span class="input-group-addon" data-toggle='tooltip' data-placement='top' title='Intercept of the trend line to add to the plot.'>Arbitrary Shading</span>
-									<input type="text" class="form-control intercept" placeholder="ex: [3,4],[9,10],[20,24]" id='arbitrary_intervals'>
-								</div>
-							</div>
+					</div>
+				</div><br>
+				<div class='row'>
+					<div class='col-md-12'>
+						<h3>Interval Shading</h3>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-3'>
+						<h3 data-toggle='tooltip' data-placement='top' title='Shade U.S. recessions according to the x-axis. The x-variable must be a date type.'><input type="checkbox" id="recession_shading" data-toggle="toggle" data-size='mini'><label class='checkbox-inline'>&nbsp Shade U.S. recessions</label></h3>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-9'>
+						<div class="input-group"> <span class="input-group-addon" data-toggle='tooltip' data-placement='top' title='Intercept of the trend line to add to the plot.'>Arbitrary Shading</span>
+							<input type="text" class="form-control intercept" placeholder="ex: [3,4],[9,10],[20,24]" id='arbitrary_intervals'>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+
+
+
 
 <!-- ********************************************************************** -->
 <!-- ********************* SCATTER PLOT STARTS HERE *********************** -->
@@ -678,9 +689,9 @@ $('[data-toggle="tooltip"]').tooltip()
 
 // Initial graph state
 function placeholder(){
-	var bounding_box=grapharea.rect(0,0,width,height).attr({class:'background',fill:'none','stroke':'lightgray','stroke-width':5.5,'stroke-dasharray':'10,10'})
-	var x1=grapharea.line(0,0,width,height).attr({'stroke':'lightgray','stroke-width':2.75,'stroke-dasharray':'10,10'})
-	var x2=grapharea.line(0,height,width,0).attr({'stroke':'lightgray','stroke-width':2.75,'stroke-dasharray':'10,10'})
+	var bounding_box=grapharea.rect(0,0,width+5,height).attr({class:'background',fill:'none','stroke':'lightgray','stroke-width':5.5,'stroke-dasharray':'10,10'})
+	var x1=grapharea.line(0,0,width+5,height).attr({'stroke':'lightgray','stroke-width':2.75,'stroke-dasharray':'10,10'})
+	var x2=grapharea.line(0,height,width+5,0).attr({'stroke':'lightgray','stroke-width':2.75,'stroke-dasharray':'10,10'})
 	var init_text=grapharea.text(width/2,height/2,'graphing area').attr({'font-family':'Lato, Arial, sans-serif','font-size':50,'text-anchor':'middle','fill':'gray','font-weight':700,'dominant-baseline':'text-before-edge',cursor:'pointer'})
 	center_baseline(init_text)
 }
@@ -744,9 +755,7 @@ $(function() {
 		})
 	})
 
-	if(location.hash){
-		$('#design_first').click()
-	}
+	$('#design_first').click()
 })
 
 /////////////////////////// LOAD DATA //////////////////////////////////
