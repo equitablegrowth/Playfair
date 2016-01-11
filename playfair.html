@@ -23,11 +23,11 @@
 	@import url(http://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700,800);
 	@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,700,600,300);
 
-	input[type=radio]:not(old){width:2em;margin:0;padding:0;font-size:1em;opacity:0;}
-	input[type=radio]:not(old) + label{display:inline-block;margin-left:-2em;font-weight:400;}
-	input[type=radio]:not(old) + label > span{display:inline-block;width:0.875em;height:0.875em;margin:0.25em 0.25em 0.25em 0.25em;border:1px solid #ccc;background:white;vertical-align:bottom;}
-	input[type=radio]:not(old):checked + label > span{}
-	input[type=radio]:not(old):checked + label > span > span{display:inline-block;width:.75em;height:.75em;background:#67c2a5;border:1px solid white;}
+	input[type=radio]:not(old){width:2em;margin:6;padding:0;font-size:14px;opacity:0;}
+	input[type=radio]:not(old) + label {display:inline-block;margin-left:-28px;font-weight:400;}
+	input[type=radio]:not(old) + label > span {display:inline-block;width:14px;height:14px;margin:3px;border:1px solid #ccc;background:white;vertical-align:bottom;}
+	input[type=radio]:not(old):checked + label > span {}
+	input[type=radio]:not(old):checked + label > span > span{display:inline-block;width:12px;height:12px;background:#67c2a5;border:1px solid white;}
 	h1 {font-family:Lancelot;font-size:50;margin:0;line-height:75%;}
 	h4 {font-family:Raleway;font-weight:300;margin-bottom:20;}
 	h3 {font-size:15px;margin-top:0px;margin-bottom:0px;font-family:Raleway;font-weight:500;}
@@ -48,6 +48,7 @@
 	.nav-tabs {margin-top:10px;}
 	.tab-pane {width:100%;margin-top:15px;margin-left:auto;margin-right:auto;}
 	.input-group-addon {min-width:90px;}
+	.input-group-addon-narrow {min-width:0px;}
 	.input-small {min-width:0px;}
 	.longlabel {min-width:150px;}
 	.bootstrap-select {margin-top:7px;margin-bottom:7px;}
@@ -108,7 +109,14 @@
 	.add {width:18px;height:18px;border:1px solid #b0b0b0;-webkit-border-radius:9px;border-radius:9px;display:inline-block;margin-top:14px;}
 	.fa-plus {color:#b0b0b0;margin-top:1px;}
 	.btn {border-radius:0px;}
+	.btn-primary {background-color:#67c2a5;border-color:#67c2a5;}
+	.btn-primary:hover {background-color:#33836A;border-color:#33836A;}
+	.btn-primary:focus {background-color:#33836A;border-color:#33836A;}
+	.btn-primary:active:hover {background-color:#33836A;border-color:#33836A;}
 	.balign {margin-top:3px;}
+	.checkbox-inline {margin-right:8px;}
+	.input-group .form-control:nth-child(3) {border-left:0px;}
+	.grouptext {border-right:0px;}
 
 	/* sidetabs */
 	.sidebar {margin:0;padding:0;border-right:1px solid black;position:relative;}
@@ -120,12 +128,12 @@
 	.v-nav>ul>li.last{border-bottom:3px solid black;margin:0}
 	.v-nav>div.tab-content{margin-left:145px;border:0px solid #aaa;position:relative;z-index:9;display:none;padding-left:20px;padding-top:0px;padding-bottom:16px;padding-right:0px;}
 
-	.input-group{margin-top:5px;}
+	.input-group{margin-top:3px;margin-bottom:3px;}
 	.element_group{margin-bottom:5px;}
 	.input-group-addon{border-radius:0px;font-size:1em;padding:5px;}
 	.form-control{border-radius:0px;box-shadow:none;height:auto;line-height:inherit;padding:5px;}
 	.styled-select select {margin-top:0px;background:transparent;width:100%;padding:5px;font-size:1em;border:1px solid #ccc;border-radius:0;height:auto;-webkit-appearance:none;}
-	.uibox {border:1px solid #bbb;padding:5px;margin-top:0px;}
+	.uibox {border:1px solid #bbb;padding:5px;margin-top:0px;margin-bottom:5px;}
 	.uibox_text{font-size:1.1em;margin-bottom:0px;color:#bbb;font-weight:bold;font-family:'Open Sans';margin-bottom:-5px;margin-left:-1px;}
 
 	#bad_data{display:none;}
@@ -383,43 +391,53 @@
 			</div>
 
 			<div class='tab-content'>
-				<div class="row">
-					<div class="col-md-3">
-						<label class='checkbox-inline'><input type="checkbox" class='text-right' id="xgrid" data-toggle="toggle" data-size='mini'></label>&nbsp X gridlines<br>
-						<label class='checkbox-inline'><input type="checkbox" class='text-right' id="ygrid" data-toggle="toggle" data-size='mini' checked></label>&nbsp Y gridlines
-					</div>
-					<div class="col-md-3">
-						<label class='checkbox-inline'><input type="checkbox" class='text-right' id="xminorgrid" data-toggle="toggle" data-size='mini'></label>&nbsp X minor gridlines<br>
-						<label class='checkbox-inline'><input type="checkbox" class='text-right' id="yminorgrid" data-toggle="toggle" data-size='mini'></label>&nbsp Y minor gridlines
-					</div>
-					<div class="col-md-3">
-						<div class="input-group input-group-sm full-width">
-						  <input type="text" class="form-control text-center" placeholder="prefix" id='x_prepend'>
-						  <span class="input-group-addon input-small">x</span>
-						  <input type="text" class="form-control text-center" placeholder="suffix" id='x_append'>
-						</div>
-					</div>
-					<div class='col-md-3'>
-						<div class="input-group input-group-sm full-width">
-						  <input type="text" class="form-control text-center" placeholder="prefix" id='y_prepend'>
-						  <span class="input-group-addon input-small">y</span>
-						  <input type="text" class="form-control text-center" placeholder="suffix" id='y_append'>
-						</div>
-					</div>
-				</div>
 				<div class='row'>
 					<div class='col-md-6'>
-						<div class="input-group input-group-sm full-width">
-							<span class="input-group-addon input-small">Custom X-axis</span>
-							<span class="input-group-addon input-small"><input type='checkbox' id='customxcheck'></span>
+						<div class="input-group full-width element_group">
+							<span class="input-group-addon">Custom X-axis:</span>
+							<span class="input-group-addon"><input type='checkbox' id='customxcheck'></span>
 							<input type="text" class="form-control" placeholder="e.g. 1,2,3" id='customx'>
 						</div>
 					</div>
 					<div class='col-md-6'>
-						<div class="input-group input-group-sm full-width">
-							<span class="input-group-addon input-small">Custom Y-axis</span>
-							<span class="input-group-addon input-small"><input type='checkbox' id='customycheck'></span>
+						<div class="input-group full-width element_group">
+							<span class="input-group-addon">Custom Y-axis:</span>
+							<span class="input-group-addon"><input type='checkbox' id='customycheck'></span>
 							<input type="text" class="form-control" placeholder="e.g. 1,2,3" id='customy'>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-6">
+					<div class='uibox_text'>Gridlines</div>
+						<div class='uibox'>
+							<div class="col-md-6">
+								<label class='checkbox-inline'><input type="checkbox" class='text-right' id="xgrid" data-toggle="toggle" data-size='mini'></label>X gridlines<br>
+								<label class='checkbox-inline'><input type="checkbox" class='text-right' id="ygrid" data-toggle="toggle" data-size='mini' checked></label>Y gridlines
+							</div>
+							<div class="col-md-6">
+								<label class='checkbox-inline'><input type="checkbox" class='text-right' id="xminorgrid" data-toggle="toggle" data-size='mini'></label>Minor X gridlines<br>
+								<label class='checkbox-inline'><input type="checkbox" class='text-right' id="yminorgrid" data-toggle="toggle" data-size='mini'></label>Minor Y gridlines
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class='uibox_text'>Formatting</div>
+						<div class='uibox'>
+							<div class='col-md-6'>
+								<div class="input-group full-width">
+								  <input type="text" class="form-control text-center grouptext" placeholder="prefix" id='x_prepend'>
+								  <span class="input-group-addon input-group-addon-narrow">x</span>
+								  <input type="text" class="form-control text-center" placeholder="suffix" id='x_append'>
+								</div>
+							</div>
+							<div class='col-md-6'>
+								<div class="input-group full-width">
+								  <input type="text" class="form-control text-center grouptext" placeholder="prefix" id='y_prepend'>
+								  <span class="input-group-addon input-group-addon-narrow">y</span>
+								  <input type="text" class="form-control text-center" placeholder="suffix" id='y_append'>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -459,16 +477,24 @@
 			<div class='tab-content'>
 				<div class="row">
 					<div class="col-md-6">
-						<h3>Orientation</h3>
-						<label class='radio-inline active'><input type="radio" name="barorient" value="vertical" checked>Vertical</label>
-						<label class='radio-inline active'><input type="radio" name="barorient" value="horizontal">Horizontal</label>
-						<br><br>
-						<h3>Chart Type</h3>
-						<!-- <label class='checkbox-inline active'><input type="checkbox" name="bartype" value="grouped">Grouped Bars</label> -->
-						<label class='checkbox-inline active'><input type="checkbox" name="bartype" id="stacked">Stacked Bars</label>
+						<div class='uibox_text'>Layout</div>
+						<div class='uibox'>
+							<div class='col-md-6'>
+								<label class='checkbox-inline'><input type="checkbox" class='text-right' id="spacing" data-toggle="toggle" data-size='mini' checked></label>Space between bars
+							</div>
+							<div class="col-md-6">
+								<input id='vert' type="radio" name="barorient" value="vertical" checked><label for='vert'><span><span></span></span>Vertical</label>
+								<input id='horiz' type="radio" name="barorient" value="horizontal"><label for='horiz'><span><span></span></span>Horizontal</label>
+							</div>
+						</div>
 					</div>
 					<div class='col-md-6'>
-						<input type="checkbox" id="spacing" data-toggle="toggle" data-size='mini' checked><label class='checkbox-inline'>&nbsp Space between bars</label>
+						<div class='uibox_text'>Chart Type</div>
+						<div class='uibox'>
+							<div class='col-md-6'>
+								<label class='checkbox-inline'><input type="checkbox" class='text-right' name="bartype" data-toggle="toggle" data-size='mini' id="stacked"></label>Stacked Bars
+							</div>
+						</div>						
 					</div>
 				</div>
 			</div>
@@ -515,53 +541,40 @@
 
 			<div class='tab-content'>
 				<div class="row">
-					<div class="col-md-6">
-						<h3 data-toggle='tooltip' data-placement='top' title='Turn points on and off. For a line graph, turn points off here and choose a connecting variable in data.'><input type="checkbox" id="points" data-toggle="toggle" data-size='mini' checked ><label class='checkbox-inline'>&nbsp Draw Points</label></h3>
-						<h3 data-toggle='tooltip' data-placement='top' title='If a label variable has been specified, turn this on to label all points by default (you can label them manually by left-clicking individual points).'><input type="checkbox" id="labels" data-toggle="toggle" data-size='mini'><label class='checkbox-inline'>&nbsp Label all points</label></h3>					
-					</div>
-					<div class="col-md-6">
-						<h3>Point Type</h3>
-						<label class='radio-inline'><input type="radio" name="linepoint" value="pointcircle" checked><span class='pointcircle'></span></label>
-						<label class='radio-inline'><input type="radio" name="linepoint" value="pointpoint"><span class='pointpoint'></span></label>
-						<label class='radio-inline'><input type="radio" name="linepoint" value="pointcircleopen"><span class='pointcircleopen'></span></label>
-					</div>
-				</div><br>
-				<div class="row">
 					<div class="col-md-12">
-						<h3>Add Trend Line<br><small>Enter - as the slope and the x-intercept for a vertical line</small></h3>
-					</div>
-				</div>
-				<div id='trends'>
-					<div class="row">
-						<div class="col-md-4">
-							<div class="input-group"> <span class="input-group-addon" data-toggle='tooltip' data-placement='top' title='Slope of the trend line to add to the plot.'>Slope</span>
-								<input type="text" class="form-control slope" placeholder="" id='slope'>
+						<div class='uibox_text'>Trend Lines</div>
+						<div class='uibox'>
+							<div id='trends'>
+								<div class='col-md-6'>
+									<div class="input-group"> <span class="input-group-addon" data-toggle='tooltip' data-placement='top' title='Slope of the trend line to add to the plot.'>Slope:</span>
+										<input type="text" class="form-control slope" placeholder="" id='slope'>
+									</div>
+								</div>
+								<div class='col-md-6'>
+									<div class="input-group"> <span class="input-group-addon" data-toggle='tooltip' data-placement='top' title='Intercept of the trend line to add to the plot.'>Intercept:</span>
+										<input type="text" class="form-control intercept" placeholder="" id='intercept'>
+									</div>
+								</div>
 							</div>
 						</div>
-						<div class='col-md-4'>
-							<div class="input-group"> <span class="input-group-addon" data-toggle='tooltip' data-placement='top' title='Intercept of the trend line to add to the plot.'>Intercept</span>
-								<input type="text" class="form-control intercept" placeholder="" id='intercept'>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-6'>
+						<div class='uibox_text'>Point Style</div>
+						<div class='uibox'>
+							<div class='col-md-6'>
+								<label class='checkbox-inline'><input type="checkbox" id="points" data-toggle="toggle" data-size='mini' checked ></label>Draw Points
+								<label class='checkbox-inline'><input type="checkbox" id="labels" data-toggle="toggle" data-size='mini'></label>Label all points	
 							</div>
 						</div>
-						<div class="col-md-4">
-							<span class="add text-center" onclick=newtrend()><i class="fa fa-plus"></i></span>
-						</div>
 					</div>
-				</div><br>
-				<div class='row'>
-					<div class='col-md-12'>
-						<h3>Interval Shading</h3>
-					</div>
-				</div>
-				<div class='row'>
-					<div class='col-md-3'>
-						<h3 data-toggle='tooltip' data-placement='top' title='Shade U.S. recessions according to the x-axis. The x-variable must be a date type.'><input type="checkbox" id="recession_shading" data-toggle="toggle" data-size='mini'><label class='checkbox-inline'>&nbsp Shade U.S. recessions</label></h3>
-					</div>
-				</div>
-				<div class='row'>
-					<div class='col-md-9'>
-						<div class="input-group"> <span class="input-group-addon" data-toggle='tooltip' data-placement='top' title='Intercept of the trend line to add to the plot.'>Arbitrary Shading</span>
-							<input type="text" class="form-control intercept" placeholder="ex: [3,4],[9,10],[20,24]" id='arbitrary_intervals'>
+					<div class='col-md-6'>
+						<div class='uibox_text'>Shading</div>
+						<div class='uibox'>
+							<div class='col-md-6'>
+								
+							</div>
 						</div>
 					</div>
 				</div>
@@ -569,7 +582,57 @@
 		</div>
 	</div>
 
-
+<!-- 
+	<h3 data-toggle='tooltip' data-placement='top' title='Turn points on and off. For a line graph, turn points off here and choose a connecting variable in data.'><input type="checkbox" id="points" data-toggle="toggle" data-size='mini' checked ><label class='checkbox-inline'>Draw Points</label></h3>
+	<h3 data-toggle='tooltip' data-placement='top' title='If a label variable has been specified, turn this on to label all points by default (you can label them manually by left-clicking individual points).'><input type="checkbox" id="labels" data-toggle="toggle" data-size='mini'><label class='checkbox-inline'>Label all points</label></h3>					
+</div>
+<div class="col-md-6">
+	<h3>Point Type</h3>
+	<label class='radio-inline'><input type="radio" name="linepoint" value="pointcircle" checked><span class='pointcircle'></span></label>
+	<label class='radio-inline'><input type="radio" name="linepoint" value="pointpoint"><span class='pointpoint'></span></label>
+	<label class='radio-inline'><input type="radio" name="linepoint" value="pointcircleopen"><span class='pointcircleopen'></span></label>
+</div>
+</div><br>
+<div class="row">
+<div class="col-md-12">
+	<h3>Add Trend Line<br><small>Enter - as the slope and the x-intercept for a vertical line</small></h3>
+</div>
+</div>
+<div id='trends'>
+<div class="row">
+	<div class="col-md-4">
+		<div class="input-group"> <span class="input-group-addon" data-toggle='tooltip' data-placement='top' title='Slope of the trend line to add to the plot.'>Slope</span>
+			<input type="text" class="form-control slope" placeholder="" id='slope'>
+		</div>
+	</div>
+	<div class='col-md-4'>
+		<div class="input-group"> <span class="input-group-addon" data-toggle='tooltip' data-placement='top' title='Intercept of the trend line to add to the plot.'>Intercept</span>
+			<input type="text" class="form-control intercept" placeholder="" id='intercept'>
+		</div>
+	</div>
+	<div class="col-md-4">
+		<span class="add text-center" onclick=newtrend()><i class="fa fa-plus"></i></span>
+	</div>
+</div>
+</div><br>
+<div class='row'>
+<div class='col-md-12'>
+	<h3>Interval Shading</h3>
+</div>
+</div>
+<div class='row'>
+<div class='col-md-3'>
+	<h3 data-toggle='tooltip' data-placement='top' title='Shade U.S. recessions according to the x-axis. The x-variable must be a date type.'><input type="checkbox" id="recession_shading" data-toggle="toggle" data-size='mini'><label class='checkbox-inline'>&nbsp Shade U.S. recessions</label></h3>
+</div>
+</div>
+<div class='row'>
+<div class='col-md-9'>
+	<div class="input-group"> <span class="input-group-addon" data-toggle='tooltip' data-placement='top' title='Intercept of the trend line to add to the plot.'>Arbitrary Shading:</span>
+		<input type="text" class="form-control intercept" placeholder="ex: [3,4],[9,10],[20,24] or [January 1997, February 1999],[June 2000, July 2000]" id='arbitrary_intervals'>
+	</div>
+</div>
+</div> 
+-->
 
 
 <!-- ********************************************************************** -->
@@ -640,6 +703,8 @@
 	  </style>
 	</defs>
 </svg>
+<div class='vspace'>
+</div>
 </div>
 
 </div>
