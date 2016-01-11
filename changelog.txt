@@ -1,7 +1,7 @@
 changelog.txt
 
 V0.7
-  - 
+  - UI re-design makes the UI a bit less awful.
 
 V0.6
   - Fixed a but that made the logo appear blurry.

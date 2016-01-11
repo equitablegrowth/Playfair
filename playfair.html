@@ -82,11 +82,11 @@
 	.contextmenucontainer hr {border:0;background:#999;color:#999;height:1px;margin-top:3px;margin-bottom:3px}
 	.panel-heading {font-size:10px;border-radius:0px 0px 0px 0px;}
 	.pointtriangle {width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:12px solid black;display:inline-block;vertical-align:middle}
-	.pointcircle {width:12px;height:12px;border:2px solid #67c2a5;-webkit-border-radius:6px;border-radius:6px;display:inline-block;vertical-align:middle;margin-top:4.5px;background-color:rgba(103, 194, 165, 0.3)}
+	.pointcircle {width:12px;height:12px;border:2px solid #67c2a5;-webkit-border-radius:6px;border-radius:6px;display:inline-block;vertical-align:middle;margin-top:-10px;background-color:rgba(103, 194, 165, 0.3)}
 	.pointcirclecontext {margin-left:4;margin-right:4;margin-top:4;margin-bottom:4;width:12px;height:12px;border:2px solid #67c2a5;-webkit-border-radius:6px;border-radius:6px;display:inline-block;vertical-align:middle;background-color:rgba(103, 194, 165, 0.3)}
-	.pointpoint {width:12px;height:12px;border:2px solid #ffffff;-webkit-border-radius:6px;border-radius:6px;display:inline-block;vertical-align:middle;margin-top:4.5px;background-color:rgba(103, 194, 165, 1)}
+	.pointpoint {width:12px;height:12px;border:2px solid #ffffff;-webkit-border-radius:6px;border-radius:6px;display:inline-block;vertical-align:middle;margin-top:-10px;background-color:rgba(103, 194, 165, 1)}
 	.pointpointcontext {margin-left:4;margin-right:4;margin-top:4;margin-bottom:4;width:12px;height:12px;border:2px solid rgba(103, 194, 165, 0);-webkit-background-clip: padding-box;background-clip: padding-box;-webkit-border-radius:6px;border-radius:6px;display:inline-block;vertical-align:middle;background-color:rgba(103, 194, 165, 1)}
-	.pointcircleopen {width:12px;height:12px;border:2px solid #67c2a5;-webkit-border-radius:6px;border-radius:6px;display:inline-block;vertical-align:middle;margin-top:4.5px;}
+	.pointcircleopen {width:12px;height:12px;border:2px solid #67c2a5;-webkit-border-radius:6px;border-radius:6px;display:inline-block;vertical-align:middle;margin-top:-10px;}
 	.pointcircleopencontext {margin-left:4;margin-right:4;margin-top:4;margin-bottom:4;width:12px;height:12px;border:2px solid #67c2a5;-webkit-border-radius:6px;border-radius:6px;display:inline-block;vertical-align:middle;}
 	.pointcirclecontext:hover {margin-left:3;margin-right:3;margin-top:3;margin-bottom:3;width:14px;height:14px;border:2px solid #67c2a5;-webkit-border-radius:7px;border-radius:7px;display:inline-block;vertical-align:middle;background-color:rgba(103, 194, 165, 0.3)}
 	.pointpointcontext:hover {margin-left:3;margin-right:3;margin-top:3;margin-bottom:3;width:14px;height:14px;border:2px solid rgba(103, 194, 165, 0);-webkit-background-clip: padding-box;background-clip: padding-box;-webkit-border-radius:7px;border-radius:7px;display:inline-block;vertical-align:middle;background-color:rgba(103, 194, 165, 1)}
@@ -117,6 +117,9 @@
 	.checkbox-inline {margin-right:8px;}
 	.input-group .form-control:nth-child(3) {border-left:0px;}
 	.grouptext {border-right:0px;}
+	.groupcheck {max-width:50px;}
+	.slim>.toggle {margin-top:-1px;margin-bottom:-1px;}
+
 
 	/* sidetabs */
 	.sidebar {margin:0;padding:0;border-right:1px solid black;position:relative;}
@@ -394,15 +397,15 @@
 				<div class='row'>
 					<div class='col-md-6'>
 						<div class="input-group full-width element_group">
+							<span class="input-group-addon groupcheck"><label class='checkbox-inline slim'><input type="checkbox" class='text-right' id="customxcheck" data-toggle="toggle" data-size='mini'></label></span>
 							<span class="input-group-addon">Custom X-axis:</span>
-							<span class="input-group-addon"><input type='checkbox' id='customxcheck'></span>
 							<input type="text" class="form-control" placeholder="e.g. 1,2,3" id='customx'>
 						</div>
 					</div>
 					<div class='col-md-6'>
 						<div class="input-group full-width element_group">
+							<span class="input-group-addon groupcheck"><label class='checkbox-inline slim'><input type="checkbox" class='text-right' id="customycheck" data-toggle="toggle" data-size='mini'></label></span>
 							<span class="input-group-addon">Custom Y-axis:</span>
-							<span class="input-group-addon"><input type='checkbox' id='customycheck'></span>
 							<input type="text" class="form-control" placeholder="e.g. 1,2,3" id='customy'>
 						</div>
 					</div>
@@ -546,13 +549,11 @@
 						<div class='uibox'>
 							<div id='trends'>
 								<div class='col-md-6'>
-									<div class="input-group"> <span class="input-group-addon" data-toggle='tooltip' data-placement='top' title='Slope of the trend line to add to the plot.'>Slope:</span>
-										<input type="text" class="form-control slope" placeholder="" id='slope'>
+									<div class="input-group"><span class="input-group-addon" data-toggle='tooltip' data-placement='top' title='Slope of the trend line to add to the plot.'>Slope:</span><input type="text" class="form-control slope" placeholder="" id='slope'>
 									</div>
 								</div>
 								<div class='col-md-6'>
-									<div class="input-group"> <span class="input-group-addon" data-toggle='tooltip' data-placement='top' title='Intercept of the trend line to add to the plot.'>Intercept:</span>
-										<input type="text" class="form-control intercept" placeholder="" id='intercept'>
+									<div class="input-group"><span class="input-group-addon" data-toggle='tooltip' data-placement='top' title='Intercept of the trend line to add to the plot.'>Intercept:</span><input type="text" class="form-control intercept" placeholder="" id='intercept'>
 									</div>
 								</div>
 							</div>
@@ -564,8 +565,13 @@
 						<div class='uibox_text'>Point Style</div>
 						<div class='uibox'>
 							<div class='col-md-6'>
-								<label class='checkbox-inline'><input type="checkbox" id="points" data-toggle="toggle" data-size='mini' checked ></label>Draw Points
-								<label class='checkbox-inline'><input type="checkbox" id="labels" data-toggle="toggle" data-size='mini'></label>Label all points	
+								<label class='checkbox-inline'><input type="checkbox" id="points" data-toggle="toggle" data-size='mini' checked ></label>Draw Points<br>
+								<label class='checkbox-inline'><input type="checkbox" id="labels" data-toggle="toggle" data-size='mini'></label>Label all points
+							</div>
+							<div class='col-md-6'>
+								<input id='pointcircle' type="radio" name="linepoint" value="pointcircle" checked><label for='pointcircle'><span><span></span></span></label><span class='pointcircle'></span>
+								<input id='pointpoint' type="radio" name="linepoint" value="pointpoint"><label for='pointpoint'><span><span></span></span></label><span class='pointpoint'></span>
+								<input id='pointcircleopen' type="radio" name="linepoint" value="pointcircleopen"><label for='pointcircleopen'><span><span></span></span></label><span class='pointcircleopen'></span>
 							</div>
 						</div>
 					</div>
@@ -573,7 +579,9 @@
 						<div class='uibox_text'>Shading</div>
 						<div class='uibox'>
 							<div class='col-md-6'>
-								
+								<label class='checkbox-inline'><input type="checkbox" id="recession_shading" data-toggle="toggle" data-size='mini'></label>Shade U.S. recessions<br>
+								<div class="input-group"> <span class="input-group-addon" data-toggle='tooltip' data-placement='top' title='Intercept of the trend line to add to the plot.'>Arbitrary Shading:</span>
+								<input type="text" class="form-control intercept" placeholder="ex: [3,4],[9,10],[20,24] or [January 1997, February 1999],[June 2000, July 2000]" id='arbitrary_intervals'></div>
 							</div>
 						</div>
 					</div>
