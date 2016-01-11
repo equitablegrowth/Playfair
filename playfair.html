@@ -5,6 +5,7 @@
 
 	<script src="lib/playfair.js"></script>
 	<script src="lib/saveSvgAsPng.js"></script>
+	<script src="lib/svg_todataurl.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2014-11-29/FileSaver.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -26,14 +27,14 @@
 	input[type=radio]:not(old) + label{display:inline-block;margin-left:-2em;font-weight:400;}
 	input[type=radio]:not(old) + label > span{display:inline-block;width:0.875em;height:0.875em;margin:0.25em 0.25em 0.25em 0.25em;border:1px solid #ccc;background:white;vertical-align:bottom;}
 	input[type=radio]:not(old):checked + label > span{}
-	input[type=radio]:not(old):checked + label > span > span{display:inline-block;width:.75em;height:.75em;background:rgb(153,204,102);border:1px solid white;}
+	input[type=radio]:not(old):checked + label > span > span{display:inline-block;width:.75em;height:.75em;background:#67c2a5;border:1px solid white;}
 	h1 {font-family:Lancelot;font-size:50;margin:0;line-height:75%;}
 	h4 {font-family:Raleway;font-weight:300;margin-bottom:20;}
 	h3 {font-size:15px;margin-top:0px;margin-bottom:0px;font-family:Raleway;font-weight:500;}
 	h5 {font-size:24px;font-family:Raleway;font-weight:500;fill:'white';}
 	body {font-family:"Open Sans";-webkit-font-smoothing: antialiased}
 	textarea {margin-top:0px;resize:none;display:block;margin-right:auto;margin-left:auto;width:100%;padding:8px;border:1px solid #cccccc;font-family:"Courier";font-size:90%;}
-	hr {border-width:1px;border-color:#dddddd;margin-top:27;}
+	hr {border-width:1px;border-color:#dddddd;margin-top:6;}
 	a {color:#205946;}
 	a:hover {color:#67c2a5;}
 	label{margin:0;}
@@ -95,8 +96,7 @@
 	.btn-file {position:relative;overflow:hidden;}
 	.btn-file input[type=file]{position:absolute;top:0;right:0;min-width:100%;min-height:100%;font-size:100px;text-align:right;filter:alpha(opacity=0);opacity:0;outline:none;background:white;cursor:inherit;display:block;}
 	.nav>li>a {padding:4px;padding-left:8px;padding-right:8px;border-bottom:0px;}
-	.nav-tabs {border-bottom:0px;}
-	.nav-tabs>li>a {border-radius:0px;border-bottom:0px;border-top:0px;border-right:0px;border-left:0px;}
+	.nav-tabs>li>a {border-radius:0px;border-bottom:1px;border-top:0px;border-right:0px;border-left:0px;}
 	.nav_tabs>li.active{border-bottom:3px solid #67c2a5;border-top:0px;border-right:0px;border-left:0px}
 	.nav-tabs>li.active>a {border-bottom:3px solid #67c2a5;border-top:0px;border-right:0px;border-left:0px}
 	.nav-tabs>li.active>a:focus {border-bottom:3px solid #67c2a5;border-top:0px;border-right:0px;border-left:0px}
@@ -107,23 +107,26 @@
 	.solid {height:8px;border-width:2px;margin-left:2;border-bottom: thin black solid;width:120px;display:inline-block;margin-top:3px;margin-bottom:3px;padding:0;}
 	.add {width:18px;height:18px;border:1px solid #b0b0b0;-webkit-border-radius:9px;border-radius:9px;display:inline-block;margin-top:14px;}
 	.fa-plus {color:#b0b0b0;margin-top:1px;}
+	.btn {border-radius:0px;}
+	.balign {margin-top:3px;}
 
 	/* sidetabs */
+	.sidebar {margin:0;padding:0;border-right:1px solid black;position:relative;}
 	.v-nav{height:auto;margin:0;}
-	.v-nav>ul{float:left;width:130px;display:block;position:relative;top:0;border:1px solid #aaa;border-right-width:0;margin:0;padding:0;}
-	.v-nav>ul>li {font-size:1em;font-family:'Open Sans';width:130px;list-style-type:none;display:block;position:relative;margin:0;padding:7px;background-color:#b7dfd1;cursor:pointer;}
-	.v-nav>ul>li.current{position:relative;background-color:#67c2a5;margin:0}
-	.v-nav>ul>li.first.current{border-bottom:0px solid black;}
+	.v-nav>ul{float:left;width:130px;display:block;position:relative;top:0;border:0px solid #aaa;border-right-width:0;margin:0;padding:0;padding-top:4px;}
+	.v-nav>ul>li {border:1px solid white;text-align:center;font-size:.8em;font-family:'Open Sans';width:130px;list-style-type:none;display:block;position:relative;margin:0;padding:7px;background-color:#dddddd;cursor:pointer;border-right:4px solid white;border-bottom-right-radius:25px;border-top-right-radius:25px;}
+	.v-nav>ul>li:hover {background-color:#b7dfd1;border-right:4px solid #67c2a5;border-bottom-right-radius:25px;border-top-right-radius:25px;}
+	.v-nav>ul>li.current{position:relative;background-color:#b7dfd1;margin:0;border-right:4px solid #67c2a5;border-bottom-right-radius:25px;border-top-right-radius:25px;}
 	.v-nav>ul>li.last{border-bottom:3px solid black;margin:0}
-	.v-nav>div.tab-content{margin-left:130px;border:1px solid #aaa;position:relative;z-index:9;display:none;padding-left:20px;padding-top:10px;padding-bottom:16px;padding-right:0px;}
+	.v-nav>div.tab-content{margin-left:145px;border:0px solid #aaa;position:relative;z-index:9;display:none;padding-left:20px;padding-top:0px;padding-bottom:16px;padding-right:0px;}
 
 	.input-group{margin-top:5px;}
 	.element_group{margin-bottom:5px;}
 	.input-group-addon{border-radius:0px;font-size:1em;padding:5px;}
 	.form-control{border-radius:0px;box-shadow:none;height:auto;line-height:inherit;padding:5px;}
 	.styled-select select {margin-top:0px;background:transparent;width:100%;padding:5px;font-size:1em;border:1px solid #ccc;border-radius:0;height:auto;-webkit-appearance:none;}
-	.uibox {border:1px solid #ccc;padding:5px;margin-top:0px;}
-	.uibox_text{font-size:1.1em;margin-bottom:0px;color:#ccc;font-weight:bold;font-family:'Open Sans';margin-bottom:-5px;margin-left:-1px;}
+	.uibox {border:1px solid #bbb;padding:5px;margin-top:0px;}
+	.uibox_text{font-size:1.1em;margin-bottom:0px;color:#bbb;font-weight:bold;font-family:'Open Sans';margin-bottom:-5px;margin-left:-1px;}
 
 	#bad_data{display:none;}
 	#png_save{display:none;}
@@ -348,7 +351,7 @@
 						<div class='uibox_text'>Logo</div>
 						<div class='uibox'>
 							<input id='nologo' type='radio' name='logo' value='nologo'><label for='nologo'><span><span></span></span>None</label>
-							<input id='brlogo' type='radio' name='logo' value='brlogo'><label for='brlogo'><span><span></span></span>Bottom-right</label>
+							<input id='brlogo' type='radio' name='logo' value='brlogo' checked><label for='brlogo'><span><span></span></span>Bottom-right</label>
 							<!-- <label class='radio-inline'><input type="radio" name="logo" value="nologo" disabled>None</label> -->
 							<!-- <label class='radio-inline'><input type="radio" name="logo" value="trlogo">Top-right</label> -->
 							<!-- <label class='radio-inline'><input type="radio" name="logo" value="brlogo" checked>Bottom-right</label> -->
@@ -370,10 +373,10 @@
 						</div>
 						<div class='uibox_text'>Key</div>
 						<div class='uibox'>
-							<label class='radio-inline'><input type="radio" name="key" value="none">None</label>
-							<label class='radio-inline active'><input type="radio" name="key" value="top">Top</label>
-							<label class='radio-inline'><input type="radio" name="key" value="right" disabled>Right</label>
-							<label class='radio-inline'><input type="radio" name="key" value="float" checked>Float</label>
+							<input id='nokey' type='radio' name='key' value='none'><label for='nokey'><span><span></span></span>None</label>
+							<input id='topkey' type='radio' name='key' value='top'><label for='topkey'><span><span></span></span>Top</label>
+							<input id='rightkey' type='radio' name='key' value='right'><label for='rightkey'><span><span></span></span>Right</label>
+							<input id='floatkey' type='radio' name='key' value='float' checked><label for='floatkey'><span><span></span></span>Float</label>
 						</div>
 					</div>
 				</div>
@@ -614,8 +617,6 @@
 
 <div class='text-center' id='graphdiv'>
 
-<button type="button" title='Reset the interactive' class="btn btn-default btn" onclick='isvalid()'><i class="fa fa-refresh"></i> Draw/refresh graph</button><br><br>
-
 <div style='max-width:745;margin-left:auto;margin-right:auto' id='constraint'>
 <svg id='grapharea' height='450px' width='750px'>
 	<defs>
@@ -645,12 +646,17 @@
 <hr>
 
 <div class='text-center unselectable'>
+<div class="btn-group btnpadding">
+<button type="button" title='Reset the interactive' class="btn btn-default balign" onclick='redraw()'><i class="fa fa-refresh"></i> Draw/refresh graph</button><br><br>
+</div>
 <div class="btn-group btnpadding" role="group">
 	<button type="button" class="btn btn-default" id='savepng' onclick=savepng()><i class="fa fa-download"></i> Save as PNG</button>
 	<button type="button" class="btn btn-default" id='savesvg' onclick=savesvg()><i class="fa fa-arrows-h"></i> Save as SVG</button>
-	<button type="button" class="btn btn-default" id='savetext' onclick=savesettings() disabled><i class="fa fa-cloud-upload"></i> Save to server</button>
 </div>
-<button type="button" class="btn btn-default btn-file" id='importtext' onclick=importsettings() disabled><input type="file"><i class="fa fa-cloud-download"></i> Restore from server</button>
+<div class="btn-group btnpadding" role="group">
+	<button type="button" class="btn btn-default" id='savetext' onclick=savesettings() disabled><i class="fa fa-cloud-upload"></i> Save to server</button>
+	<button type="button" class="btn btn-default btn-file" id='importtext' onclick=importsettings() disabled><input type="file"><i class="fa fa-cloud-download"></i> Restore from server</button>
+</div>
 <div class='vspace'>
 <small>[<a href='https://github.com/equitablegrowth/Playfair/#boards?repos=44823593'>report a bug</a>]</small>
 </div>
@@ -659,6 +665,9 @@
 <a href="JavaScript:void(0)" id='png_save' download="Playfair_graph.png" target="_blank"/></a>
 
 </div>
+
+<img id="png_save" style="clear:both;display:none;">
+
 </body>
 
 <script defer>
@@ -949,9 +958,9 @@ function populate_variables(final_data) {
 // the currently active tab or, if design/settings is active, then 
 // reference the global variable graph_type.
 //
-// Basically every form element on the page should call isvalid() either
+// Basically every form element on the page should call redraw() either
 // directly or after some other function runs (like x_vars or y_vars).
-// isvalid will check to see if a graph can be drawn and what type of
+// redraw will check to see if a graph can be drawn and what type of
 // graph can be drawn, and then execute the appropriate functions.
 
 // on change in tab, set graph_type so when draw/refresh is clicked it draws the appropriate graph
@@ -984,14 +993,16 @@ function changedimensions() {
 	grapharea.selectAll('line').remove()
 	grapharea.selectAll('circle').remove()
 	grapharea.selectAll('path').remove()
+	grapharea.selectAll('image').remove()
 
 	placeholder()
-	isvalid()
+	redraw()
 }
 
 
-// isvalid is the main graphing setup function. Gets variable values and passes them to playfair.js
-function isvalid() {
+// redraw is the main graphing setup function. Gets variable values and passes them to playfair.js
+function redraw() {
+	console.log('redraw')
 	x_var=$(".x_select").val()
 	y_var=$(".y_select").val()
 	group_var=$(".group_select").val()
@@ -1016,6 +1027,7 @@ function isvalid() {
 		grapharea.selectAll('line').remove()
 		grapharea.selectAll('circle').remove()
 		grapharea.selectAll('path').remove()
+		grapharea.selectAll('image').remove()
 
 		chartobject=playfair.init_graph(grapharea,0,0,width,height)
 		chartobject.data(final_data,x_var,y_var,group_var,facet_var)
@@ -1091,7 +1103,6 @@ function isvalid() {
 
 		chartobject.header(hed,dek)
 		chartobject.footer([eglogo_high,2],source,note,function(){
-
 			// draw the initial graph, dependent on current value of graph_type
 			if (graph_type=='Bar Chart') {
 
@@ -1198,7 +1209,7 @@ function isvalid() {
 				}
 
 				chartobject.linechart(options)
-				console.log(chartobject.xarray)
+				console.log('a',chartobject.xarray)
 				$('#customx').val(chartobject.xarray)
 				$('#customy').val(chartobject.yarray)
 			}
@@ -1532,17 +1543,13 @@ function sizedown(target) {
 function fadein(target) {
 	var item=Snap(target)
 	opacity=parseFloat(item.attr('opacity'))
-	console.log(opacity)
 	item.attr({opacity:opacity+.1})
-	console.log(item.attr('opacity'))
 }
 
 function fadeout(target) {
 	var item=Snap(target)
 	opacity=parseFloat(item.attr('opacity'))
-	console.log(opacity)
 	item.attr({opacity:opacity-.1})
-	console.log(item.attr('opacity'))
 }
 
 function addtext(target) {
@@ -1814,26 +1821,27 @@ function thickpath(e) {
 
 function savepng() {
 
-	saveSvgAsPng(document.getElementById('grapharea'),'playfair.png', {scale:2.0})
 
 
+	// saveSvgAsPng(document.getElementById('grapharea'),'playfair.png', {scale:2.0})
+
+	var svg = document.getElementById('grapharea')
+	var img = document.getElementById('png_save')
+
+	svg.toDataURL("image/png", {
+		callback: function(data) {
+			img.href=data
+			img.click()
+		}
+	})
 	// var svg = document.getElementById('grapharea')
 	// var img = document.getElementById('png_save')
-
 	// svg.toDataURL("image/png", {
 	// 	callback: function(data) {
 	// 		img.href=data
 	// 		img.click()
-	// 	}
-	// })
-	// var svg = document.getElementById('grapharea')
-	// var img = document.getElementById('png_save')
-	// svg.toDataURL("image/png", {
-	// 	callback: function(data) {
-	// 		img.href=data
-	// 		img.click()
-			// svg.height=height
-			// svg.width=width
+	// 		svg.height=height
+	// 		svg.width=width
 	// 	}
 	// })
 }
@@ -1903,9 +1911,9 @@ function importsettings() {
 // their own section and are not part of the graphic package itself.
 
 // $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-//   // run isvalid whenever tab is changed
+//   // run redraw whenever tab is changed
 //   // turns out this is a pretty bad interface idea - disabled for now
-//   isvalid()
+//   redraw()
 // })
 
 function highlight_element(ev) {
@@ -1984,7 +1992,7 @@ function x_vars(select) {
 	var value = select.value; 
 	$(".x_select").val(value);
 	$(".x_select").selectpicker('refresh')
-	// isvalid()
+	// redraw()
 }
 
 function y_vars(select) {
@@ -1992,7 +2000,7 @@ function y_vars(select) {
 	var value = select.value; 
 	$(".y_select").val(value);
 	$(".y_select").selectpicker('refresh')
-	// isvalid()
+	// redraw()
 }
 
 function group_vars(select) {
@@ -2000,7 +2008,7 @@ function group_vars(select) {
 	var value = select.value; 
 	$(".group_select").val(value);
 	$(".group_select").selectpicker('refresh')
-	// isvalid()
+	// redraw()
 }
 
 $('.panel-custom').on('show.bs.collapse', function () {
