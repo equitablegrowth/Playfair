@@ -49,6 +49,7 @@
 	.tab-pane {width:100%;margin-top:15px;margin-left:auto;margin-right:auto;}
 	.input-group-addon {min-width:90px;}
 	.input-group-addon-narrow {min-width:0px;}
+	.input-group-addon-wide {min-width:160px;}
 	.input-small {min-width:0px;}
 	.longlabel {min-width:150px;}
 	.bootstrap-select {margin-top:7px;margin-bottom:7px;}
@@ -119,6 +120,7 @@
 	.grouptext {border-right:0px;}
 	.groupcheck {max-width:50px;}
 	.slim>.toggle {margin-top:-1px;margin-bottom:-1px;}
+	.tooltip.top .tooltip-arrow {fill:none;border:0px;}
 
 
 	/* sidetabs */
@@ -629,12 +631,7 @@
 <!-- ********************************************************************** -->
 <!-- *********************** SETTINGS STARTS HERE ************************* -->
 <!-- ********************************************************************** -->
-	<div id="settings" class="tab-pane fade disabled">
-		<h3>Settings</h3>
-		<p>Some content.</p>
-	</div>
-
-	<div id="settings" class="tab-pane active">
+	<div id="settings" class="tab-pane">
 		<div class='v-nav'>
 			<ul>
 				<li id='settings_first' tab='settings_grapharea' class='first current'>Graph Area</li>
@@ -645,48 +642,496 @@
 				<li tab='settings_color'>Color Scales</li>
 				<li tab='settings_barcharts'>Barcharts</li>
 				<li tab='settings_linescatter'>Line/Scatter</li>
-
 			</ul>
 
-			<div class='tab-content'>
+			<div class='tab-content' style='min-height:260px'>
 				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Top margin:</span><input type="text" class="form-control" placeholder="25" id='top_margin'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Top padding:</span><input type="text" class="form-control" placeholder="0" id='chart_toppad'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Chart fill:</span><input type="text" class="form-control" placeholder="#ece9e8" id='chartfill'></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Bottom margin:</span><input type="text" class="form-control" placeholder="8" id='bottom_margin'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Bottom padding:</span><input type="text" class="form-control" placeholder="0" id='chart_bottompad'></div>
+					</div>
+					<div class='col-md-4'>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Left margin:</span><input type="text" class="form-control" placeholder="10" id='left_margin'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Left padding:</span><input type="text" class="form-control" placeholder="0" id='chart_leftpad'></div>
+					</div>
+					<div class='col-md-4'>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Right margin:</span><input type="text" class="form-control" placeholder="40" id='right_margin'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Right padding:</span><input type="text" class="form-control" placeholder="0" id='chart_rightpad'></div>
+					</div>
+					<div class='col-md-4'>
+					</div>
+				</div>
+			</div> 
+
+			<div class='tab-content' style='min-height:260px'>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Min head height:</span><input type="text" class="form-control" placeholder="0" id='head_height'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Min footer height:</span><input type="text" class="form-control" placeholder="0" id='footer_height'></div>
+					</div>
+					<div class='col-md-4'>
+					</div>
+				</div>
+
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Header fill:</span><input type="text" class="form-control" placeholder="0" id='headerfill'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Footer fill:</span><input type="text" class="form-control" placeholder="0" id='footerfill'></div>
+					</div>
+					<div class='col-md-4'>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Header top pad:</span><input type="text" class="form-control" placeholder="0" id='header_toppad'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Footer top pad:</span><input type="text" class="form-control" placeholder="0" id='footer_toppad'></div>
+					</div>
+					<div class='col-md-4'>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Header bottom pad:</span><input type="text" class="form-control" placeholder="0" id='header_bottompad'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Footer bottom pad:</span><input type="text" class="form-control" placeholder="0" id='footer_bottompad'></div>
+					</div>
+					<div class='col-md-4'>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Header left pad:</span><input type="text" class="form-control" placeholder="0" id='header_leftpad'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Footer left pad:</span><input type="text" class="form-control" placeholder="0" id='footer_leftpad'></div>
+					</div>
+					<div class='col-md-4'>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Header right pad:</span><input type="text" class="form-control" placeholder="0" id='header_rightpad'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Footer right pad:</span><input type="text" class="form-control" placeholder="0" id='footer_rightpad'></div>
+					</div>
+					<div class='col-md-4'>
+					</div>
 				</div>
 			</div>
 
-			<div class='tab-content'>
+			<div class='tab-content' style='min-height:260px'>
 				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Hed size:</span><input type="text" class="form-control" placeholder="20px" id='hedsize'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Hed weight:</span><input type="text" class="form-control" placeholder="700" id='hedweight'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Hed face:</span><input type="text" class="form-control" placeholder="Lato" id='hedface'></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Dek size:</span><input type="text" class="form-control" placeholder="16px" id='deksize'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Dek weight:</span><input type="text" class="form-control" placeholder="400" id='dekweight'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Dek face:</span><input type="text" class="form-control" placeholder="Lato" id='dekface'></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Annotate size:</span><input type="text" class="form-control" placeholder="12px" id='annotatesize'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Annotate weight:</span><input type="text" class="form-control" placeholder="600" id='annotateweight'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Annotate face:</span><input type="text" class="form-control" placeholder="Lato" id='annotateface'></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Data label size:</span><input type="text" class="form-control" placeholder="11px" id='datasize'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Data label weight:</span><input type="text" class="form-control" placeholder="400" id='dataweight'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Data label face:</span><input type="text" class="form-control" placeholder="Lato" id='dataface'></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Source size:</span><input type="text" class="form-control" placeholder="10px" id='sourcesize'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Source weight:</span><input type="text" class="form-control" placeholder="400" id='sourceweight'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Source face:</span><input type="text" class="form-control" placeholder="Lato" id='sourceface'></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Note size:</span><input type="text" class="form-control" placeholder="10px" id='notesize'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Note weight:</span><input type="text" class="form-control" placeholder="400" id='noteweight'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Note face:</span><input type="text" class="form-control" placeholder="Lato" id='noteface'></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Xtick size:</span><input type="text" class="form-control" placeholder="14px" id='xtick_textsize'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Xtick weight:</span><input type="text" class="form-control" placeholder="400" id='xtick_textweight'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Xtick face:</span><input type="text" class="form-control" placeholder="Lato" id='xtick_textface'></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ytick size:</span><input type="text" class="form-control" placeholder="14px" id='ytick_textsize'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ytick weight:</span><input type="text" class="form-control" placeholder="400" id='ytick_textweight'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ytick face:</span><input type="text" class="form-control" placeholder="Lato" id='ytick_textface'></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>X label size:</span><input type="text" class="form-control" placeholder="14px" id='xlabel_textsize'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>X label weight:</span><input type="text" class="form-control" placeholder="400" id='xlabel_textweight'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>X label face:</span><input type="text" class="form-control" placeholder="Lato" id='xlabel_textface'></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Y label size:</span><input type="text" class="form-control" placeholder="14px" id='ylabel_textsize'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Y label weight:</span><input type="text" class="form-control" placeholder="400" id='ylabel_textweight'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Y label face:</span><input type="text" class="form-control" placeholder="Lato" id='ylabel_textface'></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Legend size:</span><input type="text" class="form-control" placeholder="12px" id='legend_textsize'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Legend weight:</span><input type="text" class="form-control" placeholder="400" id='legend_textweight'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Legend face:</span><input type="text" class="form-control" placeholder="Lato" id='legend_textface'></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Trendline size:</span><input type="text" class="form-control" placeholder="12px" id='trend_textsize'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Trendline weight:</span><input type="text" class="form-control" placeholder="600" id='trend_textweight'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Trendline face:</span><input type="text" class="form-control" placeholder="Lato" id='trend_textface'></div>
+					</div>
 				</div>
 			</div>
 
-			<div class='tab-content'>
+			<div class='tab-content' style='min-height:260px'>
 				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Xgrid fill:</span><input type="text" class="form-control" placeholder="white" id='xgrid_fill'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Xgrid zerofill:</span><input type="text" class="form-control" placeholder="white" id='xgrid_zerofill'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Xgrid minorfill:</span><input type="text" class="form-control" placeholder="white" id='xgrid_minorfill'></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Xgrid thickness:</span><input type="text" class="form-control" placeholder="1" id='xgrid_thickness'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Xgrid zerothickness:</span><input type="text" class="form-control" placeholder="2" id='xgrid_zerothickness'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Xgrid minorthickness:</span><input type="text" class="form-control" placeholder="1" id='xgrid_minorthickness'></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Xgrid dasharray:</span><input type="text" class="form-control" placeholder="[]" id='xgrid_dasharray'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Xgrid zerodasharray:</span><input type="text" class="form-control" placeholder="[]" id='xgrid_zerodasharray'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Xgrid minordasharray:</span><input type="text" class="form-control" placeholder="[3,3]" id='xgrid_minordasharray'></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Xgrid opacity:</span><input type="text" class="form-control" placeholder="0" id='xgrid_opacity'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Xgrid zeroopacity:</span><input type="text" class="form-control" placeholder="0" id='xgrid_zeroopacity'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Xgrid minoropacity:</span><input type="text" class="form-control" placeholder="0" id='xgrid_minoropacity'></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Xtick maxsize:</span><input type="text" class="form-control" placeholder=".15" id='xtick_maxsize'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Xtick length:</span><input type="text" class="form-control" placeholder="4" id='xtick_length'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Xtick thickness:</span><input type="text" class="form-control" placeholder="1" id='xtick_thickness'></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Xtick fill:</span><input type="text" class="form-control" placeholder="white" id='xtick_fill'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Xtick to xlabel:</span><input type="text" class="form-control" placeholder="5" id='xtick_to_xlabel'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Xtick to xaxis:</span><input type="text" class="form-control" placeholder="5" id='xtick_to_xaxis'></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ygrid fill:</span><input type="text" class="form-control" placeholder="white" id='ygrid_fill'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ygrid zerofill:</span><input type="text" class="form-control" placeholder="white" id='ygrid_zerofill'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ygrid minorfill:</span><input type="text" class="form-control" placeholder="white" id='ygrid_minorfill'></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ygrid thickness:</span><input type="text" class="form-control" placeholder="1" id='ygrid_thickness'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ygrid zerothickness:</span><input type="text" class="form-control" placeholder="2" id='ygrid_zerothickness'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ygrid minorthickness:</span><input type="text" class="form-control" placeholder="1" id='ygrid_minorthickness'></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ygrid dasharray:</span><input type="text" class="form-control" placeholder="[]" id='ygrid_dasharray'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ygrid zerodasharray:</span><input type="text" class="form-control" placeholder="[]" id='ygrid_zerodasharray'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ygrid minordasharray:</span><input type="text" class="form-control" placeholder="[3,3]" id='ygrid_minordasharray'></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ygrid opacity:</span><input type="text" class="form-control" placeholder="1" id='ygrid_opacity'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ygrid zeroopacity:</span><input type="text" class="form-control" placeholder="1" id='ygrid_zeroopacity'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ygrid minoropacity:</span><input type="text" class="form-control" placeholder="0" id='ygrid_minoropacity'></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ytick maxsize:</span><input type="text" class="form-control" placeholder=".15" id='ytick_maxsize'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ytick length:</span><input type="text" class="form-control" placeholder="16" id='ytick_length'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ytick thickness:</span><input type="text" class="form-control" placeholder="1" id='ytick_thickness'></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ytick fill:</span><input type="text" class="form-control" placeholder="white" id='ytick_fill'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ytick to xlabel:</span><input type="text" class="form-control" placeholder="6" id='ytick_to_xlabel'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ytick to xaxis:</span><input type="text" class="form-control" placeholder="20" id='ytick_to_xaxis'></div>
+					</div>
 				</div>
 			</div>
 
-			<div class='tab-content'>
+			<div class='tab-content' style='min-height:260px'>
 				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Legend location:</span><input type="text" class="form-control" placeholder="top" id='legend_location'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Legend maxwidth:</span><input type="text" class="form-control" placeholder=".1" id='legend_maxwidth'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Legend toppad:</span><input type="text" class="form-control" placeholder="8" id='legend_toppad'></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Legend bottompad:</span><input type="text" class="form-control" placeholder="0" id='legend_bottompad'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Legend rightpad:</span><input type="text" class="form-control" placeholder="0" id='legend_rightpad'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Legend leftpad:</span><input type="text" class="form-control" placeholder="0" id='legend_leftpad'></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Legend element size:</span><input type="text" class="form-control" placeholder="15" id='legend_elementsize'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Legend element pad:</span><input type="text" class="form-control" placeholder="5" id='legend_elementpad'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Legend float fill:</span><input type="text" class="form-control" placeholder="white" id='legend_floatbackground'></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Legend float thickness:</span><input type="text" class="form-control" placeholder="1" id='legend_floatthickness'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Legend float stroke:</span><input type="text" class="form-control" placeholder="#b5b5b5" id='legend_floatstroke'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Legend float pad:</span><input type="text" class="form-control" placeholder="8" id='legend_floatpad'></div>
+					</div>
 				</div>
 			</div>
 
-			<div class='tab-content'>
+			<div class='tab-content' style='min-height:260px'>
 				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Diverging color:</span><input type="text" class="form-control" placeholder="['#523211','#8b5322','#dec17c','#80ccc0','#35968e']" id='diverging_color'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Sequential color:</span><input type="text" class="form-control" placeholder="['#205946','#33836A','#67c2a5','#b7dfd1','#e2f2ed']" id='sequential_color'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Qualitative color:</span><input type="text" class="form-control" placeholder="['#67c2a5','#fc8d62','#8da0cb','#e78ac3','#a6d854','#ffd92f','#e5c494','#b3b3b3']" id='qualitative_color'></div>
+					</div>
 				</div>
 			</div>
 
-			<div class='tab-content'>
+			<div class='tab-content' style='min-height:260px'>
 				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Barchart width:</span><input type="text" class="form-control" placeholder=".8" id='barchart_width'></div>
+					</div>
+					<div class='col-md-4'>
+					</div>
+					<div class='col-md-4'>
+					</div>
 				</div>
 			</div>
 
-			<div class='tab-content'>
+			<div class='tab-content' style='min-height:260px'>
 				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Trendline width:</span><input type="text" class="form-control" placeholder="1.5" id='diverging_color'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Trendline fill:</span><input type="text" class="form-control" placeholder="#c64027" id='sequential_color'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Trendline textcolor:</span><input type="text" class="form-control" placeholder="#c64027" id='qualitative_color'></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Trendline linetotext:</span><input type="text" class="form-control" placeholder="3" id='trend_linetotext'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Point size:</span><input type="text" class="form-control" placeholder="4" id='point_size'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Point strokewidth:</span><input type="text" class="form-control" placeholder="1.7" id='point_strokewidth'></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Point fillopacity:</span><input type="text" class="form-control" placeholder="1" id='trend_linetotext'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Point maxsize:</span><input type="text" class="form-control" placeholder="25" id='point_size'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Point minsize:</span><input type="text" class="form-control" placeholder="3" id='point_strokewidth'></div>
+					</div>
 				</div>
 			</div>
-
-			<div class='tab-content'>
-				<div class='row'>
-				</div>
-			</div>
+		</div>
+	</div>
 
 
 <!-- ************************* END TAB CONTENT **************************** -->
