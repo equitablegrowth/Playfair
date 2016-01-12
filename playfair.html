@@ -1014,10 +1014,10 @@
 						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ytick fill:</span><input type="text" class="form-control" placeholder="white" id='ytick_fill'></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ytick to xlabel:</span><input type="text" class="form-control" placeholder="6" id='ytick_to_xlabel'></div>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ytick to ylabel:</span><input type="text" class="form-control" placeholder="6" id='ytick_to_ylabel'></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ytick to xaxis:</span><input type="text" class="form-control" placeholder="20" id='ytick_to_xaxis'></div>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ytick to yaxis:</span><input type="text" class="form-control" placeholder="20" id='ytick_to_yaxis'></div>
 					</div>
 				</div>
 			</div>
@@ -1098,13 +1098,13 @@
 			<div class='tab-content' style='min-height:260px'>
 				<div class='row'>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Trendline width:</span><input type="text" class="form-control" placeholder="1.5" id='diverging_color'></div>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Trendline width:</span><input type="text" class="form-control" placeholder="1.5" id='trend_width'></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Trendline fill:</span><input type="text" class="form-control" placeholder="#c64027" id='sequential_color'></div>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Trendline fill:</span><input type="text" class="form-control" placeholder="#c64027" id='trend_fill'></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Trendline textcolor:</span><input type="text" class="form-control" placeholder="#c64027" id='qualitative_color'></div>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Trendline textcolor:</span><input type="text" class="form-control" placeholder="#c64027" id='trend_textcolor'></div>
 					</div>
 				</div>
 				<div class='row'>
@@ -1120,13 +1120,13 @@
 				</div>
 				<div class='row'>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Point fillopacity:</span><input type="text" class="form-control" placeholder="1" id='trend_linetotext'></div>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Point fillopacity:</span><input type="text" class="form-control" placeholder="1" id='point_fillopacity'></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Point maxsize:</span><input type="text" class="form-control" placeholder="25" id='point_size'></div>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Point maxsize:</span><input type="text" class="form-control" placeholder="25" id='point_maxsize'></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Point minsize:</span><input type="text" class="form-control" placeholder="3" id='point_strokewidth'></div>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Point minsize:</span><input type="text" class="form-control" placeholder="3" id='point_minsize'></div>
 					</div>
 				</div>
 			</div>
@@ -1527,7 +1527,6 @@ function changedimensions() {
 
 // redraw is the main graphing setup function. Gets variable values and passes them to playfair.js
 function redraw() {
-	console.log('redraw')
 	x_var=$(".x_select").val()
 	y_var=$(".y_select").val()
 	group_var=$(".group_select").val()
@@ -1627,8 +1626,19 @@ function redraw() {
 			style['point_fillopacity']=0
 		}
 
+		// get style settings from the settings tab. These will override settings elsewhere in the document if they have been filled in
+		settings=['top_margin','bottom_margin','left_margin','right_margin','head_height','footer_height','hedsize','hedweight','hedface','deksize','dekweight','dekface','datasize','dataweight','dataface','annotatesize','annotateweight','annotateface','sourcesize','sourceweight','sourceface','notesize','noteweight','noteface','chartfill','chart_toppad','chart_bottompad','chart_leftpad','chart_rightpad','headerfill','header_toppad','header_bottompad','header_leftpad','header_rightpad','footerfill','footer_toppad','footer_bottompad','footer_leftpad','footer_rightpad','xgrid_fill','xgrid_zerofill','xgrid_minorfill','xgrid_thickness','xgrid_zerothickness','xgrid_minorthickness','xgrid_dasharray','xgrid_zerodasharray','xgrid_minordasharray','xgrid_opacity','xgrid_zeroopacity','xgrid_minoropacity','ygrid_fill','ygrid_zerofill','ygrid_minorfill','ygrid_thickness','ygrid_zerothickness','ygrid_minorthickness','ygrid_dasharray','ygrid_zerodasharray','ygrid_minordasharray','ygrid_opacity','ygrid_zeroopacity','ygrid_minoropacity','xtick_textsize','xtick_textweight','xtick_textface','xtick_maxsize','xtick_length','xtick_thickness','xtick_fill','xtick_to_xlabel','xtick_to_xaxis','ytick_textsize','ytick_textweight','ytick_textface','ytick_maxsize','ytick_length','ytick_thickness','ytick_fill','ytick_to_ylabel','ytick_to_yaxis','xlabel_textsize','xlabel_textweight','xlabel_textface','ylabel_textsize','ylabel_textweight','ylabel_textface','legend_location','legend_maxwidth','legend_textsize','legend_textweight','legend_textface','legend_toppad','legend_bottompad','legend_rightpad','legend_leftpad','legend_elementsize','legend_elementpad','legend_floatbackground','legend_floatthickness','legend_floatstroke','legend_floatpad','diverging_color','sequential_color','qualitative_color','barchart_width','trend_width','trend_fill','trend_textface','trend_textweight','trend_textsize','trend_textcolor','trend_linetotext','point_size','point_strokewidth','point_fillopacity','point_maxsize','point_minsize']
+		for(var i=0;i<settings.length;i++){
+			console.log(settings[i])
+			set=$("#"+settings[i]).val()
+			if (set!=''){
+				style[settings[i]]=set
+			}
+		}
+
 		// now apply the style object
 		chartobject.style(style)
+		console.log(style)
 
 		// initialize axes
 		chartobject.xaxis({'label':xlabel,'number_of_ticks':5,'decimal':undefined,'format':undefined,'pre':xprepend,'app':xappend})
@@ -1742,7 +1752,6 @@ function redraw() {
 				}
 
 				chartobject.linechart(options)
-				console.log('a',chartobject.xarray)
 				$('#customx').val(chartobject.xarray)
 				$('#customy').val(chartobject.yarray)
 			}
