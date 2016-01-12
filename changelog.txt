@@ -3,6 +3,12 @@ changelog.txt
 V0.7
   - UI re-design makes the UI a bit less awful.
 
+  - re-sized logo
+
+  - No logo layout enabled
+
+  - Settings tab enabled. You can do all sorts of crazy things here if you want to be hardcore.
+
 V0.6
   - Fixed a but that made the logo appear blurry.
 
