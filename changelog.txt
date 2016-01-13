@@ -21,6 +21,8 @@ V0.7
 
   - when you mouse over a data element now, that element's label will appear on screen while you hover the object - useful for finding a particular line or whatever that you want to apply a permanent label too.
 
+  - When you are editing text you can now press return and get a carriage return. This is great for long annotations. I haven't done a ton of testing of this feature so I'd be curious to know if it behaves strangely in certain situations.
+
 V0.6
   - Fixed a but that made the logo appear blurry.
 

@@ -1891,6 +1891,7 @@ var down_listener=function(ev) {
 	coords=selected_text.getBBox()
 	high_coords=high_box.getBBox()
 	var keycode = (ev.keyCode)
+	// console.log('down',keycode)
 	// up and down movement and font sizing
 	if(keycode==40 && ev.shiftKey==false){selected_text.attr({y:coords.y+1});high_box.attr({y:high_coords.y+1})}
 	if(keycode==38 && ev.shiftKey==false){selected_text.attr({y:parseFloat(coords.y)-1});high_box.attr({y:high_coords.y-1})}
@@ -1905,7 +1906,7 @@ var down_listener=function(ev) {
 		selected_text.attr({'font-size':parseInt(size)+1});
 		coords=selected_text.getBBox()
 		high_box.attr({y:coords.y-3,x:coords.x-3,width:coords.width+6,height:coords.height+6})
-	}	
+	}
 
 	// left and right movement - more complicated because you have to check the text-anchor for movement. shift+ control opacity
 	if(keycode==39 || keycode==37){
@@ -1936,18 +1937,30 @@ var down_listener=function(ev) {
 	if(keycode==32 || keycode==8){
 		if(keycode==32){
 			// Handle spacebar
-			string=string+String.fromCharCode(keycode)
-			selected_text.node.textContent=string
+			if (typeof string=='object'){
+				string[string.length-1]=string[string.length-1]+String.fromCharCode(keycode)
+				selected_text.attr({text:string})
+				selected_text.selectAll("tspan:not(:first-child)").attr({x:selected_text.attr('x'),dy:selected_text.attr('font-size')})
+			} else{
+				string=string+String.fromCharCode(keycode)
+				selected_text.attr({text:string})
+			}
 		}
 		if(keycode==8){
 			// Handle backspace
-			string=string.slice(0,string.length-1)
-			selected_text.node.textContent=string
+			if (typeof string=='object'){
+				string[string.length-1]=string[string.length-1].slice(0,string[string.length-1].length-1)
+				selected_text.attr({text:string})
+				selected_text.selectAll("tspan:not(:first-child)").attr({x:selected_text.attr('x'),dy:selected_text.attr('font-size')})
+			} else {
+				string=string.slice(0,string.length-1)
+				selected_text.attr({text:string})
+			}
 		}
 
 		if(string.length>0){
 			coords=selected_text.getBBox()
-			high_box.attr({x:coords.x-3,y:coords.y-3,width:coords.width+6})
+			high_box.attr({x:coords.x-3,y:coords.y-3,width:coords.width+6,height:coords.height+6})
 			high_coords=high_box.getBBox()
 		}
 	}
@@ -1980,12 +1993,42 @@ var down_listener=function(ev) {
 // listener for text
 var press_listener=function(ev) {
 	var keycode = (ev.charCode)
-	string=string+String.fromCharCode(keycode)
-	selected_text.node.textContent=string
 
-	coords=selected_text.getBBox()
-	high_box.attr({x:coords.x-3,y:coords.y-3,width:coords.width+6})
-	high_coords=high_box.getBBox()
+	// handle carriage returns
+	if(keycode==13){
+		if (typeof string=='object'){
+			string.push('')
+			selected_text.attr({text:string})
+			selected_text.selectAll("tspan:not(:first-child)").attr({x:selected_text.attr('x'),dy:selected_text.attr('font-size')})
+		} else {
+			string=[string]
+			string.push('')
+			selected_text.attr({text:string})
+			selected_text.selectAll("tspan:not(:first-child)").attr({x:selected_text.attr('x'),dy:selected_text.attr('font-size')})
+		}
+		console.log(string)
+	} else{
+		// everything else
+		// console.log('press',keycode)
+		if(typeof string=='object'){
+			string[string.length-1]=string[string.length-1]+String.fromCharCode(keycode)
+			selected_text.attr({text:string})
+			selected_text.selectAll("tspan:not(:first-child)").attr({x:selected_text.attr('x'),dy:selected_text.attr('font-size')})
+
+			coords=selected_text.getBBox()
+			console.log(coords)
+			high_box.attr({x:coords.x-3,y:coords.y-3,width:coords.width+6,height:coords.height+6})
+			high_coords=high_box.getBBox()
+		} else {
+			string=string+String.fromCharCode(keycode)
+			selected_text.attr({text:string})
+
+			coords=selected_text.getBBox()
+			high_box.attr({x:coords.x-3,y:coords.y-3,width:coords.width+6,height:coords.height+6})
+			high_coords=high_box.getBBox()
+		}
+
+	}
 }
 
 
