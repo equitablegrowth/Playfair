@@ -23,6 +23,16 @@ V0.7
 
   - When you are editing text you can now press return and get a carriage return. This is great for long annotations. I haven't done a ton of testing of this feature so I'd be curious to know if it behaves strangely in certain situations.
 
+
+
+
+
+
+  - source/note fields will now expand the footer of the graph if the text overflows the height of the logo.
+
+  - you can delete callouts and arrows now (no seriously this time you really can)
+
+
 V0.6
   - Fixed a but that made the logo appear blurry.
 
