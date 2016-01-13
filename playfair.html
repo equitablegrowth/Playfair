@@ -197,6 +197,25 @@
 	</ul>
 </div>
 
+<div class="contextMenuContainer" id='pathdata_context_menu'>
+	<ul class="contextMenu">
+		<li onclick=labeldata(clickedevent.target)>Label Data</li>
+		<hr>
+		<li onclick=thickpath(clickedevent.target)>Thicker</li>
+		<li onclick=thinpath(clickedevent.target)>Thinner</li>
+		<hr>
+		<li><span class='solid' onclick=dash_line(clickedevent.target,0)></span></li>
+		<li><span class='dashed' onclick=dash_line(clickedevent.target,1)></span></li>
+		<hr>
+	</ul>
+	<ul id='colormenu'>
+		<li><span class='colorbox' style='background-color:#205946' onclick=change_color(clickedevent.target,'#205946')></span><span class='colorbox' style='background-color:#33836A' onclick=change_color(clickedevent.target,'#33836A')></span><span class='colorbox' style='background-color:#67c2a5' onclick=change_color(clickedevent.target,'#67c2a5')></span><span class='colorbox' style='background-color:#b7dfd1' onclick=change_color(clickedevent.target,'#b7dfd1')></span><span class='colorbox' style='background-color:#e2f2ed' onclick=change_color(clickedevent.target,'#e2f2ed')></span></span><span class='colorbox' style='background-color:#ffffff' onclick=change_color(clickedevent.target,'#ffffff')></span></li>
+		<li><span class='colorbox' style='background-color:#8e2a1d' onclick=change_color(clickedevent.target,'#8e2a1d')></span><span class='colorbox' style='background-color:#c63f26' onclick=change_color(clickedevent.target,'#c63f26')></span><span class='colorbox' style='background-color:#f58c63' onclick=change_color(clickedevent.target,'#f58c63')></span><span class='colorbox' style='background-color:#fbcdbb' onclick=change_color(clickedevent.target,'#fbcdbb')></span><span class='colorbox' style='background-color:#fef1eb' onclick=change_color(clickedevent.target,'#fef1eb')></span></span><span class='colorbox' style='background-color:#000000' onclick=change_color(clickedevent.target,'#000000')></span></li>
+		<li><span class='colorbox' style='background-color:#24385B' onclick=change_color(clickedevent.target,'#24385B')></span><span class='colorbox' style='background-color:#3F578C' onclick=change_color(clickedevent.target,'#3F578C')></span><span class='colorbox' style='background-color:#8c9fca' onclick=change_color(clickedevent.target,'#8c9fca')></span><span class='colorbox' style='background-color:#ccdaf0' onclick=change_color(clickedevent.target,'#ccdaf0')></span><span class='colorbox' style='background-color:#f1f3f9' onclick=change_color(clickedevent.target,'#f1f3f9')></span></span><span class='colorbox' style='background-color:#a3a3a3' onclick=change_color(clickedevent.target,'#a3a3a3')></span></li>
+		<li><span class='colorbox' style='background-color:#e78ac3' onclick=change_color(clickedevent.target,'#e78ac3')></span><span class='colorbox' style='background-color:#a6d854' onclick=change_color(clickedevent.target,'#a6d854')></span><span class='colorbox' style='background-color:#ffd92f' onclick=change_color(clickedevent.target,'#ffd92f')></span><span class='colorbox' style='background-color:#e5c494' onclick=change_color(clickedevent.target,'#e5c494')></span><span class='colorbox' style='background-color:#ece9e8' onclick=change_color(clickedevent.target,'#ece9e8')></span></span><span class='colorbox' style='background-color:#c3c3c3' onclick=change_color(clickedevent.target,'#c3c3c3')></span></li>	
+	</ul>
+</div>
+
 <div class="contextMenuContainer" id='data_context_menu'>
 	<ul class="contextMenu">
 		<li onclick=labeldata(clickedevent.target)>Label Data</li>
@@ -386,9 +405,9 @@
 						</div>
 						<div class='uibox_text'>Key</div>
 						<div class='uibox'>
-							<input id='nokey' type='radio' name='key' value='none'><label for='nokey'><span><span></span></span>None</label>
+							<!-- <input id='nokey' type='radio' name='key' value='none'><label for='nokey'><span><span></span></span>None</label> -->
 							<input id='topkey' type='radio' name='key' value='top'><label for='topkey'><span><span></span></span>Top</label>
-							<input id='rightkey' type='radio' name='key' value='right'><label for='rightkey'><span><span></span></span>Right</label>
+							<!-- <input id='rightkey' type='radio' name='key' value='right'><label for='rightkey'><span><span></span></span>Right</label> -->
 							<input id='floatkey' type='radio' name='key' value='float' checked><label for='floatkey'><span><span></span></span>Float</label>
 						</div>
 					</div>
@@ -1627,9 +1646,8 @@ function redraw() {
 		}
 
 		// get style settings from the settings tab. These will override settings elsewhere in the document if they have been filled in
-		settings=['top_margin','bottom_margin','left_margin','right_margin','head_height','footer_height','hedsize','hedweight','hedface','deksize','dekweight','dekface','datasize','dataweight','dataface','annotatesize','annotateweight','annotateface','sourcesize','sourceweight','sourceface','notesize','noteweight','noteface','chartfill','chart_toppad','chart_bottompad','chart_leftpad','chart_rightpad','headerfill','header_toppad','header_bottompad','header_leftpad','header_rightpad','footerfill','footer_toppad','footer_bottompad','footer_leftpad','footer_rightpad','xgrid_fill','xgrid_zerofill','xgrid_minorfill','xgrid_thickness','xgrid_zerothickness','xgrid_minorthickness','xgrid_dasharray','xgrid_zerodasharray','xgrid_minordasharray','xgrid_opacity','xgrid_zeroopacity','xgrid_minoropacity','ygrid_fill','ygrid_zerofill','ygrid_minorfill','ygrid_thickness','ygrid_zerothickness','ygrid_minorthickness','ygrid_dasharray','ygrid_zerodasharray','ygrid_minordasharray','ygrid_opacity','ygrid_zeroopacity','ygrid_minoropacity','xtick_textsize','xtick_textweight','xtick_textface','xtick_maxsize','xtick_length','xtick_thickness','xtick_fill','xtick_to_xlabel','xtick_to_xaxis','ytick_textsize','ytick_textweight','ytick_textface','ytick_maxsize','ytick_length','ytick_thickness','ytick_fill','ytick_to_ylabel','ytick_to_yaxis','xlabel_textsize','xlabel_textweight','xlabel_textface','ylabel_textsize','ylabel_textweight','ylabel_textface','legend_location','legend_maxwidth','legend_textsize','legend_textweight','legend_textface','legend_toppad','legend_bottompad','legend_rightpad','legend_leftpad','legend_elementsize','legend_elementpad','legend_floatbackground','legend_floatthickness','legend_floatstroke','legend_floatpad','diverging_color','sequential_color','qualitative_color','barchart_width','trend_width','trend_fill','trend_textface','trend_textweight','trend_textsize','trend_textcolor','trend_linetotext','point_size','point_strokewidth','point_fillopacity','point_maxsize','point_minsize']
+		settings=['linechart_strokeopacity','top_margin','bottom_margin','left_margin','right_margin','head_height','footer_height','hedsize','hedweight','hedface','deksize','dekweight','dekface','datasize','dataweight','dataface','annotatesize','annotateweight','annotateface','sourcesize','sourceweight','sourceface','notesize','noteweight','noteface','chartfill','chart_toppad','chart_bottompad','chart_leftpad','chart_rightpad','headerfill','header_toppad','header_bottompad','header_leftpad','header_rightpad','footerfill','footer_toppad','footer_bottompad','footer_leftpad','footer_rightpad','xgrid_fill','xgrid_zerofill','xgrid_minorfill','xgrid_thickness','xgrid_zerothickness','xgrid_minorthickness','xgrid_dasharray','xgrid_zerodasharray','xgrid_minordasharray','xgrid_opacity','xgrid_zeroopacity','xgrid_minoropacity','ygrid_fill','ygrid_zerofill','ygrid_minorfill','ygrid_thickness','ygrid_zerothickness','ygrid_minorthickness','ygrid_dasharray','ygrid_zerodasharray','ygrid_minordasharray','ygrid_opacity','ygrid_zeroopacity','ygrid_minoropacity','xtick_textsize','xtick_textweight','xtick_textface','xtick_maxsize','xtick_length','xtick_thickness','xtick_fill','xtick_to_xlabel','xtick_to_xaxis','ytick_textsize','ytick_textweight','ytick_textface','ytick_maxsize','ytick_length','ytick_thickness','ytick_fill','ytick_to_ylabel','ytick_to_yaxis','xlabel_textsize','xlabel_textweight','xlabel_textface','ylabel_textsize','ylabel_textweight','ylabel_textface','legend_location','legend_maxwidth','legend_textsize','legend_textweight','legend_textface','legend_toppad','legend_bottompad','legend_rightpad','legend_leftpad','legend_elementsize','legend_elementpad','legend_floatbackground','legend_floatthickness','legend_floatstroke','legend_floatpad','diverging_color','sequential_color','qualitative_color','barchart_width','trend_width','trend_fill','trend_textface','trend_textweight','trend_textsize','trend_textcolor','trend_linetotext','point_size','point_strokewidth','point_fillopacity','point_maxsize','point_minsize']
 		for(var i=0;i<settings.length;i++){
-			console.log(settings[i])
 			set=$("#"+settings[i]).val()
 			if (set!=''){
 				style[settings[i]]=set
@@ -1984,12 +2002,18 @@ $(function() {
 				$("#text_context_menu").css("top", e.clientY);
 				$("#text_context_menu").fadeIn(50, FocusContextOut());
 				doubleClicked = true;
-			} else if(e.target.nodeName=='path' || (e.target.nodeName=='line' && e.target.attributes.ident.value=='key')){
+			} else if((e.target.nodeName=='path' && e.target.className.baseVal!='dataelement') || (e.target.nodeName=='line' && e.target.attributes.ident.value=='key')){
 				clickedevent=e
 				e.preventDefault();
 				$("#path_context_menu").css("left", e.clientX+3);
 				$("#path_context_menu").css("top", e.clientY);
 				$("#path_context_menu").fadeIn(50, FocusContextOut());
+			} else if(e.target.nodeName=='path' && e.target.className.baseVal=='dataelement'){
+				clickedevent=e
+				e.preventDefault();
+				$("#pathdata_context_menu").css("left", e.clientX+3);
+				$("#pathdata_context_menu").css("top", e.clientY);
+				$("#pathdata_context_menu").fadeIn(50, FocusContextOut());
 			} else if (e.target.nodeName=='circle'){
 				clickedevent=e
 				e.preventDefault();
@@ -2010,8 +2034,14 @@ $(function() {
 				$("#callout_context_menu").css("top", e.clientY);
 				$("#callout_context_menu").fadeIn(50, FocusContextOut());
 				doubleClicked = true;		
-			} 
-			else {
+			} else if(e.target.nodeName=='rect' && e.target.attributes.ident.value=='key'){
+				clickedevent=e
+				e.preventDefault();
+				$("#data_context_menu").css("left", e.clientX+3);
+				$("#data_context_menu").css("top", e.clientY);
+				$("#data_context_menu").fadeIn(50, FocusContextOut());
+				doubleClicked = true;	
+			} else {
 				clickedevent=e
 				e.preventDefault();
 				$("#other_context_menu").css("left", e.clientX+3);
@@ -2150,11 +2180,24 @@ function labeldata(target) {
 	var item=Snap(target)
 	if(item.attr('data_type')=='bar'){
 		coords=item.getBBox()
-		if(item.attr('data_label')<0){
-			var datalabel=grapharea.text(coords.x+coords.width/2,coords.y2,item.attr('data_label')).attr({ident:'foot','font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'middle'})
-		} else{
-			var datalabel=grapharea.text(coords.x+coords.width/2,coords.y-parseInt(chartobject.datasize)*1.15,item.attr('data_label')).attr({ident:'foot','font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'middle'})
+		if(item.attr('orient')=='vertical'){
+			if(item.attr('data_label')<0){
+				var datalabel=grapharea.text(coords.x+coords.width/2,coords.y2,item.attr('data_label')).attr({ident:'foot','font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'middle'})
+			} else {
+				var datalabel=grapharea.text(coords.x+coords.width/2,coords.y-parseInt(chartobject.datasize)*1.15,item.attr('data_label')).attr({ident:'foot','font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'middle'})
+			}
 		}
+		if(item.attr('orient')=='horizontal'){
+			if(item.attr('data_label')<0){
+				var datalabel=grapharea.text(coords.x-5,coords.y+coords.height/2-parseInt(chartobject.datasize),item.attr('data_label')).attr({ident:'foot','font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'start'})
+			} else {
+				var datalabel=grapharea.text(coords.x+coords.width+5,coords.y+coords.height/2-parseInt(chartobject.datasize),item.attr('data_label')).attr({ident:'foot','font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'start'})
+			}
+		}
+	} else if (item.node.nodeName=='path'){
+		coords=item.getBBox()
+		y=parseFloat(item.realPath.split(' ')[item.realPath.split(' ').length-1])
+		var datalabel=grapharea.text(coords.x2+5,y-parseInt(chartobject.datasize)+3,item.attr('data_label')).attr({ident:'foot','font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'start'})
 	}
 	else {
 		coords=item.getBBox()

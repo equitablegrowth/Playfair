@@ -9,6 +9,16 @@ V0.7
 
   - Settings tab enabled. You can do all sorts of crazy things here if you want to be hardcore.
 
+  - line charts with >8 groups will now connect properly
+
+  - Top keys work again and are now positioned in a more aesthetically pleasing way
+
+  - I *think* I finally fixed the last of the trendline bugs but please check your trendlines carefully to make sure they are what they're supposed to be.
+
+  - you can now 'label data' a path just like you can points and bars. The label is *always* the group the line belongs to (the label variable field is ignored) and it appears at the right endpoint of the line.
+
+  - using 'label data' with horizontal bars now makes a lot more sense.
+
 V0.6
   - Fixed a but that made the logo appear blurry.
 
