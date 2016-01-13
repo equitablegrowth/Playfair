@@ -1148,6 +1148,15 @@
 						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Point minsize:</span><input type="text" class="form-control" placeholder="3" id='point_minsize'></div>
 					</div>
 				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Linechart strokeopacity:</span><input type="text" class="form-control" placeholder="1" id='linechart_strokeopacity'></div>
+					</div>
+					<div class='col-md-4'>
+					</div>
+					<div class='col-md-4'>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -2525,6 +2534,10 @@ function highlight_element(ev) {
 		try{if(ev.target.nodeName=='text'){
 			item.attr({'font-size':parseFloat(item.attr('font-size')),'opacity':(parseFloat(item.attr('opacity'))>.5 ? parseFloat(item.attr('opacity'))-.5 : .2)})
 		}}catch(err){} 
+		try{if(ev.target.className.baseVal=='dataelement'){
+			coords=item.getBBox()
+			highlighttext=grapharea.text(coords.x+coords.width/2,coords.y+coords.height/2,item.attr('data_label')).attr({'font-family':'Lato, Arial, sans-serif','font-size':16,'text-anchor':'start','fill':'black','font-weight':400,cursor:'pointer'})
+		}}catch(err){}
 }
 
 function unhighlight_element(ev) {
@@ -2550,6 +2563,9 @@ function unhighlight_element(ev) {
 		}}catch(err){} 
 		try{if(ev.target.nodeName=='text'){
 			item.attr({'font-size':parseFloat(item.attr('font-size')),'opacity':parseFloat(item.attr('opacity'))+.5})
+		}}catch(err){}
+		try{if(ev.target.className.baseVal=='dataelement'){
+			highlighttext.remove()
 		}}catch(err){}
 	} catch(err){}
 }

@@ -19,6 +19,8 @@ V0.7
 
   - using 'label data' with horizontal bars now makes a lot more sense.
 
+  - when you mouse over a data element now, that element's label will appear on screen while you hover the object - useful for finding a particular line or whatever that you want to apply a permanent label too.
+
 V0.6
   - Fixed a but that made the logo appear blurry.
 
