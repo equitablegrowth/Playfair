@@ -259,6 +259,12 @@
 	<ul class="contextMenu">
 		<li onclick=deleteelement(clickedevent.target)>Delete Line</li>
 		<hr>
+		<li onclick=thickpath(clickedevent.target)>Thicker</li>
+		<li onclick=thinpath(clickedevent.target)>Thinner</li>
+		<hr>
+		<li><span class='solid' onclick=dash_line(clickedevent.target,0)></span></li>
+		<li><span class='dashed' onclick=dash_line(clickedevent.target,1)></span></li>
+		<hr>
 	</ul>
 	<ul id='colormenu'>
 		<li><span class='colorbox' style='background-color:#205946' onclick=change_color(clickedevent.target,'#205946')></span><span class='colorbox' style='background-color:#33836A' onclick=change_color(clickedevent.target,'#33836A')></span><span class='colorbox' style='background-color:#67c2a5' onclick=change_color(clickedevent.target,'#67c2a5')></span><span class='colorbox' style='background-color:#b7dfd1' onclick=change_color(clickedevent.target,'#b7dfd1')></span><span class='colorbox' style='background-color:#e2f2ed' onclick=change_color(clickedevent.target,'#e2f2ed')></span></span><span class='colorbox' style='background-color:#ffffff' onclick=change_color(clickedevent.target,'#ffffff')></span></li>
@@ -569,12 +575,21 @@
 						<div class='uibox_text'>Trend Lines</div>
 						<div class='uibox'>
 							<div id='trends'>
-								<div class='col-md-6'>
-									<div class="input-group"><span class="input-group-addon" data-toggle='tooltip' data-placement='top' title='Slope of the trend line to add to the plot.'>Slope:</span><input type="text" class="form-control slope" placeholder="" id='slope'>
-									</div>
-								</div>
-								<div class='col-md-6'>
-									<div class="input-group"><span class="input-group-addon" data-toggle='tooltip' data-placement='top' title='Intercept of the trend line to add to the plot.'>Intercept:</span><input type="text" class="form-control intercept" placeholder="" id='intercept'>
+								<div class='row'>
+									<div class='col-md-12'>
+										<div class='col-md-4'>
+											<div class="input-group"><span class="input-group-addon" data-toggle='tooltip' data-placement='top' title='Slope of the trend line to add to the plot.'>Slope:</span><input type="text" class="form-control slope" placeholder="" id='slope'>
+											</div>
+										</div>
+										<div class='col-md-4'>
+											<div class="input-group"><span class="input-group-addon" data-toggle='tooltip' data-placement='top' title='Intercept of the trend line to add to the plot.'>Intercept:</span><input type="text" class="form-control intercept" placeholder="" id='intercept'>
+											</div>
+										</div>
+										<div class='col-md-4'>
+											<trends>
+												<button type="button" class="btn btn-default" style='margin-top:5px' id='addtrend' onclick=newtrend()><i class="fa fa-plus"></i></button>
+											</trends>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -601,11 +616,11 @@
 						<div class='uibox'>
 						<div class='row'>
 							<div class='col-md-12'>
-							<div class='col-md-12'>
-								<label class='checkbox-inline'><input type="checkbox" id="recession_shading" data-toggle="toggle" data-size='mini'></label>Shade U.S. recessions<br>
-								<div class="input-group"> <span class="input-group-addon" data-toggle='tooltip' data-placement='top' title='Intercept of the trend line to add to the plot.'>Other:</span>
-								<input type="text" class="form-control intercept" placeholder="[3,4],[9,10] or [01-1997, 02-2000], ..." id='arbitrary_intervals'></div>
-							</div>
+								<div class='col-md-12'>
+									<label class='checkbox-inline'><input type="checkbox" id="recession_shading" data-toggle="toggle" data-size='mini'></label>Shade U.S. recessions<br>
+									<div class="input-group"> <span class="input-group-addon" data-toggle='tooltip' data-placement='top' title='Intercept of the trend line to add to the plot.'>Other:</span>
+									<input type="text" class="form-control intercept" placeholder="[3,4],[9,10] or [01-1997, 02-2000], ..." id='arbitrary_intervals'></div>
+								</div>
 							</div>
 						</div>
 						</div>
@@ -1371,7 +1386,7 @@ function loadData() {
 		date=true
 		type='numeric'
 		for (var j=1;j<d.length;j++) {
-			if (moment(d[j][i], ["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY"],true).isValid()==false){
+			if (moment(d[j][i], ["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY","MM/YYYY","MM-YYYY"],true).isValid()==false){
 				date=false
 			}
 			if (d[j][i].search(alpha)>-1) {type='text'} else{
@@ -1467,7 +1482,8 @@ function loadData() {
 			} else if (column_types[i]=='numeric') {
 				final_data[d[0][i]].push(parseFloat(d[j][i]))
 			} else if (column_types[i]=='date') {
-				final_data[d[0][i]].push(new Date(d[j][i]))
+				final_data[d[0][i]].push(new Date(moment(d[j][i], ["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY"],true)))
+
 			}
 		}
 	}
@@ -1704,7 +1720,7 @@ function redraw() {
 				// get shading input from frontend
 				shading=[]
 				if (us_shading==true){
-					shad=[['June 1857','December 1858'],['October 1860','June 1861'],['April 1865','December 1867'],['June 1869','December 1870'],['October 1873','March 1879'],['March 1882','May 1885'],['March 1887','April 1888'],['July 1890','May 1891'],['January 1893','June 1894'],['December 1895','June 1897'],['June 1899','December 1900'],['September 1902','August 1904'],['May 1907','June 1908'],['January 1910','January 1912'],['January 1913','December 1914'],['August 1918','March 1919'],['January 1920','July 1921'],['May 1923','July 1924'],['October 1926','November 1927'],['August 1929','March 1933'],['May 1937','June 1938'],['February 1945','October 1945'],['November 1948','October 1949'],['July 1953','May 1954'],['August 1957','April 1958'],['April 1960','February 1961'],['December 1969','November 1970'],['November 1973','March 1975'],['January 1980','July 1980'],['July 1981','November 1982'],['July 1990','March 1991'],['March 2001','November 2001'],['December 2007','June 2009']]
+					shad=[['June 1 1857','December 1 1858'],['October 1 1860','June 1 1861'],['April 1 1865','December 1 1867'],['June 1 1869','December 1 1870'],['October 1 1873','March 1 1879'],['March 1 1882','May 1 1885'],['March 1 1887','April 1 1888'],['July 1 1890','May 1 1891'],['January 1 1893','June 1 1894'],['December 1 1895','June 1 1897'],['June 1 1899','December 1 1900'],['September 1 1902','August 1 1904'],['May 1 1907','June 1 1908'],['January 1 1910','January 1 1912'],['January 1 1913','December 1 1914'],['August 1 1918','March 1 1919'],['January 1 1920','July 1 1921'],['May 1 1923','July 1 1924'],['October 1 1926','November 1 1927'],['August 1 1929','March 1 1933'],['May 1 1937','June 1 1938'],['February 1 1945','October 1 1945'],['November 1 1948','October 1 1949'],['July 1 1953','May 1 1954'],['August 1 1957','April 1 1958'],['April 1 1960','February 1 1961'],['December 1 1969','November 1 1970'],['November 1 1973','March 1 1975'],['January 1 1980','July 1 1980'],['July 1 1981','November 1 1982'],['July 1 1990','March 1 1991'],['March 1 2001','November 1 2001'],['December 1 2007','June 1 2009']]
 					for (var i=0;i<shad.length;i++){
 						shading.push([new Date(shad[i][0]),new Date(shad[i][1])])
 					}
@@ -1718,7 +1734,7 @@ function redraw() {
 					}
 					if (moment(saf[0][0], ["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY"],true).isValid()==true){
 						for(var i=0;i<saf.length;i++){
-							shading.push([new Date(saf[i][0]),new Date(saf[i][1])])
+							shading.push([new Date(moment(saf[i][0], ["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY"],true)),new Date(moment(saf[i][0], ["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY"],true))])
 						}
 					} else {
 						for(var i=0;i<saf.length;i++){
@@ -2013,7 +2029,6 @@ var press_listener=function(ev) {
 			selected_text.attr({text:string})
 			selected_text.selectAll("tspan:not(:first-child)").attr({x:selected_text.attr('x'),dy:selected_text.attr('font-size')})
 		}
-		console.log(string)
 	} else{
 		// everything else
 		// console.log('press',keycode)
@@ -2023,7 +2038,6 @@ var press_listener=function(ev) {
 			selected_text.selectAll("tspan:not(:first-child)").attr({x:selected_text.attr('x'),dy:selected_text.attr('font-size')})
 
 			coords=selected_text.getBBox()
-			console.log(coords)
 			high_box.attr({x:coords.x-3,y:coords.y-3,width:coords.width+6,height:coords.height+6})
 			high_coords=high_box.getBBox()
 		} else {
@@ -2061,7 +2075,7 @@ $(function() {
 				$("#text_context_menu").css("top", e.clientY);
 				$("#text_context_menu").fadeIn(50, FocusContextOut());
 				doubleClicked = true;
-			} else if((e.target.nodeName=='path' && e.target.className.baseVal!='dataelement') || (e.target.nodeName=='line' && e.target.attributes.ident.value=='key')){
+			} else if((e.target.nodeName=='path' && e.target.className.baseVal!='dataelement' && e.target.className.baseVal!='callout') || (e.target.nodeName=='line' && e.target.attributes.ident.value=='key')){
 				clickedevent=e
 				e.preventDefault();
 				$("#path_context_menu").css("left", e.clientX+3);
@@ -2133,7 +2147,6 @@ $(function() {
 function boldtext(target) {
 	var item=Snap(target)
 	fontf=item.attr('font-weight')
-	console.log(fontf)
 	if(fontf==400 || fontf=='normal'){
 		item.attr({'font-weight':600})
 	}
@@ -2358,13 +2371,13 @@ function endarrow(e) {
 	var svgx=document.getElementById("grapharea").offsetLeft
 	var svgy=document.getElementById("grapharea").offsetTop
 
-	var arrow = grapharea.path('M0,0 L0,6 L8,3 L0,0').attr({fill: '#000'})
-	var amarker = arrow.marker(0,0,8,6,0,3);
+	var arrow = grapharea.path('M0,0 L0,4 L6,2 L0,0').attr({fill: '#000'})
+	var amarker = arrow.marker(0,0,6,4,0,2);
 	drawpath=0
 	grapharea.unmousemove(tracker)
 	grapharea.unclick(endarrow)
 	try{trackline.remove()}catch(err){}
-	finalline=grapharea.line(pathstart[0],pathstart[1],e.pageX-svgx,e.pageY-svgy).attr({class:'callout','stroke-width':2,'stroke':'black','shape-rendering':'auto','marker-end':amarker})
+	finalline=grapharea.line(pathstart[0],pathstart[1],e.pageX-svgx,e.pageY-svgy).attr({ident:'none',class:'callout','stroke-width':2,'stroke':'black','shape-rendering':'auto','marker-end':amarker})
 }
 
 function deleteelement(e) {
@@ -2563,7 +2576,6 @@ function importsettings() {
 function highlight_element(ev) {
 	// this should handle basically every case of mousing over a data element and getting a highlight effect
 	item=Snap(ev.target)
-	console.log(item)
 	try{if(ev.target.nodeName=='path'){
 		item.attr({'stroke-width':parseFloat(item.attr('stroke-width'))+3,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))-.5})
 	}}catch(err){}
@@ -2680,7 +2692,7 @@ $('.panel-custom').on('hide.bs.collapse', function () {
 });
 
 function newtrend(){
-	$('#trends').prepend('<div class="row"><div class="col-md-4"><div class="input-group"> <span class="input-group-addon" data-toggle="tooltip" data-placement="top" title="Slope of the trend line to add to the plot.">Slope</span><input type="text" class="form-control slope" placeholder="" id="slope"></div></div><div class="col-md-4"><div class="input-group"> <span class="input-group-addon" data-toggle="tooltip" data-placement="top" title="Intercept of the trend line to add to the plot.">Intercept</span><input type="text" class="form-control intercept" placeholder="" id="intercept"></div></div><div class="col-md-4"></div></div>')
+	$('#trends').prepend('<div class="row"><div class="col-md-12"><div class="col-md-4"><div class="input-group"><span class="input-group-addon" data-toggle="tooltip" data-placement="top" title="Slope of the trend line to add to the plot."">Slope:</span><input type="text" class="form-control slope" placeholder="" id="slope"></div></div><div class="col-md-4"><div class="input-group"><span class="input-group-addon" data-toggle="tooltip" data-placement="top" title="Intercept of the trend line to add to the plot."">Intercept:</span><input type="text" class="form-control intercept" placeholder="" id="intercept"></div></div><div class="col-md-4"></div></div></div>')
 }
 
 /////////////////////// END MISCELLANEOUS //////////////////////////////
