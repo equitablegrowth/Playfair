@@ -146,10 +146,10 @@
 
 	/* save/load dialog */
 	.savedialog{display:none;position:fixed;min-height:100%;width:100%;background-color:#666666;z-index:99;margin-top:-20px;opacity:.8;overflow:hidden;}
-	.savebox{padding:10px;display:none;position:absolute;top:50%;left:50%;z-index:100;height:auto;width:600;border:1px solid black;background-color:rgba(255,255,255,1);margin-left:-300px;margin-top:-50px}
+	.savebox{padding:10px;display:none;position:fixed;top:30%;left:50%;z-index:100;height:auto;width:600;border:1px solid black;background-color:rgba(255,255,255,1);margin-left:-300px;margin-top:-50px}
 	.marginfix{margin-left:0px;}
 	.filebox{border:1px solid #cccccc;max-height:200px;overflow:scroll;overflow-x: hidden}
-	.filerow{padding:3px;}
+	.filerow{padding:3px;padding-left:6px;}
 	.filerow:nth-child(even){background-color:white;}
 	.filerow:nth-child(odd){background-color:#dddddd;}
 
@@ -2652,13 +2652,13 @@ function importsettings() {
 }
 
 function cloudsave() {
-	disableScroll()
 	// $("#savedialog").css("left", 0);
 	// $("#savedialog").css("top", 0);
 	$("#savedialog").fadeIn(50);
 	// $("#savebox").css("left", '50vw');
 	// $("#savebox").css("top", '50vh');
 	$("#savebox").fadeIn(50);
+	// disableScroll()
 }
 
 function cloudload() {
