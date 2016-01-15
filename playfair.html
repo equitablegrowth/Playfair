@@ -145,7 +145,7 @@
 	#png_save{display:none;}
 
 	/* save/load dialog */
-	.savedialog{display:none;position:fixed;min-height:100%;width:100%;background-color:#666666;z-index:99;margin-top:-20px;opacity:.8;overflow:hidden;}
+	.savedialog{display:none;position:fixed;min-height:110%;width:100%;background-color:#666666;z-index:99;margin-top:-20px;opacity:.8;overflow:hidden;}
 	.savebox{padding:10px;display:none;position:fixed;top:30%;left:50%;z-index:100;height:auto;width:600;border:1px solid black;background-color:rgba(255,255,255,1);margin-left:-300px;margin-top:-50px}
 	.marginfix{margin-left:0px;}
 	.filebox{border:1px solid #cccccc;max-height:200px;overflow:scroll;overflow-x: hidden}
@@ -177,17 +177,9 @@
 	<div class='row marginfix'>
 		<div class='col-md-12'>
 			<div class='col-md-12'>
-			<div class='filebox'>
-				<div class='filerow'>test</div>
-				<div class='filerow'>asdf</div>
-				<div class='filerow'>test1</div>
-				<div class='filerow'>test2</div>
-				<div class='filerow'>test</div>
-				<div class='filerow'>asdf</div>
-				<div class='filerow'>test1</div>
-				<div class='filerow'>test2</div>
+				<div class='filebox' id='save_filebox'>
+				</div>
 			</div>
-		</div>
 		</div>
 	</div>
 	<br>
@@ -2652,17 +2644,23 @@ function importsettings() {
 }
 
 function cloudsave() {
-	// $("#savedialog").css("left", 0);
-	// $("#savedialog").css("top", 0);
-	$("#savedialog").fadeIn(50);
-	// $("#savebox").css("left", '50vw');
-	// $("#savebox").css("top", '50vh');
-	$("#savebox").fadeIn(50);
-	// disableScroll()
+	$.ajax({
+		url:'http://www.austinclemens.com/cgi-bin/listfiles.py',
+		type: 'post',
+		datatype: 'html',
+		data: 1,
+		success: function(response){
+			$("#savedialog").fadeIn(50);
+			$("#savebox").fadeIn(50);
+			var response = JSON.parse(response);
+			for (var i=0;i<response.length;i++){
+				$('#save_filebox').append('<div class="filerow">'+response[i]+'</div>')
+			}
+		}
+	})
 }
 
 function cloudload() {
-	disableScroll()
 	$("#savedialog").css("left", 0);
 	$("#savedialog").css("top", 0);
 	$("#savedialog").fadeIn(50);
@@ -2672,18 +2670,19 @@ function cloudload() {
 }
 
 function cancelsave() {
-	enableScroll()
 	$("#savebox").fadeOut(150);
 	$("#savedialog").fadeOut(150);
+	$('#save_filebox').empty()
 }
 
 function cancelload() {
-	enableScroll()
 	$("#savebox").fadeOut(150);
 	$("#savedialog").fadeOut(150);
 }
 
 function savetoserver() {
+
+
 	var filename=$('#savename').val()
 	var svg = document.getElementById("grapharea").innerHTML
 	var data=[chartobject,svg,JSON.stringify(final_data)]
@@ -2704,7 +2703,6 @@ function savetoserver() {
 		data: dictionary,
 		success: function(response){
 			cancelsave()
-			enableScroll()
 		}
 	})
 }
