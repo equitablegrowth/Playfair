@@ -32,7 +32,7 @@
 	h4 {font-family:Raleway;font-weight:300;margin-bottom:20;}
 	h3 {font-size:15px;margin-top:0px;margin-bottom:0px;font-family:Raleway;font-weight:500;}
 	h5 {font-size:24px;font-family:Raleway;font-weight:500;fill:'white';}
-	body {font-family:"Open Sans";-webkit-font-smoothing: antialiased}
+	body {height:100%;font-family:"Open Sans";-webkit-font-smoothing: antialiased}
 	textarea {margin-top:0px;resize:none;display:block;margin-right:auto;margin-left:auto;width:100%;padding:8px;border:1px solid #cccccc;font-family:"Courier";font-size:90%;}
 	hr {border-width:1px;border-color:#dddddd;margin-top:6;}
 	a {color:#205946;}
@@ -43,7 +43,7 @@
 	text { -webkit-font-smoothing: subpixel-antialiased; }
 
 	.toggle {margin-bottom:2px;margin-top:2px;}
-	.container {margin-top:20px;margin-bottom:70px;}
+	.container {margin-top:20px;margin-bottom:70px;height:100%;}
 	.topel {margin-top:7px;}
 	.nav-tabs {margin-top:10px;}
 	.tab-pane {width:100%;margin-top:15px;margin-left:auto;margin-right:auto;}
@@ -143,8 +143,70 @@
 
 	#bad_data{display:none;}
 	#png_save{display:none;}
+
+	/* save/load dialog */
+	.savedialog{display:none;position:fixed;min-height:100%;width:100%;background-color:#666666;z-index:99;margin-top:-20px;opacity:.8;overflow:hidden;}
+	.savebox{padding:10px;display:none;position:absolute;top:50%;left:50%;z-index:100;height:auto;width:600;border:1px solid black;background-color:rgba(255,255,255,1);margin-left:-300px;margin-top:-50px}
+	.marginfix{margin-left:0px;}
+	.filebox{border:1px solid #cccccc;max-height:200px;overflow:scroll;overflow-x: hidden}
+	.filerow{padding:3px;}
+	.filerow:nth-child(even){background-color:white;}
+	.filerow:nth-child(odd){background-color:#dddddd;}
+
+
 	</style>
 </head>
+
+<!-- ********************************************** -->
+<!-- ***************** SAVE DIALOG **************** -->
+<!-- ********************************************** -->
+
+<div class='savedialog' id='savedialog'>
+</div>
+
+<div class='savebox' id='savebox'>
+	<div class='row marginfix'>
+		<div class='col-md-12'>
+		<div class='col-md-12'>
+			  Save as:
+			  <input type="text" class="form-control" placeholder="A descriptive name for this chart" id='savename'>
+			</div>
+		</div>
+	</div>
+	<br>
+	<div class='row marginfix'>
+		<div class='col-md-12'>
+			<div class='col-md-12'>
+			<div class='filebox'>
+				<div class='filerow'>test</div>
+				<div class='filerow'>asdf</div>
+				<div class='filerow'>test1</div>
+				<div class='filerow'>test2</div>
+				<div class='filerow'>test</div>
+				<div class='filerow'>asdf</div>
+				<div class='filerow'>test1</div>
+				<div class='filerow'>test2</div>
+			</div>
+		</div>
+		</div>
+	</div>
+	<br>
+	<div class='row'>
+		<div class='col-md-12 text-center'>
+			<div class="btn-group btnpadding" role="group">
+				<button type="button" class="btn btn-default" id='cancelsave' onclick=cancelsave()>Cancel</button>
+				<button type="button" class="btn btn-default" id='savetoserver' onclick=savetoserver()>Save</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- ********************************************** -->
+<!-- ***************** LOAD DIALOG **************** -->
+<!-- ********************************************** -->
+
+
 <!-- ********************************************** -->
 <!-- ********** CONTEXTUAL MENU CONTENTS ********** -->
 <!-- ********************************************** -->
@@ -283,7 +345,7 @@
 
 <!-- Header -->
 <h1 class='text-center'>playfair</h1>
-<h4 class='text-center'><sup style='visibility: hidden'>v0.7, <a href='changelog.txt'>changelog</a></sup>make equitable graphs<sup>v0.7, <a href='changelog.txt'>changelog</a></sup></h4>
+<h4 class='text-center'><sup style='visibility: hidden'>v1.0, <a href='changelog.txt'>changelog</a></sup>make equitable graphs<sup>v1.0, <a href='changelog.txt'>changelog</a></sup></h4>
 
 	<div class='col-md-2'></div>
 	<div class='col-xs-8'>
@@ -1105,13 +1167,17 @@
 
 			<div class='tab-content' style='min-height:260px'>
 				<div class='row'>
-					<div class='col-md-4'>
+					<div class='col-md-12'>
 						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Diverging color:</span><input type="text" class="form-control" placeholder="['#523211','#8b5322','#dec17c','#80ccc0','#35968e']" id='diverging_color'></div>
 					</div>
-					<div class='col-md-4'>
+				</div>
+				<div class='row'>
+					<div class='col-md-12'>
 						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Sequential color:</span><input type="text" class="form-control" placeholder="['#205946','#33836A','#67c2a5','#b7dfd1','#e2f2ed']" id='sequential_color'></div>
 					</div>
-					<div class='col-md-4'>
+				</div>
+				<div class='row'>
+					<div class='col-md-12'>
 						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Qualitative color:</span><input type="text" class="form-control" placeholder="['#67c2a5','#fc8d62','#8da0cb','#e78ac3','#a6d854','#ffd92f','#e5c494','#b3b3b3']" id='qualitative_color'></div>
 					</div>
 				</div>
@@ -1165,7 +1231,7 @@
 				</div>
 				<div class='row'>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Linechart strokeopacity:</span><input type="text" class="form-control" placeholder="1" id='linechart_strokeopacity'></div>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Linechart lineopacity:</span><input type="text" class="form-control" placeholder="1" id='linechart_strokeopacity'></div>
 					</div>
 					<div class='col-md-4'>
 					</div>
@@ -1222,8 +1288,8 @@
 	<button type="button" class="btn btn-default" id='savesvg' onclick=savesvg()><i class="fa fa-arrows-h"></i> Save as SVG</button>
 </div>
 <div class="btn-group btnpadding" role="group">
-	<button type="button" class="btn btn-default" id='savetext' onclick=savesettings() disabled><i class="fa fa-cloud-upload"></i> Save to server</button>
-	<button type="button" class="btn btn-default btn-file" id='importtext' onclick=importsettings() disabled><input type="file"><i class="fa fa-cloud-download"></i> Restore from server</button>
+	<button type="button" class="btn btn-default" id='savetext' onclick=cloudsave()><i class="fa fa-cloud-upload"></i> Save to server</button>
+	<button type="button" class="btn btn-default btn-file" id='importtext' onclick=cloudload()><i class="fa fa-cloud-download"></i> Restore from server</button>
 </div>
 <div class='vspace'>
 <small>[<a href='https://github.com/equitablegrowth/Playfair/#boards?repos=44823593'>report a bug</a>]</small>
@@ -1386,7 +1452,7 @@ function loadData() {
 		date=true
 		type='numeric'
 		for (var j=1;j<d.length;j++) {
-			if (moment(d[j][i], ["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY","MM/YYYY","MM-YYYY"],true).isValid()==false){
+			if (moment(d[j][i], ["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY","MM/YYYY","MM-YYYY","YYYYqQ"],true).isValid()==false){
 				date=false
 			}
 			if (d[j][i].search(alpha)>-1) {type='text'} else{
@@ -1482,7 +1548,7 @@ function loadData() {
 			} else if (column_types[i]=='numeric') {
 				final_data[d[0][i]].push(parseFloat(d[j][i]))
 			} else if (column_types[i]=='date') {
-				final_data[d[0][i]].push(new Date(moment(d[j][i], ["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY"],true)))
+				final_data[d[0][i]].push(new Date(moment(d[j][i], ["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY","YYYYqQ"],true)))
 
 			}
 		}
@@ -1732,9 +1798,9 @@ function redraw() {
 						temp=temp.replace(']','')
 						saf.push([temp.split(',')[0],temp.split(',')[1]])
 					}
-					if (moment(saf[0][0], ["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY"],true).isValid()==true){
+					if (moment(saf[0][0], ["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY","YYYYqQ"],true).isValid()==true){
 						for(var i=0;i<saf.length;i++){
-							shading.push([new Date(moment(saf[i][0], ["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY"],true)),new Date(moment(saf[i][0], ["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY"],true))])
+							shading.push([new Date(moment(saf[i][0], ["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY","YYYYqQ"],true)),new Date(moment(saf[i][0], ["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY"],true))])
 						}
 					} else {
 						for(var i=0;i<saf.length;i++){
@@ -1873,6 +1939,7 @@ function edit_text(ev) {
 				x:+x+dx,
 				y:+y+dy
 			})
+			this.selectAll("tspan:not(:first-child)").attr({x:+x+dx})
 
 			box=this.getBBox()
 			high_box.attr({
@@ -1884,7 +1951,7 @@ function edit_text(ev) {
         selected_text.drag(moveFunc,function(){x=this.attr('x');y=this.attr('y')});
 
 		// set string equal to current text
-		string=selected_text.node.textContent
+		string=selected_text.attr('text')
 
 		document.addEventListener('keypress',press_listener)
 		document.addEventListener('keydown',down_listener)
@@ -1939,8 +2006,16 @@ var down_listener=function(ev) {
 			else if((selected_text.node.attributes.style.value).indexOf('end')!=-1){x=coords.x2}
 			else{x=coords.x}
 			
-			if(keycode==39){selected_text.attr({x:x+1});high_box.attr({x:high_coords.x+1})}
-			if(keycode==37){selected_text.attr({x:x-1});high_box.attr({x:high_coords.x-1})}
+			if(keycode==39){
+				selected_text.attr({x:x+1});
+				selected_text.selectAll("tspan:not(:first-child)").attr({x:x+1})
+				high_box.attr({x:high_coords.x+1})
+			}
+			if(keycode==37){
+				selected_text.attr({x:x-1});
+				selected_text.selectAll("tspan:not(:first-child)").attr({x:x-1})
+				high_box.attr({x:high_coords.x-1})
+			}
 		}
 
 		if(ev.shiftKey==true){
@@ -1953,7 +2028,6 @@ var down_listener=function(ev) {
 				selected_text.attr({opacity:opacity-.1})
 			}
 		}
-
 	}
 
 	// spacebar and backspace handling
@@ -2031,7 +2105,6 @@ var press_listener=function(ev) {
 		}
 	} else{
 		// everything else
-		// console.log('press',keycode)
 		if(typeof string=='object'){
 			string[string.length-1]=string[string.length-1]+String.fromCharCode(keycode)
 			selected_text.attr({text:string})
@@ -2048,7 +2121,6 @@ var press_listener=function(ev) {
 			high_box.attr({x:coords.x-3,y:coords.y-3,width:coords.width+6,height:coords.height+6})
 			high_coords=high_box.getBBox()
 		}
-
 	}
 }
 
@@ -2068,9 +2140,10 @@ $(function() {
 	$(svgarea).on("contextmenu", function (e) {
 		if(doubleClicked == false && drawpath!=1) {
 			disableScroll()
-			if(e.target.nodeName=='text'){
+			if(e.target.nodeName=='text' || e.target.nodeName=='tspan'){
 				clickedevent=e
 				e.preventDefault();
+				// if(e.target.nodeName=='tspan'){clickedevent=$(e.target).parent('.selector')}
 				$("#text_context_menu").css("left", e.clientX+3);
 				$("#text_context_menu").css("top", e.clientY);
 				$("#text_context_menu").fadeIn(50, FocusContextOut());
@@ -2146,6 +2219,9 @@ $(function() {
 
 function boldtext(target) {
 	var item=Snap(target)
+	try{if(target.nodeName=='tspan'){
+		item=item.parent()
+	}}catch(err){}
 	fontf=item.attr('font-weight')
 	if(fontf==400 || fontf=='normal'){
 		item.attr({'font-weight':600})
@@ -2157,6 +2233,9 @@ function boldtext(target) {
 
 function italictext(target) {
 	var item=Snap(target)
+	try{if(target.nodeName=='tspan'){
+		item=item.parent()
+	}}catch(err){}
 	style=item.attr('font-style')
 	if(style=='normal'){
 		item.attr({'font-style':'italic'})
@@ -2169,6 +2248,9 @@ function italictext(target) {
 function sizeup(target) {
 	try{high_coords=high_box.getBBox()}catch(err){}
 	var item=Snap(target)
+	try{if(target.nodeName=='tspan'){
+		item=item.parent()
+	}}catch(err){}
 	size=item.attr('font-size')
 	item.attr({'font-size':parseInt(size)+1});
 	try{coords=selected_text.getBBox()
@@ -2178,6 +2260,9 @@ function sizeup(target) {
 function sizedown(target) {
 	try{high_coords=high_box.getBBox()}catch(err){}
 	var item=Snap(target)
+	try{if(target.nodeName=='tspan'){
+		item=item.parent()
+	}}catch(err){}
 	size=item.attr('font-size')
 	item.attr({'font-size':parseInt(size)-1});
 	try{coords=selected_text.getBBox()
@@ -2186,12 +2271,18 @@ function sizedown(target) {
 
 function fadein(target) {
 	var item=Snap(target)
+	try{if(target.nodeName=='tspan'){
+		item=item.parent()
+	}}catch(err){}
 	opacity=parseFloat(item.attr('opacity'))
 	item.attr({opacity:opacity+.1})
 }
 
 function fadeout(target) {
 	var item=Snap(target)
+	try{if(target.nodeName=='tspan'){
+		item=item.parent()
+	}}catch(err){}
 	opacity=parseFloat(item.attr('opacity'))
 	item.attr({opacity:opacity-.1})
 }
@@ -2222,6 +2313,9 @@ function change_color(target,color) {
 	}
 	else{
 		var item=Snap(target)
+		try{if(target.nodeName=='tspan'){
+		item=item.parent()
+		}}catch(err){}
 		item.attr({fill:color,stroke:color})	
 		if(item.attr('ident')=='key'){
 			group=item.attr('group')
@@ -2478,8 +2572,6 @@ function thickpath(e) {
 
 function savepng() {
 
-
-
 	// saveSvgAsPng(document.getElementById('grapharea'),'playfair.png', {scale:2.0})
 
 	var svg = document.getElementById('grapharea')
@@ -2558,6 +2650,86 @@ function importsettings() {
 	// document.getElementById("grapharea").innerHTML=data[1]
 	// populate_variables(data[2])
 }
+
+function cloudsave() {
+	disableScroll()
+	// $("#savedialog").css("left", 0);
+	// $("#savedialog").css("top", 0);
+	$("#savedialog").fadeIn(50);
+	// $("#savebox").css("left", '50vw');
+	// $("#savebox").css("top", '50vh');
+	$("#savebox").fadeIn(50);
+}
+
+function cloudload() {
+	disableScroll()
+	$("#savedialog").css("left", 0);
+	$("#savedialog").css("top", 0);
+	$("#savedialog").fadeIn(50);
+	$("#savebox").css("left", '50%');
+	$("#savebox").css("top", '50%');
+	$("#savebox").fadeIn(50);
+}
+
+function cancelsave() {
+	enableScroll()
+	$("#savebox").fadeOut(150);
+	$("#savedialog").fadeOut(150);
+}
+
+function cancelload() {
+	enableScroll()
+	$("#savebox").fadeOut(150);
+	$("#savedialog").fadeOut(150);
+}
+
+function savetoserver() {
+	var filename=$('#savename').val()
+	var svg = document.getElementById("grapharea").innerHTML
+	var data=[chartobject,svg,JSON.stringify(final_data)]
+
+	dictionary={}
+	// dictionary['svg']=svg
+	temp=chartobject
+	delete temp['svg']
+	delete temp['logo']
+	dictionary['chartobject']=JSON.stringify(temp)
+	dictionary['filename']=filename
+	console.log(dictionary)
+
+	$.ajax({
+		url:'http://www.austinclemens.com/cgi-bin/savetoserver.py',
+		type: 'post',
+		datatype: 'html',
+		data: dictionary,
+		success: function(response){
+			cancelsave()
+			enableScroll()
+		}
+	})
+}
+
+function loadfromserver() {
+
+
+}
+
+// $("#year_select").change(function() {
+// 	var year=$( "#year_select" ).val()
+// 	$("#player_select").empty()
+
+// 	$.ajax({
+// 		url: "menus_nba/players_"+year+".csv",
+// 		success: function(response){
+// 			response=response.split(/\r\n|\n/)
+
+// 			for (var i=0; i<response.length;i++) {
+// 				row=response[i].split(',')
+// 				try{$('#player_select').append(new Option(row[0].replace(/"/g,'')));}catch(err){}
+// 			}
+// 		}
+// 	});
+// })
 
 ///////////////////// END SAVE FUNCTIONS ///////////////////////////////
 ////////////////////////////////////////////////////////////////////////
