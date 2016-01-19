@@ -23,7 +23,12 @@ try:
 except:
 	pass
 
-f = open('/home/austinc/public_html/testtools/saved/'+filename+'.pf','w')
+try:
+	inputs=data.getfirst('inputs')
+except:
+	pass
+
+f = open('/home/austinc/public_html/testtools/saved/'+filename,'w')
 
 try:
 	f.write(svg)
@@ -33,6 +38,12 @@ except:
 
 try:
 	f.write(chartobject)
+	f.write('\n')
+except:
+	pass
+
+try:
+	f.write(inputs)
 except:
 	pass
 
