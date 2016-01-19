@@ -2161,6 +2161,7 @@ $(function() {
 	$(svgarea).on("contextmenu", function (e) {
 		if(doubleClicked == false && drawpath!=1) {
 			disableScroll()
+			console.log(typeof e.target.attributes.ident)
 			if(e.target.nodeName=='text' || e.target.nodeName=='tspan'){
 				clickedevent=e
 				e.preventDefault();
@@ -2169,7 +2170,7 @@ $(function() {
 				$("#text_context_menu").css("top", e.clientY);
 				$("#text_context_menu").fadeIn(50, FocusContextOut());
 				doubleClicked = true;
-			} else if((e.target.nodeName=='path' && e.target.className.baseVal!='dataelement' && e.target.className.baseVal!='callout') || (e.target.nodeName=='line' && e.target.attributes.ident.value=='key')){
+			} else if((e.target.nodeName=='path' && e.target.className.baseVal!='dataelement' && e.target.className.baseVal!='callout') || (e.target.nodeName=='line' && typeof e.target.attributes.ident!='undefined')){
 				clickedevent=e
 				e.preventDefault();
 				$("#path_context_menu").css("left", e.clientX+3);
@@ -2201,13 +2202,15 @@ $(function() {
 				$("#callout_context_menu").css("top", e.clientY);
 				$("#callout_context_menu").fadeIn(50, FocusContextOut());
 				doubleClicked = true;		
-			} else if(e.target.nodeName=='rect' && e.target.attributes.ident.value=='key'){
-				clickedevent=e
-				e.preventDefault();
-				$("#data_context_menu").css("left", e.clientX+3);
-				$("#data_context_menu").css("top", e.clientY);
-				$("#data_context_menu").fadeIn(50, FocusContextOut());
-				doubleClicked = true;	
+			} else if(e.target.nodeName=='rect' && typeof e.target.attributes.ident!='undefined'){
+				if(e.target.attributes.ident.value=='key'){
+					clickedevent=e
+					e.preventDefault();
+					$("#data_context_menu").css("left", e.clientX+3);
+					$("#data_context_menu").css("top", e.clientY);
+					$("#data_context_menu").fadeIn(50, FocusContextOut());
+					doubleClicked = true;
+				}
 			} else {
 				clickedevent=e
 				e.preventDefault();
@@ -2788,7 +2791,6 @@ function load_populate(response) {
 	svg=decodeURIComponent(svg)
 	settings=response.split('\n')[2]
 	inputs=response.split('\n')[3]
-	inputs=decodeURIComponent(inputs)
 
 	chartobject=JSON.parse(settings)
 	inputs=JSON.parse(inputs)
