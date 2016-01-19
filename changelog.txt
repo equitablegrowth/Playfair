@@ -1,9 +1,11 @@
 changelog.txt
 
-V1.0
+V1.0 - First Public Release
   - server-side saving and loading!
 
   - various fixes for multi-line text
+
+  - bug fixes for notes, sources, and no-logo layouts
 
 V0.7
   - UI re-design makes the UI a bit less awful.
@@ -37,7 +39,7 @@ V0.7
   - recession shading now supported in Firefox
 
   - Support for dates in the form '1992q1'
-  
+
 
 V0.6
   - Fixed a but that made the logo appear blurry.
