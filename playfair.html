@@ -2809,6 +2809,7 @@ function load_populate(response) {
 			if(inputs[input][1]==true){state='on'}
 			if(inputs[input][1]==false){state='off'}
 			$('#'+input).bootstrapToggle('checked',state)
+			console.log("$(#"+input+").bootstrapToggle('checked',"+state+")")
 		}
 		if(inputs[input][0]=='dropdown'){
 			$('#'+input).val(inputs[input][1])
@@ -2819,7 +2820,16 @@ function load_populate(response) {
 		}
 	}
 
-	changedimensions()
+	if (inputs['gwidth'][1]!=''){
+		width=parseFloat(inputs['gwidth'][1])
+	} else {width=745}
+	if (inputs['gheight'][1]!=''){
+		height=parseFloat(inputs['gheight'][1])
+	} else {height=450}
+
+	$('#grapharea').attr('height',height)
+	$('#grapharea').attr('width',width)
+	$('#constraint').attr('style','max-width:'+width+';margin-left:auto;margin-right:auto')
 
 	// insert the returned svg into the svg slot
 	document.getElementById("grapharea").innerHTML=svg
