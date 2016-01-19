@@ -7,14 +7,41 @@ import cgitb
 cgitb.enable()
 
 data=cgi.FieldStorage()
-filename=data.getfirst('filename')
-# svg=data.getfirst('svg')
-chartobject=data.getfirst('chartobject')
+
+try:
+	filename=data.getfirst('filename')
+except:
+	pass
+
+try:
+	svg=data.getfirst('svg')
+except:
+	pass
+
+try:
+	chartobject=data.getfirst('chartobject')
+except:
+	pass
 
 f = open('/home/austinc/public_html/testtools/saved/'+filename+'.pf','w')
-# f.write(svg)
-f.write(chartobject)
-f.close()
+
+try:
+	f.write(svg)
+	f.write('\n')
+except:
+	pass
+
+try:
+	f.write(chartobject)
+except:
+	pass
+
+try:
+	f.close()
+except:
+	pass
 
 print "Content-Type: text/html\n\n"
-print 'success'
+print data
+
+
