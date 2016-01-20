@@ -1,4 +1,4 @@
-#!/usr/bin/python
+te#!/usr/bin/python
 from __future__ import division
 import cgi
 from json import dumps
@@ -28,7 +28,7 @@ try:
 except:
 	pass
 
-f = open('/home/austinc/public_html/testtools/saved/'+filename,'w')
+f = open('/home/austinc/public_html/tools/saved/'+filename,'w')
 
 try:
 	f.write(svg)

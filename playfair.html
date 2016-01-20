@@ -2808,8 +2808,8 @@ function load_populate(response) {
 		if(inputs[input][0]=='checkbox'){
 			if(inputs[input][1]==true){state='on'}
 			if(inputs[input][1]==false){state='off'}
-			$('#'+input).bootstrapToggle('checked',state)
-			console.log("$(#"+input+").bootstrapToggle('checked',"+state+")")
+			$('#'+input).bootstrapToggle(state)
+			console.log("$('#"+input+"').bootstrapToggle('"+state+"')")
 		}
 		if(inputs[input][0]=='dropdown'){
 			$('#'+input).val(inputs[input][1])

@@ -13,7 +13,7 @@ try:
 except:
 	pass
 
-with open('/home/austinc/public_html/testtools/saved/'+filename,'rU') as f:
+with open('/home/austinc/public_html/tools/saved/'+filename,'rU') as f:
 	r=f.read()
 
 results=dumps(r)
