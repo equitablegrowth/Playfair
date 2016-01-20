@@ -1,4 +1,4 @@
-te#!/usr/bin/python
+#!/usr/bin/python
 from __future__ import division
 import cgi
 from json import dumps
