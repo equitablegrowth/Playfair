@@ -2058,7 +2058,7 @@ var down_listener=function(ev) {
 			if (typeof string=='object'){
 				string[string.length-1]=string[string.length-1]+String.fromCharCode(keycode)
 				selected_text.attr({text:string})
-				selected_text.selectAll("tspan:not(:first-child)").attr({x:selected_text.attr('x'),dy:selected_text.attr('font-size')})
+				selected_text.selectAll("tspan:not(:first-child)").attr({x:selected_text.attr('x'),dy:1.1*parseFloat(selected_text.attr('font-size'))})
 			} else{
 				string=string+String.fromCharCode(keycode)
 				selected_text.attr({text:string})
@@ -2066,10 +2066,18 @@ var down_listener=function(ev) {
 		}
 		if(keycode==8){
 			// Handle backspace
+			console.log(string)
 			if (typeof string=='object'){
+				if(string[string.length-1].length>0){
+
+				} else {
+					string=string.slice(0,string.length-1)
+				}
+
 				string[string.length-1]=string[string.length-1].slice(0,string[string.length-1].length-1)
 				selected_text.attr({text:string})
-				selected_text.selectAll("tspan:not(:first-child)").attr({x:selected_text.attr('x'),dy:selected_text.attr('font-size')})
+				selected_text.selectAll("tspan:not(:first-child)").attr({x:selected_text.attr('x'),dy:1.1*parseFloat(selected_text.attr('font-size'))})
+				
 			} else {
 				string=string.slice(0,string.length-1)
 				selected_text.attr({text:string})
@@ -2117,19 +2125,19 @@ var press_listener=function(ev) {
 		if (typeof string=='object'){
 			string.push('')
 			selected_text.attr({text:string})
-			selected_text.selectAll("tspan:not(:first-child)").attr({x:selected_text.attr('x'),dy:selected_text.attr('font-size')})
+			selected_text.selectAll("tspan:not(:first-child)").attr({x:selected_text.attr('x'),dy:1.1*parseFloat(selected_text.attr('font-size'))})
 		} else {
 			string=[string]
 			string.push('')
 			selected_text.attr({text:string})
-			selected_text.selectAll("tspan:not(:first-child)").attr({x:selected_text.attr('x'),dy:selected_text.attr('font-size')})
+			selected_text.selectAll("tspan:not(:first-child)").attr({x:selected_text.attr('x'),dy:1.1*parseFloat(selected_text.attr('font-size'))})
 		}
 	} else{
 		// everything else
 		if(typeof string=='object'){
 			string[string.length-1]=string[string.length-1]+String.fromCharCode(keycode)
 			selected_text.attr({text:string})
-			selected_text.selectAll("tspan:not(:first-child)").attr({x:selected_text.attr('x'),dy:selected_text.attr('font-size')})
+			selected_text.selectAll("tspan:not(:first-child)").attr({x:selected_text.attr('x'),dy:1.1*parseFloat(selected_text.attr('font-size'))})
 
 			coords=selected_text.getBBox()
 			high_box.attr({x:coords.x-3,y:coords.y-3,width:coords.width+6,height:coords.height+6})
@@ -2499,7 +2507,14 @@ function endarrow(e) {
 }
 
 function deleteelement(e) {
-	e.remove()
+	if (e.nodeName=='tspan'){
+		item=Snap(e)
+		item=item.parent()
+		console.log(item)
+		item.remove()
+	} else {
+		e.remove()
+	}
 }
 
 function pointsizeup(e) {

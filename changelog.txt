@@ -1,5 +1,9 @@
 changelog.txt
 
+V1.05
+  - various multi-line text fixes
+  
+
 V1.0 - First Public Release
   - server-side saving and loading!
 
