@@ -1308,8 +1308,8 @@
 	<button type="button" class="btn btn-default" id='savesvg' onclick=savesvg()><i class="fa fa-arrows-h"></i> Save as SVG</button>
 </div>
 <div class="btn-group btnpadding" role="group">
-	<button type="button" class="btn btn-default" id='savetext' onclick=cloudsave()><i class="fa fa-cloud-upload"></i> Save to server</button>
-	<button type="button" class="btn btn-default btn-file" id='importtext' onclick=cloudload()><i class="fa fa-cloud-download"></i> Restore from server</button>
+	<button type="button" class="btn btn-default" id='savetext' onclick=cloudsave()><i class="fa fa-cloud-upload"></i> Save</button>
+	<button type="button" class="btn btn-default btn-file" id='importtext' onclick=cloudload()><i class="fa fa-cloud-download"></i> Load</button>
 </div>
 <div class='vspace'>
 <small>[<a href='https://github.com/equitablegrowth/Playfair/#boards?repos=44823593'>report a bug</a>]</small>
@@ -2009,12 +2009,14 @@ var down_listener=function(ev) {
 	if(keycode==40 && ev.shiftKey==true){
 		size=selected_text.attr('font-size')
 		selected_text.attr({'font-size':parseInt(size)-1});
+		selected_text.selectAll("tspan:not(:first-child)").attr({dy:1.1*parseFloat(selected_text.attr('font-size'))})
 		coords=selected_text.getBBox()
 		high_box.attr({y:coords.y-3,x:coords.x-3,width:coords.width+6,height:coords.height+6})
 	}
 	if(keycode==38 && ev.shiftKey==true){
 		size=selected_text.attr('font-size')
 		selected_text.attr({'font-size':parseInt(size)+1});
+		selected_text.selectAll("tspan:not(:first-child)").attr({dy:1.1*parseFloat(selected_text.attr('font-size'))})
 		coords=selected_text.getBBox()
 		high_box.attr({y:coords.y-3,x:coords.x-3,width:coords.width+6,height:coords.height+6})
 	}
@@ -2167,9 +2169,10 @@ $(function() {
 	var svgarea=document.getElementById('grapharea')
 	var doubleClicked = false;
 	$(svgarea).on("contextmenu", function (e) {
+		// console.log(e,e.target,e.target.nodeName,e.target.parentNode.nodeName)
 		if(doubleClicked == false && drawpath!=1) {
 			disableScroll()
-			console.log(typeof e.target.attributes.ident)
+			// console.log(typeof e.target.attributes.ident)
 			if(e.target.nodeName=='text' || e.target.nodeName=='tspan'){
 				clickedevent=e
 				e.preventDefault();
@@ -2178,6 +2181,13 @@ $(function() {
 				$("#text_context_menu").css("top", e.clientY);
 				$("#text_context_menu").fadeIn(50, FocusContextOut());
 				doubleClicked = true;
+			}  else if(e.target.className.baseVal=='callout'){
+				clickedevent=e
+				e.preventDefault();
+				$("#callout_context_menu").css("left", e.clientX+3);
+				$("#callout_context_menu").css("top", e.clientY);
+				$("#callout_context_menu").fadeIn(50, FocusContextOut());
+				doubleClicked = true;	
 			} else if((e.target.nodeName=='path' && e.target.className.baseVal!='dataelement' && e.target.className.baseVal!='callout') || (e.target.nodeName=='line' && typeof e.target.attributes.ident!='undefined')){
 				clickedevent=e
 				e.preventDefault();
@@ -2202,13 +2212,6 @@ $(function() {
 				$("#data_context_menu").css("left", e.clientX+3);
 				$("#data_context_menu").css("top", e.clientY);
 				$("#data_context_menu").fadeIn(50, FocusContextOut());
-				doubleClicked = true;	
-			} else if(e.target.className.baseVal=='callout'){
-				clickedevent=e
-				e.preventDefault();
-				$("#callout_context_menu").css("left", e.clientX+3);
-				$("#callout_context_menu").css("top", e.clientY);
-				$("#callout_context_menu").fadeIn(50, FocusContextOut());
 				doubleClicked = true;		
 			} else if(e.target.nodeName=='rect' && typeof e.target.attributes.ident!='undefined'){
 				if(e.target.attributes.ident.value=='key'){
@@ -2285,6 +2288,7 @@ function sizeup(target) {
 	}}catch(err){}
 	size=item.attr('font-size')
 	item.attr({'font-size':parseInt(size)+1});
+	item.selectAll("tspan:not(:first-child)").attr({dy:1.1*parseFloat(item.attr('font-size'))})
 	try{coords=selected_text.getBBox()
 	high_box.attr({y:coords.y-3,x:coords.x-3,width:coords.width+6,height:coords.height+6})}catch(err){}
 }
@@ -2297,6 +2301,7 @@ function sizedown(target) {
 	}}catch(err){}
 	size=item.attr('font-size')
 	item.attr({'font-size':parseInt(size)-1});
+	item.selectAll("tspan:not(:first-child)").attr({dy:1.1*parseFloat(item.attr('font-size'))})
 	try{coords=selected_text.getBBox()
 	high_box.attr({y:coords.y-3,x:coords.x-3,width:coords.width+6,height:coords.height+6})}catch(err){}
 }
@@ -2445,7 +2450,7 @@ function startpath(e) {
 
 	drawpath=1
 	pathstart=[e.pageX-svgx,e.pageY-svgy]
-	var circstart=grapharea.circle(pathstart[0],pathstart[1],1.5).attr({class:'callout',stroke:'#ababab','stroke-width':1,'shape-rendering':'geometricPrecision',fill:'none'})
+	circstart=grapharea.circle(pathstart[0],pathstart[1],1.5).attr({class:'callout',stroke:'#ababab','stroke-width':1,'shape-rendering':'geometricPrecision',fill:'none'})
 	grapharea.click(endpath)
 	grapharea.mousemove(tracker)
 }
@@ -2490,6 +2495,8 @@ function endpath(e) {
 	finalline=grapharea.path(path_string).attr({class:'callout','stroke-width':1,'stroke':'#ababab','shape-rendering':'crispEdges',fill:'none'})
 	// finalline_1=grapharea.line(pathstart[0],pathstart[1]+yoffset,pathstart[0],e.pageY-svgy).attr({'stroke-width':1,'stroke':'#ababab','shape-rendering':'crispEdges'})
 	// finalline_2=grapharea.line(pathstart[0],e.pageY-svgy,e.pageX-svgx,e.pageY-svgy).attr({'stroke-width':1,'stroke':'#ababab','shape-rendering':'crispEdges'})
+	var temp_group=grapharea.group(finalline,circstart)
+	temp_group.drag()
 }
 
 function endarrow(e) {
@@ -2504,6 +2511,7 @@ function endarrow(e) {
 	grapharea.unclick(endarrow)
 	try{trackline.remove()}catch(err){}
 	finalline=grapharea.line(pathstart[0],pathstart[1],e.pageX-svgx,e.pageY-svgy).attr({ident:'none',class:'callout','stroke-width':2,'stroke':'black','shape-rendering':'auto','marker-end':amarker})
+	finalline.drag()
 }
 
 function deleteelement(e) {
@@ -2512,6 +2520,8 @@ function deleteelement(e) {
 		item=item.parent()
 		console.log(item)
 		item.remove()
+	} else if (e.parentNode.nodeName=='g'){
+		e.parentNode.remove()
 	} else {
 		e.remove()
 	}
@@ -2753,7 +2763,7 @@ function savetoserver() {
 	databox_value=$('#data_text').val();
 	input_dict['data_text']=['textarea',databox_value]
 
-	// from StackOverflow, T.J. Crowder
+	// modified from StackOverflow, T.J. Crowder
 	// http://stackoverflow.com/a/2214077/3001940
 	var inputs, index;
 
@@ -2848,6 +2858,48 @@ function load_populate(response) {
 
 	// insert the returned svg into the svg slot
 	document.getElementById("grapharea").innerHTML=svg
+
+	// the movefunc for draggable keys
+	var moveFuncfloat=function(dx,dy,posx,posy){
+		console.log('check')
+		key_elements=grapharea.selectAll('[ident="key"]')
+		for(var i=0;i<key_elements.length;i++){
+			coords=key_elements[i].getBBox()
+			if(key_elements[i].type=='circle'){
+				key_elements[i].attr({
+					cx:coords.cx-prevx+dx,
+					cy:coords.cy-prevy+dy
+				}) 
+			} else if (key_elements[i].type=='line'){
+				key_elements[i].attr({
+					x1:coords.x-prevx+dx,
+					y1:coords.y-prevy+dy,
+					x2:coords.x2-prevx+dx,
+					y2:coords.y2-prevy+dy,
+			})
+			} else{
+				key_elements[i].attr({
+					x:coords.x-prevx+dx,
+					y:coords.y-prevy+dy
+				})
+			}
+			grapharea.append(key_elements[i])
+		}
+		prevx=dx
+		prevy=dy
+	}
+
+	// stick drag method on the things that need it.
+	drag_eles=grapharea.selectAll('rect[ident2="floatkey"]')
+	for(var i=0;i<drag_eles.length;i++){
+		console.log(drag_eles[i])
+		drag_eles[i].drag(moveFuncfloat,function(){x=this.attr('x');y=this.attr('y');prevx=0;prevy=0})
+	}
+
+	drag_eles=grapharea.selectAll('[class="callout"]')
+	for(var i=0;i<drag_eles.length;i++){
+		drag_eles[i].drag()
+	}
 }
 
 $(document).on('click', '.list-group a', function(e){

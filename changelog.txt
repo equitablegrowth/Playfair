@@ -2,7 +2,13 @@ changelog.txt
 
 V1.05
   - various multi-line text fixes
-  
+
+  - You can now drag callout arrows/lines around the graph
+
+  - various callout fixes
+
+  - fix for floating keys being immobile after load
+
 
 V1.0 - First Public Release
   - server-side saving and loading!
@@ -10,6 +16,7 @@ V1.0 - First Public Release
   - various fixes for multi-line text
 
   - bug fixes for notes, sources, and no-logo layouts
+
 
 V0.7
   - UI re-design makes the UI a bit less awful.
