@@ -1301,7 +1301,7 @@
 
 <div class='text-center unselectable'>
 <div class="btn-group btnpadding">
-<button type="button" title='Reset the interactive' class="btn btn-default balign" onclick='redraw()'><i class="fa fa-refresh"></i> Draw/refresh graph</button><br><br>
+<button type="button" title='Reset the interactive' class="btn btn-default balign" onclick='redraw()'><i class="fa fa-refresh"></i> Draw/refresh</button><br><br>
 </div>
 <div class="btn-group btnpadding" role="group">
 	<button type="button" class="btn btn-default" id='savepng' onclick=savepng()><i class="fa fa-download"></i> Save PNG</button>
@@ -1983,7 +1983,7 @@ function edit_text(ev) {
 		console.log(tlocation)
 
 		console.log(tlocation)
-		cursor=grapharea.rect(0,0,2,parseInt(selected_text.attr('font-size'))).attr({fill:'white',ident:'cursor'})
+		cursor=grapharea.rect(0,0,1,parseInt(selected_text.attr('font-size'))).attr({fill:'white',ident:'cursor'})
 		blink()
 
 		position_cursor(selected_text)
@@ -2076,25 +2076,53 @@ function center_baseline(text) {
 }
 
 function position_cursor(selected_text){
+
+	// 'text-anchor':'middle'
+
 	console.log(tlocation)
 	console.log(selected_text.attr('text'))
+
 	if (typeof selected_text.attr('text')=='object'){
-		var temp=grapharea.text(0,0,selected_text.attr('text')[tlocation[1]].substring(0,tlocation[0]+1)).attr(selected_text.attr())
+		lt=selected_text.attr('text')[tlocation[1]]
+		console.log(lt)
+		var temp=grapharea.text(0,0,lt).attr(selected_text.attr())
 		temp.attr({y:parseFloat(selected_text.attr('y'))+(1.1*tlocation[1]*parseFloat(selected_text.attr('font-size')))})
+
+		// getting the correct x is a bit tricky because all possible text-anchors have to be accounted for
+		// so place temp and get the x2 of the end of the full string. Then place temp2 and temp3, left-aligned
+		// strings, one the full string, one the substring. The difference in x-coordinate between these is
+		// the x-offset.
+		var temp2=grapharea.text(0,0,lt).attr(selected_text.attr())
+		temp2.attr({'text-anchor':'start'})
+		coords2=temp2.getBBox()
+		var temp3=grapharea.text(0,0,lt.substring(0,tlocation[0]+1)).attr(selected_text.attr())
+		temp3.attr({'text-anchor':'start'})
+		coords3=temp3.getBBox()
+
 		coords=temp.getBBox()
-		cursor.attr({x:coords.x2,y:coords.y})
+		cursor.attr({x:coords.x2-(coords2.x2-coords3.x2),y:coords.y})
+
 		temp.remove()
+		temp2.remove()
+		temp3.remove()
 	} else{
-		coords=selected_text.getBBox()
-		console.log(coords)
-		cursor.attr({x:coords.x2,y:coords.y})
-
-
-		var temp=grapharea.text(0,0,selected_text.attr('text').substring(0,tlocation[0]+1)).attr(selected_text.attr())
+		lt=selected_text.attr('text')
+		var temp=grapharea.text(0,0,lt).attr(selected_text.attr())
 		temp.attr({y:parseFloat(selected_text.attr('y'))+(1.1*tlocation[1]*parseFloat(selected_text.attr('font-size')))})
+
+		var temp2=grapharea.text(0,0,lt).attr(selected_text.attr())
+		temp2.attr({'text-anchor':'start'})
+		coords2=temp2.getBBox()
+		var temp3=grapharea.text(0,0,lt.substring(0,tlocation[0]+1)).attr(selected_text.attr())
+		temp3.attr({'text-anchor':'start'})
+		coords3=temp3.getBBox()
+
 		coords=temp.getBBox()
-		cursor.attr({x:coords.x2,y:coords.y})
+		cursor.attr({x:coords.x2-(coords2.x2-coords3.x2),y:coords.y})
+
 		temp.remove()
+		temp2.remove()
+		temp3.remove()
 	}
 }
 
@@ -2148,9 +2176,13 @@ var down_listener=function(ev) {
 
 			if(keycode==39){
 				if(tlocation[0]==string[tlocation[1]].length-1){
-					tlocation[1]=tlocation[1]+1
-					if(tlocation[1]>string.length-1){tlocation[1]=string.length-1}
-					tlocation[0]=0
+					if (typeof string=='object'){
+						if(tlocation[1]<string.length){
+							tlocation[1]=tlocation[1]+1
+							if(tlocation[1]>string.length-1){tlocation[1]=string.length-1}
+							tlocation[0]=0
+						}
+					}
 				} else{
 					tlocation[0]=tlocation[0]+1
 				}

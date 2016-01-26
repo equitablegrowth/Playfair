@@ -9,7 +9,7 @@ V1.1
 
   - fix to opacity on selected text
 
-  - 
+  - there is now a text cursor that you can move back and forth with the arrow keys. Everything seems to be working pretty well with it but there are probably bugs, please let me know.
 
 
 V1.05
