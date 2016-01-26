@@ -365,7 +365,7 @@
 
 <!-- Header -->
 <h1 class='text-center'>playfair</h1>
-<h4 class='text-center'><sup style='visibility: hidden'>v1.0, <a href='changelog.txt'>changelog</a></sup>make equitable graphs<sup>v1.0, <a href='changelog.txt'>changelog</a></sup></h4>
+<h4 class='text-center'><sup style='visibility: hidden'>v1.05, <a href='changelog.txt'>changelog</a></sup>make equitable graphs<sup>v1.05, <a href='changelog.txt'>changelog</a></sup></h4>
 
 	<div class='col-md-2'></div>
 	<div class='col-xs-8'>
@@ -1304,8 +1304,8 @@
 <button type="button" title='Reset the interactive' class="btn btn-default balign" onclick='redraw()'><i class="fa fa-refresh"></i> Draw/refresh graph</button><br><br>
 </div>
 <div class="btn-group btnpadding" role="group">
-	<button type="button" class="btn btn-default" id='savepng' onclick=savepng()><i class="fa fa-download"></i> Save as PNG</button>
-	<button type="button" class="btn btn-default" id='savesvg' onclick=savesvg()><i class="fa fa-arrows-h"></i> Save as SVG</button>
+	<button type="button" class="btn btn-default" id='savepng' onclick=savepng()><i class="fa fa-download"></i> Save PNG</button>
+	<button type="button" class="btn btn-default" id='savesvg' onclick=savesvg()><i class="fa fa-arrows-h"></i> Save SVG</button>
 </div>
 <div class="btn-group btnpadding" role="group">
 	<button type="button" class="btn btn-default" id='savetext' onclick=cloudsave()><i class="fa fa-cloud-upload"></i> Save</button>
@@ -1584,6 +1584,16 @@ function loadData() {
 }
 
 function populate_variables(final_data) {
+
+	// save current variable values
+	x_var=$(".x_select").val()
+	y_var=$(".y_select").val()
+	group_var=$(".group_select").val()
+	label=$("#line_select_label").val()
+	connect=$("#line_select_connect").val()
+	size=$("#line_select_pointsize").val()
+
+	// reset menus
 	$(".variable_select")
 		.find('option')
 		.remove()
@@ -1599,7 +1609,17 @@ function populate_variables(final_data) {
 	}
 
 	$(".variable_select").prop('disabled',false)
+
+	// if possible, set menus to previous values
+	$(".x_select").val(x_var)
+	$(".y_select").val(y_var)
+	$(".group_select").val(group_var)
+	$("#line_select_label").val(label)
+	$("#line_select_connect").val(connect)
+	$("#line_select_pointsize").val(size)
+
 	$(".variable_select").selectpicker('refresh')
+
 }
 
 ///////////////////////// END LOAD DATA ////////////////////////////////
@@ -1914,6 +1934,7 @@ function unselect_text(ev) {
 function edit_text(ev) {
 	// if a text element is clicked, select it and listen for keypresses.
 	if(ev.target.nodeName=='text' || ev.target.nodeName=='tspan'){
+
 		// Clean up previous selection if applicable
 		try{
 			select_box.remove()
@@ -1929,9 +1950,41 @@ function edit_text(ev) {
 		// deal with tspans
 		if(ev.target.nodeName=='tspan'){
 			selected_text=Snap(ev.target)
+			selected_tspan=selected_text
 			selected_text=Snap(selected_text.parent())
+			selected_text.attr({'font-size':parseFloat(selected_text.attr('font-size'))-2+'px'})
 		} else {
 			selected_text=Snap(ev.target)
+			selected_text.attr({'font-size':parseFloat(selected_text.attr('font-size'))-2+'px'})
+		}
+
+		selected=1
+
+		// place initial cursor
+		console.log(selected_text.attr('text'))
+		if (typeof selected_text.attr('text')=='object'){
+			tlocation=[selected_text.attr('text')[selected_text.attr('text').length-1].length-1,selected_text.attr('text').length-1]
+		} else{
+			tlocation=[selected_text.attr('text').length-1]
+		}
+
+		function blink(){
+			cursor.attr({opacity:0})
+			setTimeout(function(){cursor.attr({opacity:1})},500)
+		}
+
+		console.log(tlocation)
+		cursor=grapharea.rect(0,0,2,parseInt(selected_text.attr('font-size'))).attr({fill:'white'})
+		blink()
+		setInterval(blink,1000)
+
+		if (typeof selected_text.attr('text')=='object'){
+
+		} else{
+			console.log('check')
+			coords=selected_text.getBBox()
+			cursor.attr({x:coords.x2,y:coords.y})
+			console.log(cursor.attr('x'))
 		}
 
 		// if text is rotated, un-rotate it
@@ -1953,6 +2006,7 @@ function edit_text(ev) {
 		select_box.append(high_box)
 		selected_text.attr({fill:'white'})
 		grapharea.append(selected_text)
+		grapharea.append(cursor)
 
 		// listener for drag events
 		var moveFunc=function(dx,dy){
@@ -2701,6 +2755,18 @@ function importsettings() {
 }
 
 function cloudsave() {
+
+	// remove any selected text boxes
+	try{
+		select_box.remove()
+		document.removeEventListener('keypress',press_listener)
+		document.removeEventListener('keydown',down_listener)
+		selected_text.undrag()
+		selected_text.attr({transform:trans})
+		active_element.attr({fill:text_element_fill})
+		selected=0
+	} catch(err){}
+
 	$.ajax({
 		url:'http://www.austinclemens.com/cgi-bin/listfiles.py',
 		type: 'post',
@@ -2747,6 +2813,8 @@ function cancelload() {
 }
 
 function savetoserver() {
+
+	// build the dictionary to bpass to ajax
 	var filename=$('#savename').val()
 	var svg = document.getElementById("grapharea").innerHTML
 
@@ -2765,6 +2833,7 @@ function savetoserver() {
 
 	// modified from StackOverflow, T.J. Crowder
 	// http://stackoverflow.com/a/2214077/3001940
+	// get value of all inputs onscreen so they can be restored by a load
 	var inputs, index;
 
 	inputs = document.getElementsByTagName('input');
@@ -2922,71 +2991,76 @@ $(document).on('click', '.list-group a', function(e){
 // })
 
 function highlight_element(ev) {
-	// this should handle basically every case of mousing over a data element and getting a highlight effect
-	item=Snap(ev.target)
-	try{if(ev.target.nodeName=='path'){
-		item.attr({'stroke-width':parseFloat(item.attr('stroke-width'))+3,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))-.5})
-	}}catch(err){}
-	try{if(ev.target.nodeName=='circle'){
-		item.attr({'r':parseFloat(item.attr('r'))+2,'stroke-width':parseFloat(item.attr('stroke-width'))+1,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))-.5})
-	}}catch(err){} 
-	try{if(ev.target.nodeName=='line' && ev.target.attributes.ident.value=='key'){
-		item.attr({'stroke-width':parseFloat(item.attr('stroke-width'))+2,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))-.5})
-	}}catch(err){} 
-	try{if(ev.target.nodeName=='rect' && ev.target.attributes.ident.value=='key' && ev.target.attributes.ident2.value!='floatkey'){
-		item.attr({'stroke-opacity':parseFloat(item.attr('stroke-opacity'))-.5,'fill-opacity':parseFloat(item.attr('fill-opacity'))-.5,'x':parseFloat(item.attr('x'))-2,'y':parseFloat(item.attr('y'))-2,'width':parseFloat(item.attr('width'))+4,'height':parseFloat(item.attr('height'))+4})
-	}}catch(err){} 
-	try{if(ev.target.nodeName=='rect' && ev.target.attributes.data_type.value=='bar'){
-		item.attr({'stroke-opacity':parseFloat(item.attr('stroke-opacity'))-.5,'fill-opacity':parseFloat(item.attr('fill-opacity'))-.5,'x':parseFloat(item.attr('x'))-2,'y':parseFloat(item.attr('y'))-2,'width':parseFloat(item.attr('width'))+4,'height':parseFloat(item.attr('height'))+4})
-	}}catch(err){}  
-	try{if(ev.target.nodeName=='line' && ev.target.attributes.class.value=='callout'){
-		item.attr({'stroke-width':parseFloat(item.attr('stroke-width'))+2,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))-.5})
-	}}catch(err){}  
-	try{if(ev.target.nodeName=='text'){
-		item.attr({'font-size':parseFloat(item.attr('font-size')),'opacity':(parseFloat(item.attr('opacity'))>.5 ? parseFloat(item.attr('opacity'))-.5 : .2)})
-	}}catch(err){} 
-	try{if(ev.target.nodeName=='tspan'){
-		item=item.parent()
-		item.attr({'font-size':parseFloat(item.attr('font-size')),'opacity':(parseFloat(item.attr('opacity'))>.5 ? parseFloat(item.attr('opacity'))-.5 : .2)})
-	}}catch(err){} 
-	try{if(ev.target.className.baseVal=='dataelement'){
-		coords=item.getBBox()
-		highlighttext=grapharea.text(coords.x+coords.width/2,coords.y+coords.height/2,item.attr('data_label')).attr({'font-family':'Lato, Arial, sans-serif','font-size':16,'text-anchor':'start','fill':'black','font-weight':400,cursor:'pointer'})
-	}}catch(err){}
+	if(selected==0){
+		// this should handle basically every case of mousing over a data element and getting a highlight effect
+		item=Snap(ev.target)
+		try{if(ev.target.nodeName=='path'){
+			item.attr({'stroke-width':parseFloat(item.attr('stroke-width'))+3,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))-.5})
+		}}catch(err){}
+		try{if(ev.target.nodeName=='circle'){
+			item.attr({'r':parseFloat(item.attr('r'))+2,'stroke-width':parseFloat(item.attr('stroke-width'))+1,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))-.5})
+		}}catch(err){} 
+		try{if(ev.target.nodeName=='line' && ev.target.attributes.ident.value=='key'){
+			item.attr({'stroke-width':parseFloat(item.attr('stroke-width'))+2,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))-.5})
+		}}catch(err){} 
+		try{if(ev.target.nodeName=='rect' && ev.target.attributes.ident.value=='key' && ev.target.attributes.ident2.value!='floatkey'){
+			item.attr({'stroke-opacity':parseFloat(item.attr('stroke-opacity'))-.5,'fill-opacity':parseFloat(item.attr('fill-opacity'))-.5,'x':parseFloat(item.attr('x'))-2,'y':parseFloat(item.attr('y'))-2,'width':parseFloat(item.attr('width'))+4,'height':parseFloat(item.attr('height'))+4})
+		}}catch(err){} 
+		try{if(ev.target.nodeName=='rect' && ev.target.attributes.data_type.value=='bar'){
+			item.attr({'stroke-opacity':parseFloat(item.attr('stroke-opacity'))-.5,'fill-opacity':parseFloat(item.attr('fill-opacity'))-.5,'x':parseFloat(item.attr('x'))-2,'y':parseFloat(item.attr('y'))-2,'width':parseFloat(item.attr('width'))+4,'height':parseFloat(item.attr('height'))+4})
+		}}catch(err){}  
+		try{if(ev.target.nodeName=='line' && ev.target.attributes.class.value=='callout'){
+			item.attr({'stroke-width':parseFloat(item.attr('stroke-width'))+2,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))-.5})
+		}}catch(err){}  
+		try{if(ev.target.nodeName=='text'){
+			item.attr({'font-size':parseFloat(item.attr('font-size'))+2+'px'})
+		}}catch(err){} 
+		try{if(ev.target.nodeName=='tspan'){
+			item=item.parent()
+			item.attr({'font-size':parseFloat(item.attr('font-size'))+2+'px'})
+		}}catch(err){} 
+		try{if(ev.target.className.baseVal=='dataelement'){
+			coords=item.getBBox()
+			highlighttext=grapharea.text(coords.x+coords.width/2,coords.y+coords.height/2,item.attr('data_label')).attr({'font-family':'Lato, Arial, sans-serif','font-size':16,'text-anchor':'start','fill':'black','font-weight':400,cursor:'pointer'})
+		}}catch(err){}
+	}
+
 }
 
 function unhighlight_element(ev) {
 	item=Snap(ev.target)
-	try{
-		try{if(ev.target.nodeName=='path'){
-			item.attr({'stroke-width':parseFloat(item.attr('stroke-width'))-3,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))+.5})
-		}}catch(err){} 
-		try{if(ev.target.nodeName=='circle'){
-			item.attr({'r':parseFloat(item.attr('r'))-2,'stroke-width':parseFloat(item.attr('stroke-width'))-1,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))+.5})
-		}}catch(err){} 
-		try{if(ev.target.nodeName=='line' && ev.target.attributes.ident.value=='key'){
-			item.attr({'stroke-width':parseFloat(item.attr('stroke-width'))-2,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))+.5})
-		}}catch(err){} 
-		try{if(ev.target.nodeName=='rect' && ev.target.attributes.ident.value=='key' && ev.target.attributes.ident2.value!='floatkey'){
-			item.attr({'stroke-opacity':parseFloat(item.attr('stroke-opacity'))+.5,'fill-opacity':parseFloat(item.attr('fill-opacity'))+.5,'x':parseFloat(item.attr('x'))+2,'y':parseFloat(item.attr('y'))+2,'width':parseFloat(item.attr('width'))-4,'height':parseFloat(item.attr('height'))-4})
-		}}catch(err){} 
-		try{if(ev.target.nodeName=='rect' && ev.target.attributes.class.value=='dataelement'){
-			item.attr({'stroke-opacity':parseFloat(item.attr('stroke-opacity'))+.5,'fill-opacity':parseFloat(item.attr('fill-opacity'))+.5,'x':parseFloat(item.attr('x'))+2,'y':parseFloat(item.attr('y'))+2,'width':parseFloat(item.attr('width'))-4,'height':parseFloat(item.attr('height'))-4})
-		}}catch(err){} 
-		try{if(ev.target.nodeName=='line' && ev.target.attributes.class.value=='callout'){
-			item.attr({'stroke-width':parseFloat(item.attr('stroke-width'))-2,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))+.5})
-		}}catch(err){} 
-		try{if(ev.target.nodeName=='text'){
-			item.attr({'font-size':parseFloat(item.attr('font-size')),'opacity':parseFloat(item.attr('opacity'))+.5})
-		}}catch(err){}
-		try{if(ev.target.nodeName=='tspan'){
-			item=item.parent()
-			item.attr({'font-size':parseFloat(item.attr('font-size')),'opacity':parseFloat(item.attr('opacity'))+.5})
-		}}catch(err){}
-		try{if(ev.target.className.baseVal=='dataelement'){
-			highlighttext.remove()
-		}}catch(err){}
-	} catch(err){}
+	if(selected==0){
+		try{
+			try{if(ev.target.nodeName=='path'){
+				item.attr({'stroke-width':parseFloat(item.attr('stroke-width'))-3,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))+.5})
+			}}catch(err){} 
+			try{if(ev.target.nodeName=='circle'){
+				item.attr({'r':parseFloat(item.attr('r'))-2,'stroke-width':parseFloat(item.attr('stroke-width'))-1,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))+.5})
+			}}catch(err){} 
+			try{if(ev.target.nodeName=='line' && ev.target.attributes.ident.value=='key'){
+				item.attr({'stroke-width':parseFloat(item.attr('stroke-width'))-2,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))+.5})
+			}}catch(err){} 
+			try{if(ev.target.nodeName=='rect' && ev.target.attributes.ident.value=='key' && ev.target.attributes.ident2.value!='floatkey'){
+				item.attr({'stroke-opacity':parseFloat(item.attr('stroke-opacity'))+.5,'fill-opacity':parseFloat(item.attr('fill-opacity'))+.5,'x':parseFloat(item.attr('x'))+2,'y':parseFloat(item.attr('y'))+2,'width':parseFloat(item.attr('width'))-4,'height':parseFloat(item.attr('height'))-4})
+			}}catch(err){} 
+			try{if(ev.target.nodeName=='rect' && ev.target.attributes.class.value=='dataelement'){
+				item.attr({'stroke-opacity':parseFloat(item.attr('stroke-opacity'))+.5,'fill-opacity':parseFloat(item.attr('fill-opacity'))+.5,'x':parseFloat(item.attr('x'))+2,'y':parseFloat(item.attr('y'))+2,'width':parseFloat(item.attr('width'))-4,'height':parseFloat(item.attr('height'))-4})
+			}}catch(err){} 
+			try{if(ev.target.nodeName=='line' && ev.target.attributes.class.value=='callout'){
+				item.attr({'stroke-width':parseFloat(item.attr('stroke-width'))-2,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))+.5})
+			}}catch(err){} 
+			try{if(ev.target.nodeName=='text'){
+				item.attr({'font-size':parseFloat(item.attr('font-size'))-2+'px'})
+			}}catch(err){}
+			try{if(ev.target.nodeName=='tspan'){
+				item=item.parent()
+				item.attr({'font-size':parseFloat(item.attr('font-size'))-2+'px'})
+			}}catch(err){}
+			try{if(ev.target.className.baseVal=='dataelement'){
+				highlighttext.remove()
+			}}catch(err){}
+		} catch(err){}
+	}
 }
 
 function hidedata() {

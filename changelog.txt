@@ -1,5 +1,17 @@
 changelog.txt
 
+V1.1
+  - Really esoteric text bug that was putting spaces after things where it shouldn't have.
+
+  - When you save, selected text will be unselected, which should prevent situations where you can't un-select text after loading a graph.
+
+  - You can now make small changes to your data without resetting all the variable menus
+
+  - fix to opacity on selected text
+
+  - 
+
+
 V1.05
   - various multi-line text fixes
 
