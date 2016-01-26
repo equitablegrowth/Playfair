@@ -1977,25 +1977,28 @@ function edit_text(ev) {
 		if (typeof selected_text.attr('text')=='object'){
 			tlocation=[selected_text.attr('text')[selected_text.attr('text').length-1].length-1,selected_text.attr('text').length-1]
 		} else{
-			tlocation=[selected_text.attr('text').length-1]
+			tlocation=[selected_text.attr('text').length-1,0]
 		}
 
 		console.log(tlocation)
-		cursor=grapharea.rect(0,0,2,parseInt(selected_text.attr('font-size'))).attr({fill:'white'})
-		blink()
-		
 
-		if (typeof selected_text.attr('text')=='object'){
-			console.log(parseFloat(selected_text.attr('y'))+(1.1*tlocation[1]*parseFloat(selected_text.attr('font-size'))))
-			var temp=grapharea.text(selected_text.attr('x'),parseFloat(selected_text.attr('y'))+(1.1*tlocation[1]*parseFloat(selected_text.attr('font-size'))),selected_text.attr('text')[tlocation[1]]).attr(selected_text.attr())
-			coords=temp.getBBox()
-			cursor.attr({x:coords.x2,y:coords.y})
-			temp.remove()
-		} else{
-			coords=selected_text.getBBox()
-			console.log(coords)
-			cursor.attr({x:coords.x2,y:coords.y})
-		}
+		console.log(tlocation)
+		cursor=grapharea.rect(0,0,2,parseInt(selected_text.attr('font-size'))).attr({fill:'white',ident:'cursor'})
+		blink()
+
+		position_cursor(selected_text)
+
+		// if (typeof selected_text.attr('text')=='object'){
+		// 	var temp=grapharea.text(selected_text.attr('x'),parseFloat(selected_text.attr('y'))+(1.1*tlocation[1]*parseFloat(selected_text.attr('font-size'))),selected_text.attr('text')[tlocation[1]]).attr(selected_text.attr())
+		// 	temp.attr({y:parseFloat(selected_text.attr('y'))+(1.1*tlocation[1]*parseFloat(selected_text.attr('font-size')))})
+		// 	coords=temp.getBBox()
+		// 	cursor.attr({x:coords.x2,y:coords.y})
+		// 	temp.remove()
+		// } else{
+		// 	coords=selected_text.getBBox()
+		// 	console.log(coords)
+		// 	cursor.attr({x:coords.x2,y:coords.y})
+		// }
 
 		// if text is rotated, un-rotate it
 		trans=selected_text.attr('transform')
@@ -2021,20 +2024,30 @@ function edit_text(ev) {
 		// listener for drag events
 		var moveFunc=function(dx,dy){
 			dragging=1
+
 			this.attr({
 				x:+x+dx,
 				y:+y+dy
 			})
 			this.selectAll("tspan:not(:first-child)").attr({x:+x+dx})
 
+			coords=cursor.getBBox()
+			cursor.attr({
+				x:coords.x-prevx+dx,
+				y:coords.y-prevy+dy			
+			})
+
 			box=this.getBBox()
 			high_box.attr({
 				x:box.x-3,
 				y:box.y-3
 			})
+
+			prevx=dx
+			prevy=dy
 		}
 
-        selected_text.drag(moveFunc,function(){x=this.attr('x');y=this.attr('y')});
+        selected_text.drag(moveFunc,function(){x=this.attr('x');y=this.attr('y');prevx=0;prevy=0});
 
 		// set string equal to current text
 		string=selected_text.attr('text')
@@ -2062,12 +2075,35 @@ function center_baseline(text) {
 	text.attr({y:coords.y-(coords.height/2)})
 }
 
+function position_cursor(selected_text){
+	console.log(tlocation)
+	console.log(selected_text.attr('text'))
+	if (typeof selected_text.attr('text')=='object'){
+		var temp=grapharea.text(0,0,selected_text.attr('text')[tlocation[1]].substring(0,tlocation[0]+1)).attr(selected_text.attr())
+		temp.attr({y:parseFloat(selected_text.attr('y'))+(1.1*tlocation[1]*parseFloat(selected_text.attr('font-size')))})
+		coords=temp.getBBox()
+		cursor.attr({x:coords.x2,y:coords.y})
+		temp.remove()
+	} else{
+		coords=selected_text.getBBox()
+		console.log(coords)
+		cursor.attr({x:coords.x2,y:coords.y})
+
+
+		var temp=grapharea.text(0,0,selected_text.attr('text').substring(0,tlocation[0]+1)).attr(selected_text.attr())
+		temp.attr({y:parseFloat(selected_text.attr('y'))+(1.1*tlocation[1]*parseFloat(selected_text.attr('font-size')))})
+		coords=temp.getBBox()
+		cursor.attr({x:coords.x2,y:coords.y})
+		temp.remove()
+	}
+}
+
 // listener for arrow key presses, space, backspace, bold/italic, and control-sequences
 var down_listener=function(ev) {
 	coords=selected_text.getBBox()
 	high_coords=high_box.getBBox()
 	var keycode = (ev.keyCode)
-	// console.log('down',keycode)
+	// console.log('down',keycode,ev.shiftKey)
 	// up and down movement and font sizing
 	if(keycode==40 && ev.shiftKey==false){selected_text.attr({y:coords.y+1});high_box.attr({y:high_coords.y+1})}
 	if(keycode==38 && ev.shiftKey==false){selected_text.attr({y:parseFloat(coords.y)-1});high_box.attr({y:high_coords.y-1})}
@@ -2088,7 +2124,7 @@ var down_listener=function(ev) {
 
 	// left and right movement - more complicated because you have to check the text-anchor for movement. shift+ control opacity
 	if(keycode==39 || keycode==37){
-		if(ev.shiftKey==false){
+		if(ev.shiftKey==true){
 			if((selected_text.node.attributes.style.value).indexOf('middle')!=-1){x=coords.cx}
 			else if((selected_text.node.attributes.style.value).indexOf('start')!=-1){x=coords.x}
 			else if((selected_text.node.attributes.style.value).indexOf('end')!=-1){x=coords.x2}
@@ -2106,15 +2142,31 @@ var down_listener=function(ev) {
 			}
 		}
 
-		if(ev.shiftKey==true){
-			opacity=parseFloat(selected_text.attr('opacity'))
+		// move cursor
+		if(ev.shiftKey==false){
+			// opacity=parseFloat(selected_text.attr('opacity'))
 
 			if(keycode==39){
-				selected_text.attr({opacity:opacity+.1})
+				if(tlocation[0]==string[tlocation[1]].length-1){
+					tlocation[1]=tlocation[1]+1
+					if(tlocation[1]>string.length-1){tlocation[1]=string.length-1}
+					tlocation[0]=0
+				} else{
+					tlocation[0]=tlocation[0]+1
+				}
+				// selected_text.attr({opacity:opacity+.1})
 			}
 			if(keycode==37){
-				selected_text.attr({opacity:opacity-.1})
+				if(tlocation[0]==0){
+					tlocation[1]=tlocation[1]-1
+					if(tlocation[1]<0){tlocation[1]=0}
+					tlocation[0]=string[tlocation[1]].length-1
+				} else{
+					tlocation[0]=tlocation[0]-1
+				}
+				// selected_text.attr({opacity:opacity-.1})
 			}
+			position_cursor(selected_text)
 		}
 	}
 
@@ -2130,6 +2182,7 @@ var down_listener=function(ev) {
 				string=string+String.fromCharCode(keycode)
 				selected_text.attr({text:string})
 			}
+			tlocation[0]=tlocation[0]+1
 		}
 		if(keycode==8){
 			// Handle backspace
@@ -2148,6 +2201,24 @@ var down_listener=function(ev) {
 			} else {
 				string=string.slice(0,string.length-1)
 				selected_text.attr({text:string})
+			}
+
+			console.log(tlocation)
+			if (typeof string=='object'){
+				if(tlocation[0]==0){
+					console.log('zero')
+					tlocation[1]=tlocation[1]-1
+					string.pop()
+					tlocation[0]=string[tlocation[1]].length-1
+				} else{
+					tlocation[0]=tlocation[0]-1
+				}
+			} else{
+				if(tlocation[0]==0){
+
+				} else {
+					tlocation[0]=tlocation[0]-1
+				}
 			}
 		}
 
@@ -2181,6 +2252,7 @@ var down_listener=function(ev) {
 
 	high_coords=high_box.getBBox()
 	coords=selected_text.getBBox()
+	position_cursor(selected_text)
 }
 
 // listener for text
@@ -2190,14 +2262,24 @@ var press_listener=function(ev) {
 	// handle carriage returns
 	if(keycode==13){
 		if (typeof string=='object'){
-			string.push('')
-			selected_text.attr({text:string})
-			selected_text.selectAll("tspan:not(:first-child)").attr({x:selected_text.attr('x'),dy:1.1*parseFloat(selected_text.attr('font-size'))})
+			console.log('check')
+			console.log(string[string.length-1])
+			if(string[string.length-1].length>0){
+				string.push('')
+				selected_text.attr({text:string})
+				selected_text.selectAll("tspan:not(:first-child)").attr({x:selected_text.attr('x'),dy:1.1*parseFloat(selected_text.attr('font-size'))})
+				tlocation[1]=tlocation[1]+1
+				tlocation[0]=-1
+				console.log(string.length)
+			}
 		} else {
 			string=[string]
 			string.push('')
 			selected_text.attr({text:string})
 			selected_text.selectAll("tspan:not(:first-child)").attr({x:selected_text.attr('x'),dy:1.1*parseFloat(selected_text.attr('font-size'))})
+			tlocation[1]=tlocation[1]+1
+			tlocation[0]=-1
+			console.log(string.length)
 		}
 	} else{
 		// everything else
@@ -2209,6 +2291,7 @@ var press_listener=function(ev) {
 			coords=selected_text.getBBox()
 			high_box.attr({x:coords.x-3,y:coords.y-3,width:coords.width+6,height:coords.height+6})
 			high_coords=high_box.getBBox()
+			tlocation[0]=tlocation[0]+1
 		} else {
 			string=string+String.fromCharCode(keycode)
 			selected_text.attr({text:string})
@@ -2216,8 +2299,10 @@ var press_listener=function(ev) {
 			coords=selected_text.getBBox()
 			high_box.attr({x:coords.x-3,y:coords.y-3,width:coords.width+6,height:coords.height+6})
 			high_coords=high_box.getBBox()
+			tlocation[0]=tlocation[0]+1
 		}
 	}
+	position_cursor(selected_text)
 }
 
 
