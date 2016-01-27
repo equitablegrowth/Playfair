@@ -1375,7 +1375,7 @@ function placeholder(){
 	var x1=grapharea.line(0,0,width+5,height).attr({'stroke':'lightgray','stroke-width':2.75,'stroke-dasharray':'10,10'})
 	var x2=grapharea.line(0,height,width+5,0).attr({'stroke':'lightgray','stroke-width':2.75,'stroke-dasharray':'10,10'})
 	init_text=grapharea.text(width/2,height/2,'graphing area').attr({'font-family':'Lato, Arial, sans-serif','font-size':50,'text-anchor':'middle','fill':'gray','font-weight':700,'dominant-baseline':'text-before-edge',cursor:'pointer'})
-	// init_text.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
+	init_text.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 	center_baseline(init_text)
 }
 
@@ -1983,9 +1983,9 @@ function edit_text(ev) {
 
 		// place initial cursor
 		if (typeof selected_text.attr('text')=='object'){
-			tlocation=[selected_text.attr('text')[selected_text.attr('text').length-1].length-1,selected_text.attr('text').length-1]
+			tlocation=[selected_text.attr('text')[selected_text.attr('text').length-1].length,selected_text.attr('text').length-1]
 		} else{
-			tlocation=[selected_text.attr('text').length-1,0]
+			tlocation=[selected_text.attr('text').length,0]
 		}
 
 		cursor=grapharea.rect(0,0,1,parseInt(selected_text.attr('font-size'))).attr({fill:'white',ident:'cursor'})
@@ -2082,26 +2082,36 @@ function center_baseline(text) {
 
 function position_cursor(selected_text){
 	cursor.attr({height:selected_text.attr('font-size')})
+	console.log('tlocation: ',tlocation,'string: ',selected_text.attr('text'))
+	master_coords=selected_text.getBBox()
 
 	if (typeof selected_text.attr('text')=='object'){
 		lt=selected_text.attr('text')[tlocation[1]]
-		console.log(lt)
 		var temp=grapharea.text(0,0,lt).attr(selected_text.attr())
 		temp.attr({y:parseFloat(selected_text.attr('y'))+(1.1*tlocation[1]*parseFloat(selected_text.attr('font-size')))})
+		temp.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 
 		// getting the correct x is a bit tricky because all possible text-anchors have to be accounted for
 		// so place temp and get the x2 of the end of the full string. Then place temp2 and temp3, left-aligned
 		// strings, one the full string, one the substring. The difference in x-coordinate between these is
 		// the x-offset.
 		var temp2=grapharea.text(0,0,lt).attr(selected_text.attr())
-		temp2.attr({'text-anchor':'start'})
+		temp2.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
+		temp2.attr({'text-anchor':'start',x:0})
 		coords2=temp2.getBBox()
-		var temp3=grapharea.text(0,0,lt.substring(0,tlocation[0]+1)).attr(selected_text.attr())
-		temp3.attr({'text-anchor':'start'})
+		var temp3=grapharea.text(0,0,lt.substring(0,tlocation[0])).attr(selected_text.attr())
+		temp3.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
+		temp3.attr({'text-anchor':'start',x:0})
 		coords3=temp3.getBBox()
 
 		coords=temp.getBBox()
 		cursor.attr({x:coords.x2-(coords2.x2-coords3.x2),y:coords.y})
+
+		if(tlocation[0]==0){
+			cursor.attr({x:coords.x2-coords2.x2,y:coords.y})
+		} else {
+			cursor.attr({x:coords.x2-(coords2.x2-coords3.x2),y:coords.y})
+		}
 
 		temp.remove()
 		temp2.remove()
@@ -2109,17 +2119,22 @@ function position_cursor(selected_text){
 	} else{
 		lt=selected_text.attr('text')
 		var temp=grapharea.text(0,0,lt).attr(selected_text.attr())
+		temp.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 		temp.attr({y:parseFloat(selected_text.attr('y'))+(1.1*tlocation[1]*parseFloat(selected_text.attr('font-size')))})
 
 		var temp2=grapharea.text(0,0,lt).attr(selected_text.attr())
+		temp2.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 		temp2.attr({'text-anchor':'start'})
 		coords2=temp2.getBBox()
-		var temp3=grapharea.text(0,0,lt.substring(0,tlocation[0]+1)).attr(selected_text.attr())
+		var temp3=grapharea.text(0,0,lt.substring(0,tlocation[0])).attr(selected_text.attr())
+		temp3.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 		temp3.attr({'text-anchor':'start'})
 		coords3=temp3.getBBox()
 
 		coords=temp.getBBox()
 		cursor.attr({x:coords.x2-(coords2.x2-coords3.x2),y:coords.y})
+
+		if(tlocation[0]==0){cursor.attr({x:master_coords.x})}
 
 		temp.remove()
 		temp2.remove()
@@ -2178,27 +2193,42 @@ var down_listener=function(ev) {
 			// opacity=parseFloat(selected_text.attr('opacity'))
 
 			if(keycode==39){
-				cursor.attr({opacity:1})
-				if(tlocation[0]==string[tlocation[1]].length-1){
-					if (typeof string=='object'){
-						if(tlocation[1]<string.length){
-							tlocation[1]=tlocation[1]+1
-							if(tlocation[1]>string.length-1){tlocation[1]=string.length-1}
-							tlocation[0]=0
+				if (typeof string=='object'){
+					cursor.attr({opacity:1})
+					if(tlocation[0]==string[tlocation[1]].length){
+						if (typeof string=='object'){
+							if(tlocation[1]<string.length-1){
+								tlocation[1]=tlocation[1]+1
+								if(tlocation[1]>string.length-1){tlocation[1]=string.length-1}
+								tlocation[0]=0
+							}
+						} else{
+							// tlocation[0]=tlocation[0]+1
 						}
+					} else{
+						tlocation[0]=tlocation[0]+1
 					}
 				} else{
+					cursor.attr({opacity:1})
 					tlocation[0]=tlocation[0]+1
 				}
 				// selected_text.attr({opacity:opacity+.1})
 			}
 			if(keycode==37){
-				cursor.attr({opacity:1})
-				if(tlocation[0]==0){
-					tlocation[1]=tlocation[1]-1
-					if(tlocation[1]<0){tlocation[1]=0}
-					tlocation[0]=string[tlocation[1]].length-1
-				} else{
+				if (typeof string=='object'){
+					cursor.attr({opacity:1})
+					if(tlocation[0]==0){
+						tlocation[1]=tlocation[1]-1
+						tlocation[0]=string[tlocation[1]].length
+						if(tlocation[1]<0){
+							tlocation[1]=0
+							tlocation[0]=0
+						}
+					} else{
+						tlocation[0]=tlocation[0]-1
+					}
+				} else {
+					cursor.attr({opacity:1})
 					tlocation[0]=tlocation[0]-1
 				}
 				// selected_text.attr({opacity:opacity-.1})
@@ -2212,36 +2242,36 @@ var down_listener=function(ev) {
 		if(keycode==32){
 			// Handle spacebar
 			if (typeof string=='object'){
-				string[tlocation[1]]=string[tlocation[1]].slice(0,tlocation[0])+String.fromCharCode(keycode)+string[tlocation[1]].slice(tlocation[0],tlocation[1].length-1)
-				// string[string.length-1]+String.fromCharCode(keycode)
+				string[tlocation[1]]=string[tlocation[1]].slice(0,tlocation[0])+String.fromCharCode(keycode)+string[tlocation[1]].slice(tlocation[0],tlocation[1].length)
 				selected_text.attr({text:string})
 				selected_text.selectAll("tspan:not(:first-child)").attr({x:selected_text.attr('x'),dy:1.1*parseFloat(selected_text.attr('font-size'))})
 			} else{
-				string=string+String.fromCharCode(keycode)
+				string=string.slice(0,tlocation[0])+String.fromCharCode(keycode)+string.slice(tlocation[0],string.length)
 				selected_text.attr({text:string})
 			}
 			tlocation[0]=tlocation[0]+1
 		}
 		if(keycode==8){
 			// Handle backspace
-			console.log(string)
 			if (typeof string=='object'){
-				if(string[tlocation[1]].length>0){
+				if(tlocation[0]>0){
 					t=string[tlocation[1]]
-					string[tlocation[1]]=t.slice(0,tlocation[0])+t.slice(tlocation[0]+1,t.length)
+					string[tlocation[1]]=t.slice(0,tlocation[0]-1)+t.slice(tlocation[0],t.length)
 					tlocation[0]=tlocation[0]-1
-				} else {
+				} else if (tlocation[0]==0) {
+					tlocation[0]=string[tlocation[1]-1].length
+					string[tlocation[1]-1]=string[tlocation[1]-1]+string[tlocation[1]]
 					string.splice(tlocation[1],1)
 					tlocation[1]=tlocation[1]-1
-					tlocation[0]=string[tlocation[1]].length
 				}
 
 				selected_text.attr({text:string})
 				selected_text.selectAll("tspan:not(:first-child)").attr({x:selected_text.attr('x'),dy:1.1*parseFloat(selected_text.attr('font-size'))})
 				
 			} else {
-				string=string.slice(0,tlocation[0])+string.slice(tlocation[0]+1,string.length)
+				string=string.slice(0,tlocation[0]-1)+string.slice(tlocation[0],string.length)
 				selected_text.attr({text:string})
+				tlocation[0]=tlocation[0]-1
 			}
 
 			// if (typeof string=='object'){
@@ -2265,16 +2295,16 @@ var down_listener=function(ev) {
 		if(string.length>0){
 			coords=selected_text.getBBox()
 			yheight=string.length*parseFloat(selected_text.attr('font-size'))*1.1
-			console.log(string,string.length)
 			if (typeof string=='object'){
 				high_box.attr({x:coords.x-3,y:coords.y-3,width:coords.width+6,height:yheight+6})
 			} else {
-				console.log('check')
 				high_box.attr({x:coords.x-3,y:coords.y-3,width:coords.width+6,height:coords.height+6})
 			}
 
 			high_coords=high_box.getBBox()
 		}
+
+		if(tlocation[0]<0){tlocation[0]=0}
 	}
 
 	// Bold/italic handling (control+B, control+I)
@@ -2329,7 +2359,7 @@ var press_listener=function(ev) {
 		// everything else
 		if(typeof string=='object'){
 			// string[string.length-1]=string[string.length-1]+String.fromCharCode(keycode)
-			string[tlocation[1]]=string[tlocation[1]].slice(0,tlocation[0]+1)+String.fromCharCode(keycode)+string[tlocation[1]].slice(tlocation[0]+1,tlocation[1].length)
+			string[tlocation[1]]=string[tlocation[1]].slice(0,tlocation[0])+String.fromCharCode(keycode)+string[tlocation[1]].slice(tlocation[0],tlocation[1].length)
 			selected_text.attr({text:string})
 			selected_text.selectAll("tspan:not(:first-child)").attr({x:selected_text.attr('x'),dy:1.1*parseFloat(selected_text.attr('font-size'))})
 
@@ -2338,7 +2368,7 @@ var press_listener=function(ev) {
 			high_coords=high_box.getBBox()
 			tlocation[0]=tlocation[0]+1
 		} else {
-			string=string.slice(0,tlocation[0]+1)+String.fromCharCode(keycode)+string.slice(tlocation[0]+1,string.length)
+			string=string.slice(0,tlocation[0])+String.fromCharCode(keycode)+string.slice(tlocation[0],string.length)
 			selected_text.attr({text:string})
 
 			coords=selected_text.getBBox()
@@ -2525,6 +2555,7 @@ function addtext(target) {
 	var svgy=document.getElementById("grapharea").offsetTop
 
 	var text=grapharea.text(target.pageX-svgx,target.pageY-svgy,'Text Annotation').attr({'font-family':'Lato, Arial, sans-serif','font-size':16,'text-anchor':'start','fill':'black','font-weight':400,'dominant-baseline':'text-before-edge',cursor:'pointer'})
+	text.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 }
 
 function change_color(target,color) {
@@ -2581,25 +2612,31 @@ function labeldata(target) {
 		if(item.attr('orient')=='vertical'){
 			if(item.attr('data_label')<0){
 				var datalabel=grapharea.text(coords.x+coords.width/2,coords.y2,item.attr('data_label')).attr({ident:'foot','font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'middle'})
+				datalabel.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 			} else {
 				var datalabel=grapharea.text(coords.x+coords.width/2,coords.y-parseInt(chartobject.datasize)*1.15,item.attr('data_label')).attr({ident:'foot','font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'middle'})
+				datalabel.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 			}
 		}
 		if(item.attr('orient')=='horizontal'){
 			if(item.attr('data_label')<0){
 				var datalabel=grapharea.text(coords.x-5,coords.y+coords.height/2-parseInt(chartobject.datasize),item.attr('data_label')).attr({ident:'foot','font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'start'})
+				datalabel.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 			} else {
 				var datalabel=grapharea.text(coords.x+coords.width+5,coords.y+coords.height/2-parseInt(chartobject.datasize),item.attr('data_label')).attr({ident:'foot','font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'start'})
+				datalabel.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 			}
 		}
 	} else if (item.node.nodeName=='path'){
 		coords=item.getBBox()
 		y=parseFloat(item.realPath.split(' ')[item.realPath.split(' ').length-1])
 		var datalabel=grapharea.text(coords.x2+5,y-parseInt(chartobject.datasize)+3,item.attr('data_label')).attr({ident:'foot','font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'start'})
+		datalabel.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 	}
 	else {
 		coords=item.getBBox()
 		var datalabel=grapharea.text(coords.x+coords.width/2,coords.y-parseInt(chartobject.datasize)-3,item.attr('data_label')).attr({ident:'foot','font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'middle'})
+		datalabel.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 	}
 }
 

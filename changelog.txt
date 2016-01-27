@@ -12,7 +12,9 @@ V1.1
   - there is now a text cursor that you can move back and forth with the arrow keys. Everything seems to be working pretty well with it but there are probably bugs, please let me know.
 
   - slight change to vertical tab style
-  
+
+  - fixed an issue with text nudging on certain text elements
+
 
 V1.05
   - various multi-line text fixes
