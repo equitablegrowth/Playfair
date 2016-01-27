@@ -127,11 +127,11 @@
 	.sidebar {margin:0;padding:0;border-right:1px solid black;position:relative;}
 	.v-nav{height:auto;margin:0;}
 	.v-nav>ul{float:left;width:130px;display:block;position:relative;top:0;border:0px solid #aaa;border-right-width:0;margin:0;padding:0;padding-top:4px;}
-	.v-nav>ul>li {border:1px solid white;text-align:center;font-size:.8em;font-family:'Open Sans';width:130px;list-style-type:none;display:block;position:relative;margin:0;padding:7px;background-color:#dddddd;cursor:pointer;border-right:4px solid white;border-bottom-right-radius:25px;border-top-right-radius:25px;}
-	.v-nav>ul>li:hover {background-color:#b7dfd1;border-right:4px solid #67c2a5;border-bottom-right-radius:25px;border-top-right-radius:25px;}
-	.v-nav>ul>li.current{position:relative;background-color:#b7dfd1;margin:0;border-right:4px solid #67c2a5;border-bottom-right-radius:25px;border-top-right-radius:25px;}
-	.v-nav>ul>li.last{border-bottom:3px solid black;margin:0}
-	.v-nav>div.tab-content{margin-left:145px;border:0px solid #aaa;position:relative;z-index:9;display:none;padding-left:20px;padding-top:0px;padding-bottom:16px;padding-right:0px;}
+	.v-nav>ul>li {border:1px solid white;text-align:center;font-size:.8em;font-family:'Open Sans';width:130px;list-style-type:none;display:block;position:relative;margin:0;padding:7px;background-color:#eeeeee;cursor:pointer;border-right:1px solid white;border-radius:3px;width:144px;margin-bottom:1px;}
+	.v-nav>ul>li:hover {position:relative;background-color:#e2f2ed;margin:0;border-right:4px solid #67c2a5;border-bottom-right-radius:25px;border-top-right-radius:25px;border:1px solid white;border-radius:3px;width:144px;border-right:1px solid white;border-top-right-radius:0px;border-bottom-right-radius:0px;margin-bottom:1px}
+	.v-nav>ul>li.current{padding:7px;padding-left:5px;z-index:2;position:relative;background-color:#b7dfd1;margin:0;border-right:4px solid #67c2a5;border-bottom-right-radius:25px;border-top-right-radius:25px;border:1px solid #dddddd;border-radius:3px;width:146px;border-right:1px solid white;border-top-right-radius:0px;border-bottom-right-radius:0px;margin-bottom:1px}
+	/*.v-nav>ul>li.last{border-bottom:3px solid black;margin:0}*/
+	.v-nav>div.tab-content{margin-left:145px;border:0px solid #aaa;position:relative;z-index:1;display:none;padding-left:20px;padding-top:10px;padding-bottom:16px;padding-right:0px;border:1px solid #dddddd;margin-bottom:20px;border-radius:3px;}
 
 	.input-group{margin-top:3px;margin-bottom:3px;}
 	.element_group{margin-bottom:5px;}
@@ -365,7 +365,7 @@
 
 <!-- Header -->
 <h1 class='text-center'>playfair</h1>
-<h4 class='text-center'><sup style='visibility: hidden'>v1.05, <a href='changelog.txt'>changelog</a></sup>make equitable graphs<sup>v1.05, <a href='changelog.txt'>changelog</a></sup></h4>
+<h4 class='text-center'><sup style='visibility: hidden'>v1.1, <a href='changelog.txt'>changelog</a></sup>make equitable graphs<sup>v1.1, <a href='changelog.txt'>changelog</a></sup></h4>
 
 	<div class='col-md-2'></div>
 	<div class='col-xs-8'>
@@ -1270,7 +1270,7 @@
 <div class='text-center' id='graphdiv'>
 
 <div style='max-width:745;margin-left:auto;margin-right:auto' id='constraint'>
-<svg id='grapharea' height='450px' width='750px'>
+<svg id='grapharea' height='450px' width='750px' xml:space="preserve">
 	<defs>
 	  <style>
 		@font-face {
@@ -1347,6 +1347,14 @@ var eglogo_high="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAANQAAABCCAIAAACgg
 placeholder()
 setInterval(blink,1000)
 
+var insertListener = function(event){
+	if (event.animationName == "nodeInserted") {
+		// This is the debug for knowing our listener worked!
+		// event.target is the new node!
+		console.warn("Another node has been inserted! ", event, event.target);
+	}
+}
+
 // set up cursor blink
 function blink(){
 	try{
@@ -1366,7 +1374,8 @@ function placeholder(){
 	var bounding_box=grapharea.rect(0,0,width+5,height).attr({class:'background',fill:'none','stroke':'lightgray','stroke-width':5.5,'stroke-dasharray':'10,10'})
 	var x1=grapharea.line(0,0,width+5,height).attr({'stroke':'lightgray','stroke-width':2.75,'stroke-dasharray':'10,10'})
 	var x2=grapharea.line(0,height,width+5,0).attr({'stroke':'lightgray','stroke-width':2.75,'stroke-dasharray':'10,10'})
-	var init_text=grapharea.text(width/2,height/2,'graphing area').attr({'font-family':'Lato, Arial, sans-serif','font-size':50,'text-anchor':'middle','fill':'gray','font-weight':700,'dominant-baseline':'text-before-edge',cursor:'pointer'})
+	init_text=grapharea.text(width/2,height/2,'graphing area').attr({'font-family':'Lato, Arial, sans-serif','font-size':50,'text-anchor':'middle','fill':'gray','font-weight':700,'dominant-baseline':'text-before-edge',cursor:'pointer'})
+	// init_text.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 	center_baseline(init_text)
 }
 
@@ -1973,16 +1982,12 @@ function edit_text(ev) {
 		selected=1
 
 		// place initial cursor
-		console.log(selected_text.attr('text'))
 		if (typeof selected_text.attr('text')=='object'){
 			tlocation=[selected_text.attr('text')[selected_text.attr('text').length-1].length-1,selected_text.attr('text').length-1]
 		} else{
 			tlocation=[selected_text.attr('text').length-1,0]
 		}
 
-		console.log(tlocation)
-
-		console.log(tlocation)
 		cursor=grapharea.rect(0,0,1,parseInt(selected_text.attr('font-size'))).attr({fill:'white',ident:'cursor'})
 		blink()
 
@@ -2076,11 +2081,7 @@ function center_baseline(text) {
 }
 
 function position_cursor(selected_text){
-
-	// 'text-anchor':'middle'
-
-	console.log(tlocation)
-	console.log(selected_text.attr('text'))
+	cursor.attr({height:selected_text.attr('font-size')})
 
 	if (typeof selected_text.attr('text')=='object'){
 		lt=selected_text.attr('text')[tlocation[1]]
@@ -2133,21 +2134,23 @@ var down_listener=function(ev) {
 	var keycode = (ev.keyCode)
 	// console.log('down',keycode,ev.shiftKey)
 	// up and down movement and font sizing
-	if(keycode==40 && ev.shiftKey==false){selected_text.attr({y:coords.y+1});high_box.attr({y:high_coords.y+1})}
-	if(keycode==38 && ev.shiftKey==false){selected_text.attr({y:parseFloat(coords.y)-1});high_box.attr({y:high_coords.y-1})}
-	if(keycode==40 && ev.shiftKey==true){
+	if(keycode==40 && ev.shiftKey==true){selected_text.attr({y:coords.y+1});high_box.attr({y:high_coords.y+1})}
+	if(keycode==38 && ev.shiftKey==true){selected_text.attr({y:parseFloat(coords.y)-1});high_box.attr({y:high_coords.y-1})}
+	if(keycode==40 && ev.shiftKey==false){
 		size=selected_text.attr('font-size')
 		selected_text.attr({'font-size':parseInt(size)-1});
 		selected_text.selectAll("tspan:not(:first-child)").attr({dy:1.1*parseFloat(selected_text.attr('font-size'))})
 		coords=selected_text.getBBox()
 		high_box.attr({y:coords.y-3,x:coords.x-3,width:coords.width+6,height:coords.height+6})
+		position_cursor(selected_text)
 	}
-	if(keycode==38 && ev.shiftKey==true){
+	if(keycode==38 && ev.shiftKey==false){
 		size=selected_text.attr('font-size')
 		selected_text.attr({'font-size':parseInt(size)+1});
 		selected_text.selectAll("tspan:not(:first-child)").attr({dy:1.1*parseFloat(selected_text.attr('font-size'))})
 		coords=selected_text.getBBox()
 		high_box.attr({y:coords.y-3,x:coords.x-3,width:coords.width+6,height:coords.height+6})
+		position_cursor(selected_text)
 	}
 
 	// left and right movement - more complicated because you have to check the text-anchor for movement. shift+ control opacity
@@ -2175,6 +2178,7 @@ var down_listener=function(ev) {
 			// opacity=parseFloat(selected_text.attr('opacity'))
 
 			if(keycode==39){
+				cursor.attr({opacity:1})
 				if(tlocation[0]==string[tlocation[1]].length-1){
 					if (typeof string=='object'){
 						if(tlocation[1]<string.length){
@@ -2189,6 +2193,7 @@ var down_listener=function(ev) {
 				// selected_text.attr({opacity:opacity+.1})
 			}
 			if(keycode==37){
+				cursor.attr({opacity:1})
 				if(tlocation[0]==0){
 					tlocation[1]=tlocation[1]-1
 					if(tlocation[1]<0){tlocation[1]=0}
@@ -2207,7 +2212,8 @@ var down_listener=function(ev) {
 		if(keycode==32){
 			// Handle spacebar
 			if (typeof string=='object'){
-				string[string.length-1]=string[string.length-1]+String.fromCharCode(keycode)
+				string[tlocation[1]]=string[tlocation[1]].slice(0,tlocation[0])+String.fromCharCode(keycode)+string[tlocation[1]].slice(tlocation[0],tlocation[1].length-1)
+				// string[string.length-1]+String.fromCharCode(keycode)
 				selected_text.attr({text:string})
 				selected_text.selectAll("tspan:not(:first-child)").attr({x:selected_text.attr('x'),dy:1.1*parseFloat(selected_text.attr('font-size'))})
 			} else{
@@ -2220,43 +2226,53 @@ var down_listener=function(ev) {
 			// Handle backspace
 			console.log(string)
 			if (typeof string=='object'){
-				if(string[string.length-1].length>0){
-
+				if(string[tlocation[1]].length>0){
+					t=string[tlocation[1]]
+					string[tlocation[1]]=t.slice(0,tlocation[0])+t.slice(tlocation[0]+1,t.length)
+					tlocation[0]=tlocation[0]-1
 				} else {
-					string=string.slice(0,string.length-1)
+					string.splice(tlocation[1],1)
+					tlocation[1]=tlocation[1]-1
+					tlocation[0]=string[tlocation[1]].length
 				}
 
-				string[string.length-1]=string[string.length-1].slice(0,string[string.length-1].length-1)
 				selected_text.attr({text:string})
 				selected_text.selectAll("tspan:not(:first-child)").attr({x:selected_text.attr('x'),dy:1.1*parseFloat(selected_text.attr('font-size'))})
 				
 			} else {
-				string=string.slice(0,string.length-1)
+				string=string.slice(0,tlocation[0])+string.slice(tlocation[0]+1,string.length)
 				selected_text.attr({text:string})
 			}
 
-			console.log(tlocation)
-			if (typeof string=='object'){
-				if(tlocation[0]==0){
-					console.log('zero')
-					tlocation[1]=tlocation[1]-1
-					string.pop()
-					tlocation[0]=string[tlocation[1]].length-1
-				} else{
-					tlocation[0]=tlocation[0]-1
-				}
-			} else{
-				if(tlocation[0]==0){
+			// if (typeof string=='object'){
+			// 	if(tlocation[0]==0){
+			// 		console.log('zero')
+			// 		tlocation[1]=tlocation[1]-1
+			// 		string.pop()
+			// 		tlocation[0]=string[tlocation[1]].length-1
+			// 	} else{
+			// 		tlocation[0]=tlocation[0]-1
+			// 	}
+			// } else{
+			// 	if(tlocation[0]==0){
 
-				} else {
-					tlocation[0]=tlocation[0]-1
-				}
-			}
+			// 	} else {
+			// 		tlocation[0]=tlocation[0]-1
+			// 	}
+			// }
 		}
 
 		if(string.length>0){
 			coords=selected_text.getBBox()
-			high_box.attr({x:coords.x-3,y:coords.y-3,width:coords.width+6,height:coords.height+6})
+			yheight=string.length*parseFloat(selected_text.attr('font-size'))*1.1
+			console.log(string,string.length)
+			if (typeof string=='object'){
+				high_box.attr({x:coords.x-3,y:coords.y-3,width:coords.width+6,height:yheight+6})
+			} else {
+				console.log('check')
+				high_box.attr({x:coords.x-3,y:coords.y-3,width:coords.width+6,height:coords.height+6})
+			}
+
 			high_coords=high_box.getBBox()
 		}
 	}
@@ -2294,15 +2310,12 @@ var press_listener=function(ev) {
 	// handle carriage returns
 	if(keycode==13){
 		if (typeof string=='object'){
-			console.log('check')
-			console.log(string[string.length-1])
 			if(string[string.length-1].length>0){
 				string.push('')
 				selected_text.attr({text:string})
 				selected_text.selectAll("tspan:not(:first-child)").attr({x:selected_text.attr('x'),dy:1.1*parseFloat(selected_text.attr('font-size'))})
 				tlocation[1]=tlocation[1]+1
 				tlocation[0]=-1
-				console.log(string.length)
 			}
 		} else {
 			string=[string]
@@ -2311,12 +2324,12 @@ var press_listener=function(ev) {
 			selected_text.selectAll("tspan:not(:first-child)").attr({x:selected_text.attr('x'),dy:1.1*parseFloat(selected_text.attr('font-size'))})
 			tlocation[1]=tlocation[1]+1
 			tlocation[0]=-1
-			console.log(string.length)
 		}
 	} else{
 		// everything else
 		if(typeof string=='object'){
-			string[string.length-1]=string[string.length-1]+String.fromCharCode(keycode)
+			// string[string.length-1]=string[string.length-1]+String.fromCharCode(keycode)
+			string[tlocation[1]]=string[tlocation[1]].slice(0,tlocation[0]+1)+String.fromCharCode(keycode)+string[tlocation[1]].slice(tlocation[0]+1,tlocation[1].length)
 			selected_text.attr({text:string})
 			selected_text.selectAll("tspan:not(:first-child)").attr({x:selected_text.attr('x'),dy:1.1*parseFloat(selected_text.attr('font-size'))})
 
@@ -2325,7 +2338,7 @@ var press_listener=function(ev) {
 			high_coords=high_box.getBBox()
 			tlocation[0]=tlocation[0]+1
 		} else {
-			string=string+String.fromCharCode(keycode)
+			string=string.slice(0,tlocation[0]+1)+String.fromCharCode(keycode)+string.slice(tlocation[0]+1,string.length)
 			selected_text.attr({text:string})
 
 			coords=selected_text.getBBox()
@@ -3058,7 +3071,6 @@ function load_populate(response) {
 
 	// the movefunc for draggable keys
 	var moveFuncfloat=function(dx,dy,posx,posy){
-		console.log('check')
 		key_elements=grapharea.selectAll('[ident="key"]')
 		for(var i=0;i<key_elements.length;i++){
 			coords=key_elements[i].getBBox()
