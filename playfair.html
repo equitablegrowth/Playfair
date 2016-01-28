@@ -43,8 +43,7 @@
 	svg text {-moz-user-select: none;-ms-user-select: none;-khtml-user-select: none;-webkit-user-select: none;-webkit-touch-callout: none}
 	text { -webkit-font-smoothing: subpixel-antialiased; }
 
-	#graphdiv{position:relative;}
-
+	.helpboxouter{position:relative;}
 	.toggle {margin-bottom:2px;margin-top:2px;}
 	.container {margin-top:20px;margin-bottom:70px;height:100%;}
 	.topel {margin-top:7px;}
@@ -134,7 +133,7 @@
 	.v-nav>ul>li:hover {position:relative;background-color:#e2f2ed;margin:0;border-right:4px solid #67c2a5;border-bottom-right-radius:25px;border-top-right-radius:25px;border:1px solid white;border-radius:3px;width:144px;border-right:1px solid white;border-top-right-radius:0px;border-bottom-right-radius:0px;margin-bottom:1px}
 	.v-nav>ul>li.current{padding:7px;padding-left:5px;z-index:2;position:relative;background-color:#b7dfd1;margin:0;border-right:4px solid #67c2a5;border-bottom-right-radius:25px;border-top-right-radius:25px;border:1px solid #dddddd;border-radius:3px;width:146px;border-right:1px solid white;border-top-right-radius:0px;border-bottom-right-radius:0px;margin-bottom:1px}
 	/*.v-nav>ul>li.last{border-bottom:3px solid black;margin:0}*/
-	.v-nav>div.tab-content{margin-left:145px;border:0px solid #aaa;position:relative;z-index:1;display:none;padding-left:20px;padding-top:10px;padding-bottom:16px;padding-right:0px;border:1px solid #dddddd;margin-bottom:20px;border-radius:3px;}
+	.v-nav>div.tab-content{margin-left:145px;border:0px solid #aaa;position:relative;z-index:1;display:none;padding-left:20px;padding-top:20px;padding-bottom:18px;padding-right:0px;border:1px solid #dddddd;margin-bottom:20px;border-radius:3px;}
 
 	.input-group{margin-top:3px;margin-bottom:3px;}
 	.element_group{margin-bottom:5px;}
@@ -1276,24 +1275,25 @@
 <br>
 
 <div class='text-center' id='graphdiv'>
-<div class='helpbox' id='help_general'>
-	<p><b>Hover</b> an element to highlight it temporarily.</p>
-	<p><b>Double-click</b> on text to select it</p>
-	<p><b>Right-click</b> to insert annotations, label data points, change element colors, and more.</p>
-	<p><b>Drag</b> callouts, arrows, and floating keys.</p>
-	<p>Remember: if you click the draw/refresh button you will lose anything you have done here!</p>
-</div>
-<div class='helpbox' id='help_text'>
-	<p><kbd><i class="fa fa-arrow-left"></i></kbd> / <kbd><i class="fa fa-arrow-right"></i></kbd> : move cursor</p>
-	<p><kbd><i class="fa fa-arrow-up"></i></kbd> / <kbd><i class="fa fa-arrow-down"></i></kbd> : font size up/down</p>
-	<p><kbd><b>shift</b></kbd> + <kbd><i class="fa fa-arrow-left"></i></kbd> / <kbd><i class="fa fa-arrow-right"></i></kbd> / <kbd><i class="fa fa-arrow-up"></i></kbd> / <kbd><i class="fa fa-arrow-down"></i></kbd> : nudge text</p>
-	<p><kbd><b>ctrl</b></kbd> + <kbd><b>b</b></kbd> : bold</p>
-	<p><kbd><b>ctrl</b></kbd> + <kbd><b>i</b></kbd> : italic</p>
-	<!-- <p><kbd><b>ctrl</b></kbd> + <kbd><i class="fa fa-arrow-left"></i></kbd> / <kbd><i class="fa fa-arrow-right"></i></kbd> : fade in/out</p> -->
-	<p>You can also drag the selected text around the graphing area.</p>
+<div class='helpboxouter'>
+	<div class='helpbox' id='help_general'>
+		<p><b>Hover</b> an element to highlight it temporarily.</p>
+		<p><b>Double-click</b> on text to select it</p>
+		<p><b>Right-click</b> to insert annotations, label data points, change element colors, and more.</p>
+		<p><b>Drag</b> callouts, arrows, and floating keys.</p>
+		<p>Remember: if you click the draw/refresh button you will lose anything you have done here!</p>
+	</div>
+	<div class='helpbox' id='help_text'>
+		<p><kbd><i class="fa fa-arrow-left"></i></kbd> / <kbd><i class="fa fa-arrow-right"></i></kbd> : move cursor</p>
+		<p><kbd><i class="fa fa-arrow-up"></i></kbd> / <kbd><i class="fa fa-arrow-down"></i></kbd> : font size up/down</p>
+		<p><kbd><b>shift</b></kbd> + <kbd><i class="fa fa-arrow-left"></i></kbd> / <kbd><i class="fa fa-arrow-right"></i></kbd> / <kbd><i class="fa fa-arrow-up"></i></kbd> / <kbd><i class="fa fa-arrow-down"></i></kbd> : nudge text</p>
+		<p><kbd><b>ctrl</b></kbd> + <kbd><b>b</b></kbd> : bold</p>
+		<p><kbd><b>ctrl</b></kbd> + <kbd><b>i</b></kbd> : italic</p>
+		<p>You can also drag the selected text around the graphing area.</p>
+	</div>
 </div>
 <div style='max-width:745;margin-left:auto;margin-right:auto' id='constraint'>
-<svg id='grapharea' height='450px' width='745px' xml:space="preserve">
+<svg id='grapharea' height='450px' width='745px'>
 	<defs>
 	  <style>
 		@font-face {
@@ -2641,6 +2641,8 @@ function addtext(target) {
 	// coordinates of the SVG graphing area
 	var svgx=document.getElementById("grapharea").offsetLeft
 	var svgy=document.getElementById("grapharea").offsetTop
+
+	console.log(svgx,svgy)
 
 	var text=grapharea.text(target.pageX-svgx,target.pageY-svgy,'Text Annotation').attr({'font-family':'Lato, Arial, sans-serif','font-size':16,'text-anchor':'start','fill':'black','font-weight':400,'dominant-baseline':'text-before-edge',cursor:'pointer'})
 	text.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
