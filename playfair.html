@@ -17,6 +17,7 @@
 	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.7.3/css/bootstrap-select.css">
 	<link rel="stylesheet" type="text/css" href="https://gitcdn.github.io/bootstrap-toggle/2.2.0/css/bootstrap-toggle.min.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="lib/keys.css" type="text/css" />
 
 	<style>
 	@import url(http://fonts.googleapis.com/css?family=Lancelot);
@@ -41,6 +42,8 @@
 	sup {vertical-align:baseline; position:relative;top:-.7em;font-size:60%;}
 	svg text {-moz-user-select: none;-ms-user-select: none;-khtml-user-select: none;-webkit-user-select: none;-webkit-touch-callout: none}
 	text { -webkit-font-smoothing: subpixel-antialiased; }
+
+	#graphdiv{position:relative;}
 
 	.toggle {margin-bottom:2px;margin-top:2px;}
 	.container {margin-top:20px;margin-bottom:70px;height:100%;}
@@ -143,6 +146,7 @@
 
 	#bad_data{display:none;}
 	#png_save{display:none;}
+	#help_text{display:none;}
 
 	/* save/load dialog */
 	.savedialog{display:none;position:fixed;min-height:110%;width:100%;background-color:#666666;z-index:99;margin-top:-20px;opacity:.8;overflow:hidden;}
@@ -160,6 +164,9 @@
 	.list-group-item:first-child{border-radius:0px;}
 	.list-group-item:last-child{border-radius:0px;}
 	.list-group-item{border:0px;}
+
+	/* help box */
+	.helpbox{position:absolute;color:#999999;font-size:.9em;width:calc((100% - 765px)/2);border:1px solid #dddddd;border-radius:3px;padding:10px;padding-left:12px;padding-right:12px;text-align:left;}
 
 
 	</style>
@@ -371,7 +378,7 @@
 	<div class='col-xs-8'>
 	<div class='text-center'>
 		<div id='hidebutton'><small>[<a href='#' onclick=hidedata()>hide data section</a>]</small></div>
-			<textarea id='data_text' rows="6" onchange=loadData()>Paste your data into this box. You can paste directly from Excel or a CSV. Make sure you include the column headers.</textarea>
+			<textarea id='data_text' rows="6" onchange=loadData()>Paste your data into this box. You can paste directly from Excel or a CSV. Make sure you include the column headers and check the box that appears to make sure your data was parsed correctly.</textarea>
 		</div>
 		<div class="alert alert-danger" role="alert" id='bad_data'></div>
 	</div>
@@ -760,7 +767,7 @@
 				<li tab='settings_linescatter'>Line/Scatter</li>
 			</ul>
 
-			<div class='tab-content' style='min-height:260px'>
+			<div class='tab-content' style='min-height:265px'>
 				<div class='row'>
 					<div class='col-md-4'>
 						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Top margin:</span><input type="text" class="form-control" placeholder="25" id='top_margin'></div>
@@ -804,7 +811,7 @@
 				</div>
 			</div> 
 
-			<div class='tab-content' style='min-height:260px'>
+			<div class='tab-content' style='min-height:265px'>
 				<div class='row'>
 					<div class='col-md-4'>
 						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Min head height:</span><input type="text" class="form-control" placeholder="0" id='head_height'></div>
@@ -868,7 +875,7 @@
 				</div>
 			</div>
 
-			<div class='tab-content' style='min-height:260px'>
+			<div class='tab-content' style='min-height:265px'>
 				<div class='row'>
 					<div class='col-md-4'>
 						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Hed size:</span><input type="text" class="form-control" placeholder="20px" id='hedsize'></div>
@@ -1003,7 +1010,7 @@
 				</div>
 			</div>
 
-			<div class='tab-content' style='min-height:260px'>
+			<div class='tab-content' style='min-height:265px'>
 				<div class='row'>
 					<div class='col-md-4'>
 						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Xgrid fill:</span><input type="text" class="form-control" placeholder="white" id='xgrid_fill'></div>
@@ -1138,7 +1145,7 @@
 				</div>
 			</div>
 
-			<div class='tab-content' style='min-height:260px'>
+			<div class='tab-content' style='min-height:265px'>
 				<div class='row'>
 					<div class='col-md-4'>
 						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Legend location:</span><input type="text" class="form-control" placeholder="top" id='legend_location'></div>
@@ -1185,7 +1192,7 @@
 				</div>
 			</div>
 
-			<div class='tab-content' style='min-height:260px'>
+			<div class='tab-content' style='min-height:265px'>
 				<div class='row'>
 					<div class='col-md-12'>
 						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Diverging color:</span><input type="text" class="form-control" placeholder="['#523211','#8b5322','#dec17c','#80ccc0','#35968e']" id='diverging_color'></div>
@@ -1203,7 +1210,7 @@
 				</div>
 			</div>
 
-			<div class='tab-content' style='min-height:260px'>
+			<div class='tab-content' style='min-height:265px'>
 				<div class='row'>
 					<div class='col-md-4'>
 						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Barchart width:</span><input type="text" class="form-control" placeholder=".8" id='barchart_width'></div>
@@ -1215,7 +1222,7 @@
 				</div>
 			</div>
 
-			<div class='tab-content' style='min-height:260px'>
+			<div class='tab-content' style='min-height:265px'>
 				<div class='row'>
 					<div class='col-md-4'>
 						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Trendline width:</span><input type="text" class="form-control" placeholder="1.5" id='trend_width'></div>
@@ -1265,12 +1272,28 @@
 
 <!-- ************************* END TAB CONTENT **************************** -->
 </div>
-<hr>
+<!-- <hr> -->
+<br>
 
 <div class='text-center' id='graphdiv'>
-
+<div class='helpbox' id='help_general'>
+	<p><b>Hover</b> an element to highlight it temporarily.</p>
+	<p><b>Double-click</b> on text to select it</p>
+	<p><b>Right-click</b> to insert annotations, label data points, change element colors, and more.</p>
+	<p><b>Drag</b> callouts, arrows, and floating keys.</p>
+	<p>Remember: if you click the draw/refresh button you will lose anything you have done here!</p>
+</div>
+<div class='helpbox' id='help_text'>
+	<p><kbd><i class="fa fa-arrow-left"></i></kbd> / <kbd><i class="fa fa-arrow-right"></i></kbd> : move cursor</p>
+	<p><kbd><i class="fa fa-arrow-up"></i></kbd> / <kbd><i class="fa fa-arrow-down"></i></kbd> : font size up/down</p>
+	<p><kbd><b>shift</b></kbd> + <kbd><i class="fa fa-arrow-left"></i></kbd> / <kbd><i class="fa fa-arrow-right"></i></kbd> / <kbd><i class="fa fa-arrow-up"></i></kbd> / <kbd><i class="fa fa-arrow-down"></i></kbd> : nudge text</p>
+	<p><kbd><b>ctrl</b></kbd> + <kbd><b>b</b></kbd> : bold</p>
+	<p><kbd><b>ctrl</b></kbd> + <kbd><b>i</b></kbd> : italic</p>
+	<!-- <p><kbd><b>ctrl</b></kbd> + <kbd><i class="fa fa-arrow-left"></i></kbd> / <kbd><i class="fa fa-arrow-right"></i></kbd> : fade in/out</p> -->
+	<p>You can also drag the selected text around the graphing area.</p>
+</div>
 <div style='max-width:745;margin-left:auto;margin-right:auto' id='constraint'>
-<svg id='grapharea' height='450px' width='750px' xml:space="preserve">
+<svg id='grapharea' height='450px' width='745px' xml:space="preserve">
 	<defs>
 	  <style>
 		@font-face {
@@ -1371,9 +1394,9 @@ $('[data-toggle="tooltip"]').tooltip()
 
 // Initial graph state
 function placeholder(){
-	var bounding_box=grapharea.rect(0,0,width+5,height).attr({class:'background',fill:'none','stroke':'lightgray','stroke-width':5.5,'stroke-dasharray':'10,10'})
-	var x1=grapharea.line(0,0,width+5,height).attr({'stroke':'lightgray','stroke-width':2.75,'stroke-dasharray':'10,10'})
-	var x2=grapharea.line(0,height,width+5,0).attr({'stroke':'lightgray','stroke-width':2.75,'stroke-dasharray':'10,10'})
+	var bounding_box=grapharea.rect(0,0,width,height).attr({class:'background',fill:'none','stroke':'lightgray','stroke-width':3.5,'stroke-dasharray':'10,10'})
+	var x1=grapharea.line(0,0,width,height).attr({'stroke':'lightgray','stroke-width':1.75,'stroke-dasharray':'10,10'})
+	var x2=grapharea.line(0,height,width,0).attr({'stroke':'lightgray','stroke-width':1.75,'stroke-dasharray':'10,10'})
 	init_text=grapharea.text(width/2,height/2,'graphing area').attr({'font-family':'Lato, Arial, sans-serif','font-size':50,'text-anchor':'middle','fill':'gray','font-weight':700,'dominant-baseline':'text-before-edge',cursor:'pointer'})
 	init_text.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 	center_baseline(init_text)
@@ -1938,6 +1961,12 @@ function redraw() {
 
 function unselect_text(ev) {
 	if (ev.target.nodeName!='text' & dragging==0){
+
+		// ghelp=$('#help_general')
+		// thelp=$('#help_text')
+		$('#help_general')[0].style.display='block'
+		$('#help_text')[0].style.display='none'
+
 		try{
 			cursor.remove()
 			select_box.remove()
@@ -1955,6 +1984,11 @@ function unselect_text(ev) {
 function edit_text(ev) {
 	// if a text element is clicked, select it and listen for keypresses.
 	if(ev.target.nodeName=='text' || ev.target.nodeName=='tspan'){
+
+		// ghelp=$('#help_general')
+		// thelp=$('#help_text')
+		$('#help_general')[0].style.display='none'
+		$('#help_text')[0].style.display='block'
 
 		// Clean up previous selection if applicable
 		try{
@@ -2169,8 +2203,8 @@ var down_listener=function(ev) {
 	var keycode = (ev.keyCode)
 	// console.log('down',keycode,ev.shiftKey)
 	// up and down movement and font sizing
-	if(keycode==40 && ev.shiftKey==true){selected_text.attr({y:coords.y+1});high_box.attr({y:high_coords.y+1});console.log(coords.y,high_coords.y)}
-	if(keycode==38 && ev.shiftKey==true){selected_text.attr({y:coords.y-1});high_box.attr({y:high_coords.y-1});console.log(coords.y,high_coords.y)}
+	if(keycode==40 && ev.shiftKey==true){selected_text.attr({y:parseFloat(selected_text.attr('y'))+1});high_box.attr({y:high_coords.y+1});console.log(coords.y,high_coords.y)}
+	if(keycode==38 && ev.shiftKey==true){selected_text.attr({y:parseFloat(selected_text.attr('y'))-1});high_box.attr({y:high_coords.y-1});console.log(coords.y,high_coords.y)}
 	if(keycode==40 && ev.shiftKey==false){
 		size=selected_text.attr('font-size')
 		selected_text.attr({'font-size':parseInt(size)-1});
@@ -2356,7 +2390,6 @@ var down_listener=function(ev) {
 // listener for text
 var press_listener=function(ev) {
 	var keycode = (ev.charCode)
-
 	// handle carriage returns
 	if(keycode==13){
 		if (typeof string=='object'){

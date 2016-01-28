@@ -15,6 +15,8 @@ V1.1
 
   - fixed an issue with text nudging on certain text elements
 
+  - added some text boxes that tell you what all you can do on the graphing canvas
+
 
 V1.05
   - various multi-line text fixes
