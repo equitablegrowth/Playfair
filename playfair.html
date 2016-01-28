@@ -845,7 +845,7 @@
 				</div>
 				<div class='row'>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Header bottom pad:</span><input type="text" class="form-control" placeholder="0" id='header_bottompad'></div>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Header bottom pad:</span><input type="text" class="form-control" placeholder="12" id='header_bottompad'></div>
 					</div>
 					<div class='col-md-4'>
 						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Footer bottom pad:</span><input type="text" class="form-control" placeholder="0" id='footer_bottompad'></div>
@@ -1695,11 +1695,20 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 
 function changedimensions() {
 	// it's kind of weird that this updates in real time instead of waiting for draw/refresh like... everything else above the graph
+
 	if($('#gwidth').val()!=""){
 		width=$('#gwidth').val()
 	}
 	if($('#gheight').val()!=""){
 		height=$('#gheight').val()
+	}
+
+	if (parseFloat(width)>745){	
+		$('#help_general')[0].style.display='none'
+		$('#help_text')[0].style.display='none'
+	} else {
+		$('#help_general')[0].style.display='block'
+		$('#help_text')[0].style.display='none'	
 	}
 
 	$('#grapharea').attr('height',height)
@@ -1964,8 +1973,11 @@ function unselect_text(ev) {
 
 		// ghelp=$('#help_general')
 		// thelp=$('#help_text')
-		$('#help_general')[0].style.display='block'
-		$('#help_text')[0].style.display='none'
+		if(parseFloat(width)<=745){
+			$('#help_general')[0].style.display='block'
+			$('#help_text')[0].style.display='none'		
+		}
+
 
 		try{
 			cursor.remove()
@@ -1987,8 +1999,10 @@ function edit_text(ev) {
 
 		// ghelp=$('#help_general')
 		// thelp=$('#help_text')
-		$('#help_general')[0].style.display='none'
-		$('#help_text')[0].style.display='block'
+		if(parseFloat(width)<=745){
+			$('#help_general')[0].style.display='none'
+			$('#help_text')[0].style.display='block'
+		}
 
 		// Clean up previous selection if applicable
 		try{
