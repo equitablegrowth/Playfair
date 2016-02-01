@@ -476,7 +476,7 @@
 						<div class='styled-select'>
 							<select>
 								<option value='standard'>Standard</option>
-								<option value='bw'>Black on White</option>
+								<!-- <option value='bw'>Black on White</option> -->
 							</select>
 						</div>
 						</div>
@@ -1718,7 +1718,7 @@ function changedimensions() {
 
 	$('#grapharea').attr('height',height)
 	$('#grapharea').attr('width',width)
-	$('#constraint').attr('style','max-width:'+width+';margin-left:auto;margin-right:auto')
+	// $('#constraint').attr('style','max-width:'+width+';margin-left:auto;margin-right:auto')
 
 	grapharea.selectAll('rect').remove()
 	grapharea.selectAll('text').remove()
@@ -2046,11 +2046,9 @@ function edit_text(ev) {
 
 		// if text is rotated, un-rotate it
 		trans=selected_text.attr('transform')
-		console.log(trans)
 		selected_text.attr({transform:''})
 		coords=selected_text.getBBox()
-		if(trans==""){trans=trans.string;console.log('hi')}
-		console.log(trans)
+		if(trans==""){trans=trans.string;}
 
 		selected=1
 
@@ -2504,8 +2502,8 @@ $(function() {
 	var svgarea=document.getElementById('grapharea')
 	var doubleClicked = false;
 	$(svgarea).on("contextmenu", function (e) {
-		height=window.innerHeight
-		width=window.innerWidth
+		height2=window.innerHeight
+		width2=window.innerWidth
 
 		// console.log(e,e.target,e.target.nodeName,e.target.parentNode.nodeName)
 		if(doubleClicked == false && drawpath!=1) {
@@ -2518,10 +2516,10 @@ $(function() {
 				$("#text_context_menu").css("left", e.clientX+3);
 				$("#text_context_menu").css("top", e.clientY);
 				$("#text_context_menu").fadeIn(50, FocusContextOut());
-				if(e.clientY+$("#text_context_menu").height()>height){
-					$("#text_context_menu").css("top", height-$("#text_context_menu").height()-5);
+				if(e.clientY+$("#text_context_menu").height()>height2){
+					$("#text_context_menu").css("top", height2-$("#text_context_menu").height()-5);
 				}
-				if(e.clientX+$("#text_context_menu").width()>width){
+				if(e.clientX+$("#text_context_menu").width()>width2){
 					$("#text_context_menu").css("left", e.clientX-3-$("#text_context_menu").width());
 				}
 				doubleClicked = true;
@@ -2531,10 +2529,10 @@ $(function() {
 				$("#callout_context_menu").css("left", e.clientX+3);
 				$("#callout_context_menu").css("top", e.clientY);
 				$("#callout_context_menu").fadeIn(50, FocusContextOut());
-				if(e.clientY+$("#callout_context_menu").height()>height){
-					$("#callout_context_menu").css("top", height-$("#callout_context_menu").height()-5);
+				if(e.clientY+$("#callout_context_menu").height()>height2){
+					$("#callout_context_menu").css("top", height2-$("#callout_context_menu").height()-5);
 				}
-				if(e.clientX+$("#callout_context_menu").width()>width){
+				if(e.clientX+$("#callout_context_menu").width()>width2){
 					$("#callout_context_menu").css("left", e.clientX-3-$("#callout_context_menu").width());
 				}
 				doubleClicked = true;	
@@ -2544,10 +2542,10 @@ $(function() {
 				$("#path_context_menu").css("left", e.clientX+3);
 				$("#path_context_menu").css("top", e.clientY);
 				$("#path_context_menu").fadeIn(50, FocusContextOut());
-				if(e.clientY+$("#path_context_menu").height()>height){
-					$("#path_context_menu").css("top", height-$("#path_context_menu").height()-5);
+				if(e.clientY+$("#path_context_menu").height()>height2){
+					$("#path_context_menu").css("top", height2-$("#path_context_menu").height()-5);
 				}
-				if(e.clientX+$("#path_context_menu").width()>width){
+				if(e.clientX+$("#path_context_menu").width()>width2){
 					$("#path_context_menu").css("left", e.clientX-3-$("#path_context_menu").width());
 				}
 			} else if(e.target.nodeName=='path' && e.target.className.baseVal=='dataelement'){
@@ -2556,10 +2554,10 @@ $(function() {
 				$("#pathdata_context_menu").css("left", e.clientX+3);
 				$("#pathdata_context_menu").css("top", e.clientY);
 				$("#pathdata_context_menu").fadeIn(50, FocusContextOut());
-				if(e.clientY+$("#pathdata_context_menu").height()>height){
-					$("#pathdata_context_menu").css("top", height-$("#pathdata_context_menu").height()-5);
+				if(e.clientY+$("#pathdata_context_menu").height()>height2){
+					$("#pathdata_context_menu").css("top", height2-$("#pathdata_context_menu").height()-5);
 				}
-				if(e.clientX+$("#pathdata_context_menu").width()>width){
+				if(e.clientX+$("#pathdata_context_menu").width()>width2){
 					$("#pathdata_context_menu").css("left", e.clientX-3-$("#pathdata_context_menu").width());
 				}
 			} else if (e.target.nodeName=='circle'){
@@ -2568,10 +2566,10 @@ $(function() {
 				$("#point_context_menu").css("left", e.clientX+3);
 				$("#point_context_menu").css("top", e.clientY);
 				$("#point_context_menu").fadeIn(50, FocusContextOut());	
-				if(e.clientY+$("#point_context_menu").height()>height){
-					$("#point_context_menu").css("top", height-$("#point_context_menu").height()-5);
+				if(e.clientY+$("#point_context_menu").height()>height2){
+					$("#point_context_menu").css("top", height2-$("#point_context_menu").height()-5);
 				}
-				if(e.clientX+$("#point_context_menu").width()>width){
+				if(e.clientX+$("#point_context_menu").width()>width2){
 					$("#point_context_menu").css("left", e.clientX-3-$("#point_context_menu").width());
 				}
 			} else if(e.target.className.baseVal=='dataelement'){
@@ -2580,10 +2578,10 @@ $(function() {
 				$("#data_context_menu").css("left", e.clientX+3);
 				$("#data_context_menu").css("top", e.clientY);
 				$("#data_context_menu").fadeIn(50, FocusContextOut());
-				if(e.clientY+$("#data_context_menu").height()>height){
-					$("#data_context_menu").css("top", height-$("#data_context_menu").height()-5);
+				if(e.clientY+$("#data_context_menu").height()>height2){
+					$("#data_context_menu").css("top", height2-$("#data_context_menu").height()-5);
 				}
-				if(e.clientX+$("#data_context_menu").width()>width){
+				if(e.clientX+$("#data_context_menu").width()>width2){
 					$("#data_context_menu").css("left", e.clientX-3-$("#data_context_menu").width());
 				}	
 				doubleClicked = true;
@@ -2594,10 +2592,10 @@ $(function() {
 					$("#data_context_menu").css("left", e.clientX+3);
 					$("#data_context_menu").css("top", e.clientY);
 					$("#data_context_menu").fadeIn(50, FocusContextOut());
-					if(e.clientY+$("#data_context_menu").height()>height){
-					$("#data_context_menu").css("top", height-$("#data_context_menu").height()-5);
+					if(e.clientY+$("#data_context_menu").height()>height2){
+					$("#data_context_menu").css("top", height2-$("#data_context_menu").height()-5);
 					}
-					if(e.clientX+$("#data_context_menu").width()>width){
+					if(e.clientX+$("#data_context_menu").width()>width2){
 						$("#data_context_menu").css("left", e.clientX-3-$("#data_context_menu").width());
 					}
 					doubleClicked = true;
@@ -2608,10 +2606,10 @@ $(function() {
 				$("#other_context_menu").css("left", e.clientX+3);
 				$("#other_context_menu").css("top", e.clientY);
 				$("#other_context_menu").fadeIn(50, FocusContextOut());
-				if(e.clientY+$("#other_context_menu").height()>height){
-					$("#other_context_menu").css("top", height-$("#other_context_menu").height()-5);
+				if(e.clientY+$("#other_context_menu").height()>height2){
+					$("#other_context_menu").css("top", height2-$("#other_context_menu").height()-5);
 				}
-				if(e.clientX+$("#other_context_menu").width()>width){
+				if(e.clientX+$("#other_context_menu").width()>width2){
 					$("#other_context_menu").css("left", e.clientX-3-$("#other_context_menu").width());
 				}
 				doubleClicked = true;
@@ -3301,7 +3299,7 @@ function load_populate(response) {
 
 	$('#grapharea').attr('height',height)
 	$('#grapharea').attr('width',width)
-	$('#constraint').attr('style','max-width:'+width+';margin-left:auto;margin-right:auto')
+	// $('#constraint').attr('style','max-width:'+width+';margin-left:auto;margin-right:auto')
 
 	// load the correct number of slope/intercept fields and populate
 	if (inputs['slope'][0]!='text'){
