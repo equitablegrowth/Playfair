@@ -1,5 +1,25 @@
 changelog.txt
 
+V1.15
+  - changed the third point option to something that should look better for large numbers of overlapping points, like in Nick's wage to inflation passthrough graph.
+
+  - when playfair fails to save or fails to render a graph, it will now alert you, with an error message that may or may  not be helpful
+
+  - fixed a bug with loading a graph and rotated text
+
+  - slightly changed the default left-margin variable
+
+  - data parser now ignores trailing carriage returns. Should make it a little more robust to human error when pasting in from excel.
+
+  - disabled no-logo graphs. Use a logo, or else!
+
+  - contextual menus will now appear higher on the screen if they would be truncated by the bottom of your browser window
+
+  - you can now choose 'move to front' in contextual menus to move a data element or path in front of other elements
+
+  - Fixed a bug where loading a graph with multiple trendlines would not load those trendlines into the frontend interface
+
+
 V1.1
   - Really esoteric text bug that was putting spaces after things where it shouldn't have.
 

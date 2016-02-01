@@ -89,11 +89,11 @@
 	.pointcirclecontext {margin-left:4;margin-right:4;margin-top:4;margin-bottom:4;width:12px;height:12px;border:2px solid #67c2a5;-webkit-border-radius:6px;border-radius:6px;display:inline-block;vertical-align:middle;background-color:rgba(103, 194, 165, 0.3)}
 	.pointpoint {width:12px;height:12px;border:2px solid #ffffff;-webkit-border-radius:6px;border-radius:6px;display:inline-block;vertical-align:middle;margin-top:-12px;margin-left:4px;margin-right:0px;background-color:rgba(103, 194, 165, 1)}
 	.pointpointcontext {margin-left:4;margin-right:4;margin-top:4;margin-bottom:4;width:12px;height:12px;border:2px solid rgba(103, 194, 165, 0);-webkit-background-clip: padding-box;background-clip: padding-box;-webkit-border-radius:6px;border-radius:6px;display:inline-block;vertical-align:middle;background-color:rgba(103, 194, 165, 1)}
-	.pointcircleopen {width:12px;height:12px;border:2px solid #67c2a5;-webkit-border-radius:6px;border-radius:6px;display:inline-block;vertical-align:middle;margin-top:-12px;margin-left:4px;margin-right:0px;}
-	.pointcircleopencontext {margin-left:4;margin-right:4;margin-top:4;margin-bottom:4;width:12px;height:12px;border:2px solid #67c2a5;-webkit-border-radius:6px;border-radius:6px;display:inline-block;vertical-align:middle;}
+	.pointcircleopen {width:12px;height:12px;border:1px solid #67c2a5;-webkit-border-radius:6px;border-radius:6px;display:inline-block;vertical-align:middle;margin-top:-12px;margin-left:4px;margin-right:0px;}
+	.pointcircleopencontext {margin-left:4;margin-right:4;margin-top:4;margin-bottom:4;width:12px;height:12px;border:1px solid #67c2a5;-webkit-border-radius:6px;border-radius:6px;display:inline-block;vertical-align:middle;}
 	.pointcirclecontext:hover {margin-left:3;margin-right:3;margin-top:3;margin-bottom:3;width:14px;height:14px;border:2px solid #67c2a5;-webkit-border-radius:7px;border-radius:7px;display:inline-block;vertical-align:middle;background-color:rgba(103, 194, 165, 0.3)}
 	.pointpointcontext:hover {margin-left:3;margin-right:3;margin-top:3;margin-bottom:3;width:14px;height:14px;border:2px solid rgba(103, 194, 165, 0);-webkit-background-clip: padding-box;background-clip: padding-box;-webkit-border-radius:7px;border-radius:7px;display:inline-block;vertical-align:middle;background-color:rgba(103, 194, 165, 1)}
-	.pointcircleopencontext:hover {margin-left:3;margin-right:3;margin-top:3;margin-bottom:3;width:14px;height:14px;border:2px solid #67c2a5;-webkit-border-radius:7px;border-radius:7px;display:inline-block;vertical-align:middle;}
+	.pointcircleopencontext:hover {margin-left:3;margin-right:3;margin-top:3;margin-bottom:3;width:14px;height:14px;border:1px solid #67c2a5;-webkit-border-radius:7px;border-radius:7px;display:inline-block;vertical-align:middle;}
 	.pointsquare {width:12px;height:12px;border:2px solid #67c2a5;display:inline-block;vertical-align:middle;margin-top:4.5px;}
 	.dead{width:0px;height:12px;background:white;border:0px solid white;display:inline-block;vertical-align:middle}
 	.tooltip-inner {text-align:left;}
@@ -239,6 +239,7 @@
 
 <div class="contextMenuContainer" id='text_context_menu'>
 	<ul class="contextMenu">
+		<li onclick=movetofront(clickedevent.target)>Move to Front</li>
 		<li onclick=deleteelement(clickedevent.target)>Delete Text</li>
 		<hr>
 		<li onclick=boldtext(clickedevent.target)>Bold</li>
@@ -270,6 +271,7 @@
 
 <div class="contextMenuContainer" id='path_context_menu'>
 	<ul class="contextMenu">
+		<li onclick=movetofront(clickedevent.target)>Move to Front</li>
 		<li onclick=thickpath(clickedevent.target)>Thicker</li>
 		<li onclick=thinpath(clickedevent.target)>Thinner</li>
 		<hr>
@@ -287,6 +289,7 @@
 
 <div class="contextMenuContainer" id='pathdata_context_menu'>
 	<ul class="contextMenu">
+		<li onclick=movetofront(clickedevent.target)>Move to Front</li>
 		<li onclick=labeldata(clickedevent.target)>Label Data</li>
 		<hr>
 		<li onclick=thickpath(clickedevent.target)>Thicker</li>
@@ -306,6 +309,7 @@
 
 <div class="contextMenuContainer" id='data_context_menu'>
 	<ul class="contextMenu">
+		<li onclick=movetofront(clickedevent.target)>Move to Front</li>
 		<li onclick=labeldata(clickedevent.target)>Label Data</li>
 		<li onclick=addtext(clickedevent)>Add Text</li>
 		<hr>
@@ -323,6 +327,7 @@
 
 <div class="contextMenuContainer" id='point_context_menu'>
 	<ul class="contextMenu">
+		<li onclick=movetofront(clickedevent.target)>Move to Front</li>
 		<li onclick=labeldata(clickedevent.target)>Label Data</li>
 		<li onclick=addtext(clickedevent)>Add Text</li>
 		<hr>
@@ -345,6 +350,7 @@
 
 <div class="contextMenuContainer" id='callout_context_menu'>
 	<ul class="contextMenu">
+		<li onclick=movetofront(clickedevent.target)>Move to Front</li>
 		<li onclick=deleteelement(clickedevent.target)>Delete Line</li>
 		<hr>
 		<li onclick=thickpath(clickedevent.target)>Thicker</li>
@@ -371,7 +377,7 @@
 
 <!-- Header -->
 <h1 class='text-center'>playfair</h1>
-<h4 class='text-center'><sup style='visibility: hidden'>v1.1, <a href='changelog.txt'>changelog</a></sup>make equitable graphs<sup>v1.1, <a href='changelog.txt'>changelog</a></sup></h4>
+<h4 class='text-center'><sup style='visibility: hidden'>v1.15, <a href='changelog.txt'>changelog</a></sup>make equitable graphs<sup>v1.15, <a href='changelog.txt'>changelog</a></sup></h4>
 
 	<div class='col-md-2'></div>
 	<div class='col-xs-8'>
@@ -474,13 +480,12 @@
 							</select>
 						</div>
 						</div>
-						<div class='uibox_text'>Logo</div>
+						<div class='uibox_text'>Key</div>
 						<div class='uibox'>
-							<input id='nologo' type='radio' name='logo' value='nologo'><label for='nologo'><span><span></span></span>None</label>
-							<input id='brlogo' type='radio' name='logo' value='brlogo' checked><label for='brlogo'><span><span></span></span>Bottom-right</label>
-							<!-- <label class='radio-inline'><input type="radio" name="logo" value="nologo" disabled>None</label> -->
-							<!-- <label class='radio-inline'><input type="radio" name="logo" value="trlogo">Top-right</label> -->
-							<!-- <label class='radio-inline'><input type="radio" name="logo" value="brlogo" checked>Bottom-right</label> -->
+							<!-- <input id='nokey' type='radio' name='key' value='none'><label for='nokey'><span><span></span></span>None</label> -->
+							<input id='topkey' type='radio' name='key' value='top'><label for='topkey'><span><span></span></span>Top</label>
+							<!-- <input id='rightkey' type='radio' name='key' value='right'><label for='rightkey'><span><span></span></span>Right</label> -->
+							<input id='floatkey' type='radio' name='key' value='float' checked><label for='floatkey'><span><span></span></span>Float</label>
 						</div>
 					</div>
 
@@ -497,13 +502,12 @@
 							  <input type="text" class="form-control" placeholder="480" id='gheight' onchange=changedimensions()>
 							</div>
 						</div>
-						<div class='uibox_text'>Key</div>
+
+<!-- 						<div class='uibox_text'>Logo</div>
 						<div class='uibox'>
-							<!-- <input id='nokey' type='radio' name='key' value='none'><label for='nokey'><span><span></span></span>None</label> -->
-							<input id='topkey' type='radio' name='key' value='top'><label for='topkey'><span><span></span></span>Top</label>
-							<!-- <input id='rightkey' type='radio' name='key' value='right'><label for='rightkey'><span><span></span></span>Right</label> -->
-							<input id='floatkey' type='radio' name='key' value='float' checked><label for='floatkey'><span><span></span></span>Float</label>
-						</div>
+							<input id='nologo' type='radio' name='logo' value='nologo'><label for='nologo'><span><span></span></span>None</label>
+							<input id='brlogo' type='radio' name='logo' value='brlogo' checked><label for='brlogo'><span><span></span></span>Bottom-right</label>
+						</div> -->
 					</div>
 				</div>
 			</div>
@@ -790,7 +794,7 @@
 				</div>
 				<div class='row'>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Left margin:</span><input type="text" class="form-control" placeholder="10" id='left_margin'></div>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Left margin:</span><input type="text" class="form-control" placeholder="20" id='left_margin'></div>
 					</div>
 					<div class='col-md-4'>
 						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Left padding:</span><input type="text" class="form-control" placeholder="0" id='chart_leftpad'></div>
@@ -1478,6 +1482,7 @@ function loadData() {
 	alertbox.style.display='none'
 	delimit=null
 	d=document.getElementById('data_text').value
+	d=d.trim()
 	d=d.split('\n')
 	if (d[0].indexOf('	')>-1) {delimit='	'} else if (d[0].indexOf(',')>-1) {delimit=','}
 
@@ -1729,239 +1734,245 @@ function changedimensions() {
 
 // redraw is the main graphing setup function. Gets variable values and passes them to playfair.js
 function redraw() {
-	x_var=$(".x_select").val()
-	y_var=$(".y_select").val()
-	group_var=$(".group_select").val()
-	facet_var=$(".facet_select").val()
+	try{
+		x_var=$(".x_select").val()
+		y_var=$(".y_select").val()
+		group_var=$(".group_select").val()
+		facet_var=$(".facet_select").val()
 
-	// grab all text elements from the design tab
-	hed=$("#hed").val()
-	dek=$("#dek").val()
-	source=$("#source").val()
-	note=$("#note").val()
-	xlabel=$("#xlabel").val()
-	ylabel=$("#ylabel").val()
+		// grab all text elements from the design tab
+		hed=$("#hed").val()
+		dek=$("#dek").val()
+		source=$("#source").val()
+		note=$("#note").val()
+		xlabel=$("#xlabel").val()
+		ylabel=$("#ylabel").val()
 
-	if (x_var!='none' && y_var!='none') {
+		if (x_var!='none' && y_var!='none') {
 
-		// initialize playfair.js. First use init_graph to set up workspace, then call the
-		// data method to set up data and variables.
-		// 
-		// Why not just use.clear()? Because it will destroy all the embedded font declarations
-		grapharea.selectAll('rect').remove()
-		grapharea.selectAll('text').remove()
-		grapharea.selectAll('line').remove()
-		grapharea.selectAll('circle').remove()
-		grapharea.selectAll('path').remove()
-		grapharea.selectAll('image').remove()
+			// initialize playfair.js. First use init_graph to set up workspace, then call the
+			// data method to set up data and variables.
+			// 
+			// Why not just use.clear()? Because it will destroy all the embedded font declarations
+			grapharea.selectAll('rect').remove()
+			grapharea.selectAll('text').remove()
+			grapharea.selectAll('line').remove()
+			grapharea.selectAll('circle').remove()
+			grapharea.selectAll('path').remove()
+			grapharea.selectAll('image').remove()
 
-		chartobject=playfair.init_graph(grapharea,0,0,width,height)
-		chartobject.data(final_data,x_var,y_var,group_var,facet_var)
+			chartobject=playfair.init_graph(grapharea,0,0,width,height)
+			chartobject.data(final_data,x_var,y_var,group_var,facet_var)
 
-		// initialize styling, the header, and the footer. The footer loads an image (the logo)
-		// and so callouts after it need to be written as callbacks to the footer function.
-		chartobject.style()
+			// initialize styling, the header, and the footer. The footer loads an image (the logo)
+			// and so callouts after it need to be written as callbacks to the footer function.
+			chartobject.style()
 
-		// get state of all UI style toggles and apply to style of graph
-		// axes
-		xgrid=document.getElementById('xgrid').checked
-		ygrid=document.getElementById('ygrid').checked
-		xminorgrid=document.getElementById('xminorgrid').checked
-		yminorgrid=document.getElementById('yminorgrid').checked
-		xprepend=$("#x_prepend").val()
-		xappend=$("#x_append").val()
-		yprepend=$("#y_prepend").val()
-		yappend=$("#y_append").val()
+			// get state of all UI style toggles and apply to style of graph
+			// axes
+			xgrid=document.getElementById('xgrid').checked
+			ygrid=document.getElementById('ygrid').checked
+			xminorgrid=document.getElementById('xminorgrid').checked
+			yminorgrid=document.getElementById('yminorgrid').checked
+			xprepend=$("#x_prepend").val()
+			xappend=$("#x_append").val()
+			yprepend=$("#y_prepend").val()
+			yappend=$("#y_append").val()
 
-		// legend
-		legendloc=$('input[name=key]:checked').val()
+			// legend
+			legendloc=$('input[name=key]:checked').val()
 
-		// logo
-		logoloc=$('input[name=logo]:checked').val()
-		if(logoloc=='nologo'){
-			logoobj=[0,1]
-		} else {
-			logoobj=[eglogo_high,2]
-		}
-
-		// barchart specific
-		barspace=document.getElementById('spacing').checked
-
-		// line/scatter specific
-		points=document.getElementById('points').checked
-		labels=document.getElementById('labels').checked
-		us_shading=document.getElementById('recession_shading').checked
-		arbitrary_shading=$('#arbitrary_intervals').val()
-		label=$("#line_select_label").val()
-		connect=$("#line_select_connect").val()
-		size=$("#line_select_pointsize").val()
-
-		//point type
-		point_type=$('input[name=linepoint]:checked').val()
-
-		// create the style object
-		style={}
-
-		// which grids should be drawn
-		grids=[xgrid,ygrid,xminorgrid,yminorgrid]
-		attributes=['xgrid_opacity','ygrid_opacity','xgrid_minoropacity','ygrid_minoropacity']
-		for(var i=0;i<grids.length;i++){
-			if(grids[i]==true){style[attributes[i]]=1}
-			if(grids[i]==false){style[attributes[i]]=0}	
-		}
-
-		// point style
-		if(barspace==false){style['barchart_width']=1}
-		style['legend_location']=legendloc
-
-		if (point_type=='pointpoint'){
-			style['point_size']=2
-			style['point_strokewidth']=0
-			style['point_fillopacity']=1
-		} else if (point_type=='pointcircle'){
-			style['point_size']=4
-			style['point_strokewidth']=2
-			style['point_fillopacity']=.2
-		} else if (point_type=='pointcircleopen'){
-			style['point_size']=4
-			style['point_strokewidth']=2
-			style['point_fillopacity']=0
-		}
-
-		// get style settings from the settings tab. These will override settings elsewhere in the document if they have been filled in
-		settings=['linechart_strokeopacity','top_margin','bottom_margin','left_margin','right_margin','head_height','footer_height','hedsize','hedweight','hedface','deksize','dekweight','dekface','datasize','dataweight','dataface','annotatesize','annotateweight','annotateface','sourcesize','sourceweight','sourceface','notesize','noteweight','noteface','chartfill','chart_toppad','chart_bottompad','chart_leftpad','chart_rightpad','headerfill','header_toppad','header_bottompad','header_leftpad','header_rightpad','footerfill','footer_toppad','footer_bottompad','footer_leftpad','footer_rightpad','xgrid_fill','xgrid_zerofill','xgrid_minorfill','xgrid_thickness','xgrid_zerothickness','xgrid_minorthickness','xgrid_dasharray','xgrid_zerodasharray','xgrid_minordasharray','xgrid_opacity','xgrid_zeroopacity','xgrid_minoropacity','ygrid_fill','ygrid_zerofill','ygrid_minorfill','ygrid_thickness','ygrid_zerothickness','ygrid_minorthickness','ygrid_dasharray','ygrid_zerodasharray','ygrid_minordasharray','ygrid_opacity','ygrid_zeroopacity','ygrid_minoropacity','xtick_textsize','xtick_textweight','xtick_textface','xtick_maxsize','xtick_length','xtick_thickness','xtick_fill','xtick_to_xlabel','xtick_to_xaxis','ytick_textsize','ytick_textweight','ytick_textface','ytick_maxsize','ytick_length','ytick_thickness','ytick_fill','ytick_to_ylabel','ytick_to_yaxis','xlabel_textsize','xlabel_textweight','xlabel_textface','ylabel_textsize','ylabel_textweight','ylabel_textface','legend_location','legend_maxwidth','legend_textsize','legend_textweight','legend_textface','legend_toppad','legend_bottompad','legend_rightpad','legend_leftpad','legend_elementsize','legend_elementpad','legend_floatbackground','legend_floatthickness','legend_floatstroke','legend_floatpad','diverging_color','sequential_color','qualitative_color','barchart_width','trend_width','trend_fill','trend_textface','trend_textweight','trend_textsize','trend_textcolor','trend_linetotext','point_size','point_strokewidth','point_fillopacity','point_maxsize','point_minsize']
-		numerical=['linechart_strokeopacity','top_margin','bottom_margin','left_margin','right_margin','head_height','footer_height','chart_toppad','chart_bottompad','chart_leftpad','chart_rightpad','header_toppad','header_bottompad','header_leftpad','header_rightpad','footer_toppad','footer_bottompad','footer_leftpad','footer_rightpad','xgrid_thickness','xgrid_zerothickness','xgrid_minorthickness','xgrid_opacity','xgrid_zeroopacity','xgrid_minoropacity','ygrid_thickness','ygrid_zerothickness','ygrid_minorthickness','ygrid_opacity','ygrid_zeroopacity','ygrid_minoropacity','xtick_maxsize','xtick_length','xtick_thickness','xtick_to_xlabel','xtick_to_xaxis','ytick_maxsize','ytick_length','ytick_thickness','ytick_to_ylabel','ytick_to_yaxis','legend_maxwidth','legend_toppad','legend_bottompad','legend_rightpad','legend_leftpad','legend_elementsize','legend_elementpad','legend_floatthickness','legend_floatstroke','legend_floatpad','barchart_width','trend_width','trend_linetotext','point_size','point_strokewidth','point_fillopacity','point_maxsize','point_minsize']
-		for(var i=0;i<settings.length;i++){
-			set=$("#"+settings[i]).val()
-			if (set!=''){
-				if ($.inArray(settings[i],numerical)>-1){
-					style[settings[i]]=parseFloat(set)
-				} else{
-					style[settings[i]]=set
-				}
-			}
-		}
-
-		// now apply the style object
-		chartobject.style(style)
-		console.log(style)
-
-		// initialize axes
-		chartobject.xaxis({'label':xlabel,'number_of_ticks':5,'decimal':undefined,'format':undefined,'pre':xprepend,'app':xappend})
-		chartobject.yaxis({'label':ylabel,'number_of_ticks':5,'decimal':undefined,'format':undefined,'pre':yprepend,'app':yappend})
-
-		chartobject.header(hed,dek)
-		chartobject.footer(logoobj,source,note,function(){
-			// draw the initial graph, dependent on current value of graph_type
-			if (graph_type=='Bar Chart') {
-
-				if ($('#customx').val()!='' && $("#customxcheck").prop('checked')==true){
-					chartobject.xarray=$('#customx').val().split(',')
-				}
-				if ($('#customy').val()!='' && $("#customycheck").prop('checked')==true){
-					chartobject.yarray=$('#customy').val().split(',')
-				}
-
-				options={}
-
-				// orientation - 'vertical' or 'horizontal'
-				options['orientation']=$('input[name=barorient]:checked').val()
-
-				// stacked barchart toggle
-				stacked=$("#stacked").prop('checked')
-				options['stacked']=stacked
-
-				console.log(chartobject)
-				chartobject.barchart(options)
-				$('#customx').val(chartobject.xarray)
-				$('#customy').val(chartobject.yarray)
+			// logo
+			logoloc=$('input[name=logo]:checked').val()
+			if(logoloc=='nologo'){
+				logoobj=[0,1]
+			} else {
+				logoobj=[eglogo_high,2]
 			}
 
-			if (graph_type=='Line/Scatter') {
-				options={}
+			// barchart specific
+			barspace=document.getElementById('spacing').checked
 
-				// get shading input from frontend
-				shading=[]
-				if (us_shading==true){
-					shad=[['June 1 1857','December 1 1858'],['October 1 1860','June 1 1861'],['April 1 1865','December 1 1867'],['June 1 1869','December 1 1870'],['October 1 1873','March 1 1879'],['March 1 1882','May 1 1885'],['March 1 1887','April 1 1888'],['July 1 1890','May 1 1891'],['January 1 1893','June 1 1894'],['December 1 1895','June 1 1897'],['June 1 1899','December 1 1900'],['September 1 1902','August 1 1904'],['May 1 1907','June 1 1908'],['January 1 1910','January 1 1912'],['January 1 1913','December 1 1914'],['August 1 1918','March 1 1919'],['January 1 1920','July 1 1921'],['May 1 1923','July 1 1924'],['October 1 1926','November 1 1927'],['August 1 1929','March 1 1933'],['May 1 1937','June 1 1938'],['February 1 1945','October 1 1945'],['November 1 1948','October 1 1949'],['July 1 1953','May 1 1954'],['August 1 1957','April 1 1958'],['April 1 1960','February 1 1961'],['December 1 1969','November 1 1970'],['November 1 1973','March 1 1975'],['January 1 1980','July 1 1980'],['July 1 1981','November 1 1982'],['July 1 1990','March 1 1991'],['March 1 2001','November 1 2001'],['December 1 2007','June 1 2009']]
-					for (var i=0;i<shad.length;i++){
-						shading.push([new Date(shad[i][0]),new Date(shad[i][1])])
+			// line/scatter specific
+			points=document.getElementById('points').checked
+			labels=document.getElementById('labels').checked
+			us_shading=document.getElementById('recession_shading').checked
+			arbitrary_shading=$('#arbitrary_intervals').val()
+			label=$("#line_select_label").val()
+			connect=$("#line_select_connect").val()
+			size=$("#line_select_pointsize").val()
+
+			//point type
+			point_type=$('input[name=linepoint]:checked').val()
+
+			// create the style object
+			style={}
+
+			// which grids should be drawn
+			grids=[xgrid,ygrid,xminorgrid,yminorgrid]
+			attributes=['xgrid_opacity','ygrid_opacity','xgrid_minoropacity','ygrid_minoropacity']
+			for(var i=0;i<grids.length;i++){
+				if(grids[i]==true){style[attributes[i]]=1}
+				if(grids[i]==false){style[attributes[i]]=0}	
+			}
+
+			// point style
+			if(barspace==false){style['barchart_width']=1}
+			style['legend_location']=legendloc
+
+			if (point_type=='pointpoint'){
+				style['point_size']=2
+				style['point_strokewidth']=0
+				style['point_fillopacity']=1
+			} else if (point_type=='pointcircle'){
+				style['point_size']=4
+				style['point_strokewidth']=2
+				style['point_fillopacity']=.2
+			} else if (point_type=='pointcircleopen'){
+				style['point_size']=3
+				style['point_strokewidth']=1
+				style['point_fillopacity']=0
+			}
+
+			// get style settings from the settings tab. These will override settings elsewhere in the document if they have been filled in
+			settings=['linechart_strokeopacity','top_margin','bottom_margin','left_margin','right_margin','head_height','footer_height','hedsize','hedweight','hedface','deksize','dekweight','dekface','datasize','dataweight','dataface','annotatesize','annotateweight','annotateface','sourcesize','sourceweight','sourceface','notesize','noteweight','noteface','chartfill','chart_toppad','chart_bottompad','chart_leftpad','chart_rightpad','headerfill','header_toppad','header_bottompad','header_leftpad','header_rightpad','footerfill','footer_toppad','footer_bottompad','footer_leftpad','footer_rightpad','xgrid_fill','xgrid_zerofill','xgrid_minorfill','xgrid_thickness','xgrid_zerothickness','xgrid_minorthickness','xgrid_dasharray','xgrid_zerodasharray','xgrid_minordasharray','xgrid_opacity','xgrid_zeroopacity','xgrid_minoropacity','ygrid_fill','ygrid_zerofill','ygrid_minorfill','ygrid_thickness','ygrid_zerothickness','ygrid_minorthickness','ygrid_dasharray','ygrid_zerodasharray','ygrid_minordasharray','ygrid_opacity','ygrid_zeroopacity','ygrid_minoropacity','xtick_textsize','xtick_textweight','xtick_textface','xtick_maxsize','xtick_length','xtick_thickness','xtick_fill','xtick_to_xlabel','xtick_to_xaxis','ytick_textsize','ytick_textweight','ytick_textface','ytick_maxsize','ytick_length','ytick_thickness','ytick_fill','ytick_to_ylabel','ytick_to_yaxis','xlabel_textsize','xlabel_textweight','xlabel_textface','ylabel_textsize','ylabel_textweight','ylabel_textface','legend_location','legend_maxwidth','legend_textsize','legend_textweight','legend_textface','legend_toppad','legend_bottompad','legend_rightpad','legend_leftpad','legend_elementsize','legend_elementpad','legend_floatbackground','legend_floatthickness','legend_floatstroke','legend_floatpad','diverging_color','sequential_color','qualitative_color','barchart_width','trend_width','trend_fill','trend_textface','trend_textweight','trend_textsize','trend_textcolor','trend_linetotext','point_size','point_strokewidth','point_fillopacity','point_maxsize','point_minsize']
+			numerical=['linechart_strokeopacity','top_margin','bottom_margin','left_margin','right_margin','head_height','footer_height','chart_toppad','chart_bottompad','chart_leftpad','chart_rightpad','header_toppad','header_bottompad','header_leftpad','header_rightpad','footer_toppad','footer_bottompad','footer_leftpad','footer_rightpad','xgrid_thickness','xgrid_zerothickness','xgrid_minorthickness','xgrid_opacity','xgrid_zeroopacity','xgrid_minoropacity','ygrid_thickness','ygrid_zerothickness','ygrid_minorthickness','ygrid_opacity','ygrid_zeroopacity','ygrid_minoropacity','xtick_maxsize','xtick_length','xtick_thickness','xtick_to_xlabel','xtick_to_xaxis','ytick_maxsize','ytick_length','ytick_thickness','ytick_to_ylabel','ytick_to_yaxis','legend_maxwidth','legend_toppad','legend_bottompad','legend_rightpad','legend_leftpad','legend_elementsize','legend_elementpad','legend_floatthickness','legend_floatstroke','legend_floatpad','barchart_width','trend_width','trend_linetotext','point_size','point_strokewidth','point_fillopacity','point_maxsize','point_minsize']
+			for(var i=0;i<settings.length;i++){
+				set=$("#"+settings[i]).val()
+				if (set!=''){
+					if ($.inArray(settings[i],numerical)>-1){
+						style[settings[i]]=parseFloat(set)
+					} else{
+						style[settings[i]]=set
 					}
-				} else if (arbitrary_shading!=''){
-					sa=arbitrary_shading.split('],[')
-					saf=[]
-					for(var i=0;i<sa.length;i++){
-						temp=sa[i].replace('[','')
-						temp=temp.replace(']','')
-						saf.push([temp.split(',')[0],temp.split(',')[1]])
+				}
+			}
+
+			// now apply the style object
+			chartobject.style(style)
+			console.log(style)
+
+			// initialize axes
+			chartobject.xaxis({'label':xlabel,'number_of_ticks':5,'decimal':undefined,'format':undefined,'pre':xprepend,'app':xappend})
+			chartobject.yaxis({'label':ylabel,'number_of_ticks':5,'decimal':undefined,'format':undefined,'pre':yprepend,'app':yappend})
+
+			chartobject.header(hed,dek)
+			chartobject.footer(logoobj,source,note,function(){
+				// draw the initial graph, dependent on current value of graph_type
+				if (graph_type=='Bar Chart') {
+
+					if ($('#customx').val()!='' && $("#customxcheck").prop('checked')==true){
+						chartobject.xarray=$('#customx').val().split(',')
 					}
-					if (moment(saf[0][0], ["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY","YYYYqQ"],true).isValid()==true){
-						for(var i=0;i<saf.length;i++){
-							shading.push([new Date(moment(saf[i][0], ["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY","YYYYqQ"],true)),new Date(moment(saf[i][0], ["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY"],true))])
+					if ($('#customy').val()!='' && $("#customycheck").prop('checked')==true){
+						chartobject.yarray=$('#customy').val().split(',')
+					}
+
+					options={}
+
+					// orientation - 'vertical' or 'horizontal'
+					options['orientation']=$('input[name=barorient]:checked').val()
+
+					// stacked barchart toggle
+					stacked=$("#stacked").prop('checked')
+					options['stacked']=stacked
+
+					console.log(chartobject)
+					chartobject.barchart(options)
+					$('#customx').val(chartobject.xarray)
+					$('#customy').val(chartobject.yarray)
+				}
+
+				if (graph_type=='Line/Scatter') {
+					options={}
+
+					// get shading input from frontend
+					shading=[]
+					if (us_shading==true){
+						shad=[['June 1 1857','December 1 1858'],['October 1 1860','June 1 1861'],['April 1 1865','December 1 1867'],['June 1 1869','December 1 1870'],['October 1 1873','March 1 1879'],['March 1 1882','May 1 1885'],['March 1 1887','April 1 1888'],['July 1 1890','May 1 1891'],['January 1 1893','June 1 1894'],['December 1 1895','June 1 1897'],['June 1 1899','December 1 1900'],['September 1 1902','August 1 1904'],['May 1 1907','June 1 1908'],['January 1 1910','January 1 1912'],['January 1 1913','December 1 1914'],['August 1 1918','March 1 1919'],['January 1 1920','July 1 1921'],['May 1 1923','July 1 1924'],['October 1 1926','November 1 1927'],['August 1 1929','March 1 1933'],['May 1 1937','June 1 1938'],['February 1 1945','October 1 1945'],['November 1 1948','October 1 1949'],['July 1 1953','May 1 1954'],['August 1 1957','April 1 1958'],['April 1 1960','February 1 1961'],['December 1 1969','November 1 1970'],['November 1 1973','March 1 1975'],['January 1 1980','July 1 1980'],['July 1 1981','November 1 1982'],['July 1 1990','March 1 1991'],['March 1 2001','November 1 2001'],['December 1 2007','June 1 2009']]
+						for (var i=0;i<shad.length;i++){
+							shading.push([new Date(shad[i][0]),new Date(shad[i][1])])
 						}
+					} else if (arbitrary_shading!=''){
+						sa=arbitrary_shading.split('],[')
+						saf=[]
+						for(var i=0;i<sa.length;i++){
+							temp=sa[i].replace('[','')
+							temp=temp.replace(']','')
+							saf.push([temp.split(',')[0],temp.split(',')[1]])
+						}
+						if (moment(saf[0][0], ["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY","YYYYqQ"],true).isValid()==true){
+							for(var i=0;i<saf.length;i++){
+								shading.push([new Date(moment(saf[i][0], ["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY","YYYYqQ"],true)),new Date(moment(saf[i][0], ["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY"],true))])
+							}
+						} else {
+							for(var i=0;i<saf.length;i++){
+								shading.push([parseFloat(saf[i][0]),parseFloat(saf[i][1])])
+							}
+						}
+					}
+
+					options['shading']=shading
+
+					// get trendline input from frontend
+					slopes=document.getElementsByClassName('slope')
+					intercepts=document.getElementsByClassName('intercept')
+
+					trends=[]
+
+					for (var i=0;i<slopes.length;i++){
+						trends.push([slopes[i].value,intercepts[i].value])
+					}
+
+					options['abline']=trends
+
+					// get info on labelling variable from front end
+					if (label!=='none'){
+						options['label']=label
+					}
+
+					// get info on connecting variable from front end
+					if (connect!=='none'){
+						options['connect']=connect
+					}
+
+					// get info on bubble size variable from front end
+					if (size!=='none'){
+						options['size']=size
+					}
+
+					// get info on whether points should be drawn from front end
+					if (points==true){
+						options['points']=true
 					} else {
-						for(var i=0;i<saf.length;i++){
-							shading.push([parseFloat(saf[i][0]),parseFloat(saf[i][1])])
-						}
+						options['points']=false
 					}
+
+					// get info on whether labels should show by default from front end
+					if (labels==true){
+						options['labels']=true
+					} else {
+						options['labels']=false
+					}
+
+					// custom axes
+					if ($('#customx').val()!='' && $("#customxcheck").prop('checked')==true){
+						chartobject.xarray=$('#customx').val().split(',')
+					}
+					if ($('#customy').val()!='' && $("#customycheck").prop('checked')==true){
+						chartobject.yarray=$('#customy').val().split(',')
+					}
+
+					chartobject.linechart(options)
+					$('#customx').val(chartobject.xarray)
+					$('#customy').val(chartobject.yarray)
 				}
-
-				options['shading']=shading
-
-				// get trendline input from frontend
-				slopes=document.getElementsByClassName('slope')
-				intercepts=document.getElementsByClassName('intercept')
-
-				trends=[]
-
-				for (var i=0;i<slopes.length;i++){
-					trends.push([slopes[i].value,intercepts[i].value])
-				}
-
-				options['abline']=trends
-
-				// get info on labelling variable from front end
-				if (label!=='none'){
-					options['label']=label
-				}
-
-				// get info on connecting variable from front end
-				if (connect!=='none'){
-					options['connect']=connect
-				}
-
-				// get info on bubble size variable from front end
-				if (size!=='none'){
-					options['size']=size
-				}
-
-				// get info on whether points should be drawn from front end
-				if (points==true){
-					options['points']=true
-				} else {
-					options['points']=false
-				}
-
-				// get info on whether labels should show by default from front end
-				if (labels==true){
-					options['labels']=true
-				} else {
-					options['labels']=false
-				}
-
-				// custom axes
-				if ($('#customx').val()!='' && $("#customxcheck").prop('checked')==true){
-					chartobject.xarray=$('#customx').val().split(',')
-				}
-				if ($('#customy').val()!='' && $("#customycheck").prop('checked')==true){
-					chartobject.yarray=$('#customy').val().split(',')
-				}
-
-				chartobject.linechart(options)
-				$('#customx').val(chartobject.xarray)
-				$('#customy').val(chartobject.yarray)
-			}
-		})
+			})
+		} else {
+			throw 'Nothing to graph!'
+		}
+	} catch(err){
+		alert(err)
 	}
 }
 
@@ -2033,6 +2044,14 @@ function edit_text(ev) {
 			selected_text.attr({'font-size':parseFloat(selected_text.attr('font-size'))-2+'px'})
 		}
 
+		// if text is rotated, un-rotate it
+		trans=selected_text.attr('transform')
+		console.log(trans)
+		selected_text.attr({transform:''})
+		coords=selected_text.getBBox()
+		if(trans==""){trans=trans.string;console.log('hi')}
+		console.log(trans)
+
 		selected=1
 
 		// place initial cursor
@@ -2058,12 +2077,6 @@ function edit_text(ev) {
 		// 	console.log(coords)
 		// 	cursor.attr({x:coords.x2,y:coords.y})
 		// }
-
-		// if text is rotated, un-rotate it
-		trans=selected_text.attr('transform')
-		selected_text.attr({transform:''})
-		coords=selected_text.getBBox()
-		if(trans==""){trans=trans.string}
 
 		// new selection
 		select_box=grapharea.group()
@@ -2223,8 +2236,8 @@ var down_listener=function(ev) {
 	var keycode = (ev.keyCode)
 	// console.log('down',keycode,ev.shiftKey)
 	// up and down movement and font sizing
-	if(keycode==40 && ev.shiftKey==true){selected_text.attr({y:parseFloat(selected_text.attr('y'))+1});high_box.attr({y:high_coords.y+1});console.log(coords.y,high_coords.y)}
-	if(keycode==38 && ev.shiftKey==true){selected_text.attr({y:parseFloat(selected_text.attr('y'))-1});high_box.attr({y:high_coords.y-1});console.log(coords.y,high_coords.y)}
+	if(keycode==40 && ev.shiftKey==true){selected_text.attr({y:parseFloat(selected_text.attr('y'))+1});high_box.attr({y:high_coords.y+1});}
+	if(keycode==38 && ev.shiftKey==true){selected_text.attr({y:parseFloat(selected_text.attr('y'))-1});high_box.attr({y:high_coords.y-1});}
 	if(keycode==40 && ev.shiftKey==false){
 		size=selected_text.attr('font-size')
 		selected_text.attr({'font-size':parseInt(size)-1});
@@ -2293,7 +2306,7 @@ var down_listener=function(ev) {
 					cursor.attr({opacity:1})
 					if(tlocation[0]==0){
 						tlocation[1]=tlocation[1]-1
-						tlocation[0]=string[tlocation[1]].length
+						try{tlocation[0]=string[tlocation[1]].length}catch(err){}
 						if(tlocation[1]<0){
 							tlocation[1]=0
 							tlocation[0]=0
@@ -2306,6 +2319,9 @@ var down_listener=function(ev) {
 					tlocation[0]=tlocation[0]-1
 				}
 				// selected_text.attr({opacity:opacity-.1})
+			}
+			if(tlocation[0]<0){
+				tlocation[0]=0
 			}
 			position_cursor(selected_text)
 		}
@@ -2488,6 +2504,9 @@ $(function() {
 	var svgarea=document.getElementById('grapharea')
 	var doubleClicked = false;
 	$(svgarea).on("contextmenu", function (e) {
+		height=window.innerHeight
+		width=window.innerWidth
+
 		// console.log(e,e.target,e.target.nodeName,e.target.parentNode.nodeName)
 		if(doubleClicked == false && drawpath!=1) {
 			disableScroll()
@@ -2499,6 +2518,12 @@ $(function() {
 				$("#text_context_menu").css("left", e.clientX+3);
 				$("#text_context_menu").css("top", e.clientY);
 				$("#text_context_menu").fadeIn(50, FocusContextOut());
+				if(e.clientY+$("#text_context_menu").height()>height){
+					$("#text_context_menu").css("top", height-$("#text_context_menu").height()-5);
+				}
+				if(e.clientX+$("#text_context_menu").width()>width){
+					$("#text_context_menu").css("left", e.clientX-3-$("#text_context_menu").width());
+				}
 				doubleClicked = true;
 			}  else if(e.target.className.baseVal=='callout'){
 				clickedevent=e
@@ -2506,6 +2531,12 @@ $(function() {
 				$("#callout_context_menu").css("left", e.clientX+3);
 				$("#callout_context_menu").css("top", e.clientY);
 				$("#callout_context_menu").fadeIn(50, FocusContextOut());
+				if(e.clientY+$("#callout_context_menu").height()>height){
+					$("#callout_context_menu").css("top", height-$("#callout_context_menu").height()-5);
+				}
+				if(e.clientX+$("#callout_context_menu").width()>width){
+					$("#callout_context_menu").css("left", e.clientX-3-$("#callout_context_menu").width());
+				}
 				doubleClicked = true;	
 			} else if((e.target.nodeName=='path' && e.target.className.baseVal!='dataelement' && e.target.className.baseVal!='callout') || (e.target.nodeName=='line' && typeof e.target.attributes.ident!='undefined')){
 				clickedevent=e
@@ -2513,25 +2544,49 @@ $(function() {
 				$("#path_context_menu").css("left", e.clientX+3);
 				$("#path_context_menu").css("top", e.clientY);
 				$("#path_context_menu").fadeIn(50, FocusContextOut());
+				if(e.clientY+$("#path_context_menu").height()>height){
+					$("#path_context_menu").css("top", height-$("#path_context_menu").height()-5);
+				}
+				if(e.clientX+$("#path_context_menu").width()>width){
+					$("#path_context_menu").css("left", e.clientX-3-$("#path_context_menu").width());
+				}
 			} else if(e.target.nodeName=='path' && e.target.className.baseVal=='dataelement'){
 				clickedevent=e
 				e.preventDefault();
 				$("#pathdata_context_menu").css("left", e.clientX+3);
 				$("#pathdata_context_menu").css("top", e.clientY);
 				$("#pathdata_context_menu").fadeIn(50, FocusContextOut());
+				if(e.clientY+$("#pathdata_context_menu").height()>height){
+					$("#pathdata_context_menu").css("top", height-$("#pathdata_context_menu").height()-5);
+				}
+				if(e.clientX+$("#pathdata_context_menu").width()>width){
+					$("#pathdata_context_menu").css("left", e.clientX-3-$("#pathdata_context_menu").width());
+				}
 			} else if (e.target.nodeName=='circle'){
 				clickedevent=e
 				e.preventDefault();
 				$("#point_context_menu").css("left", e.clientX+3);
 				$("#point_context_menu").css("top", e.clientY);
 				$("#point_context_menu").fadeIn(50, FocusContextOut());	
+				if(e.clientY+$("#point_context_menu").height()>height){
+					$("#point_context_menu").css("top", height-$("#point_context_menu").height()-5);
+				}
+				if(e.clientX+$("#point_context_menu").width()>width){
+					$("#point_context_menu").css("left", e.clientX-3-$("#point_context_menu").width());
+				}
 			} else if(e.target.className.baseVal=='dataelement'){
 				clickedevent=e
 				e.preventDefault();
 				$("#data_context_menu").css("left", e.clientX+3);
 				$("#data_context_menu").css("top", e.clientY);
 				$("#data_context_menu").fadeIn(50, FocusContextOut());
-				doubleClicked = true;		
+				if(e.clientY+$("#data_context_menu").height()>height){
+					$("#data_context_menu").css("top", height-$("#data_context_menu").height()-5);
+				}
+				if(e.clientX+$("#data_context_menu").width()>width){
+					$("#data_context_menu").css("left", e.clientX-3-$("#data_context_menu").width());
+				}	
+				doubleClicked = true;
 			} else if(e.target.nodeName=='rect' && typeof e.target.attributes.ident!='undefined'){
 				if(e.target.attributes.ident.value=='key'){
 					clickedevent=e
@@ -2539,6 +2594,12 @@ $(function() {
 					$("#data_context_menu").css("left", e.clientX+3);
 					$("#data_context_menu").css("top", e.clientY);
 					$("#data_context_menu").fadeIn(50, FocusContextOut());
+					if(e.clientY+$("#data_context_menu").height()>height){
+					$("#data_context_menu").css("top", height-$("#data_context_menu").height()-5);
+					}
+					if(e.clientX+$("#data_context_menu").width()>width){
+						$("#data_context_menu").css("left", e.clientX-3-$("#data_context_menu").width());
+					}
 					doubleClicked = true;
 				}
 			} else {
@@ -2547,6 +2608,12 @@ $(function() {
 				$("#other_context_menu").css("left", e.clientX+3);
 				$("#other_context_menu").css("top", e.clientY);
 				$("#other_context_menu").fadeIn(50, FocusContextOut());
+				if(e.clientY+$("#other_context_menu").height()>height){
+					$("#other_context_menu").css("top", height-$("#other_context_menu").height()-5);
+				}
+				if(e.clientX+$("#other_context_menu").width()>width){
+					$("#other_context_menu").css("left", e.clientX-3-$("#other_context_menu").width());
+				}
 				doubleClicked = true;
 			}
 		} else {
@@ -2855,6 +2922,21 @@ function deleteelement(e) {
 	}
 }
 
+function movetofront(e) {
+	if (e.nodeName=='tspan'){
+		item=Snap(e)
+		item=item.parent()
+		grapharea.append(item)
+	} else if (e.parentNode.nodeName=='g'){
+		item=Snap(e)
+		item=item.parent()
+		grapharea.append(item)
+	} else {
+		item=Snap(e)
+		grapharea.append(item)
+	}
+}
+
 function pointsizeup(e) {
 	item=Snap(e)
 	item.attr({r:parseInt(item.attr('r'))+1})
@@ -2903,10 +2985,10 @@ function pointtype(e,type) {
 		}
 	} else if (type=='pointcircleopen') {
 		if (sw==0){
-			item.attr({'stroke-width':2,r:r+2,'fill-opacity':0})
+			item.attr({'stroke-width':1,r:r+2,'fill-opacity':0})
 			if(item.attr('ident')=='key'){
 				group=item.attr('group')
-				snapobj.selectAll("circle[group='"+group+"']").attr({'stroke-width':2,r:r+2,'fill-opacity':0})
+				snapobj.selectAll("circle[group='"+group+"']").attr({'stroke-width':1,r:r+2,'fill-opacity':0})
 			}
 		} else {
 			item.attr({'stroke-width':2,'fill-opacity':0})
@@ -3029,7 +3111,6 @@ function importsettings() {
 }
 
 function cloudsave() {
-
 	// remove any selected text boxes
 	try{
 		select_box.remove()
@@ -3088,55 +3169,76 @@ function cancelload() {
 
 function savetoserver() {
 
-	// build the dictionary to bpass to ajax
-	var filename=$('#savename').val()
-	var svg = document.getElementById("grapharea").innerHTML
+	try{
+		// build the dictionary to pass to ajax
+		var filename=$('#savename').val()
+		var svg = document.getElementById("grapharea").innerHTML
 
-	dictionary={}
-	dictionary['svg']=encodeURIComponent(svg)
-	temp=chartobject
-	delete temp['svg']
-	delete temp['logo']
-	dictionary['chartobject']=JSON.stringify(temp)
-	dictionary['filename']=filename
+		dictionary={}
+		dictionary['svg']=encodeURIComponent(svg)
+		temp=chartobject
+		delete temp['svg']
+		delete temp['logo']
+		dictionary['chartobject']=JSON.stringify(temp)
+		dictionary['filename']=filename
 
-	input_dict={}
+		input_dict={}
 
-	databox_value=$('#data_text').val();
-	input_dict['data_text']=['textarea',databox_value]
+		databox_value=$('#data_text').val();
+		input_dict['data_text']=['textarea',databox_value]
 
-	// modified from StackOverflow, T.J. Crowder
-	// http://stackoverflow.com/a/2214077/3001940
-	// get value of all inputs onscreen so they can be restored by a load
-	var inputs, index;
+		// modified from StackOverflow, T.J. Crowder
+		// http://stackoverflow.com/a/2214077/3001940
+		// get value of all inputs onscreen so they can be restored by a load
+		var inputs, index;
 
-	inputs = document.getElementsByTagName('input');
-	for (index = 0; index < inputs.length; ++index) {
-	    if(inputs[index].type=='radio' || inputs[index].type=='checkbox'){
-	    	input_dict[inputs[index].id]=[inputs[index].type,inputs[index].checked]
-	    } else if (inputs[index].type=='text'){
-	    	input_dict[inputs[index].id]=[inputs[index].type,inputs[index].value]
-	    }
-	}
+		inputs = document.getElementsByTagName('input');
+		for (index = 0; index < inputs.length; ++index) {
+		    if(inputs[index].type=='radio' || inputs[index].type=='checkbox'){
+		    	input_dict[inputs[index].id]=[inputs[index].type,inputs[index].checked]
+		    } else if (inputs[index].type=='text'){
+		    	input_dict[inputs[index].id]=[inputs[index].type,inputs[index].value]
+		    }
+		}
 
-	selects=document.getElementsByTagName('select');
-	for (index=0; index < selects.length; ++index){
-		input_dict[selects[index].id]=['dropdown',selects[index].value]
-	}
+		selects=document.getElementsByTagName('select');
+		for (index=0; index < selects.length; ++index){
+			input_dict[selects[index].id]=['dropdown',selects[index].value]
+		}
 
-	input_dict['graphtype']=['graphtype',graph_type]
-	dictionary['inputs']=JSON.stringify(input_dict)
+		input_dict['graphtype']=['graphtype',graph_type]
+
+		// get trendline input from frontend
+		slopes=document.getElementsByClassName('slope')
+		intercepts=document.getElementsByClassName('intercept')
+
+		fslopes=[]
+		fintercepts=[]
+
+		for (var i=0;i<slopes.length;i++){
+			fslopes.push([slopes[i].value])
+			fintercepts.push([intercepts[i].value])
+		}
+
+		input_dict['slope']=fslopes
+		input_dict['intercept']=fintercepts
+
+		dictionary['inputs']=JSON.stringify(input_dict)
 
 	// call the python script
-	$.ajax({
-		url:'http://www.austinclemens.com/cgi-bin/savetoserver.py',
-		type: 'post',
-		datatype: 'html',
-		data: dictionary,
-		success: function(response){
-			cancelsave()
-		}
-	})
+		$.ajax({
+			url:'http://www.austinclemens.com/cgi-bin/savetoserver.py',
+			type: 'post',
+			datatype: 'html',
+			data: dictionary,
+			success: function(response){
+				cancelsave()
+			}
+		})
+	} catch(err){
+		alert('Failed to save: '+'\n'+err)
+		cancelsave()
+	}
 }
 
 function loadfromserver() {
@@ -3162,6 +3264,8 @@ function load_populate(response) {
 
 	chartobject=JSON.parse(settings)
 	inputs=JSON.parse(inputs)
+
+	console.log(inputs)
 
 	document.getElementById('data_text').value=inputs['data_text'][1]
 	loadData()
@@ -3198,6 +3302,19 @@ function load_populate(response) {
 	$('#grapharea').attr('height',height)
 	$('#grapharea').attr('width',width)
 	$('#constraint').attr('style','max-width:'+width+';margin-left:auto;margin-right:auto')
+
+	// load the correct number of slope/intercept fields and populate
+	if (inputs['slope'][0]!='text'){
+
+		document.getElementsByClassName('slope')[0].value=inputs['slope'][0]
+		document.getElementsByClassName('intercept')[0].value=inputs['intercept'][0]
+
+		for(var i=1;i<inputs['slope'].length;i++){
+			newtrend()
+			document.getElementsByClassName('slope')[0].value=inputs['slope'][i]
+			document.getElementsByClassName('intercept')[0].value=inputs['intercept'][i]
+		}
+	}
 
 	// insert the returned svg into the svg slot
 	document.getElementById("grapharea").innerHTML=svg
