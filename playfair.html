@@ -377,7 +377,7 @@
 
 <!-- Header -->
 <h1 class='text-center'>playfair</h1>
-<h4 class='text-center'><sup style='visibility: hidden'>v1.15, <a href='changelog.txt'>changelog</a></sup>make equitable graphs<sup>v1.15, <a href='changelog.txt'>changelog</a></sup></h4>
+<h4 class='text-center'><sup style='visibility: hidden'>v1.2, <a href='changelog.txt'>changelog</a></sup>make equitable graphs<sup>v1.2, <a href='changelog.txt'>changelog</a></sup></h4>
 
 	<div class='col-md-2'></div>
 	<div class='col-xs-8'>
@@ -667,6 +667,8 @@
 						<div class='uibox_text'>Trend Lines</div>
 						<div class='uibox'>
 							<div id='trends'>
+							</div>
+							<div id='trendorig'>
 								<div class='row'>
 									<div class='col-md-12'>
 										<div class='col-md-4'>
@@ -1362,6 +1364,7 @@ var loaded_data=0
 var alerted=0
 var graph_type=''
 var dragging=0
+var hovered=0
 var height=480
 var width=745
 var chartobject
@@ -2013,7 +2016,7 @@ function unselect_text(ev) {
 function edit_text(ev) {
 	// if a text element is clicked, select it and listen for keypresses.
 	if(ev.target.nodeName=='text' || ev.target.nodeName=='tspan'){
-
+		hovered=0
 		// ghelp=$('#help_general')
 		// thelp=$('#help_text')
 		if(parseFloat(width)<=745){
@@ -3214,8 +3217,10 @@ function savetoserver() {
 		fintercepts=[]
 
 		for (var i=0;i<slopes.length;i++){
-			fslopes.push([slopes[i].value])
-			fintercepts.push([intercepts[i].value])
+			if(slopes[i].value!=''){
+				fslopes.push([slopes[i].value])
+				fintercepts.push([intercepts[i].value])
+			}
 		}
 
 		input_dict['slope']=fslopes
@@ -3263,7 +3268,9 @@ function load_populate(response) {
 	chartobject=JSON.parse(settings)
 	inputs=JSON.parse(inputs)
 
-	console.log(inputs)
+	console.log(inputs['intercept'])
+
+	$('#trends').empty()
 
 	document.getElementById('data_text').value=inputs['data_text'][1]
 	loadData()
@@ -3349,11 +3356,16 @@ function load_populate(response) {
 	// stick drag method on the things that need it.
 	drag_eles=grapharea.selectAll('rect[ident2="floatkey"]')
 	for(var i=0;i<drag_eles.length;i++){
-		console.log(drag_eles[i])
+		// console.log(drag_eles[i])
 		drag_eles[i].drag(moveFuncfloat,function(){x=this.attr('x');y=this.attr('y');prevx=0;prevy=0})
 	}
 
-	drag_eles=grapharea.selectAll('[class="callout"]')
+	drag_eles=grapharea.selectAll('line[class="callout"]')
+	for(var i=0;i<drag_eles.length;i++){
+		drag_eles[i].drag()
+	}
+
+	drag_eles=grapharea.selectAll('g')
 	for(var i=0;i<drag_eles.length;i++){
 		drag_eles[i].drag()
 	}
@@ -3384,32 +3396,41 @@ function highlight_element(ev) {
 		item=Snap(ev.target)
 		try{if(ev.target.nodeName=='path'){
 			item.attr({'stroke-width':parseFloat(item.attr('stroke-width'))+3,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))-.5})
+			hovered=1
 		}}catch(err){}
 		try{if(ev.target.nodeName=='circle'){
 			item.attr({'r':parseFloat(item.attr('r'))+2,'stroke-width':parseFloat(item.attr('stroke-width'))+1,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))-.5})
+			hovered=1
 		}}catch(err){} 
 		try{if(ev.target.nodeName=='line' && ev.target.attributes.ident.value=='key'){
 			item.attr({'stroke-width':parseFloat(item.attr('stroke-width'))+2,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))-.5})
+			hovered=1
 		}}catch(err){} 
 		try{if(ev.target.nodeName=='rect' && ev.target.attributes.ident.value=='key' && ev.target.attributes.ident2.value!='floatkey'){
 			item.attr({'stroke-opacity':parseFloat(item.attr('stroke-opacity'))-.5,'fill-opacity':parseFloat(item.attr('fill-opacity'))-.5,'x':parseFloat(item.attr('x'))-2,'y':parseFloat(item.attr('y'))-2,'width':parseFloat(item.attr('width'))+4,'height':parseFloat(item.attr('height'))+4})
+			hovered=1
 		}}catch(err){} 
 		try{if(ev.target.nodeName=='rect' && ev.target.attributes.data_type.value=='bar'){
 			item.attr({'stroke-opacity':parseFloat(item.attr('stroke-opacity'))-.5,'fill-opacity':parseFloat(item.attr('fill-opacity'))-.5,'x':parseFloat(item.attr('x'))-2,'y':parseFloat(item.attr('y'))-2,'width':parseFloat(item.attr('width'))+4,'height':parseFloat(item.attr('height'))+4})
+			hovered=1
 		}}catch(err){}  
 		try{if(ev.target.nodeName=='line' && ev.target.attributes.class.value=='callout'){
 			item.attr({'stroke-width':parseFloat(item.attr('stroke-width'))+2,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))-.5})
+			hovered=1
 		}}catch(err){}  
 		try{if(ev.target.nodeName=='text'){
 			item.attr({'font-size':parseFloat(item.attr('font-size'))+2+'px'})
+			hovered=1
 		}}catch(err){} 
 		try{if(ev.target.nodeName=='tspan'){
 			item=item.parent()
 			item.attr({'font-size':parseFloat(item.attr('font-size'))+2+'px'})
+			hovered=1
 		}}catch(err){} 
 		try{if(ev.target.className.baseVal=='dataelement'){
 			coords=item.getBBox()
 			highlighttext=grapharea.text(coords.x+coords.width/2,coords.y+coords.height/2,item.attr('data_label')).attr({'font-family':'Lato, Arial, sans-serif','font-size':16,'text-anchor':'start','fill':'black','font-weight':400,cursor:'pointer'})
+			hovered=1
 		}}catch(err){}
 	}
 
@@ -3417,35 +3438,44 @@ function highlight_element(ev) {
 
 function unhighlight_element(ev) {
 	item=Snap(ev.target)
-	if(selected==0){
+	if(selected==0 & hovered==1){
 		try{
 			try{if(ev.target.nodeName=='path'){
 				item.attr({'stroke-width':parseFloat(item.attr('stroke-width'))-3,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))+.5})
+				hovered=0
 			}}catch(err){} 
 			try{if(ev.target.nodeName=='circle'){
 				item.attr({'r':parseFloat(item.attr('r'))-2,'stroke-width':parseFloat(item.attr('stroke-width'))-1,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))+.5})
+				hovered=0
 			}}catch(err){} 
 			try{if(ev.target.nodeName=='line' && ev.target.attributes.ident.value=='key'){
 				item.attr({'stroke-width':parseFloat(item.attr('stroke-width'))-2,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))+.5})
+				hovered=0
 			}}catch(err){} 
 			try{if(ev.target.nodeName=='rect' && ev.target.attributes.ident.value=='key' && ev.target.attributes.ident2.value!='floatkey'){
 				item.attr({'stroke-opacity':parseFloat(item.attr('stroke-opacity'))+.5,'fill-opacity':parseFloat(item.attr('fill-opacity'))+.5,'x':parseFloat(item.attr('x'))+2,'y':parseFloat(item.attr('y'))+2,'width':parseFloat(item.attr('width'))-4,'height':parseFloat(item.attr('height'))-4})
+				hovered=0
 			}}catch(err){} 
 			try{if(ev.target.nodeName=='rect' && ev.target.attributes.class.value=='dataelement'){
 				item.attr({'stroke-opacity':parseFloat(item.attr('stroke-opacity'))+.5,'fill-opacity':parseFloat(item.attr('fill-opacity'))+.5,'x':parseFloat(item.attr('x'))+2,'y':parseFloat(item.attr('y'))+2,'width':parseFloat(item.attr('width'))-4,'height':parseFloat(item.attr('height'))-4})
+				hovered=0
 			}}catch(err){} 
 			try{if(ev.target.nodeName=='line' && ev.target.attributes.class.value=='callout'){
 				item.attr({'stroke-width':parseFloat(item.attr('stroke-width'))-2,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))+.5})
+				hovered=0
 			}}catch(err){} 
 			try{if(ev.target.nodeName=='text'){
 				item.attr({'font-size':parseFloat(item.attr('font-size'))-2+'px'})
+				hovered=0
 			}}catch(err){}
 			try{if(ev.target.nodeName=='tspan'){
 				item=item.parent()
 				item.attr({'font-size':parseFloat(item.attr('font-size'))-2+'px'})
+				hovered=0
 			}}catch(err){}
 			try{if(ev.target.className.baseVal=='dataelement'){
 				highlighttext.remove()
+				hovered=0
 			}}catch(err){}
 		} catch(err){}
 	}

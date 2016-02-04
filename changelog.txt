@@ -1,5 +1,15 @@
 changelog.txt
 
+V1.2
+  - Fixed some of the bugs that caused trend lines to multiply when saving/loading graphs
+
+  - added settings options for text colors
+
+  - I think I fixed that bug where sometimes hovering/unhovering causes elements/text to shrink
+
+  - Fixed a bug where callouts did not drag the circle with them after being loaded and dragged
+
+
 V1.15
   - changed the third point option to something that should look better for large numbers of overlapping points, like in Nick's wage to inflation passthrough graph.
 
