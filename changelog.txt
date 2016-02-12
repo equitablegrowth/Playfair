@@ -3,6 +3,12 @@ changelog.txt
 V1.25
   - You can now add horizontal lines to charts with date data on the x-axis. Trend lines with slopes and vertical lines are still quite broken. This is a tricky problem.
 
+  - fixed a bug where sometimes footers had transparent strips in them
+
+  - Fixed the bug where hovering/unhovering sometimes shrunk text. Now text just gets a shadow on rollover.
+
+  - multi-line text flow for hed/dek/source/note should be waaaaay better now. This does slow down redraw a bit.
+
 
 V1.2
   - Fixed some of the bugs that caused trend lines to multiply when saving/loading graphs
