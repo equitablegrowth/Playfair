@@ -1,5 +1,8 @@
 changelog.txt
 
+V1.4
+  - THIS UPGRADE BREAKS A BUNCH OF STUFF ON OLD GRAPHS. You will have to redraw old graphs to get contextual menus and color changing to work. Big changes to how things work under the hood that don't really matter to users but let me know if changing colors or contextual menus are acting strangely.
+
 V1.3
   - Stacked barcharts with negative values now work
 

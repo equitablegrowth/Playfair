@@ -377,7 +377,7 @@
 
 <!-- Header -->
 <h1 class='text-center'>playfair</h1>
-<h4 class='text-center'><sup style='visibility: hidden'>v1.3, <a href='changelog.txt'>changelog</a></sup>make equitable graphs<sup>v1.3, <a href='changelog.txt'>changelog</a></sup></h4>
+<h4 class='text-center'><sup style='visibility: hidden'>v1.4, <a href='changelog.txt'>changelog</a></sup>make equitable graphs<sup>v1.4, <a href='changelog.txt'>changelog</a></sup></h4>
 
 	<div class='col-md-2'></div>
 	<div class='col-xs-8'>
@@ -1412,7 +1412,7 @@ function placeholder(){
 	var bounding_box=grapharea.rect(0,0,width,height).attr({class:'background',fill:'none','stroke':'lightgray','stroke-width':3.5,'stroke-dasharray':'10,10'})
 	var x1=grapharea.line(0,0,width,height).attr({'stroke':'lightgray','stroke-width':1.75,'stroke-dasharray':'10,10'})
 	var x2=grapharea.line(0,height,width,0).attr({'stroke':'lightgray','stroke-width':1.75,'stroke-dasharray':'10,10'})
-	init_text=grapharea.text(width/2,height/2,'graphing area').attr({'font-family':'Lato, Arial, sans-serif','font-size':50,'text-anchor':'middle','fill':'gray','font-weight':700,'dominant-baseline':'text-before-edge',cursor:'pointer',colorchange:'fill'})
+	init_text=grapharea.text(width/2,height/2,'graphing area').attr({'font-family':'Lato, Arial, sans-serif','font-size':50,'text-anchor':'middle','fill':'gray','font-weight':700,'dominant-baseline':'text-before-edge',cursor:'pointer',colorchange:'fill',context:'text_context_menu'})
 	init_text.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 	center_baseline(init_text)
 }
@@ -1759,7 +1759,6 @@ function redraw() {
 		note=$("#note").val().replace('’',"'")
 		xlabel=$("#xlabel").val().replace('’',"'")
 		ylabel=$("#ylabel").val().replace('’',"'")
-		console.log(hed,hed.replace("’","'"))
 
 		if (x_var!='none' && y_var!='none') {
 
@@ -2525,112 +2524,27 @@ $(function() {
 		// console.log(e,e.target,e.target.nodeName,e.target.parentNode.nodeName)
 		if(doubleClicked == false && drawpath!=1) {
 			disableScroll()
-			// console.log(typeof e.target.attributes.ident)
-			if(e.target.nodeName=='text' || e.target.nodeName=='tspan'){
-				clickedevent=e
-				e.preventDefault();
-				// if(e.target.nodeName=='tspan'){clickedevent=$(e.target).parent('.selector')}
-				$("#text_context_menu").css("left", e.clientX+3);
-				$("#text_context_menu").css("top", e.clientY);
-				$("#text_context_menu").fadeIn(50, FocusContextOut());
-				if(e.clientY+$("#text_context_menu").height()>height2){
-					$("#text_context_menu").css("top", height2-$("#text_context_menu").height()-5);
-				}
-				if(e.clientX+$("#text_context_menu").width()>width2){
-					$("#text_context_menu").css("left", e.clientX-3-$("#text_context_menu").width());
-				}
-				doubleClicked = true;
-			}  else if(e.target.className.baseVal=='callout'){
-				clickedevent=e
-				e.preventDefault();
-				$("#callout_context_menu").css("left", e.clientX+3);
-				$("#callout_context_menu").css("top", e.clientY);
-				$("#callout_context_menu").fadeIn(50, FocusContextOut());
-				if(e.clientY+$("#callout_context_menu").height()>height2){
-					$("#callout_context_menu").css("top", height2-$("#callout_context_menu").height()-5);
-				}
-				if(e.clientX+$("#callout_context_menu").width()>width2){
-					$("#callout_context_menu").css("left", e.clientX-3-$("#callout_context_menu").width());
-				}
-				doubleClicked = true;	
-			} else if((e.target.nodeName=='path' && e.target.className.baseVal!='dataelement' && e.target.className.baseVal!='callout') || (e.target.nodeName=='line' && typeof e.target.attributes.ident!='undefined')){
-				clickedevent=e
-				e.preventDefault();
-				$("#path_context_menu").css("left", e.clientX+3);
-				$("#path_context_menu").css("top", e.clientY);
-				$("#path_context_menu").fadeIn(50, FocusContextOut());
-				if(e.clientY+$("#path_context_menu").height()>height2){
-					$("#path_context_menu").css("top", height2-$("#path_context_menu").height()-5);
-				}
-				if(e.clientX+$("#path_context_menu").width()>width2){
-					$("#path_context_menu").css("left", e.clientX-3-$("#path_context_menu").width());
-				}
-			} else if(e.target.nodeName=='path' && e.target.className.baseVal=='dataelement'){
-				clickedevent=e
-				e.preventDefault();
-				$("#pathdata_context_menu").css("left", e.clientX+3);
-				$("#pathdata_context_menu").css("top", e.clientY);
-				$("#pathdata_context_menu").fadeIn(50, FocusContextOut());
-				if(e.clientY+$("#pathdata_context_menu").height()>height2){
-					$("#pathdata_context_menu").css("top", height2-$("#pathdata_context_menu").height()-5);
-				}
-				if(e.clientX+$("#pathdata_context_menu").width()>width2){
-					$("#pathdata_context_menu").css("left", e.clientX-3-$("#pathdata_context_menu").width());
-				}
-			} else if (e.target.nodeName=='circle'){
-				clickedevent=e
-				e.preventDefault();
-				$("#point_context_menu").css("left", e.clientX+3);
-				$("#point_context_menu").css("top", e.clientY);
-				$("#point_context_menu").fadeIn(50, FocusContextOut());	
-				if(e.clientY+$("#point_context_menu").height()>height2){
-					$("#point_context_menu").css("top", height2-$("#point_context_menu").height()-5);
-				}
-				if(e.clientX+$("#point_context_menu").width()>width2){
-					$("#point_context_menu").css("left", e.clientX-3-$("#point_context_menu").width());
-				}
-			} else if(e.target.className.baseVal=='dataelement'){
-				clickedevent=e
-				e.preventDefault();
-				$("#data_context_menu").css("left", e.clientX+3);
-				$("#data_context_menu").css("top", e.clientY);
-				$("#data_context_menu").fadeIn(50, FocusContextOut());
-				if(e.clientY+$("#data_context_menu").height()>height2){
-					$("#data_context_menu").css("top", height2-$("#data_context_menu").height()-5);
-				}
-				if(e.clientX+$("#data_context_menu").width()>width2){
-					$("#data_context_menu").css("left", e.clientX-3-$("#data_context_menu").width());
-				}	
-				doubleClicked = true;
-			} else if(e.target.nodeName=='rect' && typeof e.target.attributes.ident!='undefined'){
-				if(e.target.attributes.ident.value=='key'){
-					clickedevent=e
-					e.preventDefault();
-					$("#data_context_menu").css("left", e.clientX+3);
-					$("#data_context_menu").css("top", e.clientY);
-					$("#data_context_menu").fadeIn(50, FocusContextOut());
-					if(e.clientY+$("#data_context_menu").height()>height2){
-					$("#data_context_menu").css("top", height2-$("#data_context_menu").height()-5);
-					}
-					if(e.clientX+$("#data_context_menu").width()>width2){
-						$("#data_context_menu").css("left", e.clientX-3-$("#data_context_menu").width());
-					}
-					doubleClicked = true;
-				}
-			} else {
-				clickedevent=e
-				e.preventDefault();
-				$("#other_context_menu").css("left", e.clientX+3);
-				$("#other_context_menu").css("top", e.clientY);
-				$("#other_context_menu").fadeIn(50, FocusContextOut());
-				if(e.clientY+$("#other_context_menu").height()>height2){
-					$("#other_context_menu").css("top", height2-$("#other_context_menu").height()-5);
-				}
-				if(e.clientX+$("#other_context_menu").width()>width2){
-					$("#other_context_menu").css("left", e.clientX-3-$("#other_context_menu").width());
-				}
-				doubleClicked = true;
+			if(e.target.attributes.context){
+				menu='#'+e.target.attributes.context.value
+			} else{
+				menu='#other_context_menu'
 			}
+			console.log(e.target.attributes.context)
+			console.log(menu)
+
+			clickedevent=e
+			e.preventDefault();
+			$(menu).css("left", e.clientX+3);
+			$(menu).css("top", e.clientY);
+			$(menu).fadeIn(50, FocusContextOut());
+			if(e.clientY+$(menu).height()>height2){
+				$(menu).css("top", height2-$(menu).height()-5);
+			}
+			if(e.clientX+$(menu).width()>width2){
+				$(menu).css("left", e.clientX-3-$(menu).width());
+			}
+			doubleClicked = true;
+
 		} else {
 			e.preventDefault();
 			doubleClicked = false;
@@ -2645,6 +2559,137 @@ $(function() {
 		});
 	}
 });
+
+// $(function() {
+// 	var svgarea=document.getElementById('grapharea')
+// 	var doubleClicked = false;
+// 	$(svgarea).on("contextmenu", function (e) {
+// 		height2=window.innerHeight
+// 		width2=window.innerWidth
+
+// 		// console.log(e,e.target,e.target.nodeName,e.target.parentNode.nodeName)
+// 		if(doubleClicked == false && drawpath!=1) {
+// 			disableScroll()
+// 			// console.log(typeof e.target.attributes.ident)
+// 			if(e.target.nodeName=='text' || e.target.nodeName=='tspan'){
+// 				clickedevent=e
+// 				e.preventDefault();
+// 				// if(e.target.nodeName=='tspan'){clickedevent=$(e.target).parent('.selector')}
+// 				$("#text_context_menu").css("left", e.clientX+3);
+// 				$("#text_context_menu").css("top", e.clientY);
+// 				$("#text_context_menu").fadeIn(50, FocusContextOut());
+// 				if(e.clientY+$("#text_context_menu").height()>height2){
+// 					$("#text_context_menu").css("top", height2-$("#text_context_menu").height()-5);
+// 				}
+// 				if(e.clientX+$("#text_context_menu").width()>width2){
+// 					$("#text_context_menu").css("left", e.clientX-3-$("#text_context_menu").width());
+// 				}
+// 				doubleClicked = true;
+// 			}  else if(e.target.className.baseVal=='callout'){
+// 				clickedevent=e
+// 				e.preventDefault();
+// 				$("#callout_context_menu").css("left", e.clientX+3);
+// 				$("#callout_context_menu").css("top", e.clientY);
+// 				$("#callout_context_menu").fadeIn(50, FocusContextOut());
+// 				if(e.clientY+$("#callout_context_menu").height()>height2){
+// 					$("#callout_context_menu").css("top", height2-$("#callout_context_menu").height()-5);
+// 				}
+// 				if(e.clientX+$("#callout_context_menu").width()>width2){
+// 					$("#callout_context_menu").css("left", e.clientX-3-$("#callout_context_menu").width());
+// 				}
+// 				doubleClicked = true;	
+// 			} else if((e.target.nodeName=='path' && e.target.className.baseVal!='dataelement' && e.target.className.baseVal!='callout') || (e.target.nodeName=='line' && typeof e.target.attributes.ident!='undefined')){
+// 				clickedevent=e
+// 				e.preventDefault();
+// 				$("#path_context_menu").css("left", e.clientX+3);
+// 				$("#path_context_menu").css("top", e.clientY);
+// 				$("#path_context_menu").fadeIn(50, FocusContextOut());
+// 				if(e.clientY+$("#path_context_menu").height()>height2){
+// 					$("#path_context_menu").css("top", height2-$("#path_context_menu").height()-5);
+// 				}
+// 				if(e.clientX+$("#path_context_menu").width()>width2){
+// 					$("#path_context_menu").css("left", e.clientX-3-$("#path_context_menu").width());
+// 				}
+// 			} else if(e.target.nodeName=='path' && e.target.className.baseVal=='dataelement'){
+// 				clickedevent=e
+// 				e.preventDefault();
+// 				$("#pathdata_context_menu").css("left", e.clientX+3);
+// 				$("#pathdata_context_menu").css("top", e.clientY);
+// 				$("#pathdata_context_menu").fadeIn(50, FocusContextOut());
+// 				if(e.clientY+$("#pathdata_context_menu").height()>height2){
+// 					$("#pathdata_context_menu").css("top", height2-$("#pathdata_context_menu").height()-5);
+// 				}
+// 				if(e.clientX+$("#pathdata_context_menu").width()>width2){
+// 					$("#pathdata_context_menu").css("left", e.clientX-3-$("#pathdata_context_menu").width());
+// 				}
+// 			} else if (e.target.nodeName=='circle'){
+// 				clickedevent=e
+// 				e.preventDefault();
+// 				$("#point_context_menu").css("left", e.clientX+3);
+// 				$("#point_context_menu").css("top", e.clientY);
+// 				$("#point_context_menu").fadeIn(50, FocusContextOut());	
+// 				if(e.clientY+$("#point_context_menu").height()>height2){
+// 					$("#point_context_menu").css("top", height2-$("#point_context_menu").height()-5);
+// 				}
+// 				if(e.clientX+$("#point_context_menu").width()>width2){
+// 					$("#point_context_menu").css("left", e.clientX-3-$("#point_context_menu").width());
+// 				}
+// 			} else if(e.target.className.baseVal=='dataelement'){
+// 				clickedevent=e
+// 				e.preventDefault();
+// 				$("#data_context_menu").css("left", e.clientX+3);
+// 				$("#data_context_menu").css("top", e.clientY);
+// 				$("#data_context_menu").fadeIn(50, FocusContextOut());
+// 				if(e.clientY+$("#data_context_menu").height()>height2){
+// 					$("#data_context_menu").css("top", height2-$("#data_context_menu").height()-5);
+// 				}
+// 				if(e.clientX+$("#data_context_menu").width()>width2){
+// 					$("#data_context_menu").css("left", e.clientX-3-$("#data_context_menu").width());
+// 				}	
+// 				doubleClicked = true;
+// 			} else if(e.target.nodeName=='rect' && typeof e.target.attributes.ident!='undefined'){
+// 				if(e.target.attributes.ident.value=='key'){
+// 					clickedevent=e
+// 					e.preventDefault();
+// 					$("#data_context_menu").css("left", e.clientX+3);
+// 					$("#data_context_menu").css("top", e.clientY);
+// 					$("#data_context_menu").fadeIn(50, FocusContextOut());
+// 					if(e.clientY+$("#data_context_menu").height()>height2){
+// 					$("#data_context_menu").css("top", height2-$("#data_context_menu").height()-5);
+// 					}
+// 					if(e.clientX+$("#data_context_menu").width()>width2){
+// 						$("#data_context_menu").css("left", e.clientX-3-$("#data_context_menu").width());
+// 					}
+// 					doubleClicked = true;
+// 				}
+// 			} else {
+// 				clickedevent=e
+// 				e.preventDefault();
+// 				$("#other_context_menu").css("left", e.clientX+3);
+// 				$("#other_context_menu").css("top", e.clientY);
+// 				$("#other_context_menu").fadeIn(50, FocusContextOut());
+// 				if(e.clientY+$("#other_context_menu").height()>height2){
+// 					$("#other_context_menu").css("top", height2-$("#other_context_menu").height()-5);
+// 				}
+// 				if(e.clientX+$("#other_context_menu").width()>width2){
+// 					$("#other_context_menu").css("left", e.clientX-3-$("#other_context_menu").width());
+// 				}
+// 				doubleClicked = true;
+// 			}
+// 		} else {
+// 			e.preventDefault();
+// 			doubleClicked = false;
+// 			$(".contextMenuContainer").fadeOut(100);
+// 		}
+// 	});
+// 	function FocusContextOut() {
+// 		$(document).on("click", function () {
+// 			doubleClicked = false; 
+// 			$(".contextMenuContainer").fadeOut(100);
+// 			enableScroll()
+// 		});
+// 	}
+// });
 
 $(function() {
 	var context_menus=document.getElementsByClassName('contextMenuContainer')
@@ -2732,7 +2777,7 @@ function addtext(target) {
 
 	console.log(svgx,svgy)
 
-	var text=grapharea.text(target.pageX-svgx,target.pageY-svgy,'Text Annotation').attr({'font-family':'Lato, Arial, sans-serif','font-size':16,'text-anchor':'start','fill':'black','font-weight':400,'dominant-baseline':'text-before-edge',cursor:'pointer',colorchange:'fill'})
+	var text=grapharea.text(target.pageX-svgx,target.pageY-svgy,'Text Annotation').attr({'font-family':'Lato, Arial, sans-serif','font-size':16,'text-anchor':'start','fill':'black','font-weight':400,'dominant-baseline':'text-before-edge',cursor:'pointer',colorchange:'fill',context:'text_context_menu'})
 	text.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 }
 
@@ -2784,31 +2829,31 @@ function labeldata(target) {
 		coords=item.getBBox()
 		if(item.attr('orient')=='vertical'){
 			if(item.attr('data_label')<0){
-				var datalabel=grapharea.text(coords.x+coords.width/2,coords.y2,item.attr('data_label')).attr({ident:'foot','font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'middle',colorchange:'fill'})
+				var datalabel=grapharea.text(coords.x+coords.width/2,coords.y2,item.attr('data_label')).attr({ident:'foot','font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'middle',colorchange:'fill',context:'text_context_menu'})
 				datalabel.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 			} else {
-				var datalabel=grapharea.text(coords.x+coords.width/2,coords.y-parseInt(chartobject.datasize)*1.15,item.attr('data_label')).attr({ident:'foot','font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'middle',colorchange:'fill'})
+				var datalabel=grapharea.text(coords.x+coords.width/2,coords.y-parseInt(chartobject.datasize)*1.15,item.attr('data_label')).attr({ident:'foot','font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'middle',colorchange:'fill',context:'text_context_menu'})
 				datalabel.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 			}
 		}
 		if(item.attr('orient')=='horizontal'){
 			if(item.attr('data_label')<0){
-				var datalabel=grapharea.text(coords.x-5,coords.y+coords.height/2-parseInt(chartobject.datasize),item.attr('data_label')).attr({ident:'foot','font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill'})
+				var datalabel=grapharea.text(coords.x-5,coords.y+coords.height/2-parseInt(chartobject.datasize),item.attr('data_label')).attr({ident:'foot','font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
 				datalabel.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 			} else {
-				var datalabel=grapharea.text(coords.x+coords.width+5,coords.y+coords.height/2-parseInt(chartobject.datasize),item.attr('data_label')).attr({ident:'foot','font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill'})
+				var datalabel=grapharea.text(coords.x+coords.width+5,coords.y+coords.height/2-parseInt(chartobject.datasize),item.attr('data_label')).attr({ident:'foot','font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
 				datalabel.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 			}
 		}
 	} else if (item.node.nodeName=='path'){
 		coords=item.getBBox()
 		y=parseFloat(item.realPath.split(' ')[item.realPath.split(' ').length-1])
-		var datalabel=grapharea.text(coords.x2+5,y-parseInt(chartobject.datasize)+3,item.attr('data_label')).attr({ident:'foot','font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill'})
+		var datalabel=grapharea.text(coords.x2+5,y-parseInt(chartobject.datasize)+3,item.attr('data_label')).attr({ident:'foot','font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
 		datalabel.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 	}
 	else {
 		coords=item.getBBox()
-		var datalabel=grapharea.text(coords.x+coords.width/2,coords.y-parseInt(chartobject.datasize)-3,item.attr('data_label')).attr({ident:'foot','font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'middle',colorchange:'fill'})
+		var datalabel=grapharea.text(coords.x+coords.width/2,coords.y-parseInt(chartobject.datasize)-3,item.attr('data_label')).attr({ident:'foot','font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'middle',colorchange:'fill',context:'text_context_menu'})
 		datalabel.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 	}
 }
@@ -2855,7 +2900,7 @@ function startpath(e) {
 
 	drawpath=1
 	pathstart=[e.pageX-svgx,e.pageY-svgy]
-	circstart=grapharea.circle(pathstart[0],pathstart[1],1.5).attr({class:'callout',stroke:'#ababab','stroke-width':1,'shape-rendering':'geometricPrecision',fill:'none'})
+	circstart=grapharea.circle(pathstart[0],pathstart[1],1.5).attr({class:'callout',stroke:'#ababab','stroke-width':1,'shape-rendering':'geometricPrecision',fill:'none',context:'callout_context_menu'})
 	grapharea.click(endpath)
 	grapharea.mousemove(tracker)
 }
@@ -2897,7 +2942,7 @@ function endpath(e) {
 	}
 
 	path_string='M'+pathstart[0]+' '+(pathstart[1]+yoffset)+'L'+pathstart[0]+' '+(e.pageY-svgy)+'L'+(e.pageX-svgx)+' '+(e.pageY-svgy)
-	finalline=grapharea.path(path_string).attr({class:'callout','stroke-width':1,'stroke':'#ababab','shape-rendering':'crispEdges',fill:'none',colorchange:'stroke'})
+	finalline=grapharea.path(path_string).attr({class:'callout','stroke-width':1,'stroke':'#ababab','shape-rendering':'crispEdges',fill:'none',colorchange:'stroke',context:'callout_context_menu'})
 	// finalline_1=grapharea.line(pathstart[0],pathstart[1]+yoffset,pathstart[0],e.pageY-svgy).attr({'stroke-width':1,'stroke':'#ababab','shape-rendering':'crispEdges'})
 	// finalline_2=grapharea.line(pathstart[0],e.pageY-svgy,e.pageX-svgx,e.pageY-svgy).attr({'stroke-width':1,'stroke':'#ababab','shape-rendering':'crispEdges'})
 	var temp_group=grapharea.group(finalline,circstart)
@@ -2915,7 +2960,7 @@ function endarrow(e) {
 	grapharea.unmousemove(tracker)
 	grapharea.unclick(endarrow)
 	try{trackline.remove()}catch(err){}
-	finalline=grapharea.line(pathstart[0],pathstart[1],e.pageX-svgx,e.pageY-svgy).attr({ident:'none',class:'callout','stroke-width':2,'stroke':'black','shape-rendering':'auto','marker-end':amarker,colorchange:'stroke'})
+	finalline=grapharea.line(pathstart[0],pathstart[1],e.pageX-svgx,e.pageY-svgy).attr({ident:'none',class:'callout','stroke-width':2,'stroke':'black','shape-rendering':'auto','marker-end':amarker,colorchange:'stroke',context:'callout_context_menu'})
 	finalline.drag()
 }
 
