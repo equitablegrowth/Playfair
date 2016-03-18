@@ -1195,6 +1195,11 @@
 						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Legend float pad:</span><input type="text" class="form-control" placeholder="8" id='legend_floatpad'></div>
 					</div>
 				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Legend Entry Padding:</span><input type="text" class="form-control" placeholder="8" id='legend_entrypadding'></div>
+					</div>
+				</div>
 			</div>
 
 			<div class='tab-content' style='min-height:265px'>
@@ -2732,23 +2737,22 @@ function addtext(target) {
 }
 
 function change_color(target,color) {
-	if(target.nodeName=='line'){
-		var item=Snap(target)
+	var item=Snap(target)
+	if(item.attr('colorchange'=='fill')){
+		item.attr({fill:color})
+	} else if(target.nodeName=='line'){
 		item.attr({stroke:color})	
 		if(item.attr('ident')=='key'){
 			group=item.attr('group')
 			snapobj.selectAll("[group='"+group+"']").attr({stroke:color})
 		}
 	} else if(target.nodeName=='path'){
-		var item=Snap(target)
 		item.attr({stroke:color})	
 		if(item.attr('ident')=='key'){
 			group=item.attr('group')
 			snapobj.selectAll("[group='"+group+"']").attr({stroke:color})
 		}
-	}
-	else{
-		var item=Snap(target)
+	} else{
 		try{if(target.nodeName=='tspan'){
 		item=item.parent()
 		}}catch(err){}
