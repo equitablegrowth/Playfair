@@ -377,7 +377,7 @@
 
 <!-- Header -->
 <h1 class='text-center'>playfair</h1>
-<h4 class='text-center'><sup style='visibility: hidden'>v1.25, <a href='changelog.txt'>changelog</a></sup>make equitable graphs<sup>v1.25, <a href='changelog.txt'>changelog</a></sup></h4>
+<h4 class='text-center'><sup style='visibility: hidden'>v1.3, <a href='changelog.txt'>changelog</a></sup>make equitable graphs<sup>v1.3, <a href='changelog.txt'>changelog</a></sup></h4>
 
 	<div class='col-md-2'></div>
 	<div class='col-xs-8'>
@@ -1412,7 +1412,7 @@ function placeholder(){
 	var bounding_box=grapharea.rect(0,0,width,height).attr({class:'background',fill:'none','stroke':'lightgray','stroke-width':3.5,'stroke-dasharray':'10,10'})
 	var x1=grapharea.line(0,0,width,height).attr({'stroke':'lightgray','stroke-width':1.75,'stroke-dasharray':'10,10'})
 	var x2=grapharea.line(0,height,width,0).attr({'stroke':'lightgray','stroke-width':1.75,'stroke-dasharray':'10,10'})
-	init_text=grapharea.text(width/2,height/2,'graphing area').attr({'font-family':'Lato, Arial, sans-serif','font-size':50,'text-anchor':'middle','fill':'gray','font-weight':700,'dominant-baseline':'text-before-edge',cursor:'pointer'})
+	init_text=grapharea.text(width/2,height/2,'graphing area').attr({'font-family':'Lato, Arial, sans-serif','font-size':50,'text-anchor':'middle','fill':'gray','font-weight':700,'dominant-baseline':'text-before-edge',cursor:'pointer',colorchange:'fill'})
 	init_text.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 	center_baseline(init_text)
 }
@@ -2732,31 +2732,27 @@ function addtext(target) {
 
 	console.log(svgx,svgy)
 
-	var text=grapharea.text(target.pageX-svgx,target.pageY-svgy,'Text Annotation').attr({'font-family':'Lato, Arial, sans-serif','font-size':16,'text-anchor':'start','fill':'black','font-weight':400,'dominant-baseline':'text-before-edge',cursor:'pointer'})
+	var text=grapharea.text(target.pageX-svgx,target.pageY-svgy,'Text Annotation').attr({'font-family':'Lato, Arial, sans-serif','font-size':16,'text-anchor':'start','fill':'black','font-weight':400,'dominant-baseline':'text-before-edge',cursor:'pointer',colorchange:'fill'})
 	text.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 }
 
 function change_color(target,color) {
 	var item=Snap(target)
-	if(item.attr('colorchange'=='fill')){
+	console.log(item.attr('colorchange'))
+	if(item.attr('colorchange')=='fill'){
 		item.attr({fill:color})
-	} else if(target.nodeName=='line'){
-		item.attr({stroke:color})	
+		if(item.attr('ident')=='key'){
+			group=item.attr('group')
+			snapobj.selectAll("[group='"+group+"']").attr({fill:color})
+		}
+	} else if(item.attr('colorchange')=='stroke'){
+		item.attr({stroke:color})
 		if(item.attr('ident')=='key'){
 			group=item.attr('group')
 			snapobj.selectAll("[group='"+group+"']").attr({stroke:color})
 		}
-	} else if(target.nodeName=='path'){
-		item.attr({stroke:color})	
-		if(item.attr('ident')=='key'){
-			group=item.attr('group')
-			snapobj.selectAll("[group='"+group+"']").attr({stroke:color})
-		}
-	} else{
-		try{if(target.nodeName=='tspan'){
-		item=item.parent()
-		}}catch(err){}
-		item.attr({fill:color,stroke:color})	
+	} else if(item.attr('colorchange')=='both'){
+		item.attr({fill:color,stroke:color})
 		if(item.attr('ident')=='key'){
 			group=item.attr('group')
 			snapobj.selectAll("[group='"+group+"']").attr({fill:color,stroke:color})
@@ -2788,31 +2784,31 @@ function labeldata(target) {
 		coords=item.getBBox()
 		if(item.attr('orient')=='vertical'){
 			if(item.attr('data_label')<0){
-				var datalabel=grapharea.text(coords.x+coords.width/2,coords.y2,item.attr('data_label')).attr({ident:'foot','font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'middle'})
+				var datalabel=grapharea.text(coords.x+coords.width/2,coords.y2,item.attr('data_label')).attr({ident:'foot','font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'middle',colorchange:'fill'})
 				datalabel.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 			} else {
-				var datalabel=grapharea.text(coords.x+coords.width/2,coords.y-parseInt(chartobject.datasize)*1.15,item.attr('data_label')).attr({ident:'foot','font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'middle'})
+				var datalabel=grapharea.text(coords.x+coords.width/2,coords.y-parseInt(chartobject.datasize)*1.15,item.attr('data_label')).attr({ident:'foot','font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'middle',colorchange:'fill'})
 				datalabel.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 			}
 		}
 		if(item.attr('orient')=='horizontal'){
 			if(item.attr('data_label')<0){
-				var datalabel=grapharea.text(coords.x-5,coords.y+coords.height/2-parseInt(chartobject.datasize),item.attr('data_label')).attr({ident:'foot','font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'start'})
+				var datalabel=grapharea.text(coords.x-5,coords.y+coords.height/2-parseInt(chartobject.datasize),item.attr('data_label')).attr({ident:'foot','font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill'})
 				datalabel.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 			} else {
-				var datalabel=grapharea.text(coords.x+coords.width+5,coords.y+coords.height/2-parseInt(chartobject.datasize),item.attr('data_label')).attr({ident:'foot','font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'start'})
+				var datalabel=grapharea.text(coords.x+coords.width+5,coords.y+coords.height/2-parseInt(chartobject.datasize),item.attr('data_label')).attr({ident:'foot','font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill'})
 				datalabel.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 			}
 		}
 	} else if (item.node.nodeName=='path'){
 		coords=item.getBBox()
 		y=parseFloat(item.realPath.split(' ')[item.realPath.split(' ').length-1])
-		var datalabel=grapharea.text(coords.x2+5,y-parseInt(chartobject.datasize)+3,item.attr('data_label')).attr({ident:'foot','font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'start'})
+		var datalabel=grapharea.text(coords.x2+5,y-parseInt(chartobject.datasize)+3,item.attr('data_label')).attr({ident:'foot','font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill'})
 		datalabel.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 	}
 	else {
 		coords=item.getBBox()
-		var datalabel=grapharea.text(coords.x+coords.width/2,coords.y-parseInt(chartobject.datasize)-3,item.attr('data_label')).attr({ident:'foot','font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'middle'})
+		var datalabel=grapharea.text(coords.x+coords.width/2,coords.y-parseInt(chartobject.datasize)-3,item.attr('data_label')).attr({ident:'foot','font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'middle',colorchange:'fill'})
 		datalabel.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 	}
 }
@@ -2901,7 +2897,7 @@ function endpath(e) {
 	}
 
 	path_string='M'+pathstart[0]+' '+(pathstart[1]+yoffset)+'L'+pathstart[0]+' '+(e.pageY-svgy)+'L'+(e.pageX-svgx)+' '+(e.pageY-svgy)
-	finalline=grapharea.path(path_string).attr({class:'callout','stroke-width':1,'stroke':'#ababab','shape-rendering':'crispEdges',fill:'none'})
+	finalline=grapharea.path(path_string).attr({class:'callout','stroke-width':1,'stroke':'#ababab','shape-rendering':'crispEdges',fill:'none',colorchange:'stroke'})
 	// finalline_1=grapharea.line(pathstart[0],pathstart[1]+yoffset,pathstart[0],e.pageY-svgy).attr({'stroke-width':1,'stroke':'#ababab','shape-rendering':'crispEdges'})
 	// finalline_2=grapharea.line(pathstart[0],e.pageY-svgy,e.pageX-svgx,e.pageY-svgy).attr({'stroke-width':1,'stroke':'#ababab','shape-rendering':'crispEdges'})
 	var temp_group=grapharea.group(finalline,circstart)
@@ -2919,7 +2915,7 @@ function endarrow(e) {
 	grapharea.unmousemove(tracker)
 	grapharea.unclick(endarrow)
 	try{trackline.remove()}catch(err){}
-	finalline=grapharea.line(pathstart[0],pathstart[1],e.pageX-svgx,e.pageY-svgy).attr({ident:'none',class:'callout','stroke-width':2,'stroke':'black','shape-rendering':'auto','marker-end':amarker})
+	finalline=grapharea.line(pathstart[0],pathstart[1],e.pageX-svgx,e.pageY-svgy).attr({ident:'none',class:'callout','stroke-width':2,'stroke':'black','shape-rendering':'auto','marker-end':amarker,colorchange:'stroke'})
 	finalline.drag()
 }
 

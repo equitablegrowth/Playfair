@@ -1,5 +1,10 @@
 changelog.txt
 
+V1.3
+  - Stacked barcharts with negative values now work
+
+  - Minor layout changes
+
 V1.25
   - You can now add horizontal lines to charts with date data on the x-axis. Trend lines with slopes and vertical lines are still quite broken. This is a tricky problem.
 
