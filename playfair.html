@@ -6,6 +6,7 @@
 	<script src="lib/playfair.js"></script>
 	<script src="lib/saveSvgAsPng.js"></script>
 	<script src="lib/svg_todataurl.js"></script>
+	<script src="pico/client.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2014-11-29/FileSaver.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -3229,17 +3230,17 @@ function savetoserver() {
 		var filename=$('#savename').val()
 		var svg = document.getElementById("grapharea").innerHTML
 
-		dictionary={}
+		var dictionary={}
 		dictionary['svg']=encodeURIComponent(svg)
-		temp=chartobject
+		var temp=chartobject
 		delete temp['svg']
 		delete temp['logo']
 		dictionary['chartobject']=JSON.stringify(temp)
 		dictionary['filename']=filename
 
-		input_dict={}
+		var input_dict={}
 
-		databox_value=$('#data_text').val();
+		var databox_value=$('#data_text').val();
 		input_dict['data_text']=['textarea',databox_value]
 
 		// modified from StackOverflow, T.J. Crowder
@@ -3264,11 +3265,11 @@ function savetoserver() {
 		input_dict['graphtype']=['graphtype',graph_type]
 
 		// get trendline input from frontend
-		slopes=document.getElementsByClassName('slope')
-		intercepts=document.getElementsByClassName('intercept')
+		var slopes=document.getElementsByClassName('slope')
+		var intercepts=document.getElementsByClassName('intercept')
 
-		fslopes=[]
-		fintercepts=[]
+		var fslopes=[]
+		var fintercepts=[]
 
 		for (var i=0;i<slopes.length;i++){
 			if(slopes[i].value!=''){
@@ -3281,6 +3282,7 @@ function savetoserver() {
 		input_dict['intercept']=fintercepts
 
 		dictionary['inputs']=JSON.stringify(input_dict)
+		console.log(dictionary)
 
 	// call the python script
 		$.ajax({
