@@ -1,5 +1,10 @@
 changelog.txt
 
+V1.5
+  - Grouped barcharts with negative values now work. This is all kinda hanging together with gum and paper clips until I rewrite all the bar chart stuff. Please make sure your values are correct and etc.
+
+  - Fixed a bug where certain datasets had problems with axes being drawn correctly. Thanks Nick!
+
 V1.4
   - THIS UPGRADE BREAKS A BUNCH OF STUFF ON OLD GRAPHS. You will have to redraw old graphs to get contextual menus and color changing to work. Big changes to how things work under the hood that don't really matter to users but let me know if changing colors or contextual menus are acting strangely.
 

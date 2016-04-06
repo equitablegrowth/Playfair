@@ -6,12 +6,13 @@ import cgitb
 import os
 from json import dumps
 
-cgitb.enable()
+path=os.path.realpath(__file__)
+path='/'.join(path.split('/')[:-2])+'/saved/'
 
-files=os.listdir('/home/austinc/public_html/tools/saved/')
+files=os.listdir(path)
 filelist=[]
 for file in files:
-	create=os.path.getctime('/home/austinc/public_html/tools/saved/'+file)
+	create=os.path.getctime(path+file)
 	filelist.append([file,create])
 
 filelist.sort(key=lambda x:x[1])

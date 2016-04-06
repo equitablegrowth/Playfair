@@ -3,17 +3,18 @@ from __future__ import division
 import cgi
 from json import dumps
 import cgitb
-
-cgitb.enable()
+import os
 
 data=cgi.FieldStorage()
+path=os.path.realpath(__file__)
+path='/'.join(path.split('/')[:-2])+'/saved/'
 
 try:
 	filename=data.getfirst('loadfile')
 except:
 	pass
 
-with open('/home/austinc/public_html/tools/saved/'+filename,'rU') as f:
+with open(path+filename,'rU') as f:
 	r=f.read()
 
 results=dumps(r)

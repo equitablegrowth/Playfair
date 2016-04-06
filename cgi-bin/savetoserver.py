@@ -3,9 +3,10 @@ from __future__ import division
 import cgi
 from json import dumps
 import cgitb
+import os
 
-cgitb.enable()
-
+path=os.path.realpath(__file__)
+path='/'.join(path.split('/')[:-2])+'/saved/'
 data=cgi.FieldStorage()
 
 try:
@@ -28,7 +29,7 @@ try:
 except:
 	pass
 
-f = open('/home/austinc/public_html/tools/saved/'+filename,'w')
+f = open(path+filename,'w')
 
 try:
 	f.write(svg)

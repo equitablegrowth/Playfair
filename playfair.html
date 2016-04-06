@@ -377,7 +377,7 @@
 
 <!-- Header -->
 <h1 class='text-center'>playfair</h1>
-<h4 class='text-center'><sup style='visibility: hidden'>v1.4, <a href='changelog.txt'>changelog</a></sup>make equitable graphs<sup>v1.4, <a href='changelog.txt'>changelog</a></sup></h4>
+<h4 class='text-center'><sup style='visibility: hidden'>v1.5, <a href='changelog.txt'>changelog</a></sup>make equitable graphs<sup>v1.5, <a href='changelog.txt'>changelog</a></sup></h4>
 
 	<div class='col-md-2'></div>
 	<div class='col-xs-8'>
@@ -765,6 +765,7 @@
 				<li id='settings_first' tab='settings_grapharea' class='first current'>Graph Area</li>
 				<li tab='settings_headerfooter'>Header/Footer</li>
 				<li tab='settings_text'>Text</li>
+				<li tab='settings_text'>Text Colors</li>
 				<li tab='settings_grids'>Grids</li>
 				<li tab='settings_legend'>Legend</li>
 				<li tab='settings_color'>Color Scales</li>
@@ -1011,6 +1012,53 @@
 					</div>
 					<div class='col-md-4'>
 						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Trendline face:</span><input type="text" class="form-control" placeholder="Lato" id='trend_textface'></div>
+					</div>
+				</div>
+			</div>
+
+			<div class='tab-content' style='min-height:265px'>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Hed fill:</span><input type="text" class="form-control" placeholder="black" id='hedtextfill'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Dek fill:</span><input type="text" class="form-control" placeholder="black" id='dektextfill'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Data fill:</span><input type="text" class="form-control" placeholder="black" id='datatextfill'></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Annotate fill:</span><input type="text" class="form-control" placeholder="black" id='annotatetextfill'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Source fill:</span><input type="text" class="form-control" placeholder="black" id='sourcetextfill'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Note fill:</span><input type="text" class="form-control" placeholder="black" id='notetextfill'></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Xtick fill:</span><input type="text" class="form-control" placeholder="black" id='xtick_textfill'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ytick fill:</span><input type="text" class="form-control" placeholder="black" id='ytick_textfill'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Legend fill:</span><input type="text" class="form-control" placeholder="black" id='legend_textfill'></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Xlabel fill:</span><input type="text" class="form-control" placeholder="black" id='xlabel_textfill'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ylabel fill:</span><input type="text" class="form-control" placeholder="black" id='ylabel_textfill'></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Trend fill:</span><input type="text" class="form-control" placeholder="#c64027" id='trend_textcolor'></div>
 					</div>
 				</div>
 			</div>
@@ -3178,7 +3226,7 @@ function cloudsave() {
 	} catch(err){}
 
 	$.ajax({
-		url:'http://www.austinclemens.com/cgi-bin/listfiles.py',
+		url:'cgi-bin/listfiles.py',
 		type: 'post',
 		datatype: 'html',
 		data: 1,
@@ -3195,7 +3243,7 @@ function cloudsave() {
 
 function cloudload() {
 	$.ajax({
-		url:'http://www.austinclemens.com/cgi-bin/listfiles.py',
+		url:'cgi-bin/listfiles.py',
 		type: 'post',
 		datatype: 'html',
 		data: 1,
@@ -3284,7 +3332,7 @@ function savetoserver() {
 
 	// call the python script
 		$.ajax({
-			url:'http://www.austinclemens.com/cgi-bin/savetoserver.py',
+			url:'cgi-bin/savetoserver.py',
 			type: 'post',
 			datatype: 'html',
 			data: dictionary,
@@ -3301,7 +3349,7 @@ function savetoserver() {
 function loadfromserver() {
 	dictionary={'loadfile':loadfile}
 	$.ajax({
-		url:'http://www.austinclemens.com/cgi-bin/loadfromserver.py',
+		url:'cgi-bin/loadfromserver.py',
 		type: 'post',
 		datatype: 'html',
 		data: dictionary,
