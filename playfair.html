@@ -29,8 +29,7 @@
 	input[type=radio]:not(old) + label > span {display:inline-block;width:14px;height:14px;margin:3px;border:1px solid #ccc;background:white;vertical-align:bottom;}
 	input[type=radio]:not(old):checked + label > span {}
 	input[type=radio]:not(old):checked + label > span > span{display:inline-block;width:12px;height:12px;background:#67c2a5;border:1px solid white;}
-	h1 {font-family:Lancelot;font-size:50;margin:0;line-height:75%;}
-	h4 {font-family:Raleway;font-weight:300;margin-bottom:20;}
+	h1 {font-family:Lancelot;font-size:50;margin:0;line-height:75%;margin-bottom:30}
 	h3 {font-size:15px;margin-top:0px;margin-bottom:0px;font-family:Raleway;font-weight:500;}
 	h5 {font-size:24px;font-family:Raleway;font-weight:500;fill:'white';}
 	body {height:100%;padding-bottom:100px;font-family:"Open Sans";-webkit-font-smoothing: antialiased}
@@ -43,6 +42,7 @@
 	svg text {-moz-user-select: none;-ms-user-select: none;-khtml-user-select: none;-webkit-user-select: none;-webkit-touch-callout: none}
 	text { -webkit-font-smoothing: subpixel-antialiased; }
 
+	.h4 {position:absolute;font-family:Raleway;font-weight:300;padding-left:5px;margin-top:0px;font-size:.3em;}
 	.helpboxouter{position:relative;}
 	.toggle {margin-bottom:2px;margin-top:2px;}
 	.container {margin-top:20px;margin-bottom:250px;height:100%;}
@@ -376,8 +376,7 @@
 <div class='container'>
 
 <!-- Header -->
-<h1 class='text-center'>playfair</h1>
-<h4 class='text-center'><sup style='visibility: hidden'>v1.5, <a href='changelog.txt'>changelog</a></sup>make equitable graphs<sup>v1.5, <a href='changelog.txt'>changelog</a></sup></h4>
+<h1 class='text-center'><span class='h4' style='visibility: hidden'>v1.6, <a href='changelog.txt'>changelog</a></span>playfair<span class='h4'>v1.6, <a href='changelog.txt'>changelog</a></span></h1>
 
 	<div class='col-md-2'></div>
 	<div class='col-xs-8'>
@@ -2839,10 +2838,17 @@ function change_color(target,color) {
 			snapobj.selectAll("[group='"+group+"']").attr({fill:color})
 		}
 	} else if(item.attr('colorchange')=='stroke'){
-		item.attr({stroke:color})
-		if(item.attr('ident')=='key'){
-			group=item.attr('group')
-			snapobj.selectAll("[group='"+group+"']").attr({stroke:color})
+		if(item.attr('arrow')){
+			item.attr({stroke:color})
+			var temparrow = grapharea.path('M0,0 L0,4 L6,2 L0,0').attr({fill:color})
+			var tempamarker = temparrow.marker(0,0,6,4,0,2).attr({fill:color});
+			item.attr({'marker-end':tempamarker})
+		} else{
+			item.attr({stroke:color})
+			if(item.attr('ident')=='key'){
+				group=item.attr('group')
+				snapobj.selectAll("[group='"+group+"']").attr({stroke:color})
+			}
 		}
 	} else if(item.attr('colorchange')=='both'){
 		item.attr({fill:color,stroke:color})
@@ -3008,7 +3014,7 @@ function endarrow(e) {
 	grapharea.unmousemove(tracker)
 	grapharea.unclick(endarrow)
 	try{trackline.remove()}catch(err){}
-	finalline=grapharea.line(pathstart[0],pathstart[1],e.pageX-svgx,e.pageY-svgy).attr({ident:'none',class:'callout','stroke-width':2,'stroke':'black','shape-rendering':'auto','marker-end':amarker,colorchange:'stroke',context:'callout_context_menu'})
+	finalline=grapharea.line(pathstart[0],pathstart[1],e.pageX-svgx,e.pageY-svgy).attr({arrow:1,ident:'none',class:'callout','stroke-width':2,'stroke':'black','shape-rendering':'auto','marker-end':amarker,colorchange:'stroke',context:'callout_context_menu'})
 	finalline.drag()
 }
 
@@ -3497,93 +3503,107 @@ function highlight_element(ev) {
 	if(selected==0){
 		// this should handle basically every case of mousing over a data element and getting a highlight effect
 		item=Snap(ev.target)
-		try{if(ev.target.nodeName=='path'){
-			item.attr({'stroke-width':parseFloat(item.attr('stroke-width'))+3,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))-.5})
-			hovered=1
-		}}catch(err){}
-		try{if(ev.target.nodeName=='circle'){
-			item.attr({'r':parseFloat(item.attr('r'))+2,'stroke-width':parseFloat(item.attr('stroke-width'))+1,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))-.5})
-			hovered=1
-		}}catch(err){} 
-		try{if(ev.target.nodeName=='line' && ev.target.attributes.ident.value=='key'){
-			item.attr({'stroke-width':parseFloat(item.attr('stroke-width'))+2,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))-.5})
-			hovered=1
-		}}catch(err){} 
-		try{if(ev.target.nodeName=='rect' && ev.target.attributes.ident.value=='key' && ev.target.attributes.ident2.value!='floatkey'){
-			item.attr({'stroke-opacity':parseFloat(item.attr('stroke-opacity'))-.5,'fill-opacity':parseFloat(item.attr('fill-opacity'))-.5,'x':parseFloat(item.attr('x'))-2,'y':parseFloat(item.attr('y'))-2,'width':parseFloat(item.attr('width'))+4,'height':parseFloat(item.attr('height'))+4})
-			hovered=1
-		}}catch(err){} 
-		try{if(ev.target.nodeName=='rect' && ev.target.attributes.data_type.value=='bar'){
-			item.attr({'stroke-opacity':parseFloat(item.attr('stroke-opacity'))-.5,'fill-opacity':parseFloat(item.attr('fill-opacity'))-.5,'x':parseFloat(item.attr('x'))-2,'y':parseFloat(item.attr('y'))-2,'width':parseFloat(item.attr('width'))+4,'height':parseFloat(item.attr('height'))+4})
-			hovered=1
-		}}catch(err){}  
-		try{if(ev.target.nodeName=='line' && ev.target.attributes.class.value=='callout'){
-			item.attr({'stroke-width':parseFloat(item.attr('stroke-width'))+2,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))-.5})
-			hovered=1
-		}}catch(err){}  
-		try{if(ev.target.nodeName=='text'){
-			// item.attr({'font-size':parseFloat(item.attr('font-size'))+2+'px'})
-			// var f=grapharea.filter(Snap.filter.shadow(3,3,4,'#777777'))
-			item.attr({filter:shadowfilter})
-			hovered=1
-		}}catch(err){} 
-		try{if(ev.target.nodeName=='tspan'){
-			item=item.parent()
-			item.attr({filter:shadowfilter})
-			// item.attr({'font-size':parseFloat(item.attr('font-size'))+2+'px'})
-			hovered=1
-		}}catch(err){} 
-		try{if(ev.target.className.baseVal=='dataelement'){
-			coords=item.getBBox()
-			highlighttext=grapharea.text(coords.x+coords.width/2,coords.y+coords.height/2,item.attr('data_label')).attr({'font-family':'Lato, Arial, sans-serif','font-size':16,'text-anchor':'start','fill':'black','font-weight':400,cursor:'pointer'})
-			hovered=1
-		}}catch(err){}
+		
+		try{
+			if(item.attr('context')){
+				item.attr({filter:shadowfilter})
+				hovered=1	
+			}
+		} catch(err){}
+
+		// try{if(ev.target.nodeName=='path'){
+		// 	item.attr({'stroke-width':parseFloat(item.attr('stroke-width'))+3,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))-.5})
+		// 	hovered=1
+		// }}catch(err){}
+		// try{if(ev.target.nodeName=='circle'){
+		// 	item.attr({'r':parseFloat(item.attr('r'))+2,'stroke-width':parseFloat(item.attr('stroke-width'))+1,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))-.5})
+		// 	hovered=1
+		// }}catch(err){} 
+		// try{if(ev.target.nodeName=='line' && ev.target.attributes.ident.value=='key'){
+		// 	item.attr({'stroke-width':parseFloat(item.attr('stroke-width'))+2,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))-.5})
+		// 	hovered=1
+		// }}catch(err){} 
+		// try{if(ev.target.nodeName=='rect' && ev.target.attributes.ident.value=='key' && ev.target.attributes.ident2.value!='floatkey'){
+		// 	item.attr({'stroke-opacity':parseFloat(item.attr('stroke-opacity'))-.5,'fill-opacity':parseFloat(item.attr('fill-opacity'))-.5,'x':parseFloat(item.attr('x'))-2,'y':parseFloat(item.attr('y'))-2,'width':parseFloat(item.attr('width'))+4,'height':parseFloat(item.attr('height'))+4})
+		// 	hovered=1
+		// }}catch(err){} 
+		// try{if(ev.target.nodeName=='rect' && ev.target.attributes.data_type.value=='bar'){
+		// 	item.attr({'stroke-opacity':parseFloat(item.attr('stroke-opacity'))-.5,'fill-opacity':parseFloat(item.attr('fill-opacity'))-.5,'x':parseFloat(item.attr('x'))-2,'y':parseFloat(item.attr('y'))-2,'width':parseFloat(item.attr('width'))+4,'height':parseFloat(item.attr('height'))+4})
+		// 	hovered=1
+		// }}catch(err){}  
+		// try{if(ev.target.nodeName=='line' && ev.target.attributes.class.value=='callout'){
+		// 	item.attr({'stroke-width':parseFloat(item.attr('stroke-width'))+2,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))-.5})
+		// 	hovered=1
+		// }}catch(err){}  
+		// try{if(ev.target.nodeName=='text'){
+		// 	// item.attr({'font-size':parseFloat(item.attr('font-size'))+2+'px'})
+		// 	// var f=grapharea.filter(Snap.filter.shadow(3,3,4,'#777777'))
+		// 	item.attr({filter:shadowfilter})
+		// 	hovered=1
+		// }}catch(err){} 
+		// try{if(ev.target.nodeName=='tspan'){
+		// 	item=item.parent()
+		// 	item.attr({filter:shadowfilter})
+		// 	// item.attr({'font-size':parseFloat(item.attr('font-size'))+2+'px'})
+		// 	hovered=1
+		// }}catch(err){} 
+		// try{if(ev.target.className.baseVal=='dataelement'){
+		// 	coords=item.getBBox()
+		// 	highlighttext=grapharea.text(coords.x+coords.width/2,coords.y+coords.height/2,item.attr('data_label')).attr({'font-family':'Lato, Arial, sans-serif','font-size':16,'text-anchor':'start','fill':'black','font-weight':400,cursor:'pointer'})
+		// 	hovered=1
+		// }}catch(err){}
 	}
 }
 
 function unhighlight_element(ev) {
-	item=Snap(ev.target)
 	if(selected==0 & hovered==1){
+		item=Snap(ev.target)
+
 		try{
-			try{if(ev.target.nodeName=='path'){
-				item.attr({'stroke-width':parseFloat(item.attr('stroke-width'))-3,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))+.5})
-				hovered=0
-			}}catch(err){} 
-			try{if(ev.target.nodeName=='circle'){
-				item.attr({'r':parseFloat(item.attr('r'))-2,'stroke-width':parseFloat(item.attr('stroke-width'))-1,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))+.5})
-				hovered=0
-			}}catch(err){} 
-			try{if(ev.target.nodeName=='line' && ev.target.attributes.ident.value=='key'){
-				item.attr({'stroke-width':parseFloat(item.attr('stroke-width'))-2,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))+.5})
-				hovered=0
-			}}catch(err){} 
-			try{if(ev.target.nodeName=='rect' && ev.target.attributes.ident.value=='key' && ev.target.attributes.ident2.value!='floatkey'){
-				item.attr({'stroke-opacity':parseFloat(item.attr('stroke-opacity'))+.5,'fill-opacity':parseFloat(item.attr('fill-opacity'))+.5,'x':parseFloat(item.attr('x'))+2,'y':parseFloat(item.attr('y'))+2,'width':parseFloat(item.attr('width'))-4,'height':parseFloat(item.attr('height'))-4})
-				hovered=0
-			}}catch(err){} 
-			try{if(ev.target.nodeName=='rect' && ev.target.attributes.class.value=='dataelement'){
-				item.attr({'stroke-opacity':parseFloat(item.attr('stroke-opacity'))+.5,'fill-opacity':parseFloat(item.attr('fill-opacity'))+.5,'x':parseFloat(item.attr('x'))+2,'y':parseFloat(item.attr('y'))+2,'width':parseFloat(item.attr('width'))-4,'height':parseFloat(item.attr('height'))-4})
-				hovered=0
-			}}catch(err){} 
-			try{if(ev.target.nodeName=='line' && ev.target.attributes.class.value=='callout'){
-				item.attr({'stroke-width':parseFloat(item.attr('stroke-width'))-2,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))+.5})
-				hovered=0
-			}}catch(err){} 
-			try{if(ev.target.nodeName=='text'){
-				// item.attr({'font-size':parseFloat(item.attr('font-size'))-2+'px'})
+			if(item.attr('context')){
 				item.attr({filter:''})
 				hovered=0
-			}}catch(err){}
-			try{if(ev.target.nodeName=='tspan'){
-				item=item.parent()
-				item.attr({filter:''})
-				hovered=0
-			}}catch(err){}
-			try{if(ev.target.className.baseVal=='dataelement'){
-				highlighttext.remove()
-				hovered=0
-			}}catch(err){}
+			}
 		} catch(err){}
+
+			// try{if(ev.target.nodeName=='path'){
+			// 	item.attr({'stroke-width':parseFloat(item.attr('stroke-width'))-3,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))+.5})
+			// 	hovered=0
+			// }}catch(err){} 
+			// try{if(ev.target.nodeName=='circle'){
+			// 	item.attr({'r':parseFloat(item.attr('r'))-2,'stroke-width':parseFloat(item.attr('stroke-width'))-1,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))+.5})
+			// 	hovered=0
+			// }}catch(err){} 
+			// try{if(ev.target.nodeName=='line' && ev.target.attributes.ident.value=='key'){
+			// 	item.attr({'stroke-width':parseFloat(item.attr('stroke-width'))-2,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))+.5})
+			// 	hovered=0
+			// }}catch(err){} 
+			// try{if(ev.target.nodeName=='rect' && ev.target.attributes.ident.value=='key' && ev.target.attributes.ident2.value!='floatkey'){
+			// 	item.attr({'stroke-opacity':parseFloat(item.attr('stroke-opacity'))+.5,'fill-opacity':parseFloat(item.attr('fill-opacity'))+.5,'x':parseFloat(item.attr('x'))+2,'y':parseFloat(item.attr('y'))+2,'width':parseFloat(item.attr('width'))-4,'height':parseFloat(item.attr('height'))-4})
+			// 	hovered=0
+			// }}catch(err){} 
+			// try{if(ev.target.nodeName=='rect' && ev.target.attributes.class.value=='dataelement'){
+			// 	item.attr({'stroke-opacity':parseFloat(item.attr('stroke-opacity'))+.5,'fill-opacity':parseFloat(item.attr('fill-opacity'))+.5,'x':parseFloat(item.attr('x'))+2,'y':parseFloat(item.attr('y'))+2,'width':parseFloat(item.attr('width'))-4,'height':parseFloat(item.attr('height'))-4})
+			// 	hovered=0
+			// }}catch(err){} 
+			// try{if(ev.target.nodeName=='line' && ev.target.attributes.class.value=='callout'){
+			// 	item.attr({'stroke-width':parseFloat(item.attr('stroke-width'))-2,'stroke-opacity':parseFloat(item.attr('stroke-opacity'))+.5})
+			// 	hovered=0
+			// }}catch(err){} 
+			// try{if(ev.target.nodeName=='text'){
+			// 	// item.attr({'font-size':parseFloat(item.attr('font-size'))-2+'px'})
+			// 	item.attr({filter:''})
+			// 	hovered=0
+			// }}catch(err){}
+			// try{if(ev.target.nodeName=='tspan'){
+			// 	item=item.parent()
+			// 	item.attr({filter:''})
+			// 	hovered=0
+			// }}catch(err){}
+			// try{if(ev.target.className.baseVal=='dataelement'){
+			// 	highlighttext.remove()
+			// 	hovered=0
+			// }}catch(err){}
 	}
 }
 

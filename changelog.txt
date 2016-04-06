@@ -1,5 +1,10 @@
 changelog.txt
 
+V1.6
+  - Playfair has moved servers and is no longer anti-union or anti-anything. All saves should work.
+
+  - Re-coloring an arrow works now
+
 V1.5
   - Grouped barcharts with negative values now work. This is all kinda hanging together with gum and paper clips until I rewrite all the bar chart stuff. Please make sure your values are correct and etc.
 
