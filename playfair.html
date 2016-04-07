@@ -1628,12 +1628,14 @@ function loadData(coerce_array) {
 	// Now loop through all numeric columns and if any have turned into NaN remove that row.
 	// If all are NaN, send a red alert. If any are NaN but not all, send a yellow alert with 
 	// number of observations found and type of each column. If none are NaN, send green alert
-	// with number of observations and type of each column.
+	// with number of observations and type of each column. For dates, remove blanks or things
+	// that become blanks when you remove all text.
 	observations=d.length-1
 	column_observations=[]
 	red_flag=0
 	yellow_flag=0
 	var numeric=/[0-9]/
+	missing_array=[]
 
 	for (var i=0;i<column_types.length;i++) {
 		if (column_types[i]=='numeric') {
@@ -1641,6 +1643,22 @@ function loadData(coerce_array) {
 			for (var j=1;j<d.length;j++) {
 				if (d[j][i].search(numeric)==-1) {
 					column_obs=column_obs-1
+					if(missing_array.indexOf(j)==-1){
+						missing_array.push(j)
+					}
+				}
+			}
+			if (column_obs==0) {red_flag=1}
+			if (column_obs!=observations) {yellow_flag=1}
+			column_observations.push(column_obs)
+		} else if (column_types[i]=='date') {
+			column_obs=observations
+			for (var j=1;j<d.length;j++){
+				if (d[j][i].search(numeric)==-1) {
+					column_obs=column_obs-1
+					if(missing_array.indexOf(j)==-1){
+						missing_array.push(j)
+					}
 				}
 			}
 			if (column_obs==0) {red_flag=1}
@@ -1649,6 +1667,10 @@ function loadData(coerce_array) {
 		} else {
 			column_observations.push(observations)
 		}
+	}
+
+	for (var i=missing_array.length-1;i>0;i--){
+		d.splice(missing_array[i],1)
 	}
 
 	// Final alerts section

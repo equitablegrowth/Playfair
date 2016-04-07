@@ -1,6 +1,10 @@
 changelog.txt
 V?
-  - You can now coerce playfair to parse a variable as text, numeric, or date.
+  - You can now coerce playfair to parse a variable as text, numeric, or date. Use this when for example you have year data like 1989, 1990, etc. that Playfair would not normally parse as a date. At the moment, if you change your data, it will cause Playfair to re-evaluate the data and reset your selections.
+
+  - I think I've solved all the problems with missing data but I can't swear to it. Please let me know.
+
+  - 
 
 V1.6
   - Playfair has moved servers and is no longer anti-union or anti-anything. All saves should work.
