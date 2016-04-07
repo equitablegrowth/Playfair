@@ -1,4 +1,6 @@
 changelog.txt
+V?
+  - You can now coerce playfair to parse a variable as text, numeric, or date.
 
 V1.6
   - Playfair has moved servers and is no longer anti-union or anti-anything. All saves should work.

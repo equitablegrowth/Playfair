@@ -1,0 +1,1 @@
+<select class="dataselect" id="var1coerce" onchange=gen_coerce_array() disabled><option value="numeric">numeric</option><option value="date">date</option><option value="text">text</option></select>

@@ -43,6 +43,7 @@
 	text { -webkit-font-smoothing: subpixel-antialiased; }
 
 	.h4 {position:absolute;font-family:Raleway;font-weight:300;padding-left:5px;margin-top:0px;font-size:.3em;}
+	.dataselect {font-size:70%;background-color:inherit;}
 	.helpboxouter{position:relative;}
 	.toggle {margin-bottom:2px;margin-top:2px;}
 	.container {margin-top:20px;margin-bottom:250px;height:100%;}
@@ -61,7 +62,7 @@
 	.botrow {margin-bottom:15px;}
 	.select {margin-bottom:-7px;margin-top:-3px;}
 	.unmarg {margin-top:-15px;}
-	.alert {margin-top:12px;margin-bottom:-5px;font-size:90%;}
+	.alert {margin-top:12px;margin-bottom:-5px;font-size:95%;}
 	.variable_select {margin:3;}
 	.panel-title {font-family:Raleway;font-weight:700;font-size:160%;}
 	.input-group > .input-group-btn:last-child > .selectpicker {border-top-right-radius: 5px;border-bottom-right-radius: 5px;}
@@ -1534,7 +1535,21 @@ $(function() {
 // successfully loaded, loaded_data is set to 1 - this global be used as
 // a check for graphing functions.
 
-function loadData() {
+function gen_coerce_array() {
+	coerce_array=[]
+	temp=$('.dataselect')
+	for(var i=0;i<temp.length;i++){
+		coerce_array.push($(temp[i]).val())
+	}
+
+	loadData(coerce_array)
+}
+
+function loadData(coerce_array) {
+	if (coerce_array===undefined){
+		coerce_array=[]
+	}
+
 	alerted=1
 	alertbox=document.getElementById('bad_data')
 	alertbox.style.display='none'
@@ -1574,24 +1589,40 @@ function loadData() {
 	// loop through columns and data points, check each one for dates. *ALL* datapoints must be
 	// dates to qualify. If the column is not a date, check to see if it is numeric/text. A non-date
 	// column is flagged as text if any alpha characters are found.
-	for (var i=0; i<columns;i++) {
-		date=true
-		type='numeric'
-		for (var j=1;j<d.length;j++) {
-			if (moment(d[j][i], ["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY","MM/YYYY","MM-YYYY","YYYYqQ"],true).isValid()==false){
-				date=false
+	if(coerce_array.length==0){
+		for (var i=0; i<columns;i++) {
+			date=true
+			type='numeric'
+			for (var j=1;j<d.length;j++) {
+				if (moment(d[j][i], ["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY","MM/YYYY","MM-YYYY","YYYYqQ"],true).isValid()==false){
+					date=false
+				}
+				if (d[j][i].search(alpha)>-1) {type='text'} else{
+					// clean numeric junk
+					if(date==false){
+						d[j][i] = d[j][i].replace(/[^0-9\.-]+/g, "")
+					}
+				}
 			}
-			if (d[j][i].search(alpha)>-1) {type='text'} else{
-				// clean numeric junk
-				if(date==false){
+			if (date==true){
+				type='date'
+			}
+			column_types.push(type)
+		}
+	} else{
+		for (var i=0; i<columns;i++) {
+			if(coerce_array[i]=='date'){
+				type='date'
+			} else if (coerce_array[i]=='text'){
+				type='text'
+			} else if (coerce_array[i]=='numeric'){
+				type='numeric'
+				for(var j=1;j<d.length;j++){
 					d[j][i] = d[j][i].replace(/[^0-9\.-]+/g, "")
 				}
 			}
+			column_types.push(type)
 		}
-		if (date==true){
-			type='date'
-		}
-		column_types.push(type)
 	}
 
 	// Now loop through all numeric columns and if any have turned into NaN remove that row.
@@ -1625,7 +1656,13 @@ function loadData() {
 		alertbox.className = "alert alert-warning";
 		alertbox.innerHTML = "<b>One or more of your columns has no observations. You can still use this dataset but I dropped that column. I might also have dropped some rows with missing data. Here's what I think about each of your columns:</b><ul>"
 		for (i=0;i<column_types.length;i++) {
-			alertbox.innerHTML = alertbox.innerHTML + '<ul><li>The <b>'+d[0][i]+'</b> column is a '+column_types[i]+' column, and it has '+column_observations[i]+' observations in it.</li></ul>';
+			if(column_types[i]=='text'){
+				alertbox.innerHTML = alertbox.innerHTML + '<ul><li>The <b>'+d[0][i]+'</b> column is a <select class="dataselect" id="coerce'+i+'" onchange=gen_coerce_array()><option value="numeric">numeric</option><option value="date">date</option><option value="text" selected>text</option></select> column, and it has '+column_observations[i]+' observations in it.</li></ul>';
+			} else if(column_types[i]=='numeric'){
+				alertbox.innerHTML = alertbox.innerHTML + '<ul><li>The <b>'+d[0][i]+'</b> column is a <select class="dataselect" id="coerce'+i+'" onchange=gen_coerce_array()><option value="numeric" selected>numeric</option><option value="date">date</option><option value="text">text</option></select> column, and it has '+column_observations[i]+' observations in it.</li></ul>';
+			} else if(column_types[i]=='date'){
+				alertbox.innerHTML = alertbox.innerHTML + '<ul><li>The <b>'+d[0][i]+'</b> column is a <select class="dataselect" id="coerce'+i+'" onchange=gen_coerce_array()><option value="numeric">numeric</option><option value="date" selected>date</option><option value="text">text</option></select> column, and it has '+column_observations[i]+' observations in it.</li></ul>';
+			}
 		}
 		alertbox.style.display='block'
 	}
@@ -1634,7 +1671,13 @@ function loadData() {
 		alertbox.className = "alert alert-warning";
 		alertbox.innerHTML = "<b>Some of your columns are missing data. You can still use this dataset but I will drop rows missing data. Here's what I think about each of your columns:</b><ul>"
 		for (i=0;i<column_types.length;i++) {
-			alertbox.innerHTML = alertbox.innerHTML + '<ul><li>The <b>'+d[0][i]+'</b> column is a '+column_types[i]+' column, and it has '+column_observations[i]+' observations in it.</li></ul>';
+			if(column_types[i]=='text'){
+				alertbox.innerHTML = alertbox.innerHTML + '<ul><li>The <b>'+d[0][i]+'</b> column is a <select class="dataselect" id="coerce'+i+'" onchange=gen_coerce_array()><option value="numeric">numeric</option><option value="date">date</option><option value="text" selected>text</option></select> column, and it has '+column_observations[i]+' observations in it.</li></ul>';
+			} else if(column_types[i]=='numeric'){
+				alertbox.innerHTML = alertbox.innerHTML + '<ul><li>The <b>'+d[0][i]+'</b> column is a <select class="dataselect" id="coerce'+i+'" onchange=gen_coerce_array()><option value="numeric" selected>numeric</option><option value="date">date</option><option value="text">text</option></select> column, and it has '+column_observations[i]+' observations in it.</li></ul>';
+			} else if(column_types[i]=='date'){
+				alertbox.innerHTML = alertbox.innerHTML + '<ul><li>The <b>'+d[0][i]+'</b> column is a <select class="dataselect" id="coerce'+i+'" onchange=gen_coerce_array()><option value="numeric">numeric</option><option value="date" selected>date</option><option value="text">text</option></select> column, and it has '+column_observations[i]+' observations in it.</li></ul>';
+			}
 		}
 		alertbox.style.display='block'
 	}
@@ -1643,7 +1686,13 @@ function loadData() {
 		alertbox.className = "alert alert-success";
 		alertbox.innerHTML = "<b>Your data looks good. Just to make sure, here's what I think about each of your columns:</b>"
 		for (i=0;i<column_types.length;i++) {
-			alertbox.innerHTML = alertbox.innerHTML + '<ul><li>The <b>'+d[0][i]+'</b> column is a '+column_types[i]+' column, and it has '+column_observations[i]+' observations in it.</li></ul>';
+			if(column_types[i]=='text'){
+				alertbox.innerHTML = alertbox.innerHTML + '<ul><li>The <b>'+d[0][i]+'</b> column is a <select class="dataselect" id="coerce'+i+'" onchange=gen_coerce_array()><option value="numeric">numeric</option><option value="date">date</option><option value="text" selected>text</option></select> column, and it has '+column_observations[i]+' observations in it.</li></ul>';
+			} else if(column_types[i]=='numeric'){
+				alertbox.innerHTML = alertbox.innerHTML + '<ul><li>The <b>'+d[0][i]+'</b> column is a <select class="dataselect" id="coerce'+i+'" onchange=gen_coerce_array()><option value="numeric" selected>numeric</option><option value="date">date</option><option value="text">text</option></select> column, and it has '+column_observations[i]+' observations in it.</li></ul>';
+			} else if(column_types[i]=='date'){
+				alertbox.innerHTML = alertbox.innerHTML + '<ul><li>The <b>'+d[0][i]+'</b> column is a <select class="dataselect" id="coerce'+i+'" onchange=gen_coerce_array()><option value="numeric">numeric</option><option value="date" selected>date</option><option value="text">text</option></select> column, and it has '+column_observations[i]+' observations in it.</li></ul>';
+			}
 		}
 		alertbox.style.display='block'
 	}
@@ -1673,9 +1722,10 @@ function loadData() {
 				final_data[d[0][i]].push(d[j][i])
 			} else if (column_types[i]=='numeric') {
 				final_data[d[0][i]].push(parseFloat(d[j][i]))
+			} else if (column_types[i]=='date' & coerce_array[i]=='date'){
+				final_data[d[0][i]].push(new Date(moment(d[j][i], ["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY","YYYYqQ"],false)))
 			} else if (column_types[i]=='date') {
 				final_data[d[0][i]].push(new Date(moment(d[j][i], ["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY","YYYYqQ"],true)))
-
 			}
 		}
 	}
