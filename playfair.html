@@ -43,7 +43,7 @@
 	text { -webkit-font-smoothing: subpixel-antialiased; }
 
 	.h4 {position:absolute;font-family:Raleway;font-weight:300;padding-left:5px;margin-top:0px;font-size:.3em;}
-	.dataselect {font-size:70%;background-color:inherit;}
+	.dataselect {font-size:90%;background-color:inherit;}
 	.helpboxouter{position:relative;}
 	.toggle {margin-bottom:2px;margin-top:2px;}
 	.container {margin-top:20px;margin-bottom:250px;height:100%;}
@@ -62,7 +62,8 @@
 	.botrow {margin-bottom:15px;}
 	.select {margin-bottom:-7px;margin-top:-3px;}
 	.unmarg {margin-top:-15px;}
-	.alert {margin-top:12px;margin-bottom:-5px;font-size:95%;}
+	.alert {margin-top:12px;margin-bottom:-5px;font-size:90%;}
+	.alert>ul{padding-top:2px;}
 	.variable_select {margin:3;}
 	.panel-title {font-family:Raleway;font-weight:700;font-size:160%;}
 	.input-group > .input-group-btn:last-child > .selectpicker {border-top-right-radius: 5px;border-bottom-right-radius: 5px;}
@@ -475,7 +476,7 @@
 						<span class="input-group-addon" data-toggle='tooltip' data-placement='top' title='Width of the graph in pixels.'>Theme:</span>
 						<div class='styled-select'>
 							<select>
-								<option value='standard'>Standard</option>
+								<!-- <option value='standard'>Standard</option> -->
 								<!-- <option value='bw'>Black on White</option> -->
 							</select>
 						</div>
@@ -1630,12 +1631,12 @@ function loadData(coerce_array) {
 	// number of observations found and type of each column. If none are NaN, send green alert
 	// with number of observations and type of each column. For dates, remove blanks or things
 	// that become blanks when you remove all text.
-	observations=d.length-1
-	column_observations=[]
-	red_flag=0
-	yellow_flag=0
+	var observations=d.length-1
+	var column_observations=[]
+	var red_flag=0
+	var yellow_flag=0
 	var numeric=/[0-9]/
-	missing_array=[]
+	var missing_array=[]
 
 	for (var i=0;i<column_types.length;i++) {
 		if (column_types[i]=='numeric') {
@@ -2013,8 +2014,26 @@ function redraw() {
 
 					console.log(chartobject)
 					chartobject.barchart(options)
-					$('#customx').val(chartobject.xarray)
-					$('#customy').val(chartobject.yarray)
+
+					if(Object.prototype.toString.call(chartobject.xarray[0])==='[object Date]'){
+						temp=[]
+						for(var i=0;i<chartobject.xarray.length;i++){
+							temp.push(moment(chartobject.xarray[i]).format('MMMM YYYY'))
+						}
+						$('#customx').val(temp)
+					} else{
+						$('#customx').val(chartobject.xarray)
+					}
+
+					if(Object.prototype.toString.call(chartobject.yarray[0])==='[object Date]'){
+						temp=[]
+						for(var i=0;i<chartobject.xarray.length;i++){
+							temp.push(moment(chartobject.xarray[i]).format('MMMM YYYY'))
+						}
+						$('#customx').val(temp)
+					} else{
+						$('#customy').val(chartobject.yarray)
+					}
 				}
 
 				if (graph_type=='Line/Scatter') {
@@ -2098,8 +2117,26 @@ function redraw() {
 					}
 
 					chartobject.linechart(options)
-					$('#customx').val(chartobject.xarray)
-					$('#customy').val(chartobject.yarray)
+
+					if(Object.prototype.toString.call(chartobject.xarray[0])==='[object Date]'){
+						temp=[]
+						for(var i=0;i<chartobject.xarray.length;i++){
+							temp.push(moment(chartobject.xarray[i]).format('MMMM YYYY'))
+						}
+						$('#customx').val(temp)
+					} else{
+						$('#customx').val(chartobject.xarray)
+					}
+
+					if(Object.prototype.toString.call(chartobject.yarray[0])==='[object Date]'){
+						temp=[]
+						for(var i=0;i<chartobject.xarray.length;i++){
+							temp.push(moment(chartobject.xarray[i]).format('MMMM YYYY'))
+						}
+						$('#customx').val(temp)
+					} else{
+						$('#customy').val(chartobject.yarray)
+					}
 				}
 			})
 		} else {

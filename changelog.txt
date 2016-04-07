@@ -4,7 +4,7 @@ V?
 
   - I think I've solved all the problems with missing data but I can't swear to it. Please let me know.
 
-  - 
+  - Custom axes for dates are now possible.
 
 V1.6
   - Playfair has moved servers and is no longer anti-union or anti-anything. All saves should work.
