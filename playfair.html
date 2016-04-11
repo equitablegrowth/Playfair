@@ -4,8 +4,10 @@
 	<title>playfair - equitable graphs</title>
 
 	<script src="lib/playfair.js"></script>
-	<script src="lib/saveSvgAsPng.js"></script>
+	<!-- <script src="lib/saveSvgAsPng.js"></script> -->
+	<!-- for save as PNG support -->
 	<script src="lib/svg_todataurl.js"></script>
+	<!-- for save as SVG support-->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2014-11-29/FileSaver.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -3500,7 +3502,7 @@ function load_populate(response) {
 					y1:coords.y-prevy+dy,
 					x2:coords.x2-prevx+dx,
 					y2:coords.y2-prevy+dy,
-			})
+				})
 			} else{
 				key_elements[i].attr({
 					x:coords.x-prevx+dx,
