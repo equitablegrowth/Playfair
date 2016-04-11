@@ -473,11 +473,9 @@
 				<div class="row">
 					<div class="col-md-6 botrow">
 						<div class='input-group element_group'>
-						<span class="input-group-addon" data-toggle='tooltip' data-placement='top' title='Width of the graph in pixels.'>Theme:</span>
+						<span class="input-group-addon" data-toggle='tooltip' data-placement='top'>Theme:</span>
 						<div class='styled-select'>
-							<select>
-								<!-- <option value='standard'>Standard</option> -->
-								<!-- <option value='bw'>Black on White</option> -->
+							<select id='themes' onchange=change_theme()>
 							</select>
 						</div>
 						</div>
@@ -1510,6 +1508,34 @@ $(document).unbind('keydown').bind('keydown', function (event) {
     }
 });
 
+///////////////////////////// THEMES ///////////////////////////////////
+// Initialize the theme dropdown and handle changes
+
+$(document).ready(function(){
+	$.ajax({
+		url:'cgi-bin/listthemes.py',
+		method: 'post',
+		datatype: 'html',
+		data: 1,
+		contentType:'application/x-www-form-urlencoded',
+		dataType:'text html',
+		success: function(response){
+			console.log('success?')
+			console.log(response)
+			var response = JSON.parse(response);
+			console.log(response)
+			// for (var i=0;i<response.length;i++){
+			// 	$('#load_filebox').append('<a href="#" class="list-group-item filerow">'+response[i]+'</a')
+			// }
+		}
+	})
+
+
+})
+
+function change_theme(){
+
+}
 
 ///////////////////////// VERTICAL TABS ////////////////////////////////
 // Completely ripped these vertical tabs off from this jsfiddle:
