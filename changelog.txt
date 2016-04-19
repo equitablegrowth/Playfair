@@ -1,6 +1,13 @@
 changelog.txt
 
+V2.0
+  - so much stuff
+
+  - the UI has been re-designed and a lot of stuff has been moved around
+
 V1.7
+  - finally fixed that bug 
+
   - possible to have x- and y-axis labels that stretch over two lines now (but no more, and there is now a max length restriction).
 
   - There are now more restrictions for the lengths of heads and subheads. Write shorter heads/subheads!
