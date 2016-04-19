@@ -45,7 +45,7 @@
 	text { -webkit-font-smoothing: subpixel-antialiased; }
 	*{margin:0;padding:0;}
 
-	.bottom{background-color:#eeeeee;padding-top:30px;padding-bottom:30px;}
+	.bottom{background-color:#eeeeee;padding-top:30px;padding-bottom:30px;margin-top:40px;}
 	.h4 {position:absolute;font-family:Raleway;font-weight:300;padding-left:5px;margin-top:0px;font-size:.3em;}
 	.dataselect {font-size:90%;background-color:inherit;}
 	.helpboxouter{position:relative;}
@@ -54,7 +54,7 @@
 	.topel {margin-top:7px;}
 	.nav-tabs {margin-top:10px;border:0px;}
 	.tab-pane {width:100%;margin-top:0px;margin-left:auto;margin-right:auto;}
-	.input-group-addon {min-width:90px;}
+	.input-group-addon {min-width:90px;background-color:#ddd;}
 	.input-group-addon-narrow {min-width:0px;}
 	.input-group-addon-wide {min-width:160px;}
 	.input-small {min-width:0px;}
@@ -171,8 +171,8 @@
 	.list-group-item{border:0px;}
 
 	/* help box */
-	.helpbox{position:absolute;color:#999999;font-size:.9em;width:calc((100% - 765px)/2);border:1px solid #dddddd;border-radius:3px;padding:10px;padding-left:12px;padding-right:12px;text-align:left;}
-
+	.helpbox{position:absolute;color:#888;font-size:.9em;width:calc((100% - 785px)/2);border:1px solid #dddddd;border-radius:2px;padding:16px 12px 10px 14px;text-align:left;}
+	.helphighlight{background-color:#ddd;padding:0px 3px 0px 3px;}
 
 	</style>
 </head>
@@ -1339,11 +1339,11 @@
 <div class='text-center' id='graphdiv'>
 <div class='helpboxouter'>
 	<div class='helpbox' id='help_general'>
-		<p><b>Hover</b> an element to highlight it temporarily.</p>
-		<p><b>Double-click</b> on text to select it</p>
-		<p><b>Right-click</b> to insert annotations, label data points, change element colors, and more.</p>
-		<p><b>Drag</b> callouts, arrows, and floating keys.</p>
-		<p>Remember: if you click the redraw button you will lose anything you have done here!</p>
+		<p><span class='helphighlight'><b>Hover</b></span> an element to highlight it temporarily.</p>
+		<p><span class='helphighlight'><b>Double-click</b></span> on text to select it</p>
+		<p><span class='helphighlight'><b>Right-click</b></span> to insert annotations, label data points, change element colors, and more.</p>
+		<p><span class='helphighlight'><b>Drag</b></span> callouts, arrows, and floating keys.</p>
+		<p><span class='helphighlight'><b>Remember</b></span> if you click the redraw button you will lose anything you have done here!</p>
 	</div>
 	<div class='helpbox' id='help_text'>
 		<p><kbd><i class="fa fa-arrow-left"></i></kbd> / <kbd><i class="fa fa-arrow-right"></i></kbd> : move cursor</p>
