@@ -43,15 +43,17 @@
 	sup {vertical-align:baseline; position:relative;top:-.7em;font-size:60%;}
 	svg text {-moz-user-select: none;-ms-user-select: none;-khtml-user-select: none;-webkit-user-select: none;-webkit-touch-callout: none}
 	text { -webkit-font-smoothing: subpixel-antialiased; }
+	*{margin:0;padding:0;}
 
+	.bottom{background-color:#eeeeee;padding-top:30px;padding-bottom:30px;}
 	.h4 {position:absolute;font-family:Raleway;font-weight:300;padding-left:5px;margin-top:0px;font-size:.3em;}
 	.dataselect {font-size:90%;background-color:inherit;}
 	.helpboxouter{position:relative;}
 	.toggle {margin-bottom:2px;margin-top:2px;}
 	.container {margin-top:20px;margin-bottom:250px;height:100%;}
 	.topel {margin-top:7px;}
-	.nav-tabs {margin-top:10px;}
-	.tab-pane {width:100%;margin-top:15px;margin-left:auto;margin-right:auto;}
+	.nav-tabs {margin-top:10px;border:0px;}
+	.tab-pane {width:100%;margin-top:0px;margin-left:auto;margin-right:auto;}
 	.input-group-addon {min-width:90px;}
 	.input-group-addon-narrow {min-width:0px;}
 	.input-group-addon-wide {min-width:160px;}
@@ -104,12 +106,11 @@
 	.btn-file {position:relative;overflow:hidden;}
 	.btn-file input[type=file]{position:absolute;top:0;right:0;min-width:100%;min-height:100%;font-size:100px;text-align:right;filter:alpha(opacity=0);opacity:0;outline:none;background:white;cursor:inherit;display:block;}
 	.nav>li>a {padding:4px;padding-left:8px;padding-right:8px;border-bottom:0px;}
-	.nav-tabs>li>a {border-radius:0px;border-bottom:1px;border-top:0px;border-right:0px;border-left:0px;}
-	.nav_tabs>li.active{border-bottom:3px solid #67c2a5;border-top:0px;border-right:0px;border-left:0px}
+	.nav-tabs>li>a {border-radius:0px;border-top:0px;border-right:0px;border-left:0px;}
+	/*.nav_tabs>li.active{border-bottom:3px solid #67c2a5;border-top:0px;border-right:0px;border-left:0px}*/
 	.nav-tabs>li.active>a {border-bottom:3px solid #67c2a5;border-top:0px;border-right:0px;border-left:0px}
 	.nav-tabs>li.active>a:focus {border-bottom:3px solid #67c2a5;border-top:0px;border-right:0px;border-left:0px}
 	.nav-tabs>li.active>a:hover {border-bottom:3px solid #67c2a5;border-top:0px;border-right:0px;border-left:0px;background-color:none;}
-	.nav_tabs>li>a:hover {border-bottom:3px solid #67c2a5;background-color:none}
 	.nav_tabs>li:hover {border-bottom:3px solid #67c2a5}
 	.dashed {height:8px;border-width:2px;margin-left:2;border-bottom: thin black dashed;width:120px;display:inline-block;margin-top:3px;margin-bottom:3px;padding:0;}
 	.solid {height:8px;border-width:2px;margin-left:2;border-bottom: thin black solid;width:120px;display:inline-block;margin-top:3px;margin-bottom:3px;padding:0;}
@@ -127,17 +128,18 @@
 	.groupcheck {max-width:50px;}
 	.slim>.toggle {margin-top:-1px;margin-bottom:-1px;}
 	.tooltip.top .tooltip-arrow {fill:none;border:0px;}
+	.submenu{}
 
 
 	/* sidetabs */
-	.sidebar {margin:0;padding:0;border-right:1px solid black;position:relative;}
-	.v-nav{height:auto;margin:0;}
-	.v-nav>ul{float:left;width:130px;display:block;position:relative;top:0;border:0px solid #aaa;border-right-width:0;margin:0;padding:0;padding-top:4px;}
-	.v-nav>ul>li {border:1px solid white;text-align:center;font-size:.8em;font-family:'Open Sans';width:130px;list-style-type:none;display:block;position:relative;margin:0;padding:7px;background-color:#eeeeee;cursor:pointer;border-right:1px solid white;border-radius:3px;width:144px;margin-bottom:1px;}
-	.v-nav>ul>li:hover {position:relative;background-color:#e2f2ed;margin:0;border-right:4px solid #67c2a5;border-bottom-right-radius:25px;border-top-right-radius:25px;border:1px solid white;border-radius:3px;width:144px;border-right:1px solid white;border-top-right-radius:0px;border-bottom-right-radius:0px;margin-bottom:1px}
-	.v-nav>ul>li.current{padding:7px;padding-left:5px;z-index:1;position:relative;background-color:#b7dfd1;margin:0;border-right:4px solid #67c2a5;border-bottom-right-radius:25px;border-top-right-radius:25px;border:1px solid #dddddd;border-radius:3px;width:146px;border-right:1px solid white;border-top-right-radius:0px;border-bottom-right-radius:0px;margin-bottom:1px}
+	/*.sidebar {margin:0;padding:0;border-right:1px solid black;position:relative;}*/
+	.v-nav{width:100%;margin:0;margin-top:1px;}
+	.v-nav ul{margin:0;background-color:#33836A;}
+	.v-nav li {display:inline-block;text-align:center;font-size:.9em;font-family:'Open Sans';list-style-type:none;margin:0;margin-right:-4px;padding:5px 12px 5px 12px;cursor:pointer;color:white;font-weight:600;}
+	.v-nav li:hover {background-color:#133328;}
+	.v-nav li.current{background-color:#205946;}
 	/*.v-nav>ul>li.last{border-bottom:3px solid black;margin:0}*/
-	.v-nav>div.tab-content{margin-left:145px;border:0px solid #aaa;position:relative;z-index:1;display:none;padding-left:20px;padding-top:20px;padding-bottom:18px;padding-right:0px;border:1px solid #dddddd;margin-bottom:20px;border-radius:3px;}
+	.v-nav div.tab-content{padding-left:10%;padding-right:10%;margin-bottom:20px;padding-bottom:30px;padding-top:30px;background-color:#eeeeee;}
 
 	.input-group{margin-top:3px;margin-bottom:3px;}
 	.element_group{margin-bottom:5px;}
@@ -544,7 +546,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-md-6">
+<!-- 					<div class="col-md-6">
 						<div class='uibox_text'>Formatting</div>
 						<div class='uibox'>
 							<div class='col-md-6'>
@@ -562,7 +564,7 @@
 								</div>
 							</div>
 						</div>
-					</div>
+					</div> -->
 				</div>
 			</div>
 		</div>
@@ -1380,9 +1382,8 @@
 </div>
 
 </div>
-<hr>
 
-<div class='text-center unselectable'>
+<div class='text-center unselectable bottom'>
 <div class="btn-group btnpadding">
 <button type="button" title='Reset the interactive' class="btn btn-default balign" onclick='redraw()'><i class="fa fa-refresh"></i> Redraw</button><br><br>
 </div>
@@ -1456,7 +1457,7 @@ $('[data-toggle="tooltip"]').tooltip()
 
 // Initial graph state
 function placeholder(){
-	var bounding_box=grapharea.rect(0,0,width,height).attr({class:'background',fill:'none','stroke':'lightgray','stroke-width':3.5,'stroke-dasharray':'10,10'})
+	var bounding_box=grapharea.rect(0,0,width,height).attr({class:'background',fill:'none','stroke':'lightgray','stroke-width':3.5,'stroke-dasharray':'12,8'})
 	// var x1=grapharea.line(0,0,width,height).attr({'stroke':'lightgray','stroke-width':1.75,'stroke-dasharray':'10,10'})
 	// var x2=grapharea.line(0,height,width,0).attr({'stroke':'lightgray','stroke-width':1.75,'stroke-dasharray':'10,10'})
 	// init_text=grapharea.text(width/2,height/2,'graphing area').attr({'font-family':'Lato, Arial, sans-serif','font-size':50,'text-anchor':'middle','fill':'gray','font-weight':700,'dominant-baseline':'text-before-edge',cursor:'pointer',colorchange:'fill',context:'text_context_menu'})
