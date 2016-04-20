@@ -31,7 +31,7 @@
 	input[type=radio]:not(old) + label > span {display:inline-block;width:14px;height:14px;margin:3px;border:1px solid #ccc;background:white;vertical-align:bottom;}
 	input[type=radio]:not(old):checked + label > span {}
 	input[type=radio]:not(old):checked + label > span > span{display:inline-block;width:12px;height:12px;background:#67c2a5;border:1px solid white;}
-	h1 {font-family:Lancelot;font-size:50;margin:0;line-height:75%;margin-bottom:13}
+	h1 {font-family:Lancelot;font-size:50;margin:0;line-height:75%;margin-bottom:13;margin-top:10px;}
 	h3 {font-size:15px;margin-top:0px;margin-bottom:0px;font-family:Raleway;font-weight:500;}
 	h5 {font-size:24px;font-family:Raleway;font-weight:500;fill:'white';}
 	body {height:100%;padding-bottom:100px;font-family:"Open Sans";-webkit-font-smoothing: antialiased}
@@ -44,6 +44,7 @@
 	svg text {-moz-user-select: none;-ms-user-select: none;-khtml-user-select: none;-webkit-user-select: none;-webkit-touch-callout: none}
 	text { -webkit-font-smoothing: subpixel-antialiased; }
 	*{margin:0;padding:0;}
+	i{color:#205946;}
 
 	/* random stuff that you should categorize or eliminate or something */
 	.bottom{background-color:#eeeeee;padding-top:30px;padding-bottom:30px;margin-top:40px;}
@@ -383,7 +384,7 @@
 
 <!-- Header -->
 <h1 class='text-center'>playfair</h1>
-<h1 class='text-center'><span class='h4'>v2.0  <a href='changelog.txt'>changelog</a></span></h4>
+<h1 class='text-center'><span class='h4'>v2.0  <a href='changelog.html'>changelog</a></span></h4>
 <!-- Tabs -->
 <ul class="nav nav-tabs" id='maintabs'>
 	<li class="active"><a data-toggle="tab" href="#data">Data</a></li>
@@ -406,7 +407,7 @@
 	<div id='data' class='tab-pane active'>
 		<div class='v-nav'>
 			<ul>
-				<li id='data_main' tab='data_main' class='first current'>Data Entry</li>
+				<li id='data_first' tab='data_main' class='first current'>Data Entry</li>
 			</ul>
 
 			<div class='tab-content'>
@@ -517,11 +518,11 @@
 							</div>
 						</div>
 
-<!-- 						<div class='uibox_text'>Logo</div>
+						<div class='uibox_text'>Logo</div>
 						<div class='uibox'>
 							<input id='nologo' type='radio' name='logo' value='nologo'><label for='nologo'><span><span></span></span>None</label>
 							<input id='brlogo' type='radio' name='logo' value='brlogo' checked><label for='brlogo'><span><span></span></span>Bottom-right</label>
-						</div> -->
+						</div>
 					</div>
 				</div>
 			</div>
@@ -529,23 +530,24 @@
 			<div class='tab-content'>
 				<div class='row'>
 					<div class='col-md-6'>
-						<div class="input-group full-width element_group">
-							<span class="input-group-addon groupcheck"><label class='checkbox-inline slim'><input type="checkbox" class='text-right' id="customxcheck" data-toggle="toggle" data-size='mini'></label></span>
-							<span class="input-group-addon">Custom X-axis:</span>
-							<input type="text" class="form-control" placeholder="e.g. 1,2,3" id='customx'>
+						<div class='uibox_text'>Custom Axes</div>
+						<div class='uibox'>
+							<div class='col-md-6'>
+								<div class="input-group full-width element_group">
+									<span class="input-group-addon groupcheck"><label class='checkbox-inline slim'><input type="checkbox" class='text-right' id="customxcheck" data-toggle="toggle" data-size='mini'></label></span>
+									<span class="input-group-addon">Custom X-axis:</span>
+									<input type="text" class="form-control" placeholder="e.g. 1,2,3" id='customx'>
+								</div>
+								<div class="input-group full-width element_group">
+									<span class="input-group-addon groupcheck"><label class='checkbox-inline slim'><input type="checkbox" class='text-right' id="customycheck" data-toggle="toggle" data-size='mini'></label></span>
+									<span class="input-group-addon">Custom Y-axis:</span>
+									<input type="text" class="form-control" placeholder="e.g. 1,2,3" id='customy'>
+								</div>
+							</div>
 						</div>
 					</div>
-					<div class='col-md-6'>
-						<div class="input-group full-width element_group">
-							<span class="input-group-addon groupcheck"><label class='checkbox-inline slim'><input type="checkbox" class='text-right' id="customycheck" data-toggle="toggle" data-size='mini'></label></span>
-							<span class="input-group-addon">Custom Y-axis:</span>
-							<input type="text" class="form-control" placeholder="e.g. 1,2,3" id='customy'>
-						</div>
-					</div>
-				</div>
-				<div class="row">
 					<div class="col-md-6">
-					<div class='uibox_text'>Gridlines</div>
+						<div class='uibox_text'>Gridlines</div>
 						<div class='uibox'>
 							<div class="col-md-6">
 								<label class='checkbox-inline'><input type="checkbox" class='text-right' id="xgrid" data-toggle="toggle" data-size='mini'></label>X gridlines<br>
@@ -580,6 +582,73 @@
 			</div>
 		</div>
 	</div>
+
+<!-- ********************************************************************** -->
+<!-- ************************ CHART STARTS HERE ************************ -->
+<!-- ********************************************************************** -->
+	<div id='chart' class='tab-pane'>
+		<div class='v-nav'>
+			<ul>
+				<li id='chart_first' tab='chart_points' class='first current'>Points</li>
+				<li tab='chart_lines'>Lines</li>
+				<li tab='chart_bars'>Bars</li>
+				<li tab='chart_stackedbar'>Stacked Bars</li>
+				<li tab='chart_area'>Area</li>
+				<li tab='chart_text'>Text</li>
+				<li tab='chart_text'>Error Bars</li>
+			</ul>
+
+			<div class='tab-content'>
+				<div class='row'>
+					<div class='col-md-6'>
+						test
+					</div>
+				</div>
+			</div>
+
+			<div class='tab-content'>
+				<div class='row'>
+					<div class='col-md-6'>
+						test
+					</div>
+				</div>
+			</div>
+
+			<div class='tab-content'>
+				<div class='row'>
+					<div class='col-md-6'>
+						test
+					</div>
+				</div>
+			</div>
+
+			<div class='tab-content'>
+				<div class='row'>
+					<div class='col-md-6'>
+						test
+					</div>
+				</div>
+			</div>
+
+			<div class='tab-content'>
+				<div class='row'>
+					<div class='col-md-6'>
+						test
+					</div>
+				</div>
+			</div>
+
+			<div class='tab-content'>
+				<div class='row'>
+					<div class='col-md-6'>
+						test
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
 
 <!-- ********************************************************************** -->
 <!-- ************************ BARCHART STARTS HERE ************************ -->
@@ -1566,7 +1635,7 @@ $(function() {
 		})
 	})
 
-	$('#data_main').click()
+	$('#data_first').click()
 })
 
 /////////////////////////// LOAD DATA //////////////////////////////////
