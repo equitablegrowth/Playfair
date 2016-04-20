@@ -13,10 +13,10 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.4.1/snap.svg-min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.7.3/js/bootstrap-select.min.js"></script>
+	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.7.3/js/bootstrap-select.min.js"></script> -->
 	<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.0/js/bootstrap-toggle.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.7.3/css/bootstrap-select.css">
+	<!-- <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.7.3/css/bootstrap-select.css"> -->
 	<link rel="stylesheet" type="text/css" href="https://gitcdn.github.io/bootstrap-toggle/2.2.0/css/bootstrap-toggle.min.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="lib/keys.css" type="text/css" />
@@ -108,14 +108,38 @@
 	.element_group{margin-bottom:5px;}
 	.input-group-addon{border-radius:0px;font-size:1em;padding:5px;}
 	.form-control{border-radius:0px;box-shadow:none;height:auto;line-height:inherit;padding:5px;padding-left:10px;}
-	.styled-select select {margin-top:0px;background:transparent;width:100%;padding:5px;font-size:1em;border:1px solid #ccc;border-radius:0;height:auto;-webkit-appearance:none;}
-	.uibox {border:1px solid #ddd;padding:5px;margin-top:0px;margin-bottom:5px;padding-top:10px;padding-bottom:10px;}
-	.uibox_text{font-size:1.1em;margin-bottom:0px;color:#ccc;font-weight:bold;font-family:'Open Sans';margin-bottom:-5px;margin-left:-1px;}
+
+	/* selects, text boxes, and labels for them */
+	.labeled_ele{margin:7px 0px 7px 0px;}
+	.labeled_ele>label{border:1px solid #bbb;width:100px;padding:5px 6px 5px 6px;text-align:center;margin:0;margin-right:-4px;background-color:#ddd;font-family:'Open Sans';font-weight:400;}
+	.labeled_ele>input{border:1px solid #bbb;width:100px;padding:5px 6px 5px 6px;text-align:center;margin:0;margin-right:-4px;background-color:#ddd;font-family:'Open Sans';font-weight:400;}
+	.select_carat{position:relative;display:inline-block;}
+	.select_carat:after{content:'V';width:22px;height:22px;color:black;right:1px;top:1px;position:absolute;}
+	.styled-select select{width:calc(100% - 100px);display:inline-block;position:relative;-moz-appearance:none;-webkit-appearance:none;padding:5px 6px 5px 6px;margin:0px;border:1px solid #bbb;background-color:white;border-radius:0px;}
+	.styled-input input{width:calc(100% - 100px);display:inline-block;position:relative;-moz-appearance:none;-webkit-appearance:none;padding:5px 6px 5px 6px;margin:0px;border:1px solid #bbb;background-color:white;border-radius:0px;}
+
+	/* on-off switches */
+	.onoffswitch {display:block;position:relative;width:40px;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;margin:7px 0px 7px 0px;vertical-align:middle;}
+	.onoffswitch-checkbox {display:none;}
+	.onoffswitch-label {display:inline-block;overflow:hidden;cursor:pointer;border:1px solid #bbb;border-radius:0px;}
+	.onoffswitch-inner {display:inline-block;width:200%;margin-left:-100%;transition:margin 0.3s ease-in 0s;}
+	.onoffswitch-inner:before, .onoffswitch-inner:after {display:inline-block;float:left; width:50%;padding: 0;color:white;font-family:'Open Sans';box-sizing:border-box;background-clip:padding-box;}
+	.onoffswitch-inner:before {padding:5px 4px 5px 4px;content:"On";padding-left:5px;background-color:#67C2A5;color: #FFFFFF;font-weight:400;font-size:1em;}
+	.onoffswitch-inner:after {padding:5px 4px 5px 4px;content: "Off";padding-right:5px;background-color:#EEEEEE;color:#000000;text-align:right;font-weight:400;font-size:1em;}
+	.onoffswitch-switch {display:inline-block;width:8px;margin:0px;background:#fff;position:absolute;top:0;bottom:0;right:32px;transition:all 0.3s ease-in 0s;border:1px solid #bbb}
+	.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {margin-left:0;}
+	.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {right:0px;}
+	.freetext{position:relative;padding:0;margin:0;font-size:1em;top:13px;left:50px;height:0px;width:0px;}
+	.wrapper{display:relative;}
+
+	/* UI boxes for GUI elements */
+	.uibox {border:1px solid #ccc ;margin-top:0px;margin-bottom:5px;padding:7px 15px 7px 15px;}
+	.uibox_text{font-size:1.1em;margin-bottom:0px;color:#aaa;font-weight:bold;font-family:'Open Sans';margin-bottom:-5px;margin-left:-1px;}
 
 	/* point types */
 	.pointcircle {width:12px;height:12px;border:2px solid #67c2a5;-webkit-border-radius:6px;border-radius:6px;display:inline-block;vertical-align:middle;margin-top:-12px;margin-left:4px;margin-right:0px;background-color:rgba(103, 194, 165, 0.3)}
 	.pointcirclecontext {margin-left:4;margin-right:4;margin-top:4;margin-bottom:4;width:12px;height:12px;border:2px solid #67c2a5;-webkit-border-radius:6px;border-radius:6px;display:inline-block;vertical-align:middle;background-color:rgba(103, 194, 165, 0.3)}
-	.pointpoint {width:12px;height:12px;border:2px solid #ffffff;-webkit-border-radius:6px;border-radius:6px;display:inline-block;vertical-align:middle;margin-top:-12px;margin-left:4px;margin-right:0px;background-color:rgba(103, 194, 165, 1)}
+	.pointpoint {width:8px;height:8px;-webkit-border-radius:4px;border-radius:4px;display:inline-block;vertical-align:middle;margin-top:-12px;margin-left:4px;margin-right:0px;background-color:rgba(103, 194, 165, 1)}
 	.pointpointcontext {margin-left:4;margin-right:4;margin-top:4;margin-bottom:4;width:12px;height:12px;border:2px solid rgba(103, 194, 165, 0);-webkit-background-clip: padding-box;background-clip: padding-box;-webkit-border-radius:6px;border-radius:6px;display:inline-block;vertical-align:middle;background-color:rgba(103, 194, 165, 1)}
 	.pointcircleopen {width:12px;height:12px;border:1px solid #67c2a5;-webkit-border-radius:6px;border-radius:6px;display:inline-block;vertical-align:middle;margin-top:-12px;margin-left:4px;margin-right:0px;}
 	.pointcircleopencontext {margin-left:4;margin-right:4;margin-top:4;margin-bottom:4;width:12px;height:12px;border:1px solid #67c2a5;-webkit-border-radius:6px;border-radius:6px;display:inline-block;vertical-align:middle;}
@@ -150,7 +174,6 @@
 	.v-nav>div.tab-content{padding-left:7%;padding-right:7%;margin-bottom:20px;padding-bottom:30px;padding-top:30px;background-color:#eeeeee;}
 
 	/* hidden ui elements */
-	#bad_data{}
 	#png_save{display:none;}
 	#help_text{display:none;}
 
@@ -441,45 +464,43 @@
 			<div class='tab-content'>
 				<div class='row'>
 					<div class="col-md-6">
-						<div class="input-group full-width">
-						  <span class="input-group-addon">Headline:</span>
-						  <input type="text" class="form-control" placeholder="A Great Chart" id='hed'>
+						<div class="labeled_ele">
+							<label>Headline</label>
+							<span class='styled-input'>
+								<input type="text styled-input" placeholder="A Great Chart" id='hed'>
+							</span>
+						</div>
+						<div class="labeled_ele">
+							<label>Source</label>
+							<span class='styled-input'>
+								<input type="text styled-input" placeholder="Where this data comes from" id='source'>
+							</span>
+						</div>
+						<div class="labeled_ele">
+							<label>X Label</label>
+							<span class='styled-input'>
+								<input type="text styled-input" placeholder="A label for the x-axis" id='xlabel'>
+							</span>
 						</div>
 					</div>
 					<div class="col-md-6">
-						<div class="input-group full-width">
-						  <span class="input-group-addon">Subhead:</span>
-						  <input type="text" class="form-control" placeholder="More detail about this great chart" id='dek'>
+						<div class="labeled_ele">
+							<label>Subhead</label>
+							<span class='styled-input'>
+								<input type="text styled-input" placeholder="More detail about this great chart" id='dek'>
+							</span>
 						</div>
-					</div>
-				</div>
-
-				<div class='row'>
-					<div class="col-md-6">
-						<div class="input-group full-width">
-						  <span class="input-group-addon">Source:</span>
-						  <input type="text" class="form-control" placeholder="Where this data came from" id='source'>
+						<div class="labeled_ele">
+							<label>Note</label>
+							<span class='styled-input'>
+								<input type="text styled-input" placeholder="Another thing you should know" id='note'>
+							</span>
 						</div>
-					</div>
-					<div class="col-md-6">
-						<div class="input-group full-width">
-						  <span class="input-group-addon">Note:</span>
-						  <input type="text" class="form-control" placeholder="Another thing you should know" id='note'>
-						</div>
-					</div>
-				</div>
-
-				<div class='row'>
-					<div class="col-md-6">
-						<div class="input-group full-width">
-						  <span class="input-group-addon">X label:</span>
-						  <input type="text" class="form-control" placeholder="A label for the x-axis" id='xlabel'>
-						</div>
-					</div>
-					<div class="col-md-6">
-						<div class="input-group full-width">
-						  <span class="input-group-addon">Y label:</span>
-						  <input type="text" class="form-control" placeholder="A label for the y-axis" id='ylabel'>
+						<div class="labeled_ele">
+							<label>Y Label</label>
+							<span class='styled-input'>
+								<input type="text styled-input" placeholder="A label for the y-axis" id='ylabel'>
+							</span>
 						</div>
 					</div>
 				</div>
@@ -488,12 +509,12 @@
 			<div class='tab-content'>
 				<div class="row">
 					<div class="col-md-6 botrow">
-						<div class='input-group element_group'>
-						<span class="input-group-addon" data-toggle='tooltip' data-placement='top'>Theme:</span>
-						<div class='styled-select'>
-							<select id='themes' onchange=change_theme()>
-							</select>
-						</div>
+						<div class="labeled_ele">
+							<label>Theme</label>
+							<span class='styled-select'>
+								<select class="variable_select group_select" id='themes' onchange=change_theme() disabled>
+								</select>
+							</span>
 						</div>
 						<div class='uibox_text'>Key</div>
 						<div class='uibox'>
@@ -505,16 +526,20 @@
 					</div>
 
 					<div class="col-md-6">
-						<div class='col-md-6' style='padding-left:0'>
-							<div class="input-group element_group">
-							  <span class="input-group-addon" data-toggle='tooltip' data-placement='top' title='Width of the graph in pixels.'>Width:</span>
-							  <input type="text" class="form-control" placeholder="745" id='gwidth' onchange=changedimensions()>
+						<div class='col-md-6'>
+							<div class="labeled_ele">
+								<label>Width</label>
+								<span class='styled-input'>
+									<input type="text styled-input" placeholder="745" id='gwidth'>
+								</span>
 							</div>
 						</div>
-						<div class='col-md-6' style='padding-left:0'>
-							<div class="input-group">
-							  <span class="input-group-addon" data-toggle='tooltip' data-placement='top' title='Height of the graph in pixels.'>Height:</span>
-							  <input type="text" class="form-control" placeholder="480" id='gheight' onchange=changedimensions()>
+						<div class='col-md-6'>
+							<div class="labeled_ele">
+								<label>Height</label>
+								<span class='styled-input'>
+									<input type="text styled-input" placeholder="480" id='gheight'>
+								</span>
 							</div>
 						</div>
 
@@ -549,16 +574,53 @@
 					<div class="col-md-6">
 						<div class='uibox_text'>Gridlines</div>
 						<div class='uibox'>
-							<div class="col-md-6">
-								<label class='checkbox-inline'><input type="checkbox" class='text-right' id="xgrid" data-toggle="toggle" data-size='mini'></label>X gridlines<br>
-								<label class='checkbox-inline'><input type="checkbox" class='text-right' id="ygrid" data-toggle="toggle" data-size='mini' checked></label>Y gridlines
-							</div>
-							<div class="col-md-6">
-								<label class='checkbox-inline'><input type="checkbox" class='text-right' id="xminorgrid" data-toggle="toggle" data-size='mini'></label>Minor X gridlines<br>
-								<label class='checkbox-inline'><input type="checkbox" class='text-right' id="yminorgrid" data-toggle="toggle" data-size='mini'></label>Minor Y gridlines
+							<div class='row'>
+
+								<div class="col-md-6">
+									<div class='wrapper'>
+									<span class='freetext'>X gridlines</span>
+									<div class="onoffswitch">
+									    <input type="checkbox" class="onoffswitch-checkbox" id="xgrid">
+									    <label class="onoffswitch-label" for="xgrid">
+									        <span class="onoffswitch-inner"></span>
+									        <span class="onoffswitch-switch"></span>
+									    </label>
+									</div>
+									</div>
+									
+									<div class='wrapper'>
+									<span class='freetext'>Y gridlines</span>
+									<div class="onoffswitch">
+									    <input type="checkbox" class="onoffswitch-checkbox" id="ygrid" checked>
+									    <label class="onoffswitch-label" for="ygrid">
+									        <span class="onoffswitch-inner"></span>
+									        <span class="onoffswitch-switch"></span>
+									    </label>
+									</div>
+									</div>
+								</div>
+
+								<div class="col-md-6">
+									<div class='freetext'>Minor X gridlines</div>
+									<div class="onoffswitch">
+									    <input type="checkbox" class="onoffswitch-checkbox" id="xminorgrid">
+									    <label class="onoffswitch-label" for="xgrid">
+									        <span class="onoffswitch-inner"></span>
+									        <span class="onoffswitch-switch"></span>
+									    </label>
+									</div>
+									
+									<div class='freetext'>Minor Y gridlines</div>
+									<div class="onoffswitch">
+									    <input type="checkbox" class="onoffswitch-checkbox" id="yminorgrid">
+									    <label class="onoffswitch-label" for="ygrid">
+									        <span class="onoffswitch-inner"></span>
+									        <span class="onoffswitch-switch"></span>
+									    </label>
+									</div>
+								</div>
 							</div>
 						</div>
-					</div>
 <!-- 					<div class="col-md-6">
 						<div class='uibox_text'>Formatting</div>
 						<div class='uibox'>
@@ -576,8 +638,8 @@
 								  <input type="text" class="form-control text-center" placeholder="suffix" id='y_append'>
 								</div>
 							</div>
-						</div>
-					</div> -->
+						</div>-->
+					</div> 
 				</div>
 			</div>
 		</div>
@@ -595,13 +657,92 @@
 				<li tab='chart_stackedbar'>Stacked Bars</li>
 				<li tab='chart_area'>Area</li>
 				<li tab='chart_text'>Text</li>
-				<li tab='chart_text'>Error Bars</li>
+				<li tab='chart_text'>Segments/Trend Lines</li>
 			</ul>
 
 			<div class='tab-content'>
 				<div class='row'>
 					<div class='col-md-6'>
-						test
+						<div class="labeled_ele">
+							<label>X Variable</label>
+							<span class='styled-select'>
+								<select class="variable_select x_select" id='point_select_x' disabled>
+									<option value='none'>Nothing selected</option>
+								</select>
+							</span>
+						</div>
+
+						<div class="labeled_ele">
+							<label>Point Color</label>
+							<span class='styled-select'>
+								<select class="variable_select group_select" id='point_select_color' disabled>
+									<option value='none'>Nothing selected</option>
+								</select>
+							</span>
+						</div>
+
+						<div class="labeled_ele">
+							<label>Point Labels</label>
+							<span class='styled-select'>
+								<select class="variable_select group_select" id='point_select_label' disabled>
+									<option value='none'>Nothing selected</option>
+								</select>
+							</span>
+						</div>
+					</div>
+					<div class='col-md-6'>
+						<div class="labeled_ele">
+							<label>Y Variable</label>
+							<span class='styled-select'>
+								<select class="variable_select y_select" id='point_select_y' disabled>
+									<option value='none'>Nothing selected</option>
+								</select>
+							</span>
+						</div>
+
+						<div class="labeled_ele">
+							<label>Point Size</label>
+							<span class='styled-select'>
+								<select class="variable_select group_select" id='point_select_size' disabled>
+									<option value='none'>Nothing selected</option>
+								</select>
+							</span>
+						</div>
+
+						<div class="labeled_ele">
+							<label>Point Types</label>
+							<span class='styled-select'>
+								<select class="variable_select group_select" id='point_select_types' disabled>
+									<option value='none'>Nothing selected</option>
+								</select>
+							</span>
+						</div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-6'>
+						<div class='uibox_text'>Point Style</div>
+						<div class='uibox'>
+							<div class='col-md-6'>
+								<label class='checkbox-inline'><input type="checkbox" id="points" data-toggle="toggle" data-size='mini' checked ></label>Draw Points<br>
+								<label class='checkbox-inline'><input type="checkbox" id="labels" data-toggle="toggle" data-size='mini'></label>Label all points
+							</div>
+							<div class='col-md-6'>
+								<div>
+									<input id='pointcircle' type="radio" name="linepoint" value="pointcircle" checked><label for='pointcircle'><span><span></span></span></label><span class='pointcircle'></span>
+									<input id='pointpoint' type="radio" name="linepoint" value="pointpoint"><label for='pointpoint'><span><span></span></span></label><span class='pointpoint'></span>
+									<input id='pointcircleopen' type="radio" name="linepoint" value="pointcircleopen"><label for='pointcircleopen'><span><span></span></span></label><span class='pointcircleopen'></span>
+								</div>
+<!-- 								PUT MORE POINT TYPES HERE
+								<div>
+									<input id='pointcircle' type="radio" name="linepoint" value="pointcircle" checked><label for='pointcircle'><span><span></span></span></label><span class='pointcircle'></span>
+									<input id='pointpoint' type="radio" name="linepoint" value="pointpoint"><label for='pointpoint'><span><span></span></span></label><span class='pointpoint'></span>
+									<input id='pointcircleopen' type="radio" name="linepoint" value="pointcircleopen"><label for='pointcircleopen'><span><span></span></span></label><span class='pointcircleopen'></span>
+								</div> -->
+							</div>
+						</div>
+					</div>
+					<div class='col-md-6'>
 					</div>
 				</div>
 			</div>
@@ -774,20 +915,7 @@
 					</div>
 				</div>
 				<div class='row'>
-					<div class='col-md-6'>
-						<div class='uibox_text'>Point Style</div>
-						<div class='uibox'>
-							<div class='col-md-6'>
-								<label class='checkbox-inline'><input type="checkbox" id="points" data-toggle="toggle" data-size='mini' checked ></label>Draw Points<br>
-								<label class='checkbox-inline'><input type="checkbox" id="labels" data-toggle="toggle" data-size='mini'></label>Label all points
-							</div>
-							<div class='col-md-6'>
-								<input id='pointcircle' type="radio" name="linepoint" value="pointcircle" checked><label for='pointcircle'><span><span></span></span></label><span class='pointcircle'></span>
-								<input id='pointpoint' type="radio" name="linepoint" value="pointpoint"><label for='pointpoint'><span><span></span></span></label><span class='pointpoint'></span>
-								<input id='pointcircleopen' type="radio" name="linepoint" value="pointcircleopen"><label for='pointcircleopen'><span><span></span></span></label><span class='pointcircleopen'></span>
-							</div>
-						</div>
-					</div>
+
 					<div class='col-md-6'>
 						<div class='uibox_text'>Shading</div>
 						<div class='uibox'>
@@ -1528,9 +1656,6 @@ function blink(){
 		setTimeout(function(){cursor.attr({opacity:1})},500)
 	} catch(err){}
 }
-
-// Initialize select inputs
-$('.variable_select').selectpicker({dropupAuto:true});
 
 // Initialize tooltips
 $('[data-toggle="tooltip"]').tooltip()
@@ -3611,30 +3736,6 @@ function unhighlight_element(ev) {
 			}
 		} catch(err){}
 	}
-}
-
-function x_vars(select) {
-	// When an x-variable is selected, update it across all graph types
-	var value = select.value; 
-	$(".x_select").val(value);
-	$(".x_select").selectpicker('refresh')
-	// redraw()
-}
-
-function y_vars(select) {
-	// When a y-variable is selected, update it across all graph types
-	var value = select.value; 
-	$(".y_select").val(value);
-	$(".y_select").selectpicker('refresh')
-	// redraw()
-}
-
-function group_vars(select) {
-	// When a y-variable is selected, update it across all graph types
-	var value = select.value; 
-	$(".group_select").val(value);
-	$(".group_select").selectpicker('refresh')
-	// redraw()
 }
 
 $('.panel-custom').on('show.bs.collapse', function () {
