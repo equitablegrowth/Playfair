@@ -105,7 +105,7 @@
 	.labeled_ele>label{border:1px solid #bbb;border-right:0px;width:100px;padding:5px 6px 5px 6px;text-align:center;margin:0;margin-right:-4px;background-color:#ddd;font-family:'Open Sans';font-weight:400;}
 	.labeled_ele>input{border:1px solid #bbb;width:100px;padding:5px 6px 5px 6px;text-align:center;margin:0;margin-right:-4px;background-color:#ddd;font-family:'Open Sans';font-weight:400;}
 	.select_carat{position:relative;width:calc(100% - 100px);}
-	.select_carat:after{content:"\f078";font-family:'FontAwesome';width:35px;height:28px;background-color:#67c2a5;color:white;right:2px;top:-4px;position:absolute;padding-left:11px;padding-top:4px;margin-bottom:5px;}
+	.select_carat:after{border-radius:1px;content:"\f078";font-family:'FontAwesome';width:35px;height:28px;background-color:#67c2a5;color:white;right:2px;top:-4px;position:absolute;padding-left:11px;padding-top:4px;margin-bottom:5px;}
 	.styled-select select{width:calc(100% - 100px);display:inline-block;position:relative;-moz-appearance:none;-webkit-appearance:none;padding:5px 6px 5px 6px;margin:0px;border:1px solid #bbb;background-color:white;border-radius:0px;}
 	.styled-select select[disabled]{color:#bbb;}
 	.styled-input input{width:calc(100% - 100px);display:inline-block;position:relative;-moz-appearance:none;-webkit-appearance:none;padding:5px 6px 5px 6px;margin:0px;border:1px solid #bbb;background-color:white;border-radius:0px;}
@@ -116,8 +116,8 @@
 	/* radio buttons */
 	input[type=radio]:not(old){width:20px;margin:6;padding:0;font-size:1em;opacity:0;}
 	input[type=radio]:not(old) + label {display:inline-block;margin-left:-28px;font-weight:400;}
-	input[type=radio]:not(old) + label > span {display:inline-block;width:18px;height:18px;margin:7px 3px 7px 3px;border:1px solid #ccc;background:white;vertical-align:middle;}
-	input[type=radio]:not(old):checked + label > span > span{display:inline-block;width:16px;height:16px;background:#67c2a5;border:1px solid white;}
+	input[type=radio]:not(old) + label > span {display:inline-block;width:18px;height:18px;margin:7px 3px 7px 3px;border:1px solid #ccc;background:white;vertical-align:middle;border-radius:1px;}
+	input[type=radio]:not(old):checked + label > span > span{display:inline-block;width:16px;height:16px;background:#67c2a5;border:1px solid white;border-radius:1px;}
 
 	/* on-off switches */
 	/* these are adapted from Craig Buckler's switches here: http://www.sitepoint.com/css3-toggle-switch/ */
@@ -412,10 +412,7 @@
 	<li class="active"><a data-toggle="tab" href="#data">Data</a></li>
 	<li><a data-toggle="tab" href="#design">Design</a></li>
 	<li><a data-toggle="tab" href="#chart">Chart</a></li>
-	<!-- <li><a data-toggle="tab" href="#linechart">Line/Scatter</a></li> -->
-	<!-- <li class='disabled'><a href="#histogram">Histogram</a></li> -->
 	<!-- <li class='disabled'><a href="#waffle">Waffle</a></li>	 -->
-	<!-- <li class='disabled'><a href="#areachart">Area Chart</a></li>  -->
 	<!-- <li class='disabled'><a href="#maps">Choropleth</a></li>  -->
 	<li><a data-toggle='tab' href="#settings">Settings</a></li>
 </ul>
@@ -428,7 +425,7 @@
 
 	<div id='data' class='tab-pane active'>
 		<div class='v-nav'>
-			<ul>
+			<ul class='unselectable'>
 				<li id='data_first' tab='data_main' class='first current'>Data Entry</li>
 			</ul>
 
@@ -454,7 +451,7 @@
 
 	<div id="design" class="tab-pane">
 		<div class='v-nav'>
-			<ul>
+			<ul class='unselectable'>
 				<li id='design_first' tab='design_textelements' class='first current'>Text Elements</li>
 				<li tab='design_style'>Style</li>
 				<li tab='design_axes'>Axes</li>
@@ -532,7 +529,7 @@
 							<div class="labeled_ele">
 								<label>Width</label>
 								<span class='styled-input'>
-									<input type="text styled-input" placeholder="745" id='gwidth'>
+									<input type="text styled-input" placeholder="745" id='gwidth' onchange="changedimensions()">
 								</span>
 							</div>
 						</div>
@@ -540,7 +537,7 @@
 							<div class="labeled_ele">
 								<label>Height</label>
 								<span class='styled-input'>
-									<input type="text styled-input" placeholder="480" id='gheight'>
+									<input type="text styled-input" placeholder="480" id='gheight' onchange="changedimensions()">
 								</span>
 							</div>
 						</div>
@@ -641,7 +638,7 @@
 <!-- ********************************************************************** -->
 	<div id='chart' class='tab-pane'>
 		<div class='v-nav'>
-			<ul>
+			<ul class='unselectable'>
 				<li id='chart_first' tab='chart_points' class='first current'>Points</li>
 				<li tab='chart_lines'>Lines</li>
 				<li tab='chart_bars'>Bars</li>
@@ -829,213 +826,111 @@
 			<div class='tab-content'>
 				<div class='row'>
 					<div class='col-md-6'>
-						test
-					</div>
-				</div>
-			</div>
-
-			<div class='tab-content'>
-				<div class='row'>
-					<div class='col-md-6'>
-						test
-					</div>
-				</div>
-			</div>
-
-			<div class='tab-content'>
-				<div class='row'>
-					<div class='col-md-6'>
-						test
-					</div>
-				</div>
-			</div>
-
-			<div class='tab-content'>
-				<div class='row'>
-					<div class='col-md-6'>
-						test
-					</div>
-				</div>
-			</div>
-
-			<div class='tab-content'>
-				<div class='row'>
-					<div class='col-md-6'>
-						test
-					</div>
-				</div>
-			</div>
-
-		</div>
-	</div>
-
-
-<!-- ********************************************************************** -->
-<!-- ************************ BARCHART STARTS HERE ************************ -->
-<!-- ********************************************************************** -->
-	<div id="barchart" class="tab-pane">
-		<div class='v-nav'>
-			<ul>
-				<li id='barchart_first' tab='barchart_data' class='first current'>Data</li>
-				<li tab='barchart_style'>Style</li>
-			</ul>
-
-			<div class='tab-content'>
-				<div class='row'>
-					<div class='col-md-6'>
-						<div class="input-group"> <span class="input-group-addon pickvar">Bar Categories</span>
-							<select class="variable_select x_select" id='bar_select_category' data-width='100%' data-dropup-auto=false onchange=x_vars(this) disabled><option value='none'>Nothing selected</option></select>
-						</div>
-						<div class="input-group"> <span class="input-group-addon pickvar">Category Values</span>
-							<select class="variable_select y_select" id='bar_select_values' data-width='100%' data-dropup-auto=false onchange=y_vars(this) disabled><option value='none'>Nothing selected</option></select>
+						<div class="labeled_ele">
+							<label>X Variable</label>
+							<span class='styled-select'>
+								<span class='select_carat'>
+									<select class="variable_select x_select" id='bar_select_x' disabled>
+										<option value='none'>Nothing selected</option>
+									</select>
+								</span>
+							</span>
 						</div>
 
+						<div class="labeled_ele">
+							<label>Bar Color</label>
+							<span class='styled-select'>
+								<span class='select_carat'>
+									<select class="variable_select group_select" id='bar_select_connect' disabled>
+										<option value='none'>Nothing selected</option>
+									</select>
+								</span>
+							</span>
+						</div>
 					</div>
 					<div class='col-md-6'>
-						<div class="input-group"> <span class="input-group-addon pickvar">Sub-Categories</span>
-							<select class="variable_select group_select" id='bar_select_grouping' data-width='100%' data-dropup-auto=false onchange=group_vars(this) disabled><option value='none'>Nothing selected</option></select>
-						</div>							
-					</div>
-				</div>				
-			</div>
+						<div class="labeled_ele">
+							<label>Y Variable</label>
+							<span class='styled-select'>
+								<span class='select_carat'>
+									<select class="variable_select y_select" id='bar_select_y' disabled>
+										<option value='none'>Nothing selected</option>
+									</select>
+								</span>
+							</span>
+						</div>
 
-			<div class='tab-content'>
-				<div class="row">
-					<div class="col-md-6">
-						<div class='uibox_text'>Layout</div>
+						<div class="labeled_ele">
+							<label>Group On</label>
+							<span class='styled-select'>
+								<span class='select_carat'>
+									<select class="variable_select group_select" id='bar_select_group' disabled>
+										<option value='none'>Nothing selected</option>
+									</select>
+								</span>
+							</span>
+						</div>
+					</div>
+				</div>
+
+				<div class='row'>
+					<div class='col-md-6'>
+						<div class='uibox_text'>Bar Style</div>
 						<div class='uibox'>
 							<div class='col-md-6'>
-								<label class='checkbox-inline'><input type="checkbox" class='text-right' id="spacing" data-toggle="toggle" data-size='mini' checked></label>Space between bars
-							</div>
-							<div class="col-md-6">
-								<input id='vert' type="radio" name="barorient" value="vertical" checked><label for='vert'><span><span></span></span>Vertical</label>
-								<input id='horiz' type="radio" name="barorient" value="horizontal"><label for='horiz'><span><span></span></span>Horizontal</label>
-							</div>
-						</div>
-					</div>
-					<div class='col-md-6'>
-						<div class='uibox_text'>Chart Type</div>
-						<div class='uibox'>
-							<div class='col-md-6'>
-								<label class='checkbox-inline'><input type="checkbox" class='text-right' name="bartype" data-toggle="toggle" data-size='mini' id="stacked"></label>Stacked Bars
-							</div>
-						</div>						
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-
-<!-- ********************************************************************** -->
-<!-- *********************** LINECHART STARTS HERE ************************ -->
-<!-- ********************************************************************** -->
-
-	<div id="linechart" class="tab-pane">
-		<div class='v-nav'>
-			<ul>
-				<li id='linechart_first' tab='linechart_data' class='first current'>Data</li>
-				<li tab='linechart_style'>Style</li>
-			</ul>
-
-			<div class='tab-content'>
-				<div class='row'>
-					<div class='col-md-6'>
-						<div class="input-group"> <span class="input-group-addon pickvar" data-toggle='tooltip' data-placement='top' title='Select the X variable for your graph.'>X Variable</span>
-							<select class="variable_select x_select" id='line_select_category' data-width='100%' data-dropup-auto=false onchange=x_vars(this) disabled><option value='none'>Nothing selected</option></select>
-						</div>
-						<div class="input-group"> <span class="input-group-addon pickvar" data-toggle='tooltip' data-placement='top' title='Select the Y variable for your graph.'>Y Variable</span>
-							<select class="variable_select y_select" id='line_select_values' data-width='100%' data-dropup-auto=false onchange=y_vars(this) disabled><option value='none'>Nothing selected</option></select>
-						</div>
-						<div class="input-group"> <span class="input-group-addon pickvar" data-toggle='tooltip' data-placement='top' title='Select a variable that divides your data into groups. Groups will be colored differently and a key will be added.'>Group Variable</span>
-							<select class="variable_select group_select" id='line_select_grouping' data-width='100%' data-dropup-auto=false onchange=group_vars(this) disabled><option value='none'>Nothing selected</option></select>
-						</div>
-					</div>
-					<div class='col-md-6'>
-						<div class="input-group"> <span class="input-group-addon pickvar" data-toggle='tooltip' data-placement='top' title='Select a variable to label the points in the graph. You must right click a point and choose Label Data to label it.'>Label Points</span>
-							<select class="variable_select label_select" id='line_select_label' data-width='100%' data-dropup-auto=false disabled><option value='none'>Nothing selected</option></select>
-						</div>
-						<div class="input-group"> <span class="input-group-addon pickvar" data-toggle='tooltip' data-placement='top' title='Select a variable to order your points for connecting them with a line. If you want a standard line graph, select your x-variable here.'>Connect Points</span>
-							<select class="variable_select connect_select" id='line_select_connect' data-width='100%' data-dropup-auto=false disabled><option value='none'>Nothing selected</option></select>
-						</div>
-						<div class="input-group"> <span class="input-group-addon pickvar" data-toggle='tooltip' data-placement='top' title='Select a variable to scale the points in your graph (a bubble graph). If there is a large differential between the largest and smallest values, a log scale will be used.'>Point Size</span>
-							<select class="variable_select" id='line_select_pointsize' data-width='100%' data-dropup-auto=false disabled><option value='none'>Nothing selected</option></select>
-						</div>
-					</div>
-				</div>	
-			</div>
-
-			<div class='tab-content'>
-				<div class="row">
-					<div class="col-md-12">
-						<div class='uibox_text'>Trend Lines</div>
-						<div class='uibox'>
-							<div id='trends'>
-							</div>
-							<div id='trendorig'>
-								<div class='row'>
-									<div class='col-md-12'>
-										<div class='col-md-4'>
-											<div class="input-group"><span class="input-group-addon" data-toggle='tooltip' data-placement='top' title='Slope of the trend line to add to the plot.'>Slope:</span><input type="text" class="form-control slope" placeholder="" id='slope'>
-											</div>
-										</div>
-										<div class='col-md-4'>
-											<div class="input-group"><span class="input-group-addon" data-toggle='tooltip' data-placement='top' title='Intercept of the trend line to add to the plot.'>Intercept:</span><input type="text" class="form-control intercept" placeholder="" id='intercept'>
-											</div>
-										</div>
-										<div class='col-md-4'>
-											<trends>
-												<button type="button" class="btn btn-default" style='margin-top:5px' id='addtrend' onclick=newtrend()><i class="fa fa-plus"></i></button>
-											</trends>
-										</div>
-									</div>
+								<div>
+									<input type="checkbox" id="spacing" name="spacing" class="switch" checked/>
+									<label for="spacing">Space between bars</label>
 								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-				<div class='row'>
-
 					<div class='col-md-6'>
-						<div class='uibox_text'>Shading</div>
-						<div class='uibox'>
-						<div class='row'>
-							<div class='col-md-12'>
-								<div class='col-md-12'>
-									<label class='checkbox-inline'><input type="checkbox" id="recession_shading" data-toggle="toggle" data-size='mini'></label>Shade U.S. recessions<br>
-									<div class="input-group"> <span class="input-group-addon" data-toggle='tooltip' data-placement='top' title='Intercept of the trend line to add to the plot.'>Other:</span>
-									<input type="text" class="form-control intercept" placeholder="[3,4],[9,10] or [01-1997, 02-2000], ..." id='arbitrary_intervals'></div>
-								</div>
-							</div>
-						</div>
-						</div>
 					</div>
 				</div>
 			</div>
+
+			<div class='tab-content'>
+				<div class='row'>
+					<div class='col-md-6'>
+						test
+					</div>
+				</div>
+			</div>
+
+			<div class='tab-content'>
+				<div class='row'>
+					<div class='col-md-6'>
+						test
+					</div>
+				</div>
+			</div>
+
+			<div class='tab-content'>
+				<div class='row'>
+					<div class='col-md-6'>
+						test
+					</div>
+				</div>
+			</div>
+
+			<div class='tab-content'>
+				<div class='row'>
+					<div class='col-md-6'>
+						test
+					</div>
+				</div>
+			</div>
+
+			<div class='tab-content'>
+				<div class='row'>
+					<div class='col-md-6'>
+						test
+					</div>
+				</div>
+			</div>
+
 		</div>
-	</div>
-
-<!-- ********************************************************************** -->
-<!-- ********************* SCATTER PLOT STARTS HERE *********************** -->
-<!-- ********************************************************************** -->
-	<div id="scatterplot" class="tab-pane fade">
-		<h3>Scatter Plot</h3>
-		<p>Some content.</p>
-	</div>
-
-<!-- ********************************************************************** -->
-<!-- *********************** DOT PLOT STARTS HERE ************************* -->
-<!-- ********************************************************************** -->
-	<div id="dotplot" class="tab-pane fade disabled">
-		<h3>Dot Plot</h3>
-		<p>Some content.</p>
-	</div>
-
-<!-- ********************************************************************** -->
-<!-- ********************** HISTOGRAM STARTS HERE ************************* -->
-<!-- ********************************************************************** -->
-	<div id="histogram" class="tab-pane fade disabled">
-		<h3>Histogram</h3>
-		<p>Some content.</p>
 	</div>
 
 <!-- ********************************************************************** -->
@@ -1051,7 +946,7 @@
 <!-- ********************************************************************** -->
 	<div id="settings" class="tab-pane">
 		<div class='v-nav'>
-			<ul>
+			<ul class='unselectable'>
 				<li id='settings_first' tab='settings_grapharea' class='first current'>Graph Area</li>
 				<li tab='settings_headerfooter'>Header/Footer</li>
 				<li tab='settings_text'>Text</li>
@@ -1642,7 +1537,7 @@
 		<p>You can also drag the selected text around the graphing area.</p>
 	</div>
 </div>
-<div style='max-width:745;margin-left:auto;margin-right:auto' id='constraint'>
+<div id='constraint'>
 <svg id='grapharea' height='480px' width='745px'>
 	<defs>
 		<style>
@@ -2181,19 +2076,70 @@ function changedimensions() {
 // redraw is the main graphing setup function. Gets variable values and passes them to playfair.js
 function redraw() {
 	try{
-		x_var=$(".x_select").val()
-		y_var=$(".y_select").val()
-		group_var=$(".group_select").val()
-		facet_var=$(".facet_select").val()
+		// xvar:var1,yvar:var2,connect:var3,grouping:{color:var4,line-width;var3},
+
+		// this.flatdata=data
+		// this.dataset=datadict
+		// this.line=geom_dict.line
+		// this.bar=geom_dict.bar
+		// this.point=geom_dict.point
+		// this.text=geom_dict.text
+		// this.area=geom_dict.area
+		// this.stackedbar=geom_dict.stackedbar
+
+		//set up geom_dict by looking at all the stuff in chart and gathering variables as appropriate
+		var geom_dict={}
+
+		if($("#point_select_x").val()!='none' & $("#point_select_y").val()!='none'){
+			var x_var=$("#point_select_x").val()
+			var y_var=$("#point_select_y").val()
+
+			var color=$("#point_select_color").val()
+			var size=$("#point_select_size").val()
+			var label=$("#point_select_label").val()
+			var type=$("#point_select_type").val()
+
+			geom_dict['point']={'xvar':x_var,'yvar':y_var,'labels':label,'grouping':{'color':color,'size':size,'type':type}}
+		}
+
+		if($("#line_select_x").val()!='none' & $("#line_select_y").val()!='none'){
+			var x_var=$("#line_select_x").val()
+			var y_var=$("#line_select_y").val()
+
+			var connect=$("#line_select_connect").val()
+			var color=$("#line_select_color").val()
+			var size=$("#line_select_size").val()
+			var type=$("#line_select_type").val()
+
+			geom_dict['line']={'xvar':x_var,'yvar':y_var,'connect':connect,'grouping':{'color':color,'size':size,'type':type}}
+		}
+
+		if($("#bar_select_x").val()!='none' & $("#bar_select_y").val()!='none'){
+			var x_var=$("#bar_select_x").val()
+			var y_var=$("#bar_select_y").val()
+
+			var color=$("#bar_select_color").val()
+			var bargroup=$("#bar_select_group").val()
+
+			geom_dict['bar']={'xvar':x_var,'yvar':y_var,'connect':connect,'grouping':{'color':color,'size':size,'type':type}}
+		}
+
+		var line_x_var=$("#line_select_x").val()
+		var line_y_var=$("#line_select_y").val()
+
+		var bar_x_var=$("#bar_select_x").val()
+		var bar_y_var=$("#bar_select_y").val()
+
+		var geoms=['line','bar','point','text','area','stackedbar','shading','segments']
 
 		// grab all text elements from the design tab
 		// replace the apostrophe character from word if applicable: Source’s
-		hed=$("#hed").val().replace("’","'")
-		dek=$("#dek").val().replace('’',"'")
-		source=$("#source").val().replace('’',"'")
-		note=$("#note").val().replace('’',"'")
-		xlabel=$("#xlabel").val().replace('’',"'")
-		ylabel=$("#ylabel").val().replace('’',"'")
+		hed=$("#hed").val().replace(/\uFFFD/g,"'")
+		dek=$("#dek").val().replace(/\uFFFD/g,"'")
+		source=$("#source").val().replace(/\uFFFD/g,"'")
+		note=$("#note").val().replace(/\uFFFD/g,"'")
+		xlabel=$("#xlabel").val().replace(/\uFFFD/g,"'")
+		ylabel=$("#ylabel").val().replace(/\uFFFD/g,"'")
 
 		if (x_var!='none' && y_var!='none') {
 
@@ -2209,7 +2155,7 @@ function redraw() {
 			grapharea.selectAll('image').remove()
 
 			chartobject=playfair.init_graph(grapharea,0,0,width,height)
-			chartobject.data(final_data,x_var,y_var,group_var,facet_var)
+			chartobject.data(final_data,geom_dict)
 
 			// initialize styling, the header, and the footer. The footer loads an image (the logo)
 			// and so callouts after it need to be written as callbacks to the footer function.
@@ -3082,7 +3028,7 @@ function addtext(target) {
 		var annoface=chartobject.annotateface
 		var annofill=chartobject.annotatetextfill
 	} else {
-		var annosize='14px'
+		var annosizes='14px'
 		var annoweight=400
 		var annoface='Lato'
 		var annofill='black'
@@ -3785,11 +3731,31 @@ $(document).on('click', '.list-group a', function(e){
 // This section contains playfair interface functions that do not merit
 // their own section and are not part of the graphic package itself.
 
-// $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-//   // run redraw whenever tab is changed
-//   // turns out this is a pretty bad interface idea - disabled for now
-//   redraw()
-// })
+// detect width changes - if < 1200, then graphdiv needs to be align-right
+var width = $(window).width();
+$(window).resize(function(){
+	if($(this).width() < 1200){
+		$('#graphdiv').addClass('text-right')
+		$('#graphdiv').removeClass('text-center')
+		$('#help_general').css('width','calc(100% - 765px)')
+		$('#help_text').css('width','calc(100% - 765px)')
+	}
+	if($(this).width() >= 1200){
+		$('#graphdiv').addClass('text-center')
+		$('#graphdiv').removeClass('text-right')
+		$('#help_general').css('width','calc((100% - 785px)/2)')
+		$('#help_text').css('width','calc((100% - 785px)/2)')
+	}
+});
+
+$(document).ready(function(){
+	if($(window).width()<1200){
+		$('#graphdiv').addClass('text-right')
+		$('#graphdiv').removeClass('text-center')
+		$('#help_general').css('width','calc(100% - 765px)')
+		$('#help_text').css('width','calc(100% - 765px)')
+	}
+})
 
 function highlight_element(ev) {
 	if(selected==0){
