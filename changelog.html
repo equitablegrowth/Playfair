@@ -26,7 +26,7 @@ body{width:700px;margin-left:auto;margin-right:auto;padding-top:22px;padding-bot
 <li> Possible to have x and yaxis labels that stretch over two lines now (but no more, and there is now a max length restriction).</li>
 <li> There are now more restrictions for the lengths of heads and subheads. Write shorter heads/subheads!</li>
 <li> You can now load themes into playfair. This is in the design/style tab but don&#39;t actually use it yet. We may eventually have a second graph style but for now we are still just using the official one.</li>
-<li> You can now coerce playfair to parse a variable as text, numeric, or date. Use this when for example you have year data like 1989, 1990, etc. that Playfair would not normally parse as a date. At the moment, if you change your data, it will cause Playfair to reevaluate the data and reset your selections.</li>
+<li> You can now coerce playfair to parse a variable as text, numeric, or date. Use this when for example you have year data like 1989, 1990, etc. that Playfair would not normally parse as a date. At the moment, if you change your data, it will cause Playfair to reevaluate the data and reset your variable selections.</li>
 <li> I think I&#39;ve solved all the problems with missing data but I can&#39;t swear to it. Please let me know.</li>
 <li> Custom axes for dates are now possible.</li>
 </ul>
@@ -134,7 +134,7 @@ body{width:700px;margin-left:auto;margin-right:auto;padding-top:22px;padding-bot
 
 <h1>v0.6</h1>
 <ul>
-<li> Fixed a but that made the logo appear blurry.</li>
+<li> Fixed a bug that made the logo appear blurry.</li>
 <li> New tools splash screen</li>
 </ul>
 
@@ -166,18 +166,18 @@ body{width:700px;margin-left:auto;margin-right:auto;padding-top:22px;padding-bot
 <ul>
 <li> Date parsing: Playfair can now handle a date data type. The data alert box will inform you that your column has been parsed as a date. Check and make sure! All rows of the column must parse as a date  one missing observation will prevent proper parsing. Only certain formats are recognized as dates. Any of the following should work:</li>
   <ul>
-    <li>19810228 (FRED format)</li>
-    <li>02281981</li>
+    <li>1981-02-28 (FRED format)</li>
+    <li>02-28-1981</li>
     <li>02/28/1981</li>
-    <li>022881</li>
+    <li>02-28-81</li>
     <li>02/28/81</li>
     <li>02/1981</li>
-    <li>021981</li>
+    <li>02-1981</li>
     <li>February 1981</li>
     <li>February 26 1981</li>
     <li>February 26, 1981</li>
   </ul>
-<li> If there are other formats Playfair should recognize, please log these as bugs. It intentionally does not recognize sequences like 1996,1997 as years  either edit out commas in these sequences manually, format them without commas, or format them in your data as 1/1/1996, 1/1/1997, etc.  It also doesn&#39;t really handle amounts of time that should be denominated in hours. So if you want to track a stock from 2PM to 2PM the next day, you will want to simply count out the hours (ie your data is 1,2,3,4,...) and then use a custom axis as appropriate. You cannot currently use custom axes with date data.</li>
+<li> If there are other formats Playfair should recognize, please log these as bugs. It intentionally does not recognize sequences like 1996, 1997 as years  either edit out commas in these sequences manually, format them without commas, or format them in your data as 1/1/1996, 1/1/1997, etc.  It also doesn&#39;t really handle amounts of time that should be denominated in hours. So if you want to track a stock from 2PM to 2PM the next day, you will want to simply count out the hours (ie your data is 1,2,3,4,...) and then use a custom axis as appropriate. You cannot currently use custom axes with date data.</li>
 <li> When you hover over a data element on a graph, it will now be highlighted, which should make it easier to rightclick on an element and alter its color or etc.</li>
 <li> When you rightclick on a linechart line, you can now change that line to a dashed line using the contextual menu that appears (or a dashed line to a solid line).</li>
 <li> Various bug fixes.</li>

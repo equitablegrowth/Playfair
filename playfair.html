@@ -26,7 +26,7 @@
 	h3 {font-size:15px;margin-top:0px;margin-bottom:0px;font-family:Raleway;font-weight:500;}
 	h5 {font-size:24px;font-family:Raleway;font-weight:500;fill:'white';}
 	body {height:100%;padding-bottom:100px;font-family:"Open Sans";-webkit-font-smoothing: antialiased}
-	textarea {margin-top:0px;resize:none;display:block;margin-right:auto;margin-left:auto;width:100%;padding:8px;border:1px solid #cccccc;font-family:"Courier";font-size:90%;}
+	textarea {margin-top:0px;resize:none;display:block;margin-right:auto;margin-left:auto;width:100%;padding:8px;border:1px solid #bbb;font-family:"Courier";font-size:90%;}
 	hr {border-width:1px;border-color:#dddddd;margin-top:6;}
 	a {color:#205946;}
 	a:hover {color:#67c2a5;}
@@ -40,7 +40,6 @@
 	/* random stuff that you should categorize or eliminate or something */
 	.bottom{background-color:#eeeeee;padding-top:30px;padding-bottom:30px;margin-top:40px;}
 	.h4 {font-family:Raleway;font-weight:300;margin-top:0px;font-size:.3em;}
-	.dataselect {font-size:90%;background-color:inherit;}
 	.helpboxouter{position:relative;}
 	.toggle {margin-bottom:2px;margin-top:2px;}
 	.container {margin-top:20px;margin-bottom:250px;height:100%;}
@@ -77,17 +76,12 @@
 	.panel-heading {font-size:10px;border-radius:0px 0px 0px 0px;}
 	.dead{width:0px;height:12px;background:white;border:0px solid white;display:inline-block;vertical-align:middle}
 	.tooltip-inner {text-align:left;}
-	.btn-file {position:relative;overflow:hidden;}
-	.btn-file input[type=file]{position:absolute;top:0;right:0;min-width:100%;min-height:100%;font-size:100px;text-align:right;filter:alpha(opacity=0);opacity:0;outline:none;background:white;cursor:inherit;display:block;}
 	.dashed {height:8px;border-width:2px;margin-left:2;border-bottom: thin black dashed;width:120px;display:inline-block;margin-top:3px;margin-bottom:3px;padding:0;}
 	.solid {height:8px;border-width:2px;margin-left:2;border-bottom: thin black solid;width:120px;display:inline-block;margin-top:3px;margin-bottom:3px;padding:0;}
 	.add {width:18px;height:18px;border:1px solid #b0b0b0;-webkit-border-radius:9px;border-radius:9px;display:inline-block;margin-top:14px;}
 	.fa-plus {color:#b0b0b0;margin-top:1px;}
-	.btn {border-radius:0px;}
-	.btn-primary {background-color:#67c2a5;border-color:#67c2a5;}
-	.btn-primary:hover {background-color:#33836A;border-color:#33836A;}
-	.btn-primary:focus {background-color:#33836A;border-color:#33836A;}
-	.btn-primary:active:hover {background-color:#33836A;border-color:#33836A;}
+	.btn {border-radius:2px;display:inline-block;position:relative;border:1px solid #bbb;}
+	.btn-group{display:inline-block;position:relative;}
 	.balign {margin-top:3px;}
 	.checkbox-inline {margin-right:8px;}
 	.input-group .form-control:nth-child(3) {border-left:0px;}
@@ -105,18 +99,24 @@
 	.labeled_ele>label{border:1px solid #bbb;border-right:0px;width:100px;padding:5px 6px 5px 6px;text-align:center;margin:0;margin-right:-4px;background-color:#ddd;font-family:'Open Sans';font-weight:400;}
 	.labeled_ele>input{border:1px solid #bbb;width:100px;padding:5px 6px 5px 6px;text-align:center;margin:0;margin-right:-4px;background-color:#ddd;font-family:'Open Sans';font-weight:400;}
 	.select_carat{position:relative;width:calc(100% - 100px);}
-	.select_carat:after{border-radius:1px;content:"\f078";font-family:'FontAwesome';width:35px;height:28px;background-color:#67c2a5;color:white;right:2px;top:-4px;position:absolute;padding-left:11px;padding-top:4px;margin-bottom:5px;}
+	.select_carat:after{border-radius:1px;content:"\f078";font-family:'FontAwesome';width:35px;height:28px;background-color:#67c2a5;color:white;right:2px;top:-4px;position:absolute;padding-left:11px;padding-top:4px;margin-bottom:5px;pointer-events:none}
 	.styled-select select{width:calc(100% - 100px);display:inline-block;position:relative;-moz-appearance:none;-webkit-appearance:none;padding:5px 6px 5px 6px;margin:0px;border:1px solid #bbb;background-color:white;border-radius:0px;}
 	.styled-select select[disabled]{color:#bbb;}
 	.styled-input input{width:calc(100% - 100px);display:inline-block;position:relative;-moz-appearance:none;-webkit-appearance:none;padding:5px 6px 5px 6px;margin:0px;border:1px solid #bbb;background-color:white;border-radius:0px;}
 	.styled-inputwide input{width:calc(100% - 160px);display:inline-block;position:relative;-moz-appearance:none;-webkit-appearance:none;padding:5px 6px 5px 6px;margin:0px;border:1px solid #bbb;background-color:white;border-radius:0px;}
 	.labeled_elewide>label{border:1px solid #bbb;width:160px;padding:5px 6px 5px 6px;text-align:center;margin:0;margin-right:-4px;background-color:#ddd;font-family:'Open Sans';font-weight:400;}
 	.labeled_elewide>input{border:1px solid #bbb;width:160px;padding:5px 6px 5px 6px;text-align:center;margin:0;margin-right:-4px;background-color:#ddd;font-family:'Open Sans';font-weight:400;}
+	.dataselect {display:inline;}
+	.dataselect select{display:inline;font-size:90%;background-color:inherit;text-align:left;padding:0px 15px 0px 4px;border:1px solid;border-radius:2px;-moz-appearance:none;-webkit-appearance:none;}
+	.small_caratg{position:relative}
+	.small_caratg:after{content:"\f078";font-family:'FontAwesome';font-size:.7em;width:10px;height:10px;color:#3c763d;background-color:none;right:3px;top:3px;position:absolute;pointer-events:none}
+	.small_caraty{position:relative}
+	.small_caraty:after{content:"\f078";font-family:'FontAwesome';font-size:.7em;width:10px;height:10px;color:rgb(138, 109, 59);background-color:none;right:3px;top:3px;position:absolute;pointer-events:none}
 
 	/* radio buttons */
 	input[type=radio]:not(old){width:20px;margin:6;padding:0;font-size:1em;opacity:0;}
 	input[type=radio]:not(old) + label {display:inline-block;margin-left:-28px;font-weight:400;}
-	input[type=radio]:not(old) + label > span {display:inline-block;width:18px;height:18px;margin:7px 3px 7px 3px;border:1px solid #ccc;background:white;vertical-align:middle;border-radius:1px;}
+	input[type=radio]:not(old) + label > span {display:inline-block;width:18px;height:18px;margin:7px 3px 7px 3px;border:1px solid #bbb;background:white;vertical-align:middle;border-radius:1px;}
 	input[type=radio]:not(old):checked + label > span > span{display:inline-block;width:16px;height:16px;background:#67c2a5;border:1px solid white;border-radius:1px;}
 
 	/* on-off switches */
@@ -132,8 +132,8 @@
 	.tableswitch{display:table;width:100%;}
 
 	/* UI boxes for GUI elements */
-	.uibox {border:1px solid #ccc ;margin-top:0px;margin-bottom:5px;padding:7px 15px 7px 15px;}
-	.uibox_text{font-size:1.1em;margin-bottom:0px;color:#aaa;font-weight:bold;font-family:'Open Sans';margin-bottom:-5px;margin-left:-1px;}
+	.uibox {border:1px solid #ccc ;margin-top:0px;margin-bottom:5px;padding:7px 15px 7px 15px;border-radius:1px;}
+	.uibox_text{font-size:1.1em;margin-bottom:0px;color:#aaa;font-weight:bold;font-family:'Open Sans';margin-bottom:-5px;margin-left:5px;}
 
 	/* point types */
 	.pointcircle {width:12px;height:12px;border:2px solid #67c2a5;-webkit-border-radius:6px;border-radius:6px;display:inline-block;vertical-align:middle;margin-left:4px;margin-right:0px;background-color:rgba(103, 194, 165, 0.3)}
@@ -1567,14 +1567,16 @@
 </div>
 
 <div class='text-center unselectable bottom'>
-<div class="btn-group btnpadding">
-<button type="button" title='Reset the interactive' class="btn btn-default balign" onclick='redraw()'><i class="fa fa-refresh"></i> Redraw</button><br><br>
+
+<div class='btn-group'>
+	<button type="button" title='Reset the interactive' class="btn btn-default balign" onclick='redraw()'><i class="fa fa-refresh"></i> Redraw</button><br><br>
 </div>
-<div class="btn-group btnpadding" role="group">
+
+<div class="btn-group" role="group">
 	<button type="button" class="btn btn-default" id='savepng' onclick=savepng()><i class="fa fa-download"></i> Download PNG</button>
 	<button type="button" class="btn btn-default" id='savesvg' onclick=savesvg()><i class="fa fa-arrows-h"></i> Download SVG</button>
 </div>
-<div class="btn-group btnpadding" role="group">
+<div class="btn-group" role="group">
 	<button type="button" class="btn btn-default" id='savetext' onclick=cloudsave()><i class="fa fa-cloud-upload"></i> Save</button>
 	<button type="button" class="btn btn-default btn-file" id='importtext' onclick=cloudload()><i class="fa fa-cloud-download"></i> Load</button>
 </div>
@@ -1748,7 +1750,7 @@ $(function() {
 
 function gen_coerce_array() {
 	coerce_array=[]
-	temp=$('.dataselect')
+	temp=$('.dataselect select')
 	for(var i=0;i<temp.length;i++){
 		coerce_array.push($(temp[i]).val())
 	}
@@ -1890,11 +1892,11 @@ function loadData(coerce_array) {
 		alertbox.innerHTML = "<b>One or more of your columns has no observations. You can still use this dataset but I dropped that column. I might also have dropped some rows with missing data. Here's what I think about each of your columns:</b><ul>"
 		for (i=0;i<column_types.length;i++) {
 			if(column_types[i]=='text'){
-				alertbox.innerHTML = alertbox.innerHTML + '<ul><li>The <b>'+d[0][i]+'</b> column is a <select class="dataselect" id="coerce'+i+'" onchange=gen_coerce_array()><option value="numeric">numeric</option><option value="date">date</option><option value="text" selected>text</option></select> column, and it has '+column_observations[i]+' observations in it.</li></ul>';
+				alertbox.innerHTML = alertbox.innerHTML + '<ul><li>The <b>'+d[0][i]+'</b> column is a <div class="dataselect"><span class="small_caraty"><select id="coerce'+i+'" onchange=gen_coerce_array()><option value="numeric">numeric</option><option value="date">date</option><option value="text" selected>text</option></select></span></div> column, and it has '+column_observations[i]+' observations in it.</li></ul>';
 			} else if(column_types[i]=='numeric'){
-				alertbox.innerHTML = alertbox.innerHTML + '<ul><li>The <b>'+d[0][i]+'</b> column is a <select class="dataselect" id="coerce'+i+'" onchange=gen_coerce_array()><option value="numeric" selected>numeric</option><option value="date">date</option><option value="text">text</option></select> column, and it has '+column_observations[i]+' observations in it.</li></ul>';
+				alertbox.innerHTML = alertbox.innerHTML + '<ul><li>The <b>'+d[0][i]+'</b> column is a <div class="dataselect"><span class="small_caraty"><select id="coerce'+i+'" onchange=gen_coerce_array()><option value="numeric" selected>numeric</option><option value="date">date</option><option value="text">text</option></select></span></div> column, and it has '+column_observations[i]+' observations in it.</li></ul>';
 			} else if(column_types[i]=='date'){
-				alertbox.innerHTML = alertbox.innerHTML + '<ul><li>The <b>'+d[0][i]+'</b> column is a <select class="dataselect" id="coerce'+i+'" onchange=gen_coerce_array()><option value="numeric">numeric</option><option value="date" selected>date</option><option value="text">text</option></select> column, and it has '+column_observations[i]+' observations in it.</li></ul>';
+				alertbox.innerHTML = alertbox.innerHTML + '<ul><li>The <b>'+d[0][i]+'</b> column is a <div class="dataselect"><span class="small_caraty"><select id="coerce'+i+'" onchange=gen_coerce_array()><option value="numeric">numeric</option><option value="date" selected>date</option><option value="text">text</option></select></span></div> column, and it has '+column_observations[i]+' observations in it.</li></ul>';
 			}
 		}
 		alertbox.style.display='block'
@@ -1905,11 +1907,11 @@ function loadData(coerce_array) {
 		alertbox.innerHTML = "<b>Some of your columns are missing data. You can still use this dataset but I will drop rows missing data. Here's what I think about each of your columns:</b><ul>"
 		for (i=0;i<column_types.length;i++) {
 			if(column_types[i]=='text'){
-				alertbox.innerHTML = alertbox.innerHTML + '<ul><li>The <b>'+d[0][i]+'</b> column is a <select class="dataselect" id="coerce'+i+'" onchange=gen_coerce_array()><option value="numeric">numeric</option><option value="date">date</option><option value="text" selected>text</option></select> column, and it has '+column_observations[i]+' observations in it.</li></ul>';
+				alertbox.innerHTML = alertbox.innerHTML + '<ul><li>The <b>'+d[0][i]+'</b> column is a <div class="dataselect"><span class="small_caraty"><select id="coerce'+i+'" onchange=gen_coerce_array()><option value="numeric">numeric</option><option value="date">date</option><option value="text" selected>text</option></select></span></div> column, and it has '+column_observations[i]+' observations in it.</li></ul>';
 			} else if(column_types[i]=='numeric'){
-				alertbox.innerHTML = alertbox.innerHTML + '<ul><li>The <b>'+d[0][i]+'</b> column is a <select class="dataselect" id="coerce'+i+'" onchange=gen_coerce_array()><option value="numeric" selected>numeric</option><option value="date">date</option><option value="text">text</option></select> column, and it has '+column_observations[i]+' observations in it.</li></ul>';
+				alertbox.innerHTML = alertbox.innerHTML + '<ul><li>The <b>'+d[0][i]+'</b> column is a <div class="dataselect"><span class="small_caraty"><select id="coerce'+i+'" onchange=gen_coerce_array()><option value="numeric" selected>numeric</option><option value="date">date</option><option value="text">text</option></select></span></div> column, and it has '+column_observations[i]+' observations in it.</li></ul>';
 			} else if(column_types[i]=='date'){
-				alertbox.innerHTML = alertbox.innerHTML + '<ul><li>The <b>'+d[0][i]+'</b> column is a <select class="dataselect" id="coerce'+i+'" onchange=gen_coerce_array()><option value="numeric">numeric</option><option value="date" selected>date</option><option value="text">text</option></select> column, and it has '+column_observations[i]+' observations in it.</li></ul>';
+				alertbox.innerHTML = alertbox.innerHTML + '<ul><li>The <b>'+d[0][i]+'</b> column is a <div class="dataselect"><span class="small_caraty"><select id="coerce'+i+'" onchange=gen_coerce_array()><option value="numeric">numeric</option><option value="date" selected>date</option><option value="text">text</option></select></span></div> column, and it has '+column_observations[i]+' observations in it.</li></ul>';
 			}
 		}
 		alertbox.style.display='block'
@@ -1920,11 +1922,11 @@ function loadData(coerce_array) {
 		alertbox.innerHTML = "<b>Your data looks good. Just to make sure, here's what I think about each of your columns:</b>"
 		for (i=0;i<column_types.length;i++) {
 			if(column_types[i]=='text'){
-				alertbox.innerHTML = alertbox.innerHTML + '<ul><li>The <b>'+d[0][i]+'</b> column is a <select class="dataselect" id="coerce'+i+'" onchange=gen_coerce_array()><option value="numeric">numeric</option><option value="date">date</option><option value="text" selected>text</option></select> column, and it has '+column_observations[i]+' observations in it.</li></ul>';
+				alertbox.innerHTML = alertbox.innerHTML + '<ul><li>The <b>'+d[0][i]+'</b> column is a <div class="dataselect"><span class="small_caratg"><select id="coerce'+i+'" onchange=gen_coerce_array()><option value="numeric">numeric</option><option value="date">date</option><option value="text" selected>text</option></select></span></div> column, and it has '+column_observations[i]+' observations in it.</li></ul>';
 			} else if(column_types[i]=='numeric'){
-				alertbox.innerHTML = alertbox.innerHTML + '<ul><li>The <b>'+d[0][i]+'</b> column is a <select class="dataselect" id="coerce'+i+'" onchange=gen_coerce_array()><option value="numeric" selected>numeric</option><option value="date">date</option><option value="text">text</option></select> column, and it has '+column_observations[i]+' observations in it.</li></ul>';
+				alertbox.innerHTML = alertbox.innerHTML + '<ul><li>The <b>'+d[0][i]+'</b> column is a <div class="dataselect"><span class="small_caratg"><select id="coerce'+i+'" onchange=gen_coerce_array()><option value="numeric" selected>numeric</option><option value="date">date</option><option value="text">text</option></select></span></div> column, and it has '+column_observations[i]+' observations in it.</li></ul>';
 			} else if(column_types[i]=='date'){
-				alertbox.innerHTML = alertbox.innerHTML + '<ul><li>The <b>'+d[0][i]+'</b> column is a <select class="dataselect" id="coerce'+i+'" onchange=gen_coerce_array()><option value="numeric">numeric</option><option value="date" selected>date</option><option value="text">text</option></select> column, and it has '+column_observations[i]+' observations in it.</li></ul>';
+				alertbox.innerHTML = alertbox.innerHTML + '<ul><li>The <b>'+d[0][i]+'</b> column is a <div class="dataselect"><span class="small_caratg"><select id="coerce'+i+'" onchange=gen_coerce_array()><option value="numeric">numeric</option><option value="date" selected>date</option><option value="text">text</option></select></span></div> column, and it has '+column_observations[i]+' observations in it.</li></ul>';
 			}
 		}
 		alertbox.style.display='block'
@@ -2006,8 +2008,6 @@ function populate_variables(final_data) {
 	$("#line_select_connect").val(connect)
 	$("#line_select_pointsize").val(size)
 
-	$(".variable_select").selectpicker('refresh')
-
 }
 
 ///////////////////////// END LOAD DATA ////////////////////////////////
@@ -2076,17 +2076,6 @@ function changedimensions() {
 // redraw is the main graphing setup function. Gets variable values and passes them to playfair.js
 function redraw() {
 	try{
-		// xvar:var1,yvar:var2,connect:var3,grouping:{color:var4,line-width;var3},
-
-		// this.flatdata=data
-		// this.dataset=datadict
-		// this.line=geom_dict.line
-		// this.bar=geom_dict.bar
-		// this.point=geom_dict.point
-		// this.text=geom_dict.text
-		// this.area=geom_dict.area
-		// this.stackedbar=geom_dict.stackedbar
-
 		//set up geom_dict by looking at all the stuff in chart and gathering variables as appropriate
 		var geom_dict={}
 
@@ -2099,7 +2088,10 @@ function redraw() {
 			var label=$("#point_select_label").val()
 			var type=$("#point_select_type").val()
 
-			geom_dict['point']={'xvar':x_var,'yvar':y_var,'labels':label,'grouping':{'color':color,'size':size,'type':type}}
+			var pointlabel=document.getElementById('labels').checked
+			// var point_type=$('input[name=linepoint]:checked').val()
+
+			geom_dict['point']={'xvar':x_var,'yvar':y_var,'labels':label,'labelall':pointlabel,'grouping':{'color':color,'size':size,'type':type}}
 		}
 
 		if($("#line_select_x").val()!='none' & $("#line_select_y").val()!='none'){
@@ -2120,33 +2112,26 @@ function redraw() {
 
 			var color=$("#bar_select_color").val()
 			var bargroup=$("#bar_select_group").val()
+			// var barspace=document.getElementById('spacing').checked
 
 			geom_dict['bar']={'xvar':x_var,'yvar':y_var,'connect':connect,'grouping':{'color':color,'size':size,'type':type}}
 		}
 
-		var line_x_var=$("#line_select_x").val()
-		var line_y_var=$("#line_select_y").val()
-
-		var bar_x_var=$("#bar_select_x").val()
-		var bar_y_var=$("#bar_select_y").val()
-
-		var geoms=['line','bar','point','text','area','stackedbar','shading','segments']
-
 		// grab all text elements from the design tab
 		// replace the apostrophe character from word if applicable: Source’s
-		hed=$("#hed").val().replace(/\uFFFD/g,"'")
-		dek=$("#dek").val().replace(/\uFFFD/g,"'")
-		source=$("#source").val().replace(/\uFFFD/g,"'")
-		note=$("#note").val().replace(/\uFFFD/g,"'")
-		xlabel=$("#xlabel").val().replace(/\uFFFD/g,"'")
-		ylabel=$("#ylabel").val().replace(/\uFFFD/g,"'")
+		var hed=$("#hed").val().replace("’","'")
+		var dek=$("#dek").val().replace(/\uFFFD/g,"'")
+		var source=$("#source").val().replace(/\uFFFD/g,"'")
+		var note=$("#note").val().replace(/\uFFFD/g,"'")
+		var xlabel=$("#xlabel").val().replace(/\uFFFD/g,"'")
+		var ylabel=$("#ylabel").val().replace(/\uFFFD/g,"'")
 
-		if (x_var!='none' && y_var!='none') {
+		if (geom_dict.length>0) {
 
 			// initialize playfair.js. First use init_graph to set up workspace, then call the
 			// data method to set up data and variables.
-			// 
 			// Why not just use.clear()? Because it will destroy all the embedded font declarations
+			// this is apparently a known bug in Snap
 			grapharea.selectAll('rect').remove()
 			grapharea.selectAll('text').remove()
 			grapharea.selectAll('line').remove()
@@ -2155,6 +2140,7 @@ function redraw() {
 			grapharea.selectAll('image').remove()
 
 			chartobject=playfair.init_graph(grapharea,0,0,width,height)
+			console.log(geom_dict)
 			chartobject.data(final_data,geom_dict)
 
 			// initialize styling, the header, and the footer. The footer loads an image (the logo)
@@ -2162,29 +2148,25 @@ function redraw() {
 			chartobject.style()
 
 			// get state of all UI style toggles and apply to style of graph axes
-			xgrid=document.getElementById('xgrid').checked
-			ygrid=document.getElementById('ygrid').checked
-			xminorgrid=document.getElementById('xminorgrid').checked
-			yminorgrid=document.getElementById('yminorgrid').checked
-			xprepend=$("#x_prepend").val()
-			xappend=$("#x_append").val()
-			yprepend=$("#y_prepend").val()
-			yappend=$("#y_append").val()
+			var xgrid=document.getElementById('xgrid').checked
+			var ygrid=document.getElementById('ygrid').checked
+			var xminorgrid=document.getElementById('xminorgrid').checked
+			var yminorgrid=document.getElementById('yminorgrid').checked
 
 			// legend
-			legendloc=$('input[name=key]:checked').val()
+			var legendloc=$('input[name=key]:checked').val()
 
-			// barchart specific
-			barspace=document.getElementById('spacing').checked
+			// // barchart specific
+			// barspace=document.getElementById('spacing').checked
 
-			// line/scatter specific
-			points=document.getElementById('points').checked
-			labels=document.getElementById('labels').checked
-			us_shading=document.getElementById('recession_shading').checked
-			arbitrary_shading=$('#arbitrary_intervals').val()
-			label=$("#line_select_label").val()
-			connect=$("#line_select_connect").val()
-			size=$("#line_select_pointsize").val()
+			// // line/scatter specific
+			// points=document.getElementById('points').checked
+			// labels=document.getElementById('labels').checked
+			// us_shading=document.getElementById('recession_shading').checked
+			// arbitrary_shading=$('#arbitrary_intervals').val()
+			// label=$("#line_select_label").val()
+			// connect=$("#line_select_connect").val()
+			// size=$("#line_select_pointsize").val()
 
 			//point type
 			point_type=$('input[name=linepoint]:checked').val()
@@ -2197,8 +2179,8 @@ function redraw() {
 			}
 
 			// which grids should be drawn
-			grids=[xgrid,ygrid,xminorgrid,yminorgrid]
-			attributes=['xgrid_opacity','ygrid_opacity','xgrid_minoropacity','ygrid_minoropacity']
+			var grids=[xgrid,ygrid,xminorgrid,yminorgrid]
+			var attributes=['xgrid_opacity','ygrid_opacity','xgrid_minoropacity','ygrid_minoropacity']
 			for(var i=0;i<grids.length;i++){
 				if(grids[i]==true){style[attributes[i]]=1}
 				if(grids[i]==false){style[attributes[i]]=0}	
