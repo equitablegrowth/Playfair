@@ -279,18 +279,18 @@ window.playfair = (function () {
 		ymaxis=[]
 
 		if(Object.prototype.toString.call(xaxis[0])==='[object Date]'){
-			xmaxis=xaxis
+			var xmaxis=xaxis
 		} else{
 			for(var i=0;i<xaxis.length;i++){
-				xmaxis.push(xaxis[i].replace(/[^0-9\.\-]+/g, ''))
+				var xmaxis.push(xaxis[i].replace(/[^0-9\.\-]+/g, ''))
 			}
 		}
 
 		if(Object.prototype.toString.call(yaxis[0])==='[object Date]'){
-			ymaxis=yaxis
+			var ymaxis=yaxis
 		} else{
 			for(var i=0;i<yaxis.length;i++){
-				ymaxis.push(yaxis[i].replace(/[^0-9\.\-]+/g, ''))
+				var ymaxis.push(yaxis[i].replace(/[^0-9\.\-]+/g, ''))
 			}
 		}
 
@@ -300,13 +300,14 @@ window.playfair = (function () {
 		var graph_background=snapobj.rect(graph_obj.x,graph_obj.y+graph_obj.head_height,graph_obj.width,graph_obj.height-(graph_obj.head_height+graph_obj.footer_height)).attr({class:'background',fill:this.chartfill})
 
 		// draw axes
+		var axes=draw_axes(this,xaxis,yaxis)
 
+		// draw geoms
+		if(typeof(chartobject.line)!=='undefined'){draw_lines(axes)}
+		if(typeof(chartobject.point)!=='undefined'){draw_points(axes)}
+		if(typeof(chartobject.bar)!=='undefined'){draw_bars(axes)}
 
-		// 	
-
-
-
-
+		// redraw the key/fix key elements
 	}
 
 	// The linechart/scatter plot method
@@ -1403,6 +1404,45 @@ window.playfair = (function () {
 }());
 
 
+function draw_lines(axes){
+	// axes are [xleft,xright,ybottom,ytop]
+}
+
+function draw_points(axes){
+	// axes are [xleft,xright,ybottom,ytop]
+	
+
+
+
+
+
+
+	// draw point
+	if (options['points']==true) {
+		snapobj.circle(x_data_value,y_data_value,pointsize).attr({fill:this.qualitative_color[i],stroke:this.qualitative_color[i],'stroke-width':this.point_strokewidth,'data_type':'point','data_label':group_array[k][4],'group':group[i],'class':'dataelement','fill-opacity':this.point_fillopacity,colorchange:'both',context:'point_context_menu'})
+	}
+
+	// label point
+	if (options['labels']==true) {
+		var label=snapobj.text(x_data_value,y_data_value-pointsize-3,group_array[k][4]).attr({'font-family':this.dataface,'font-size':this.datasize,'font-weight':this.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'middle',fill:this.datatextfill,colorchange:'fill',context:'text_context_menu'})
+		label.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
+		coords=label.getBBox()
+		label.attr({y:coords.y-coords.height})
+	}
+}
+
+function draw_bars(axes){
+	// axes are [xleft,xright,ybottom,ytop]
+}
+
+function get_value(value,[limit_start,limit_end],[pixel_start,pixel_end],y){
+	if(y==1){
+		return pixel_start-(value-limit_start)/Math.abs(limit_end-limit_start)*Math.abs(pixel_end-pixel_start)
+	} else{
+		return pixel_start+(value-limit_start)/Math.abs(limit_end-limit_start)*Math.abs(pixel_end-pixel_start)
+	}
+}
+
 // Axis creation. I poked around and couldn't find an algorithm I like on stackoverflow etc.
 // In particular, many do not treat 0 correctly in my opinion. I started from scratch with the 
 // following rules in mind - roughly in order of importance:
@@ -1428,6 +1468,8 @@ window.playfair = (function () {
 //     prepend: a string to add before each tick label
 //     append: a string to add after each tick label
 //     transform: a number that all values will be divided by
+
+
 
 function create_axis(dataseries,parameters) {
 
