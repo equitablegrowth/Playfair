@@ -22,77 +22,47 @@
 	@import url(http://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700,800);
 	@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,700,600,300);
 
+	*{margin:0;padding:0;}
 	h1 {font-family:Lancelot;font-size:50;margin:0;line-height:75%;margin-bottom:13;margin-top:10px;}
 	h3 {font-size:15px;margin-top:0px;margin-bottom:0px;font-family:Raleway;font-weight:500;}
 	h5 {font-size:24px;font-family:Raleway;font-weight:500;fill:'white';}
 	body {height:100%;padding-bottom:100px;font-family:"Open Sans";-webkit-font-smoothing: antialiased}
 	textarea {margin-top:0px;resize:none;display:block;margin-right:auto;margin-left:auto;width:100%;padding:8px;border:1px solid #bbb;font-family:"Courier";font-size:90%;}
-	hr {border-width:1px;border-color:#dddddd;margin-top:6;}
 	a {color:#205946;}
 	a:hover {color:#67c2a5;}
 	label{margin:0;}
-	sup {vertical-align:baseline; position:relative;top:-.7em;font-size:60%;}
 	svg text {-moz-user-select: none;-ms-user-select: none;-khtml-user-select: none;-webkit-user-select: none;-webkit-touch-callout: none}
 	text { -webkit-font-smoothing: subpixel-antialiased; }
-	*{margin:0;padding:0;}
-	i{color:#205946;}
 
-	/* random stuff that you should categorize or eliminate or something */
 	.bottom{background-color:#eeeeee;padding-top:30px;padding-bottom:30px;margin-top:40px;}
 	.h4 {font-family:Raleway;font-weight:300;margin-top:0px;font-size:.3em;}
 	.helpboxouter{position:relative;}
-	.toggle {margin-bottom:2px;margin-top:2px;}
 	.container {margin-top:20px;margin-bottom:250px;height:100%;}
-	.topel {margin-top:7px;}
 	.nav-tabs {margin-top:10px;border:0px;}
 	.tab-pane {width:100%;margin-top:0px;margin-left:auto;margin-right:auto;}
 	.input-group-addon {min-width:90px;background-color:#ddd;}
-	.input-group-addon-narrow {min-width:0px;}
-	.input-group-addon-wide {min-width:160px;}
-	.input-small {min-width:0px;}
-	.longlabel {min-width:150px;}
-	.bootstrap-select {margin-top:7px;margin-bottom:7px;}
-	.full-width {width:100%;}
 	.row {width:100%;display:table;}
 	.col-md-6 {float:none;display: table-cell;vertical-align: top;}
-	.botrow {margin-bottom:15px;}
 	.select {margin-bottom:-7px;margin-top:-3px;}
-	.unmarg {margin-top:-15px;}
 	.alert {margin-top:12px;margin-bottom:-5px;font-size:90%;}
 	.alert>ul{padding-top:2px;padding-left:30px;}
-	.variable_select {margin:3;}
-	.panel-title {font-family:Raleway;font-weight:700;font-size:160%;}
-	.input-group > .input-group-btn:last-child > .selectpicker {border-top-right-radius: 5px;border-bottom-right-radius: 5px;}
-	.input-group > .input-group-btn:first-child > .selectpicker {border-top-left-radius: 5px;border-bottom-left-radius: 5px;}
-	.pickvar {min-width:130px;}
-	.colorbox {width:16px;height:16px;background:red;border-radius:8px;margin-left:2;margin-right:2;margin-top:4;margin-bottom:0;display:inline-block;}
-	.colorbox:hover {width:18px;height:18px;border-radius:100%;border:2px solid #000000;margin-left:1;margin-right:1;margin-top:3;margin-bottom:-1;}
-	.panel-custom {border-color:#dddddd;}
-	.panel-custom .panel-heading {background:#e8e8e8;border-color: #dddddd;}
 	.fun > .panel-heading {background:#0063cd;color:white;}
 	.panel-heading:hover {background:#0063cd;color:white;}
-	.vspace {margin-top:30;}
 	.unselectable {-webkit-touch-callout: none;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;}
 	.panel-heading {font-size:10px;border-radius:0px 0px 0px 0px;}
-	.dead{width:0px;height:12px;background:white;border:0px solid white;display:inline-block;vertical-align:middle}
 	.tooltip-inner {text-align:left;}
-	.dashed {height:8px;border-width:2px;margin-left:2;border-bottom: thin black dashed;width:120px;display:inline-block;margin-top:3px;margin-bottom:3px;padding:0;}
-	.solid {height:8px;border-width:2px;margin-left:2;border-bottom: thin black solid;width:120px;display:inline-block;margin-top:3px;margin-bottom:3px;padding:0;}
 	.add {width:18px;height:18px;border:1px solid #b0b0b0;-webkit-border-radius:9px;border-radius:9px;display:inline-block;margin-top:14px;}
-	.fa-plus {color:#b0b0b0;margin-top:1px;}
-	.btn {border-radius:2px;display:inline-block;position:relative;border:1px solid #bbb;}
-	.btn-group{display:inline-block;position:relative;}
-	.balign {margin-top:3px;}
-	.checkbox-inline {margin-right:8px;}
 	.input-group .form-control:nth-child(3) {border-left:0px;}
-	.grouptext {border-right:0px;}
-	.groupcheck {max-width:50px;}
-	.slim>.toggle {margin-top:-1px;margin-bottom:-1px;}
 	.tooltip.top .tooltip-arrow {fill:none;border:0px;}
 	.input-group{margin-top:3px;margin-bottom:3px;}
 	.element_group{margin-bottom:5px;}
 	.input-group-addon{border-radius:0px;font-size:1em;padding:5px;}
 	.form-control{border-radius:0px;box-shadow:none;height:auto;line-height:inherit;padding:5px;padding-left:10px;}
+
+	/* buttons */
+	.btn {border-radius:2px;display:inline-block;position:relative;border:1px solid #bbb;}
+	.btn-group{display:inline-block;position:relative;}
+	.balign {margin-top:3px;border-radius:2px !important;}
 
 	/* selects, text boxes, and labels for them */
 	.labeled_ele{margin:7px 0px 7px 0px;}
@@ -106,12 +76,12 @@
 	.styled-inputwide input{width:calc(100% - 160px);display:inline-block;position:relative;-moz-appearance:none;-webkit-appearance:none;padding:5px 6px 5px 6px;margin:0px;border:1px solid #bbb;background-color:white;border-radius:0px;}
 	.labeled_elewide>label{border:1px solid #bbb;width:160px;padding:5px 6px 5px 6px;text-align:center;margin:0;margin-right:-4px;background-color:#ddd;font-family:'Open Sans';font-weight:400;}
 	.labeled_elewide>input{border:1px solid #bbb;width:160px;padding:5px 6px 5px 6px;text-align:center;margin:0;margin-right:-4px;background-color:#ddd;font-family:'Open Sans';font-weight:400;}
-	.dataselect {display:inline;}
-	.dataselect select{display:inline;font-size:90%;background-color:inherit;text-align:left;padding:0px 15px 0px 4px;border:1px solid;border-radius:2px;-moz-appearance:none;-webkit-appearance:none;}
 	.small_caratg{position:relative}
 	.small_caratg:after{content:"\f078";font-family:'FontAwesome';font-size:.7em;width:10px;height:10px;color:#3c763d;background-color:none;right:3px;top:3px;position:absolute;pointer-events:none}
 	.small_caraty{position:relative}
 	.small_caraty:after{content:"\f078";font-family:'FontAwesome';font-size:.7em;width:10px;height:10px;color:rgb(138, 109, 59);background-color:none;right:3px;top:3px;position:absolute;pointer-events:none}
+	.dataselect {display:inline;}
+	.dataselect select{display:inline;font-size:90%;background-color:inherit;text-align:left;padding:0px 15px 0px 4px;border:1px solid;border-radius:2px;-moz-appearance:none;-webkit-appearance:none;}
 
 	/* radio buttons */
 	input[type=radio]:not(old){width:20px;margin:6;padding:0;font-size:1em;opacity:0;}
@@ -155,6 +125,10 @@
 	.contextmenucontainer #colormenu li {padding-left:10px;padding-bottom:4px;}
 	.contextmenucontainer #colormenu li:hover {color:white;background-color:#0063cd;opacity:1;}
 	.contextmenucontainer hr {border:0;background:#999;color:#999;height:1px;margin-top:3px;margin-bottom:3px}
+	.colorbox {width:16px;height:16px;background:red;border-radius:8px;margin-left:2;margin-right:2;margin-top:4;margin-bottom:0;display:inline-block;}
+	.colorbox:hover {width:18px;height:18px;border-radius:100%;border:2px solid #000000;margin-left:1;margin-right:1;margin-top:3;margin-bottom:-1;}
+	.dashed {height:8px;border-width:2px;margin-left:2;border-bottom: thin black dashed;width:120px;display:inline-block;margin-top:3px;margin-bottom:3px;padding:0;}
+	.solid {height:8px;border-width:2px;margin-left:2;border-bottom: thin black solid;width:120px;display:inline-block;margin-top:3px;margin-bottom:3px;padding:0;}
 
 	/* main menus */
 	.nav>li>a {padding:4px;padding-left:8px;padding-right:8px;border-bottom:0px;}
@@ -504,7 +478,7 @@
 
 			<div class='tab-content'>
 				<div class="row">
-					<div class="col-md-6 botrow">
+					<div class="col-md-6">
 						<div class="labeled_ele">
 							<label>Theme</label>
 							<span class='styled-select'>
@@ -958,58 +932,58 @@
 				<li tab='settings_linescatter'>Line/Scatter</li>
 			</ul>
 
-			<div class='tab-content' style='min-height:265px'>
+			<div class='tab-content'>
 				<div class='row'>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Top margin:</span><input type="text" class="form-control" placeholder="25" id='top_margin'></div>
+						<div class="labeled_elewide"><label>Top margin</label><span class='styled-inputwide'><input type="text styled-input" placeholder="25" id='top_margin'></span></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Top padding:</span><input type="text" class="form-control" placeholder="0" id='chart_toppad'></div>
+						<div class="labeled_elewide"><label>Top padding</label><span class='styled-inputwide'><input type="text styled-input" placeholder="0" id='chart_toppad'></span></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Chart fill:</span><input type="text" class="form-control" placeholder="#ece9e8" id='chartfill'></div>
+						<div class="labeled_elewide"><label>Chart fill</label><span class='styled-inputwide'><input type="text styled-input" placeholder="#ece9e8" id='chartfill'></span></div>
 					</div>
 				</div>
 				<div class='row'>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Bottom margin:</span><input type="text" class="form-control" placeholder="8" id='bottom_margin'></div>
+						<div class="labeled_elewide"><label>Bottom margin</label><span class='styled-inputwide'><input type="text styled-input" placeholder="8" id='bottom_margin'></span></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Bottom padding:</span><input type="text" class="form-control" placeholder="0" id='chart_bottompad'></div>
-					</div>
-					<div class='col-md-4'>
-					</div>
-				</div>
-				<div class='row'>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Left margin:</span><input type="text" class="form-control" placeholder="20" id='left_margin'></div>
-					</div>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Left padding:</span><input type="text" class="form-control" placeholder="0" id='chart_leftpad'></div>
+						<div class="labeled_elewide"><label>Bottom padding</label><span class='styled-inputwide'><input type="text styled-input" placeholder="0" id='chart_bottompad'></span></div>
 					</div>
 					<div class='col-md-4'>
 					</div>
 				</div>
 				<div class='row'>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Right margin:</span><input type="text" class="form-control" placeholder="40" id='right_margin'></div>
+						<div class="labeled_elewide"><label>Left margin</label><span class='styled-inputwide'><input type="text styled-input" placeholder="20" id='left_margin'></span></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Right padding:</span><input type="text" class="form-control" placeholder="0" id='chart_rightpad'></div>
+						<div class="labeled_elewide"><label>Left padding</label><span class='styled-inputwide'><input type="text styled-input" placeholder="0" id='chart_leftpad'></span></div>
+					</div>
+					<div class='col-md-4'>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Right margin</label><span class='styled-inputwide'><input type="text styled-input" placeholder="40" id='right_margin'></span></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Right padding</label><span class='styled-inputwide'><input type="text styled-input" placeholder="0" id='chart_rightpad'></span></div>
 					</div>
 					<div class='col-md-4'>
 					</div>
 				</div>
 			</div> 
 
-			<div class='tab-content' style='min-height:265px'>
+			<div class='tab-content'>
 				<div class='row'>
 					<div class='col-md-4'>
 						<div class="labeled_elewide"><label>Min head height</label><span class='styled-inputwide'><input type="text styled-input" placeholder="0" id='head_height'></span></div>
 					</div>
 
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Min footer height:</span><input type="text" class="form-control" placeholder="0" id='footer_height'></div>
+						<div class="labeled_elewide"><label>Min footer height</label><span class='styled-inputwide'><input type="text styled-input" placeholder="0" id='footer_height'></span></div>
 					</div>
 					<div class='col-md-4'>
 					</div>
@@ -1017,447 +991,447 @@
 
 				<div class='row'>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Header fill:</span><input type="text" class="form-control" placeholder="0" id='headerfill'></div>
+						<div class="labeled_elewide"><label>Header fill</label><span class='styled-inputwide'><input type="text styled-input" placeholder="0" id='headerfill'></span></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Footer fill:</span><input type="text" class="form-control" placeholder="0" id='footerfill'></div>
-					</div>
-					<div class='col-md-4'>
-					</div>
-				</div>
-				<div class='row'>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Header top pad:</span><input type="text" class="form-control" placeholder="0" id='header_toppad'></div>
-					</div>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Footer top pad:</span><input type="text" class="form-control" placeholder="0" id='footer_toppad'></div>
+						<div class="labeled_elewide"><label>Footer fill</label><span class='styled-inputwide'><input type="text styled-input" placeholder="0" id='footerfill'></span></div>
 					</div>
 					<div class='col-md-4'>
 					</div>
 				</div>
 				<div class='row'>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Header bottom pad:</span><input type="text" class="form-control" placeholder="12" id='header_bottompad'></div>
+						<div class="labeled_elewide"><label>Header top pad</label><span class='styled-inputwide'><input type="text styled-input" placeholder="0" id='header_toppad'></span></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Footer bottom pad:</span><input type="text" class="form-control" placeholder="0" id='footer_bottompad'></div>
-					</div>
-					<div class='col-md-4'>
-					</div>
-				</div>
-				<div class='row'>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Header left pad:</span><input type="text" class="form-control" placeholder="0" id='header_leftpad'></div>
-					</div>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Footer left pad:</span><input type="text" class="form-control" placeholder="0" id='footer_leftpad'></div>
+						<div class="labeled_elewide"><label>Footer top pad</label><span class='styled-inputwide'><input type="text styled-input" placeholder="0" id='footer_toppad'></span></div>
 					</div>
 					<div class='col-md-4'>
 					</div>
 				</div>
 				<div class='row'>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Header right pad:</span><input type="text" class="form-control" placeholder="0" id='header_rightpad'></div>
+						<div class="labeled_elewide"><label>Header bottom pad</label><span class='styled-inputwide'><input type="text styled-input" placeholder="12" id='header_bottompad'></span></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Footer right pad:</span><input type="text" class="form-control" placeholder="0" id='footer_rightpad'></div>
+						<div class="labeled_elewide"><label>Footer bottom pad</label><span class='styled-inputwide'><input type="text styled-input" placeholder="0" id='footer_bottompad'></span></div>
+					</div>
+					<div class='col-md-4'>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Header left pad</label><span class='styled-inputwide'><input type="text styled-input" placeholder="0" id='header_leftpad'></span></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Footer left pad</label><span class='styled-inputwide'><input type="text styled-input" placeholder="0" id='footer_leftpad'></span></div>
+					</div>
+					<div class='col-md-4'>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Header right pad</label><span class='styled-inputwide'><input type="text styled-input" placeholder="0" id='header_rightpad'></span></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Footer right pad</label><span class='styled-inputwide'><input type="text styled-input" placeholder="0" id='footer_rightpad'></span></div>
 					</div>
 					<div class='col-md-4'>
 					</div>
 				</div>
 			</div>
 
-			<div class='tab-content' style='min-height:265px'>
+			<div class='tab-content'>
 				<div class='row'>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Hed size:</span><input type="text" class="form-control" placeholder="20px" id='hedsize'></div>
+						<div class="labeled_elewide"><label>Hed size</label><span class='styled-inputwide'><input type="text styled-input" placeholder="20px" id='hedsize'></span></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Hed weight:</span><input type="text" class="form-control" placeholder="700" id='hedweight'></div>
+						<div class="labeled_elewide"><label>Hed weight</label><span class='styled-inputwide'><input type="text styled-input" placeholder="700" id='hedweight'></span></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Hed face:</span><input type="text" class="form-control" placeholder="Lato" id='hedface'></div>
+						<div class="labeled_elewide"><label>Hed face</label><span class='styled-inputwide'><input type="text styled-input" placeholder="Lato" id='hedface'></span></div>
 					</div>
 				</div>
 				<div class='row'>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Dek size:</span><input type="text" class="form-control" placeholder="16px" id='deksize'></div>
+						<div class="labeled_elewide"><label>Dek size</label><span class='styled-inputwide'><input type="text styled-input" placeholder="16px" id='deksize'></span></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Dek weight:</span><input type="text" class="form-control" placeholder="400" id='dekweight'></div>
+						<div class="labeled_elewide"><label>Dek weight</label><span class='styled-inputwide'><input type="text styled-input" placeholder="400" id='dekweight'></span></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Dek face:</span><input type="text" class="form-control" placeholder="Lato" id='dekface'></div>
-					</div>
-				</div>
-				<div class='row'>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Annotate size:</span><input type="text" class="form-control" placeholder="12px" id='annotatesize'></div>
-					</div>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Annotate weight:</span><input type="text" class="form-control" placeholder="600" id='annotateweight'></div>
-					</div>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Annotate face:</span><input type="text" class="form-control" placeholder="Lato" id='annotateface'></div>
+						<div class="labeled_elewide"><label>Dek face</label><span class='styled-inputwide'><input type="text styled-input" placeholder="Lato" id='dekface'></span></div>
 					</div>
 				</div>
 				<div class='row'>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Data label size:</span><input type="text" class="form-control" placeholder="11px" id='datasize'></div>
+						<div class="labeled_elewide"><label>Annotate size</label><span class='styled-inputwide'><input type="text styled-input" placeholder="12px" id='annotatesize'></span></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Data label weight:</span><input type="text" class="form-control" placeholder="400" id='dataweight'></div>
+						<div class="labeled_elewide"><label>Annotate weight</label><span class='styled-inputwide'><input type="text styled-input" placeholder="600" id='annotateweight'></span></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Data label face:</span><input type="text" class="form-control" placeholder="Lato" id='dataface'></div>
-					</div>
-				</div>
-				<div class='row'>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Source size:</span><input type="text" class="form-control" placeholder="10px" id='sourcesize'></div>
-					</div>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Source weight:</span><input type="text" class="form-control" placeholder="400" id='sourceweight'></div>
-					</div>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Source face:</span><input type="text" class="form-control" placeholder="Lato" id='sourceface'></div>
+						<div class="labeled_elewide"><label>Annotate face</label><span class='styled-inputwide'><input type="text styled-input" placeholder="Lato" id='annotateface'></span></div>
 					</div>
 				</div>
 				<div class='row'>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Note size:</span><input type="text" class="form-control" placeholder="10px" id='notesize'></div>
+						<div class="labeled_elewide"><label>Data label size</label><span class='styled-inputwide'><input type="text styled-input" placeholder="11px" id='datasize'></span></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Note weight:</span><input type="text" class="form-control" placeholder="400" id='noteweight'></div>
+						<div class="labeled_elewide"><label>Data label weight</label><span class='styled-inputwide'><input type="text styled-input" placeholder="400" id='dataweight'></span></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Note face:</span><input type="text" class="form-control" placeholder="Lato" id='noteface'></div>
-					</div>
-				</div>
-				<div class='row'>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Xtick size:</span><input type="text" class="form-control" placeholder="14px" id='xtick_textsize'></div>
-					</div>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Xtick weight:</span><input type="text" class="form-control" placeholder="400" id='xtick_textweight'></div>
-					</div>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Xtick face:</span><input type="text" class="form-control" placeholder="Lato" id='xtick_textface'></div>
+						<div class="labeled_elewide"><label>Data label face</label><span class='styled-inputwide'><input type="text styled-input" placeholder="Lato" id='dataface'></span></div>
 					</div>
 				</div>
 				<div class='row'>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ytick size:</span><input type="text" class="form-control" placeholder="14px" id='ytick_textsize'></div>
+						<div class="labeled_elewide"><label>Source size</label><span class='styled-inputwide'><input type="text styled-input" placeholder="10px" id='sourcesize'></span></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ytick weight:</span><input type="text" class="form-control" placeholder="400" id='ytick_textweight'></div>
+						<div class="labeled_elewide"><label>Source weight</label><span class='styled-inputwide'><input type="text styled-input" placeholder="400" id='sourceweight'></span></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ytick face:</span><input type="text" class="form-control" placeholder="Lato" id='ytick_textface'></div>
-					</div>
-				</div>
-				<div class='row'>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>X label size:</span><input type="text" class="form-control" placeholder="14px" id='xlabel_textsize'></div>
-					</div>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>X label weight:</span><input type="text" class="form-control" placeholder="400" id='xlabel_textweight'></div>
-					</div>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>X label face:</span><input type="text" class="form-control" placeholder="Lato" id='xlabel_textface'></div>
+						<div class="labeled_elewide"><label>Source face</label><span class='styled-inputwide'><input type="text styled-input" placeholder="Lato" id='sourceface'></span></div>
 					</div>
 				</div>
 				<div class='row'>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Y label size:</span><input type="text" class="form-control" placeholder="14px" id='ylabel_textsize'></div>
+						<div class="labeled_elewide"><label>Note size</label><span class='styled-inputwide'><input type="text styled-input" placeholder="10px" id='notesize'></span></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Y label weight:</span><input type="text" class="form-control" placeholder="400" id='ylabel_textweight'></div>
+						<div class="labeled_elewide"><label>Note weight</label><span class='styled-inputwide'><input type="text styled-input" placeholder="400" id='noteweight'></span></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Y label face:</span><input type="text" class="form-control" placeholder="Lato" id='ylabel_textface'></div>
-					</div>
-				</div>
-				<div class='row'>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Legend size:</span><input type="text" class="form-control" placeholder="12px" id='legend_textsize'></div>
-					</div>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Legend weight:</span><input type="text" class="form-control" placeholder="400" id='legend_textweight'></div>
-					</div>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Legend face:</span><input type="text" class="form-control" placeholder="Lato" id='legend_textface'></div>
+						<div class="labeled_elewide"><label>Note face</label><span class='styled-inputwide'><input type="text styled-input" placeholder="Lato" id='noteface'></span></div>
 					</div>
 				</div>
 				<div class='row'>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Trendline size:</span><input type="text" class="form-control" placeholder="12px" id='trend_textsize'></div>
+						<div class="labeled_elewide"><label>Xtick size</label><span class='styled-inputwide'><input type="text styled-input" placeholder="14px" id='xtick_textsize'></span></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Trendline weight:</span><input type="text" class="form-control" placeholder="600" id='trend_textweight'></div>
+						<div class="labeled_elewide"><label>Xtick weight</label><span class='styled-inputwide'><input type="text styled-input" placeholder="400" id='xtick_textweight'></span></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Trendline face:</span><input type="text" class="form-control" placeholder="Lato" id='trend_textface'></div>
-					</div>
-				</div>
-			</div>
-
-			<div class='tab-content' style='min-height:265px'>
-				<div class='row'>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Hed fill:</span><input type="text" class="form-control" placeholder="black" id='hedtextfill'></div>
-					</div>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Dek fill:</span><input type="text" class="form-control" placeholder="black" id='dektextfill'></div>
-					</div>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Data fill:</span><input type="text" class="form-control" placeholder="black" id='datatextfill'></div>
+						<div class="labeled_elewide"><label>Xtick face</label><span class='styled-inputwide'><input type="text styled-input" placeholder="Lato" id='xtick_textface'></span></div>
 					</div>
 				</div>
 				<div class='row'>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Annotate fill:</span><input type="text" class="form-control" placeholder="black" id='annotatetextfill'></div>
+						<div class="labeled_elewide"><label>Ytick size</label><span class='styled-inputwide'><input type="text styled-input" placeholder="14px" id='ytick_textsize'></span></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Source fill:</span><input type="text" class="form-control" placeholder="black" id='sourcetextfill'></div>
+						<div class="labeled_elewide"><label>Ytick weight</label><span class='styled-inputwide'><input type="text styled-input" placeholder="400" id='ytick_textweight'></span></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Note fill:</span><input type="text" class="form-control" placeholder="black" id='notetextfill'></div>
-					</div>
-				</div>
-				<div class='row'>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Xtick fill:</span><input type="text" class="form-control" placeholder="black" id='xtick_textfill'></div>
-					</div>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ytick fill:</span><input type="text" class="form-control" placeholder="black" id='ytick_textfill'></div>
-					</div>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Legend fill:</span><input type="text" class="form-control" placeholder="black" id='legend_textfill'></div>
+						<div class="labeled_elewide"><label>Ytick face</label><span class='styled-inputwide'><input type="text styled-input" placeholder="Lato" id='ytick_textface'></span></div>
 					</div>
 				</div>
 				<div class='row'>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Xlabel fill:</span><input type="text" class="form-control" placeholder="black" id='xlabel_textfill'></div>
+						<div class="labeled_elewide"><label>X label size</label><span class='styled-inputwide'><input type="text styled-input" placeholder="14px" id='xlabel_textsize'></span></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ylabel fill:</span><input type="text" class="form-control" placeholder="black" id='ylabel_textfill'></div>
+						<div class="labeled_elewide"><label>X label weight</label><span class='styled-inputwide'><input type="text styled-input" placeholder="400" id='xlabel_textweight'></span></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Trend fill:</span><input type="text" class="form-control" placeholder="#c64027" id='trend_textcolor'></div>
+						<div class="labeled_elewide"><label>X label face</label><span class='styled-inputwide'><input type="text styled-input" placeholder="Lato" id='xlabel_textface'></span></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Y label size</label><span class='styled-inputwide'><input type="text styled-input" placeholder="14px" id='ylabel_textsize'></span></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Y label weight</label><span class='styled-inputwide'><input type="text styled-input" placeholder="400" id='ylabel_textweight'></span></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Y label face</label><span class='styled-inputwide'><input type="text styled-input" placeholder="Lato" id='ylabel_textface'></span></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Legend size</label><span class='styled-inputwide'><input type="text styled-input" placeholder="12px" id='legend_textsize'></span></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Legend weight</label><span class='styled-inputwide'><input type="text styled-input" placeholder="400" id='legend_textweight'></span></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Legend face</label><span class='styled-inputwide'><input type="text styled-input" placeholder="Lato" id='legend_textface'></span></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Trendline size</label><span class='styled-inputwide'><input type="text styled-input" placeholder="12px" id='trend_textsize'></span></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Trendline weight</label><span class='styled-inputwide'><input type="text styled-input" placeholder="600" id='trend_textweight'></span></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Trendline face</label><span class='styled-inputwide'><input type="text styled-input" placeholder="Lato" id='trend_textface'></span></div>
 					</div>
 				</div>
 			</div>
 
-			<div class='tab-content' style='min-height:265px'>
+			<div class='tab-content'>
 				<div class='row'>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Xgrid fill:</span><input type="text" class="form-control" placeholder="white" id='xgrid_fill'></div>
+						<div class="labeled_elewide"><label>Hed fill</label><span class='styled-inputwide'><input type="text styled-input" placeholder="black" id='hedtextfill'></span></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Xgrid zerofill:</span><input type="text" class="form-control" placeholder="white" id='xgrid_zerofill'></div>
+						<div class="labeled_elewide"><label>Dek fill</label><span class='styled-inputwide'><input type="text styled-input" placeholder="black" id='dektextfill'></span></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Xgrid minorfill:</span><input type="text" class="form-control" placeholder="white" id='xgrid_minorfill'></div>
+						<div class="labeled_elewide"><label>Data fill</label><span class='styled-inputwide'><input type="text styled-input" placeholder="black" id='datatextfill'></span></div>
 					</div>
 				</div>
 				<div class='row'>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Xgrid thickness:</span><input type="text" class="form-control" placeholder="1" id='xgrid_thickness'></div>
+						<div class="labeled_elewide"><label>Annotate fill</label><span class='styled-inputwide'><input type="text styled-input" placeholder="black" id='annotatetextfill'></span></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Xgrid zerothickness:</span><input type="text" class="form-control" placeholder="2" id='xgrid_zerothickness'></div>
+						<div class="labeled_elewide"><label>Source fill</label><span class='styled-inputwide'><input type="text styled-input" placeholder="black" id='sourcetextfill'></span></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Xgrid minorthickness:</span><input type="text" class="form-control" placeholder="1" id='xgrid_minorthickness'></div>
-					</div>
-				</div>
-				<div class='row'>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Xgrid dasharray:</span><input type="text" class="form-control" placeholder="[]" id='xgrid_dasharray'></div>
-					</div>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Xgrid zerodasharray:</span><input type="text" class="form-control" placeholder="[]" id='xgrid_zerodasharray'></div>
-					</div>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Xgrid minordasharray:</span><input type="text" class="form-control" placeholder="[3,3]" id='xgrid_minordasharray'></div>
+						<div class="labeled_elewide"><label>Note fill</label><span class='styled-inputwide'><input type="text styled-input" placeholder="black" id='notetextfill'></span></div>
 					</div>
 				</div>
 				<div class='row'>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Xgrid opacity:</span><input type="text" class="form-control" placeholder="0" id='xgrid_opacity'></div>
+						<div class="labeled_elewide"><label>Xtick fill</label><span class='styled-inputwide'><input type="text styled-input" placeholder="black" id='xtick_textfill'></span></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Xgrid zeroopacity:</span><input type="text" class="form-control" placeholder="0" id='xgrid_zeroopacity'></div>
+						<div class="labeled_elewide"><label>Ytick fill</label><span class='styled-inputwide'><input type="text styled-input" placeholder="black" id='ytick_textfill'></span></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Xgrid minoropacity:</span><input type="text" class="form-control" placeholder="0" id='xgrid_minoropacity'></div>
-					</div>
-				</div>
-				<div class='row'>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Xtick maxsize:</span><input type="text" class="form-control" placeholder=".15" id='xtick_maxsize'></div>
-					</div>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Xtick length:</span><input type="text" class="form-control" placeholder="4" id='xtick_length'></div>
-					</div>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Xtick thickness:</span><input type="text" class="form-control" placeholder="1" id='xtick_thickness'></div>
+						<div class="labeled_elewide"><label>Legend fill</label><span class='styled-inputwide'><input type="text styled-input" placeholder="black" id='legend_textfill'></span></div>
 					</div>
 				</div>
 				<div class='row'>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Xtick fill:</span><input type="text" class="form-control" placeholder="white" id='xtick_fill'></div>
+						<div class="labeled_elewide"><label>Xlabel fill</label><span class='styled-inputwide'><input type="text styled-input" placeholder="black" id='xlabel_textfill'></span></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Xtick to xlabel:</span><input type="text" class="form-control" placeholder="5" id='xtick_to_xlabel'></div>
+						<div class="labeled_elewide"><label>Ylabel fill</label><span class='styled-inputwide'><input type="text styled-input" placeholder="black" id='ylabel_textfill'></span></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Xtick to xaxis:</span><input type="text" class="form-control" placeholder="5" id='xtick_to_xaxis'></div>
-					</div>
-				</div>
-				<div class='row'>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ygrid fill:</span><input type="text" class="form-control" placeholder="white" id='ygrid_fill'></div>
-					</div>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ygrid zerofill:</span><input type="text" class="form-control" placeholder="white" id='ygrid_zerofill'></div>
-					</div>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ygrid minorfill:</span><input type="text" class="form-control" placeholder="white" id='ygrid_minorfill'></div>
-					</div>
-				</div>
-				<div class='row'>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ygrid thickness:</span><input type="text" class="form-control" placeholder="1" id='ygrid_thickness'></div>
-					</div>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ygrid zerothickness:</span><input type="text" class="form-control" placeholder="2" id='ygrid_zerothickness'></div>
-					</div>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ygrid minorthickness:</span><input type="text" class="form-control" placeholder="1" id='ygrid_minorthickness'></div>
-					</div>
-				</div>
-				<div class='row'>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ygrid dasharray:</span><input type="text" class="form-control" placeholder="[]" id='ygrid_dasharray'></div>
-					</div>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ygrid zerodasharray:</span><input type="text" class="form-control" placeholder="[]" id='ygrid_zerodasharray'></div>
-					</div>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ygrid minordasharray:</span><input type="text" class="form-control" placeholder="[3,3]" id='ygrid_minordasharray'></div>
-					</div>
-				</div>
-				<div class='row'>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ygrid opacity:</span><input type="text" class="form-control" placeholder="1" id='ygrid_opacity'></div>
-					</div>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ygrid zeroopacity:</span><input type="text" class="form-control" placeholder="1" id='ygrid_zeroopacity'></div>
-					</div>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ygrid minoropacity:</span><input type="text" class="form-control" placeholder="0" id='ygrid_minoropacity'></div>
-					</div>
-				</div>
-				<div class='row'>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ytick maxsize:</span><input type="text" class="form-control" placeholder=".15" id='ytick_maxsize'></div>
-					</div>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ytick length:</span><input type="text" class="form-control" placeholder="16" id='ytick_length'></div>
-					</div>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ytick thickness:</span><input type="text" class="form-control" placeholder="1" id='ytick_thickness'></div>
-					</div>
-				</div>
-				<div class='row'>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ytick fill:</span><input type="text" class="form-control" placeholder="white" id='ytick_fill'></div>
-					</div>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ytick to ylabel:</span><input type="text" class="form-control" placeholder="6" id='ytick_to_ylabel'></div>
-					</div>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Ytick to yaxis:</span><input type="text" class="form-control" placeholder="20" id='ytick_to_yaxis'></div>
+						<div class="labeled_elewide"><label>Trend fill</label><span class='styled-inputwide'><input type="text styled-input" placeholder="#c64027" id='trend_textcolor'></span></div>
 					</div>
 				</div>
 			</div>
 
-			<div class='tab-content' style='min-height:265px'>
+			<div class='tab-content'>
 				<div class='row'>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Legend location:</span><input type="text" class="form-control" placeholder="top" id='legend_location'></div>
+						<div class="labeled_elewide"><label>Xgrid fill</label><span class='styled-inputwide'><input type="text styled-input" placeholder="white" id='xgrid_fill'></span></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Legend maxwidth:</span><input type="text" class="form-control" placeholder=".1" id='legend_maxwidth'></div>
+						<div class="labeled_elewide"><label>Xgrid zerofill</label><span class='styled-inputwide'><input type="text styled-input" placeholder="white" id='xgrid_zerofill'></span></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Legend toppad:</span><input type="text" class="form-control" placeholder="8" id='legend_toppad'></div>
+						<div class="labeled_elewide"><label>Xgrid minorfill</label><span class='styled-inputwide'><input type="text styled-input" placeholder="white" id='xgrid_minorfill'></span></div>
 					</div>
 				</div>
 				<div class='row'>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Legend bottompad:</span><input type="text" class="form-control" placeholder="0" id='legend_bottompad'></div>
+						<div class="labeled_elewide"><label>Xgrid thickness</label><span class='styled-inputwide'><input type="text styled-input" placeholder="1" id='xgrid_thickness'></span></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Legend rightpad:</span><input type="text" class="form-control" placeholder="0" id='legend_rightpad'></div>
+						<div class="labeled_elewide"><label>Xgrid zerothickness</label><span class='styled-inputwide'><input type="text styled-input" placeholder="2" id='xgrid_zerothickness'></span></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Legend leftpad:</span><input type="text" class="form-control" placeholder="0" id='legend_leftpad'></div>
-					</div>
-				</div>
-				<div class='row'>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Legend element size:</span><input type="text" class="form-control" placeholder="15" id='legend_elementsize'></div>
-					</div>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Legend element pad:</span><input type="text" class="form-control" placeholder="5" id='legend_elementpad'></div>
-					</div>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Legend float fill:</span><input type="text" class="form-control" placeholder="white" id='legend_floatbackground'></div>
+						<div class="labeled_elewide"><label>Xgrid minorthickness</label><span class='styled-inputwide'><input type="text styled-input" placeholder="1" id='xgrid_minorthickness'></span></div>
 					</div>
 				</div>
 				<div class='row'>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Legend float thickness:</span><input type="text" class="form-control" placeholder="1" id='legend_floatthickness'></div>
+						<div class="labeled_elewide"><label>Xgrid dasharray</label><span class='styled-inputwide'><input type="text styled-input" placeholder="[]" id='xgrid_dasharray'></span></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Legend float stroke:</span><input type="text" class="form-control" placeholder="#b5b5b5" id='legend_floatstroke'></div>
+						<div class="labeled_elewide"><label>Xgrid zerodasharray</label><span class='styled-inputwide'><input type="text styled-input" placeholder="[]" id='xgrid_zerodasharray'></span></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Legend float pad:</span><input type="text" class="form-control" placeholder="8" id='legend_floatpad'></div>
+						<div class="labeled_elewide"><label>Xgrid minordasharray</label><span class='styled-inputwide'><input type="text styled-input" placeholder="[3,3]" id='xgrid_minordasharray'></span></div>
 					</div>
 				</div>
 				<div class='row'>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Legend Entry Padding:</span><input type="text" class="form-control" placeholder="8" id='legend_entrypadding'></div>
+						<div class="labeled_elewide"><label>Xgrid opacity</label><span class='styled-inputwide'><input type="text styled-input" placeholder="0" id='xgrid_opacity'></span></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Xgrid zeroopacity</label><span class='styled-inputwide'><input type="text styled-input" placeholder="0" id='xgrid_zeroopacity'></span></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Xgrid minoropacity</label><span class='styled-inputwide'><input type="text styled-input" placeholder="0" id='xgrid_minoropacity'></span></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Xtick maxsize</label><span class='styled-inputwide'><input type="text styled-input" placeholder=".15" id='xtick_maxsize'></span></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Xtick length</label><span class='styled-inputwide'><input type="text styled-input" placeholder="4" id='xtick_length'></span></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Xtick thickness</label><span class='styled-inputwide'><input type="text styled-input" placeholder="1" id='xtick_thickness'></span></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Xtick fill</label><span class='styled-inputwide'><input type="text styled-input" placeholder="white" id='xtick_fill'></span></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Xtick to xlabel</label><span class='styled-inputwide'><input type="text styled-input" placeholder="5" id='xtick_to_xlabel'></span></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Xtick to xaxis</label><span class='styled-inputwide'><input type="text styled-input" placeholder="5" id='xtick_to_xaxis'></span></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Ygrid fill</label><span class='styled-inputwide'><input type="text styled-input" placeholder="white" id='ygrid_fill'></span></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Ygrid zerofill</label><span class='styled-inputwide'><input type="text styled-input" placeholder="white" id='ygrid_zerofill'></span></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Ygrid minorfill</label><span class='styled-inputwide'><input type="text styled-input" placeholder="white" id='ygrid_minorfill'></span></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Ygrid thickness</label><span class='styled-inputwide'><input type="text styled-input" placeholder="1" id='ygrid_thickness'></span></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Ygrid zerothickness</label><span class='styled-inputwide'><input type="text styled-input" placeholder="2" id='ygrid_zerothickness'></span></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Ygrid minorthickness</label><span class='styled-inputwide'><input type="text styled-input" placeholder="1" id='ygrid_minorthickness'></span></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Ygrid dasharray</label><span class='styled-inputwide'><input type="text styled-input" placeholder="[]" id='ygrid_dasharray'></span></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Ygrid zerodasharray</label><span class='styled-inputwide'><input type="text styled-input" placeholder="[]" id='ygrid_zerodasharray'></span></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Ygrid minordasharray</label><span class='styled-inputwide'><input type="text styled-input" placeholder="[3,3]" id='ygrid_minordasharray'></span></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Ygrid opacity</label><span class='styled-inputwide'><input type="text styled-input" placeholder="1" id='ygrid_opacity'></span></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Ygrid zeroopacity</label><span class='styled-inputwide'><input type="text styled-input" placeholder="1" id='ygrid_zeroopacity'></span></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Ygrid minoropacity</label><span class='styled-inputwide'><input type="text styled-input" placeholder="0" id='ygrid_minoropacity'></span></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Ytick maxsize</label><span class='styled-inputwide'><input type="text styled-input" placeholder=".15" id='ytick_maxsize'></span></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Ytick length</label><span class='styled-inputwide'><input type="text styled-input" placeholder="16" id='ytick_length'></span></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Ytick thickness</label><span class='styled-inputwide'><input type="text styled-input" placeholder="1" id='ytick_thickness'></span></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Ytick fill</label><span class='styled-inputwide'><input type="text styled-input" placeholder="white" id='ytick_fill'></span></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Ytick to ylabel</label><span class='styled-inputwide'><input type="text styled-input" placeholder="6" id='ytick_to_ylabel'></span></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Ytick to yaxis</label><span class='styled-inputwide'><input type="text styled-input" placeholder="20" id='ytick_to_yaxis'></span></div>
 					</div>
 				</div>
 			</div>
 
-			<div class='tab-content' style='min-height:265px'>
+			<div class='tab-content'>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Legend location</label><span class='styled-inputwide'><input type="text styled-input" placeholder="top" id='legend_location'></span></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Legend maxwidth</label><span class='styled-inputwide'><input type="text styled-input" placeholder=".1" id='legend_maxwidth'></span></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Legend toppad</label><span class='styled-inputwide'><input type="text styled-input" placeholder="8" id='legend_toppad'></span></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Legend bottompad</label><span class='styled-inputwide'><input type="text styled-input" placeholder="0" id='legend_bottompad'></span></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Legend rightpad</label><span class='styled-inputwide'><input type="text styled-input" placeholder="0" id='legend_rightpad'></span></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Legend leftpad</label><span class='styled-inputwide'><input type="text styled-input" placeholder="0" id='legend_leftpad'></span></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Legend element size</label><span class='styled-inputwide'><input type="text styled-input" placeholder="15" id='legend_elementsize'></span></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Legend element pad</label><span class='styled-inputwide'><input type="text styled-input" placeholder="5" id='legend_elementpad'></span></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Legend float fill</label><span class='styled-inputwide'><input type="text styled-input" placeholder="white" id='legend_floatbackground'></span></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Legend float thickness</label><span class='styled-inputwide'><input type="text styled-input" placeholder="1" id='legend_floatthickness'></span></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Legend float stroke</label><span class='styled-inputwide'><input type="text styled-input" placeholder="#b5b5b5" id='legend_floatstroke'></span></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Legend float pad</label><span class='styled-inputwide'><input type="text styled-input" placeholder="8" id='legend_floatpad'></span></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Legend Entry Padding</label><span class='styled-inputwide'><input type="text styled-input" placeholder="8" id='legend_entrypadding'></span></div>
+					</div>
+				</div>
+			</div>
+
+			<div class='tab-content'>
 				<div class='row'>
 					<div class='col-md-12'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Diverging color:</span><input type="text" class="form-control" placeholder='["#523211","#8b5322","#dec17c","#80ccc0","#35968e"]' id='diverging_color'></div>
-					</div>
-				</div>
-				<div class='row'>
-					<div class='col-md-12'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Sequential color:</span><input type="text" class="form-control" placeholder='["#205946","#33836A","#67c2a5","#b7dfd1","#e2f2ed"]' id='sequential_color'></div>
+						<div class="labeled_elewide"><label>Diverging color</label><span class='styled-inputwide'><input type="text styled-input" placeholder='["#523211","#8b5322","#dec17c","#80ccc0","#35968e"]' id='diverging_color'></span></div>
 					</div>
 				</div>
 				<div class='row'>
 					<div class='col-md-12'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Qualitative color:</span><input type="text" class="form-control" placeholder='["#67c2a5","#fc8d62","#8da0cb","#e78ac3","#a6d854","#ffd92f","#e5c494","#b3b3b3"]' id='qualitative_color'></div>
+						<div class="labeled_elewide"><label>Sequential color</label><span class='styled-inputwide'><input type="text styled-input" placeholder='["#205946","#33836A","#67c2a5","#b7dfd1","#e2f2ed"]' id='sequential_color'></span></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-12'>
+						<div class="labeled_elewide"><label>Qualitative color</label><span class='styled-inputwide'><input type="text styled-input" placeholder='["#67c2a5","#fc8d62","#8da0cb","#e78ac3","#a6d854","#ffd92f","#e5c494","#b3b3b3"]' id='qualitative_color'></span></div>
 					</div>
 				</div>
 			</div>
 
-			<div class='tab-content' style='min-height:265px'>
+			<div class='tab-content'>
 				<div class='row'>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Barchart width:</span><input type="text" class="form-control" placeholder=".8" id='barchart_width'></div>
+						<div class="labeled_elewide"><label>Barchart width</label><span class='styled-inputwide'><input type="text styled-input" placeholder=".8" id='barchart_width'></span></div>
 					</div>
 					<div class='col-md-4'>
 					</div>
@@ -1466,43 +1440,43 @@
 				</div>
 			</div>
 
-			<div class='tab-content' style='min-height:265px'>
+			<div class='tab-content'>
 				<div class='row'>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Trendline width:</span><input type="text" class="form-control" placeholder="1.5" id='trend_width'></div>
+						<div class="labeled_elewide"><label>Trendline width</label><span class='styled-inputwide'><input type="text styled-input" placeholder="1.5" id='trend_width'></span></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Trendline fill:</span><input type="text" class="form-control" placeholder="#c64027" id='trend_fill'></div>
+						<div class="labeled_elewide"><label>Trendline fill</label><span class='styled-inputwide'><input type="text styled-input" placeholder="#c64027" id='trend_fill'></span></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Trendline textcolor:</span><input type="text" class="form-control" placeholder="#c64027" id='trend_textcolor'></div>
+						<div class="labeled_elewide"><label>Trendline textcolor</label><span class='styled-inputwide'><input type="text styled-input" placeholder="#c64027" id='trend_textcolor'></span></div>
 					</div>
 				</div>
 				<div class='row'>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Trendline linetotext:</span><input type="text" class="form-control" placeholder="3" id='trend_linetotext'></div>
+						<div class="labeled_elewide"><label>Trendline linetotext</label><span class='styled-inputwide'><input type="text styled-input" placeholder="3" id='trend_linetotext'></span></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Point size:</span><input type="text" class="form-control" placeholder="4" id='point_size'></div>
+						<div class="labeled_elewide"><label>Point size</label><span class='styled-inputwide'><input type="text styled-input" placeholder="4" id='point_size'></span></div>
 					</div>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Point strokewidth:</span><input type="text" class="form-control" placeholder="1.7" id='point_strokewidth'></div>
-					</div>
-				</div>
-				<div class='row'>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Point fillopacity:</span><input type="text" class="form-control" placeholder="1" id='point_fillopacity'></div>
-					</div>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Point maxsize:</span><input type="text" class="form-control" placeholder="25" id='point_maxsize'></div>
-					</div>
-					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Point minsize:</span><input type="text" class="form-control" placeholder="3" id='point_minsize'></div>
+						<div class="labeled_elewide"><label>Point strokewidth</label><span class='styled-inputwide'><input type="text styled-input" placeholder="1.7" id='point_strokewidth'></span></div>
 					</div>
 				</div>
 				<div class='row'>
 					<div class='col-md-4'>
-						<div class="input-group full-width"><span class="input-group-addon input-group-addon-wide" data-toggle='tooltip' data-placement='top' title=''>Linechart lineopacity:</span><input type="text" class="form-control" placeholder="1" id='linechart_strokeopacity'></div>
+						<div class="labeled_elewide"><label>Point fillopacity</label><span class='styled-inputwide'><input type="text styled-input" placeholder="1" id='point_fillopacity'></span></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Point maxsize</label><span class='styled-inputwide'><input type="text styled-input" placeholder="25" id='point_maxsize'></span></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Point minsize</label><span class='styled-inputwide'><input type="text styled-input" placeholder="3" id='point_minsize'></span></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Linechart lineopacity</label><span class='styled-inputwide'><input type="text styled-input" placeholder="1" id='linechart_strokeopacity'></span></div>
 					</div>
 					<div class='col-md-4'>
 					</div>
@@ -1579,10 +1553,8 @@
 <div class="btn-group" role="group">
 	<button type="button" class="btn btn-default" id='savetext' onclick=cloudsave()><i class="fa fa-cloud-upload"></i> Save</button>
 	<button type="button" class="btn btn-default btn-file" id='importtext' onclick=cloudload()><i class="fa fa-cloud-download"></i> Load</button>
-</div>
-<div class='vspace'>
+</div><hr>
 <small>[<a href='https://github.com/equitablegrowth/Playfair/#boards?repos=44823593'>report a bug</a>]</small>
-</div>
 </div>
 
 <a href="JavaScript:void(0)" id='png_save' download="Playfair_graph.png" target="_blank"/></a>
@@ -1904,7 +1876,7 @@ function loadData(coerce_array) {
 
 	if (yellow_flag==1 && red_flag==0) {
 		alertbox.className = "alert alert-warning";
-		alertbox.innerHTML = "<b>Some of your columns are missing data. You can still use this dataset but I will drop rows missing data. Here's what I think about each of your columns:</b><ul>"
+		alertbox.innerHTML = "<b>Some of your columns are missing data. These rows will be dropped. Here's what I think about each of your columns:</b><ul>"
 		for (i=0;i<column_types.length;i++) {
 			if(column_types[i]=='text'){
 				alertbox.innerHTML = alertbox.innerHTML + '<ul><li>The <b>'+d[0][i]+'</b> column is a <div class="dataselect"><span class="small_caraty"><select id="coerce'+i+'" onchange=gen_coerce_array()><option value="numeric">numeric</option><option value="date">date</option><option value="text" selected>text</option></select></span></div> column, and it has '+column_observations[i]+' observations in it.</li></ul>';
@@ -3615,12 +3587,12 @@ function load_populate(response) {
 		if(inputs[input][0]=='checkbox'){
 			if(inputs[input][1]==true){state='on'}
 			if(inputs[input][1]==false){state='off'}
+			// FIX THIS! ! ! ! ! ! ! !
 			$('#'+input).bootstrapToggle(state)
-			console.log("$('#"+input+"').bootstrapToggle('"+state+"')")
 		}
 		if(inputs[input][0]=='dropdown'){
 			$('#'+input).val(inputs[input][1])
-			$('#'+input).selectpicker('refresh')
+			// $('#'+input).selectpicker('refresh')
 		}
 		if(inputs[input][0]=='graphtype'){
 			graph_type=inputs[input][1]
