@@ -304,9 +304,9 @@ window.playfair = (function () {
 		console.log(axes)
 
 		// draw geoms
-		if(typeof(chartobject.line)!=='undefined'){draw_lines(axes)}
-		if(typeof(chartobject.point)!=='undefined'){draw_points(axes)}
-		if(typeof(chartobject.bar)!=='undefined'){draw_bars(axes)}
+		if(typeof(chartobject.line)!=='undefined'){draw_lines(axes),graph_obj.line,snapobj}
+		if(typeof(chartobject.point)!=='undefined'){draw_points(axes),graph_obj.point,snapobj}
+		if(typeof(chartobject.bar)!=='undefined'){draw_bars(axes),graph_obj.bar,snapobj}
 
 		// redraw the key/fix key elements
 	}
@@ -1412,27 +1412,63 @@ function draw_lines(axes){
 	// axes are [xleft,xright,ybottom,ytop]
 }
 
-function draw_points(axes){
+function draw_points(axes,point,snapobj){
 	// axes are [xleft,xright,ybottom,ytop]
-	if(typeof(chartobject.line.grouping.color)!=='undefined'){
+	// point is {'xvar':x_var,'yvar':y_var,'labels':label,'labelall':pointlabel,'grouping':{'color':color,'size':size,'type':type}}
 
+	// create sets of options for each grouping variable
+	if(typeof(point.grouping.color)!=='undefined'){
+		var color_groups=[...new Set(chartobject.flatdata[point.grouping.color])]
+	} 
+	if(typeof(point.grouping.type)!=='undefined'){
+		var color_groups=[...new Set(chartobject.flatdata[point.grouping.color])]
 	}
-	if(typeof(chartobject.line.grouping.size)!=='undefined'){
+
+	// check for sizing variable and get min and max for scaling
+	if(typeof(point.grouping.size)!=='undefined'){
+		var minsize=Math.min(...chartobject.flatdata[point.grouping.size])
+		var maxsize=Math.max(...chartobject.flatdata[point.grouping.size])
+	}
+
+	for(var i=0;i<chartobject.dataset.length;i++){
+		var current=chartobject.dataset[i]
+
+		// check for sizing variable and set point size
+		if(typeof(point.grouping.size)!=='undefined'){
+			var pointsize=((current[point.grouping.size]-minsize)/(maxsize-minsize))*(parseFloat(chartobject.point_maxsize)-parseFloat(chartobject.point_minsize))+parseFloat(chartobject.point_minsize)
+		} else {
+			var pointsize=chartobject.point_size
+		}
+
+		// set various values for points. locations
+		var x_loc=get_coord(current.xvar,[chartobject.xmin,chartobject.xmax],[axes[0],axes[1]],0)
+		var y_loc=get_coord(current.xvar,[chartobject.ymin,chartobject.ymax],[axes[2],axes[3]],1)
 		
-	}
-	if(typeof(chartobject.line.grouping.type)!=='undefined'){
-		
-	}
+		// color
+		if(typeof(point.grouping.color)!=='undefined'){
+			var color=sequential_color[color_groups.indexOf(current[point.grouping.color])]
+		} else {
+			var color=chartobject.sequential_color[0]
+		}
 
-	// draw point
-	snapobj.circle(x_data_value,y_data_value,pointsize).attr({fill:this.qualitative_color[i],stroke:this.qualitative_color[i],'stroke-width':this.point_strokewidth,'data_type':'point','data_label':group_array[k][4],'group':group[i],'class':'dataelement','fill-opacity':this.point_fillopacity,colorchange:'both',context:'point_context_menu'})
+		// point type
+		var pointtype=1
 
-	// label point
-	if (options['labels']==true) {
-		var label=snapobj.text(x_data_value,y_data_value-pointsize-3,group_array[k][4]).attr({'font-family':this.dataface,'font-size':this.datasize,'font-weight':this.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'middle',fill:this.datatextfill,colorchange:'fill',context:'text_context_menu'})
-		label.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
-		coords=label.getBBox()
-		label.attr({y:coords.y-coords.height})
+		// label
+		var label=current[point.labels]
+
+		// draw point
+		if(pointtype==1){
+			snapobj.circle(x_loc,y_loc,pointsize).attr({fill:color,stroke:color,'stroke-width':chartobject.point_strokewidth,'data_type':'point','data_label':label,'group':'PLACEHOLDER FIX ME','class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu'})
+		}
+
+		// label point
+		if (point.labelall==true) {
+			var label=snapobj.text(x_loc,y_loc-pointsize-3,current[point.labels]).attr({'font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'middle',fill:chartobject.datatextfill,colorchange:'fill',context:'text_context_menu'})
+			label.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
+			var coords=label.getBBox()
+			label.attr({y:coords.y-coords.height})
+		}
 	}
 }
 
@@ -1440,7 +1476,7 @@ function draw_bars(axes){
 	// axes are [xleft,xright,ybottom,ytop]
 }
 
-function get_value(value,[limit_start,limit_end],[pixel_start,pixel_end],y){
+function get_coord(value,[limit_start,limit_end],[pixel_start,pixel_end],y){
 	if(y==1){
 		return pixel_start-(value-limit_start)/Math.abs(limit_end-limit_start)*Math.abs(pixel_end-pixel_start)
 	} else{
