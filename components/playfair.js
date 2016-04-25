@@ -275,22 +275,22 @@ window.playfair = (function () {
 		// versions of the axes. It's not clear to me that this is the right way to do this but the rationale is that
 		// this supports some flexibility in custom axes. You can have a custom axis like: [$3,4.00,5]. There are
 		// legitimate reasons to do this so for now this is what it is.
-		xmaxis=[]
-		ymaxis=[]
+		var xmaxis=[]
+		var ymaxis=[]
 
 		if(Object.prototype.toString.call(xaxis[0])==='[object Date]'){
-			var xmaxis=xaxis
+			xmaxis=xaxis
 		} else{
 			for(var i=0;i<xaxis.length;i++){
-				var xmaxis.push(xaxis[i].replace(/[^0-9\.\-]+/g, ''))
+				xmaxis.push(xaxis[i].replace(/[^0-9\.\-]+/g, ''))
 			}
 		}
 
 		if(Object.prototype.toString.call(yaxis[0])==='[object Date]'){
-			var ymaxis=yaxis
+			ymaxis=yaxis
 		} else{
 			for(var i=0;i<yaxis.length;i++){
-				var ymaxis.push(yaxis[i].replace(/[^0-9\.\-]+/g, ''))
+				ymaxis.push(yaxis[i].replace(/[^0-9\.\-]+/g, ''))
 			}
 		}
 
@@ -301,6 +301,7 @@ window.playfair = (function () {
 
 		// draw axes
 		var axes=draw_axes(this,xaxis,yaxis)
+		console.log(axes)
 
 		// draw geoms
 		if(typeof(chartobject.line)!=='undefined'){draw_lines(axes)}
@@ -1403,6 +1404,9 @@ window.playfair = (function () {
 	return playfair;
 }());
 
+/////////////////////////////////////////////////
+///////////////////// GEOMS /////////////////////
+/////////////////////////////////////////////////
 
 function draw_lines(axes){
 	// axes are [xleft,xright,ybottom,ytop]
@@ -1410,17 +1414,18 @@ function draw_lines(axes){
 
 function draw_points(axes){
 	// axes are [xleft,xright,ybottom,ytop]
-	
+	if(typeof(chartobject.line.grouping.color)!=='undefined'){
 
-
-
-
-
+	}
+	if(typeof(chartobject.line.grouping.size)!=='undefined'){
+		
+	}
+	if(typeof(chartobject.line.grouping.type)!=='undefined'){
+		
+	}
 
 	// draw point
-	if (options['points']==true) {
-		snapobj.circle(x_data_value,y_data_value,pointsize).attr({fill:this.qualitative_color[i],stroke:this.qualitative_color[i],'stroke-width':this.point_strokewidth,'data_type':'point','data_label':group_array[k][4],'group':group[i],'class':'dataelement','fill-opacity':this.point_fillopacity,colorchange:'both',context:'point_context_menu'})
-	}
+	snapobj.circle(x_data_value,y_data_value,pointsize).attr({fill:this.qualitative_color[i],stroke:this.qualitative_color[i],'stroke-width':this.point_strokewidth,'data_type':'point','data_label':group_array[k][4],'group':group[i],'class':'dataelement','fill-opacity':this.point_fillopacity,colorchange:'both',context:'point_context_menu'})
 
 	// label point
 	if (options['labels']==true) {
@@ -2198,6 +2203,43 @@ function formatDate(date,range){
 	}
 	return(monthlookup[date.getUTCMonth()]+' '+date.getUTCDate()+', '+date.getUTCFullYear())
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
