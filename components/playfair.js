@@ -76,7 +76,7 @@ window.playfair = (function () {
 
 		for(var key in geom_dict){
 			xtypes.push(typeof(data[geom_dict[key]['xvar']][0]))
-			console.log(data,key,data[geom_dict[key]],data[geom_dict[key]['yvar']])
+			console.log(data,key,data[geom_dict[key]],data[geom_dict[key]['yvar']],geom_dict[key])
 			ytypes.push(typeof(data[geom_dict[key]['yvar']][0]))
 
 			if(key=='area' | key=='stackedbar'){
@@ -1386,7 +1386,7 @@ window.playfair = (function () {
 			'line_types':[0,0],
 			'line_minsize':2,
 			'line_maxsize':20,
-			'line_ize':2,
+			'line_size':2,
 
 			// logo
 			'logo':0,
@@ -1418,7 +1418,7 @@ window.playfair = (function () {
 ///////////////////// GEOMS /////////////////////
 /////////////////////////////////////////////////
 
-function draw_lines(axes,bar,snapobj){
+function draw_lines(axes,line,snapobj){
 	// axes are [xleft,xright,ybottom,ytop]
 	// var is {'xvar':x_var,'yvar':y_var,'connect':connect,'grouping':{'color':color,'size':size,'type':type}}
 
@@ -1437,50 +1437,75 @@ function draw_lines(axes,bar,snapobj){
 	}
 
 	// create full group list
+	if(line.grouping.color!=='none' || line.grouping.type!=='none'){
+		var temp=[]
+		for(var i=0;i<chartobject.dataset.length;i++){
+			temp.push([chartobject.dataset[i][line.grouping.color],chartobject.dataset[i][line.grouping.type]])
+		}
+		var groups=[...new Set(temp)]
+	} else {
+		var groups=[[undefined,undefined]]
+	}
 
 	// loop through groups in the dataset to draw lines
-	for(var i=0;i<chartobject.dataset.length;i++){
-		var current=chartobject.dataset[i]
+	for(var i=0;i<groups.length;i++){
+		var current=chartobject.dataset.filter(function(row){
+			return row[line.grouping.color]===groups[i][0]
+		}).filter(function(row){
+			return row[line.grouping.type]===groups[i][1]
+		})
+
+		// order according to the connect variable
+		if(line.connect!=='none'){
+			current.sort(function(a,b){
+				return a[line.connect]>b[line.connect]
+			})
+		}
+
+		console.log(groups[i],current)
 
 		// check for sizing variable and set line width
 		if(line.grouping.size!=='none'){
-			var linewidth=((current[point.grouping.size]-minsize)/(maxsize-minsize))*(parseFloat(chartobject.line_maxsize)-parseFloat(chartobject.line_minsize))+parseFloat(chartobject.line_minsize)
+			var linewidth=((current[0][line.grouping.size]-minsize)/(maxsize-minsize))*(parseFloat(chartobject.line_maxsize)-parseFloat(chartobject.line_minsize))+parseFloat(chartobject.line_minsize)
 		} else {
 			var linewidth=chartobject.line_size
 		}
 
 		// color
 		if(line.grouping.color!=='none'){
-			var color=chartobject.qualitative_color[color_groups.indexOf(current[line.grouping.color])]
+			var color=chartobject.qualitative_color[color_groups.indexOf(current[0][line.grouping.color])]
 		} else {
 			var color=chartobject.qualitative_color[0]
 		}
 
 		// point type
 		var linetype=1
+		var linetype=chartobject.line_types[linetype]
 
 		// label
-		var label=current[line.color]+', '+current[line.type]
+		var label=current[0][line.color]+', '+current[0][line.type]
 
+		var path=''
+		// now loop through points in the line
+		for(var j=0;j<current.length;j++){
+			var sub_current=current[j]
 
-		// set various values for points. locations
-		var x_loc=get_coord(current[point.xvar],[chartobject.xarray[0],chartobject.xarray[chartobject.xarray.length-1]],[axes[0],axes[1]],0)
-		var y_loc=get_coord(current[point.yvar],[chartobject.yarray[0],chartobject.yarray[chartobject.yarray.length-1]],[axes[2],axes[3]],1)
-
-		// draw point
-		snapobj.path(path_string).attr({'data_label':group[i],class:'dataelement',stroke:color,'stroke-width':linewidth,fill:'none','group':group[i],'fill-opacity':0,'stroke-opacity':this.linechart_strokeopacity,'colorchange':'stroke',context:'pathdata_context_menu'})
-
-		if(pointtype==1){
-			snapobj.circle(x_loc,y_loc,pointsize).attr({fill:color,stroke:color,'stroke-width':chartobject.point_strokewidth,'data_type':'point','data_label':label,'group':'PLACEHOLDER FIX ME','class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu'})
+			// set various values for points. locations
+			var x_loc=get_coord(sub_current[line.xvar],[chartobject.xarray[0],chartobject.xarray[chartobject.xarray.length-1]],[axes[0],axes[1]],0)
+			var y_loc=get_coord(sub_current[line.yvar],[chartobject.yarray[0],chartobject.yarray[chartobject.yarray.length-1]],[axes[2],axes[3]],1)
+			console.log(x_loc,y_loc)
+			// add to path or start path
+			if(j==0){
+				path=path+'M'+x_loc+','+y_loc
+				console.log(path)
+			} else{
+				path=path+'L'+x_loc+','+y_loc
+				console.log(path)
+			}
 		}
 
-		// label point
-		if (point.labelall==true) {
-			var label=snapobj.text(x_loc,y_loc-pointsize-3,current[point.labels]).attr({'font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'middle',fill:chartobject.datatextfill,colorchange:'fill',context:'text_context_menu'})
-			label.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
-			var coords=label.getBBox()
-			label.attr({y:coords.y-coords.height})
-		}
+		// draw line
+		snapobj.path(path).attr({'data_label':label,class:'dataelement',stroke:color,'stroke-width':linewidth,fill:'none','group':groups[i],'fill-opacity':0,'stroke-opacity':chartobject.linechart_strokeopacity,'colorchange':'stroke',context:'pathdata_context_menu'})
 	}
 }
 
