@@ -1584,41 +1584,45 @@ function draw_bars(axes,bar,snapobj){
 
 	// to figure out the width of a bar, need to find the two values that are *closest* on the x-axis.
 	// the bar width should be just large enough that those two bars have a little space between them
+	// sort on x, then track the difference in order
+	var temp=chartobject.dataset
+	temp.sort(function(a,b){
+		return a[bar.xvar]>b[bar.xvar]
+	})
 
-	// loop through observations in the dataset to draw points
+	var mindiff=Number.POSITIVE_INFINITY
+	for(var i=1;i<temp.length;i++){
+		var diff=Math.abs(temp[i][bar.xvar]-temp[i-1][bar.xvar])
+		if(diff!=0 && diff<mindiff){
+			mindiff=diff
+		}
+	}
+
+	var totalwidth=chartobject.barchart_width*(get_coord(mindiff,[chartobject.xarray[0],chartobject.xarray[chartobject.xarray.length-1]],[axes[0],axes[1]],0)-get_coord(0,[chartobject.xarray[0],chartobject.xarray[chartobject.xarray.length-1]],[axes[0],axes[1]],0))
+	var barwidth=totalwidth
+
+	// loop through observations in the dataset to draw bars
 	for(var i=0;i<chartobject.dataset.length;i++){
 		var current=chartobject.dataset[i]
 
-		// set various values for points. locations
-		var x_loc=get_coord(current[point.xvar],[chartobject.xarray[0],chartobject.xarray[chartobject.xarray.length-1]],[axes[0],axes[1]],0)
-		var y_loc=get_coord(current[point.yvar],[chartobject.yarray[0],chartobject.yarray[chartobject.yarray.length-1]],[axes[2],axes[3]],1)
+		// set various values for bar locations
+		var x1=get_coord(current[bar.xvar],[chartobject.xarray[0],chartobject.xarray[chartobject.xarray.length-1]],[axes[0],axes[1]],0)-(barwidth/2)
+		var x2=x1+barwidth
+		var y_loc=get_coord(current[bar.yvar],[chartobject.yarray[0],chartobject.yarray[chartobject.yarray.length-1]],[axes[2],axes[3]],1)
 		var zero=get_coord(0,[chartobject.yarray[0],chartobject.yarray[chartobject.yarray.length-1]],[axes[2],axes[3]],1)
 
 		// color
-		if(point.grouping.color!=='none'){
-			var color=chartobject.qualitative_color[color_groups.indexOf(current[point.grouping.color])]
+		if(bar.grouping.color!=='none'){
+			var color=chartobject.qualitative_color[color_groups.indexOf(current[bar.grouping.color])]
 		} else {
 			var color=chartobject.qualitative_color[0]
 		}
 
-		// point type
-		var pointtype=1
+		// label in this case should be the y-value
+		var label=current[bar.yvar]
 
-		// label
-		var label=current[point.labels]
-
-		// draw point
-		if(pointtype==1){
-			snapobj.circle(x_loc,y_loc,pointsize).attr({fill:color,stroke:color,'stroke-width':chartobject.point_strokewidth,'data_type':'point','data_label':label,'group':'PLACEHOLDER FIX ME','class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu'})
-		}
-
-		// label point
-		if (point.labelall==true) {
-			var label=snapobj.text(x_loc,y_loc-pointsize-3,current[point.labels]).attr({'font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'middle',fill:chartobject.datatextfill,colorchange:'fill',context:'text_context_menu'})
-			label.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
-			var coords=label.getBBox()
-			label.attr({y:coords.y-coords.height})
-		}
+		// draw bar
+		snapobj.path('M'+x1+','+zero+'L'+x2+','+zero+'L'+x2+','+y_loc+'L'+x1+','+y_loc+'L'+x1+','+zero).attr({orient:'vertical','data_type':'bar','data_label':label,'group':current[bar.grouping.subgroup],'class':'dataelement','shape-rendering':'crispEdges',fill:color,colorchange:'fill',context:'data_context_menu'})
 	}
 }
 
