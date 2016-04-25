@@ -87,9 +87,9 @@ function redraw() {
 
 			var color=$("#bar_select_color").val()
 			var bargroup=$("#bar_select_group").val()
-			// var barspace=document.getElementById('spacing').checked
+			var barspace=document.getElementById('spacing').checked
 
-			geom_dict['bar']={'xvar':x_var,'yvar':y_var,'connect':connect,'grouping':{'color':color,'size':size,'type':type}}
+			geom_dict['bar']={'xvar':x_var,'yvar':y_var,spacing:barspace,'grouping':{'color':color,'bargroup':bargroup}}
 			ready=1
 		}
 
