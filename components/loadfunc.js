@@ -259,12 +259,13 @@ function populate_variables(final_data) {
 	$(".variable_select").prop('disabled',false)
 
 	// if possible, set menus to previous values
-	$(".x_select").val(x_var)
-	$(".y_select").val(y_var)
-	$(".group_select").val(group_var)
-	$("#line_select_label").val(label)
-	$("#line_select_connect").val(connect)
-	$("#line_select_pointsize").val(size)
+	// this needs to be redone now that you can't just set all x_selects as the same thing
+	// $(".x_select").val(x_var)
+	// $(".y_select").val(y_var)
+	// $(".group_select").val(group_var)
+	// $("#line_select_label").val(label)
+	// $("#line_select_connect").val(connect)
+	// $("#line_select_pointsize").val(size)
 
 }
 

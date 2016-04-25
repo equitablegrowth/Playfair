@@ -47,7 +47,7 @@ function changedimensions() {
 
 // redraw is the main graphing setup function. Gets variable values and passes them to playfair.js
 function redraw() {
-	try{
+	// try{
 		//set up geom_dict by looking at all the stuff in chart and gathering variables as appropriate
 		var geom_dict={}
 		var ready=0
@@ -355,10 +355,11 @@ function redraw() {
 		else {
 			throw 'Nothing to graph!'
 		}
-	} catch(err){
-		alert(err)
-		console.log(new Error().stack)
-	}
+	// } catch(err){
+	// 	alert(err)
+	// 	console.log(new Error().stack)
+	// 	console.trace()
+	// }
 }
 
 /////////////////////// END UPDATE GRAPH ///////////////////////////////

@@ -34,6 +34,7 @@ window.playfair = (function () {
 	// data comes in as the final_data object - this is an object where each
 	// key is a row-heading that corresponds to a list of values
 	Playfair.prototype.data = function(data,geom_dict) {
+		console.log(geom_dict)
 		var datadict=[]
 		for(var key in data){
 			var items=data[key].length
@@ -75,6 +76,7 @@ window.playfair = (function () {
 
 		for(var key in geom_dict){
 			xtypes.push(typeof(data[geom_dict[key]['xvar']][0]))
+			console.log(data,key,data[geom_dict[key]],data[geom_dict[key]['yvar']])
 			ytypes.push(typeof(data[geom_dict[key]['yvar']][0]))
 
 			if(key=='area' | key=='stackedbar'){
@@ -125,6 +127,10 @@ window.playfair = (function () {
 				})
 
 			} else {
+				if(key=='bar'){
+					ymins.push(0)
+				}
+
 				if(Object.prototype.toString.call(data[geom_dict[key]['xvar']][0])==='[object Date]'){
 					xmaxes.push(new Date(moment(Math.max(...data[geom_dict[key]['xvar']]))))
 					xmins.push(new Date(moment(Math.min(...data[geom_dict[key]['xvar']]))))
@@ -235,7 +241,7 @@ window.playfair = (function () {
 				var xaxis=graph_obj.xstrings
 				graph_obj.xarray=xaxis
 			} else if(typeof(graph_obj.xmax)=='number'){
-				var xaxis=create_numerical_axis([graph_obj.xmin,graph_obj.xmax],[options['xlimit_min'],options['xlimit_max']])
+				var xaxis=create_numerical_axis([graph_obj.xmin,graph_obj.xmax],[graph_obj.xmin,graph_obj.xmax])
 			} else if(Object.prototype.toString.call(graph_obj.xmax)==='[object Date]'){
 				var xaxis=create_date_axis([graph_obj.xmin,graph_obj.xmax],[options['xlimit_min'],options['xlimit_max']])
 			}
@@ -256,7 +262,7 @@ window.playfair = (function () {
 				var yaxis=graph_obj.ystrings
 				graph_obj.yarray=yaxis
 			} else if(typeof(graph_obj.ymax)=='number'){
-				var yaxis=create_numerical_axis([graph_obj.ymin,graph_obj.ymax],[options['ylimit_min'],options['ylimit_max']])
+				var yaxis=create_numerical_axis([graph_obj.ymin,graph_obj.ymax],[graph_obj.ymin,graph_obj.ymax])
 			} else if(Object.prototype.toString.call(graph_obj.ymax)==='[object Date]'){
 				var yaxis=create_date_axis([graph_obj.ymin,graph_obj.ymax],[options['ylimit_min'],options['ylimit_max']])
 			}
@@ -304,9 +310,9 @@ window.playfair = (function () {
 		console.log(axes)
 
 		// draw geoms
-		if(typeof(chartobject.line)!=='undefined'){draw_lines(axes),graph_obj.line,snapobj}
-		if(typeof(chartobject.point)!=='undefined'){draw_points(axes),graph_obj.point,snapobj}
-		if(typeof(chartobject.bar)!=='undefined'){draw_bars(axes),graph_obj.bar,snapobj}
+		if(typeof(chartobject.line)!=='undefined'){draw_lines(axes,graph_obj.line,snapobj)}
+		if(typeof(chartobject.point)!=='undefined'){draw_points(axes,graph_obj.point,snapobj)}
+		if(typeof(chartobject.bar)!=='undefined'){draw_bars(axes,graph_obj.bar,snapobj)}
 
 		// redraw the key/fix key elements
 	}
@@ -1417,15 +1423,15 @@ function draw_points(axes,point,snapobj){
 	// point is {'xvar':x_var,'yvar':y_var,'labels':label,'labelall':pointlabel,'grouping':{'color':color,'size':size,'type':type}}
 
 	// create sets of options for each grouping variable
-	if(typeof(point.grouping.color)!=='undefined'){
+	if(point.grouping.color!=='none'){
 		var color_groups=[...new Set(chartobject.flatdata[point.grouping.color])]
 	} 
-	if(typeof(point.grouping.type)!=='undefined'){
+	if(point.grouping.type!=='none'){
 		var color_groups=[...new Set(chartobject.flatdata[point.grouping.color])]
 	}
 
 	// check for sizing variable and get min and max for scaling
-	if(typeof(point.grouping.size)!=='undefined'){
+	if(point.grouping.size!=='none'){
 		var minsize=Math.min(...chartobject.flatdata[point.grouping.size])
 		var maxsize=Math.max(...chartobject.flatdata[point.grouping.size])
 	}
@@ -1434,21 +1440,21 @@ function draw_points(axes,point,snapobj){
 		var current=chartobject.dataset[i]
 
 		// check for sizing variable and set point size
-		if(typeof(point.grouping.size)!=='undefined'){
+		if(point.grouping.size!=='none'){
 			var pointsize=((current[point.grouping.size]-minsize)/(maxsize-minsize))*(parseFloat(chartobject.point_maxsize)-parseFloat(chartobject.point_minsize))+parseFloat(chartobject.point_minsize)
 		} else {
 			var pointsize=chartobject.point_size
 		}
 
 		// set various values for points. locations
-		var x_loc=get_coord(current.xvar,[chartobject.xmin,chartobject.xmax],[axes[0],axes[1]],0)
-		var y_loc=get_coord(current.xvar,[chartobject.ymin,chartobject.ymax],[axes[2],axes[3]],1)
-		
+		var x_loc=get_coord(current[point.xvar],[chartobject.xarray[0],chartobject.xarray[chartobject.xarray.length-1]],[axes[0],axes[1]],0)
+		var y_loc=get_coord(current[point.yvar],[chartobject.yarray[0],chartobject.yarray[chartobject.yarray.length-1]],[axes[2],axes[3]],1)
+
 		// color
-		if(typeof(point.grouping.color)!=='undefined'){
-			var color=sequential_color[color_groups.indexOf(current[point.grouping.color])]
+		if(point.grouping.color!=='none'){
+			var color=chartobject.qualitative_color[color_groups.indexOf(current[point.grouping.color])]
 		} else {
-			var color=chartobject.sequential_color[0]
+			var color=chartobject.qualitative_color[0]
 		}
 
 		// point type
@@ -1498,18 +1504,122 @@ function get_coord(value,[limit_start,limit_end],[pixel_start,pixel_end],y){
 //
 // Things passed to this function (#=required):
 //   # dataseries: array of numbers to be plotted (either x or y, not both)
-//   # yflag: =1 if the dataseries is y-values for the plot, else 0
-//     ticks: number of ticks if the user selects a specific number
-//     decimal: number of decimal places to display on each tick value
-//     multiple: specific multiple to use for axis values (ie 10 for 10,20...)
-//     format: for special data types. Possible values:
-//		   * date: formats the label as a date. Specify the appropriate multiples value
-//		     as well. Specifying this and 'year' is kinda pointless.
-//		   * percent: multiplies values by 100 and adds %
-//     prepend: a string to add before each tick label
-//     append: a string to add after each tick label
-//     transform: a number that all values will be divided by
 
+function create_numerical_axis(data,limit) {
+	var datamin=data[0]
+	var datamax=data[1]
+	var limitmin=limit[0]
+	var limitmax=limit[1]
+	var range=datamax-datamin
+	var nice_ticks=[.1,.2,.5,1,.15,.25,.75]
+
+	if(datamin<=0 & datamax>=0){zero_flag=1}
+	else{zero_flag=0}
+
+	// This is sort of a brute force method for finding a good division of the graph.
+	// First, generate a big list of candidate step values, make an axis for each one,
+	// and evaluate that axis by the amount of 'wasted space' it has. Give preference
+	// to nice numbers of ticks (I prefer about 5 but this can be set) - larger numbers
+	// of ticks will generally have an advantage is reducing wasted space, so penalize
+	// them by some arbitrary amount (another setting). Some of the candidate step
+	// numbers are gonna be garbage but hey, computation is cheap.
+
+	console.log('range: ',range,'maxdata: ',datamin,'mindata: ',datamax,'minlimit: ',limitmin,'maxlimit: ',limitmax)
+	var steps=range/4
+
+	if(steps>=1){
+	    rounded=Math.round(steps)
+	    digits=rounded.toString().length
+    } else {
+    	var places=steps.toString().split('.')[1]
+    	var first_place=0
+    	for(var i=0;i<places.length;i++){
+    		if (places[i]!='0' && first_place==0){
+    			first_place=i+1
+    		}
+    	}
+    	var digits=-parseInt(first_place)
+    }
+
+    candidate_steps={0:[],1:[],2:[],3:[],4:[],5:[],6:[],7:[],8:[],9:[],10:[]}
+    candidate_arrays=[]
+
+    // generate the candidate steps
+    // this whole candidate_steps[5] thing is all about knowing where to truncate
+    // numbers that have no exact binary representation. This seems like an incredibly
+    // stupid way to do it and there must be another way but I'm not sure what it is.
+
+    for (var i=0;i<nice_ticks.length;i++){
+    	if (i<4){digit_mod=digits+1}else{digit_mod=digits}
+    	if(digits>=3){
+			candidate_steps[0].push(nice_ticks[i]*Math.pow(10,digits))
+			candidate_steps[0].push(nice_ticks[i]*Math.pow(10,digits-1))
+			candidate_steps[0].push(nice_ticks[i]*Math.pow(10,digits+1))
+    	}
+    	if(digits==2){
+			candidate_steps[0].push(nice_ticks[i]*Math.pow(10,digits))
+			try{candidate_steps[digit_mod-1].push(nice_ticks[i]*Math.pow(10,digits-1))}catch(err){candidate_steps[0].push(nice_ticks[i]*Math.pow(10,digits-1))}
+			candidate_steps[0].push(nice_ticks[i]*Math.pow(10,digits+1))
+    	}
+    	if(digits<2){
+			try{candidate_steps[2-digit_mod].push(nice_ticks[i]*Math.pow(10,digits))}catch(err){candidate_steps[0].push(nice_ticks[i]*Math.pow(10,digits))}
+			try{candidate_steps[3-digit_mod].push(nice_ticks[i]*Math.pow(10,digits-1))}catch(err){candidate_steps[0].push(nice_ticks[i]*Math.pow(10,digits-1))}
+			try{candidate_steps[1-digit_mod].push(nice_ticks[i]*Math.pow(10,digits+1))}catch(err){candidate_steps[0].push(nice_ticks[i]*Math.pow(10,digits+1))}
+    	}
+    }
+
+    // generate an axis for each of the candidate step numbers
+    for (var key in candidate_steps){
+		for (var i=0;i<candidate_steps[key].length;i++){
+	    	steps=parseFloat(candidate_steps[key][i])
+
+	    	// starting value depends on whether or not 0 is in the array
+	    	if(zero_flag==1){
+		    	min_steps=Math.ceil(Math.abs(datamin)/steps)
+		    	step_array=[(-min_steps*steps).toFixed(key)]		
+	    	} else {
+	    		step_array=[(Math.floor(datamin/steps)*steps).toFixed(key)]
+	    	}
+
+	    	var stepnum=1
+		    while (step_array[step_array.length-1]<datamax){
+		        step_array.push((parseFloat(step_array[0])+steps*stepnum).toFixed(key))
+		        stepnum++
+		    }
+
+		    // this arbitrarily enforces step_arrays of length between 4 and 10
+		    if (step_array.length<11 && step_array.length>4){candidate_arrays.push(step_array)}
+	    }
+	}
+
+	// sort candidate_arrays by length (smallest first)
+	candidate_arrays.sort(function(a,b) {
+		return a.length-b.length
+	})
+
+	// now evaluate all possibilities in the candidate_array
+	best_score=Number.POSITIVE_INFINITY
+	for (var i=0;i<candidate_arrays.length;i++){
+		candidate_range=parseFloat(candidate_arrays[i][candidate_arrays[i].length-1])-parseFloat(candidate_arrays[i][0])
+		wasted=(candidate_range-range)/candidate_range
+
+		penalty=1
+		if(candidate_arrays[i].length>6){
+			penalty=1+.4*(candidate_arrays[i].length-6)
+		}
+
+		score=Math.pow(10,wasted)*penalty
+
+		if (score<best_score){
+			best_score=score
+			best_array=candidate_arrays[i]
+		}
+
+		console.log('array: ',candidate_arrays[i],'score: ',score,'penalty: ',penalty)
+	}
+
+	return best_array
+}
 
 
 function create_axis(dataseries,parameters) {
@@ -1832,7 +1942,7 @@ function draw_axes(playobj,xvar,yvar,shiftx,shifty) {
 	// and incorporate them into the graph's margins appropriately.
 	legend_height=0
 
-	if (playobj.group!=='none' && playobj.legend_location!=='none'){
+	if (typeof(playobj.group)!=='undefined' && playobj.legend_location!=='none'){
 
 		// array with unique group values
 		grouptemp=playobj.dataset[playobj.group]
