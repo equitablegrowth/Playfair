@@ -7,6 +7,7 @@ h2{margin-left:auto;margin-right:auto;font-family:'Lancelot';font-size:50;margin
 h1{margin-top:30px;margin-bottom:0px;font-family:'Raleway';font-size:1.7em;color:#205946;}
 ul{margin-top:0;}
 li{list-style:square;}
+ul>ul li{list-style:circle;}
 text {-webkit-font-smoothing: subpixel-antialiased; }
 body{width:700px;margin-left:auto;margin-right:auto;padding-top:22px;padding-bottom:100px;font-size:1.1em;font-family:'Open Sans';-webkit-font-smoothing: antialiased}
 </style>
@@ -18,6 +19,19 @@ body{width:700px;margin-left:auto;margin-right:auto;padding-top:22px;padding-bot
 <li> So much stuff</li>
 <li> The UI has been redesigned and a lot of stuff has been moved around</li>
 <li> Changelog looks less crappy</li>
+<li> Charts now generally follow the grammar of graphics as implemented in ggplot2. This allows you to implement any 'geom' (points, lines, bars, etc.) on to any chart in any combination. This vastly increases the types of charts you can create.</li>
+<li> You can now use categorical values as an axis for any geom type.</li>
+<li> The following geoms are currently implemented:</li>
+    <ul>
+        <li>points</li>
+        <li>bars</li>
+        <li>lines</li>
+        <li>shading</li>
+        <li>segments</li>
+        <li>stacked bars</li>
+        <li>area</li>
+    </ul>
+<li> Changes to data storage and refactoring of code to make adding geoms easier in the future</li>
 </ul>
 
 <h1>v1.7</h1>
@@ -165,18 +179,18 @@ body{width:700px;margin-left:auto;margin-right:auto;padding-top:22px;padding-bot
 <h1>v0.2</h1>
 <ul>
 <li> Date parsing: Playfair can now handle a date data type. The data alert box will inform you that your column has been parsed as a date. Check and make sure! All rows of the column must parse as a date  one missing observation will prevent proper parsing. Only certain formats are recognized as dates. Any of the following should work:</li>
-  <ul>
-    <li>1981-02-28 (FRED format)</li>
-    <li>02-28-1981</li>
-    <li>02/28/1981</li>
-    <li>02-28-81</li>
-    <li>02/28/81</li>
-    <li>02/1981</li>
-    <li>02-1981</li>
-    <li>February 1981</li>
-    <li>February 26 1981</li>
-    <li>February 26, 1981</li>
-  </ul>
+    <ul>
+        <li>1981-02-28 (FRED format)</li>
+        <li>02-28-1981</li>
+        <li>02/28/1981</li>
+        <li>02-28-81</li>
+        <li>02/28/81</li>
+        <li>02/1981</li>
+        <li>02-1981</li>
+        <li>February 1981</li>
+        <li>February 26 1981</li>
+        <li>February 26, 1981</li>
+    </ul>
 <li> If there are other formats Playfair should recognize, please log these as bugs. It intentionally does not recognize sequences like 1996, 1997 as years  either edit out commas in these sequences manually, format them without commas, or format them in your data as 1/1/1996, 1/1/1997, etc.  It also doesn&#39;t really handle amounts of time that should be denominated in hours. So if you want to track a stock from 2PM to 2PM the next day, you will want to simply count out the hours (ie your data is 1,2,3,4,...) and then use a custom axis as appropriate. You cannot currently use custom axes with date data.</li>
 <li> When you hover over a data element on a graph, it will now be highlighted, which should make it easier to rightclick on an element and alter its color or etc.</li>
 <li> When you rightclick on a linechart line, you can now change that line to a dashed line using the contextual menu that appears (or a dashed line to a solid line).</li>
