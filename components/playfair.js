@@ -237,9 +237,9 @@ window.playfair = (function () {
 		// get the appropriate axis for x variables
 		// this first if is to check for a custom (user-defined) axis.
 		if(typeof graph_obj.xarray=='undefined'){
-			if(graph_obj.xmax==NaN){
+			if(isNaN(graph_obj.xmax)==true){
 				var xaxis=graph_obj.xstrings
-				graph_obj.xarray=xaxis
+				console.log(xaxis)
 			} else if(typeof(graph_obj.xmax)=='number'){
 				var xaxis=create_numerical_axis([graph_obj.xmin,graph_obj.xmax],[graph_obj.xmin,graph_obj.xmax])
 			} else if(Object.prototype.toString.call(graph_obj.xmax)==='[object Date]'){
@@ -258,7 +258,7 @@ window.playfair = (function () {
 
 		// get the appropriate axis for y variables
 		if(typeof graph_obj.yarray=='undefined'){
-			if(graph_obj.ymax==NaN){
+			if(isNaN(graph_obj.ymax)==true){
 				var yaxis=graph_obj.ystrings
 				graph_obj.yarray=yaxis
 			} else if(typeof(graph_obj.ymax)=='number'){
@@ -306,7 +306,11 @@ window.playfair = (function () {
 		var graph_background=snapobj.rect(graph_obj.x,graph_obj.y+graph_obj.head_height,graph_obj.width,graph_obj.height-(graph_obj.head_height+graph_obj.footer_height)).attr({class:'background',fill:this.chartfill})
 
 		// draw axes
-		var axes=draw_axes(this,xaxis,yaxis)
+		if(typeof(graph_obj.bar)!=='undefined'){
+			var axes=draw_axes(this,xaxis,yaxis,1)
+		} else {
+			var axes=draw_axes(this,xaxis,yaxis)
+		}
 		console.log(axes)
 
 		// draw geoms
@@ -1627,6 +1631,8 @@ function draw_bars(axes,bar,snapobj){
 }
 
 function get_coord(value,[limit_start,limit_end],[pixel_start,pixel_end],y){
+	console.log(value,[limit_start,limit_end],[pixel_start,pixel_end],y)
+	// universal function for converting a numerical or categorical value into a pixel value on the chart
 	if(y==1){
 		return pixel_start-(value-limit_start)/Math.abs(limit_end-limit_start)*Math.abs(pixel_end-pixel_start)
 	} else{
@@ -2493,8 +2499,6 @@ function formatDate(date,range){
 	}
 	return(monthlookup[date.getUTCMonth()]+' '+date.getUTCDate()+', '+date.getUTCFullYear())
 }
-
-
 
 
 

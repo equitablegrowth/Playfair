@@ -210,6 +210,10 @@ function loadData(coerce_array) {
 
 	for (i=0;i<d[0].length;i++){
 		final_data[d[0][i]]=[]
+
+		// attach data type property to each column
+		final_data[d[0][i]].dtype=column_types[i]
+
 		for (j=1;j<d.length;j++) {
 			if (column_types[i]=='text'){
 				final_data[d[0][i]].push(d[j][i])
