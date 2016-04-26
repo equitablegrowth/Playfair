@@ -239,11 +239,13 @@ window.playfair = (function () {
 		if(typeof graph_obj.xarray=='undefined'){
 			if(isNaN(graph_obj.xmax)==true){
 				var xaxis=graph_obj.xstrings
-				console.log(xaxis)
+				xaxis.dtype='text'
 			} else if(typeof(graph_obj.xmax)=='number'){
 				var xaxis=create_numerical_axis([graph_obj.xmin,graph_obj.xmax],[graph_obj.xmin,graph_obj.xmax])
+				xaxis.dtype='numeric'
 			} else if(Object.prototype.toString.call(graph_obj.xmax)==='[object Date]'){
 				var xaxis=create_date_axis([graph_obj.xmin,graph_obj.xmax],[options['xlimit_min'],options['xlimit_max']])
+				xaxis.dtype='date'
 			}
 			graph_obj.xarray=xaxis
 		} else {
@@ -260,11 +262,13 @@ window.playfair = (function () {
 		if(typeof graph_obj.yarray=='undefined'){
 			if(isNaN(graph_obj.ymax)==true){
 				var yaxis=graph_obj.ystrings
-				graph_obj.yarray=yaxis
+				yaxis.dtype='text'
 			} else if(typeof(graph_obj.ymax)=='number'){
 				var yaxis=create_numerical_axis([graph_obj.ymin,graph_obj.ymax],[graph_obj.ymin,graph_obj.ymax])
+				yaxis.dtype='numeric'
 			} else if(Object.prototype.toString.call(graph_obj.ymax)==='[object Date]'){
 				var yaxis=create_date_axis([graph_obj.ymin,graph_obj.ymax],[options['ylimit_min'],options['ylimit_max']])
+				yaxis.dtype='date'
 			}
 			graph_obj.yarray=yaxis
 		} else {
@@ -306,11 +310,19 @@ window.playfair = (function () {
 		var graph_background=snapobj.rect(graph_obj.x,graph_obj.y+graph_obj.head_height,graph_obj.width,graph_obj.height-(graph_obj.head_height+graph_obj.footer_height)).attr({class:'background',fill:this.chartfill})
 
 		// draw axes
-		if(typeof(graph_obj.bar)!=='undefined'){
-			var axes=draw_axes(this,xaxis,yaxis,1)
+		if(yaxis.dtype=='text'){
+			var yoffset=1
 		} else {
-			var axes=draw_axes(this,xaxis,yaxis)
+			var yoffset=0
 		}
+
+		if(xaxis.dtype=='text' || typeof(graph_obj.bar)!=='undefined'){
+			var xoffset=1
+		} else {
+			var xoffset=0
+		}
+
+		var axes=draw_axes(this,xaxis,yaxis,xoffset,yoffset)
 		console.log(axes)
 
 		// draw geoms
@@ -907,21 +919,34 @@ function draw_bars(axes,bar,snapobj){
 	// to figure out the width of a bar, need to find the two values that are *closest* on the x-axis.
 	// the bar width should be just large enough that those two bars have a little space between them
 	// sort on x, then track the difference in order
-	var temp=chartobject.dataset
-	temp.sort(function(a,b){
-		return a[bar.xvar]>b[bar.xvar]
-	})
+	if(chartobject.flatdata[bar.xvar].dtype!='text'){
+		var temp=chartobject.dataset
+		temp.sort(function(a,b){
+			return a[bar.xvar]>b[bar.xvar]
+		})
 
-	var mindiff=Number.POSITIVE_INFINITY
-	for(var i=1;i<temp.length;i++){
-		var diff=Math.abs(temp[i][bar.xvar]-temp[i-1][bar.xvar])
-		if(diff!=0 && diff<mindiff){
-			mindiff=diff
+		var mindiff=Number.POSITIVE_INFINITY
+		for(var i=1;i<temp.length;i++){
+			var diff=Math.abs(temp[i][bar.xvar]-temp[i-1][bar.xvar])
+			if(diff!=0 && diff<mindiff){
+				mindiff=diff
+			}
 		}
-	}
 
-	var totalwidth=chartobject.barchart_width*(get_coord(mindiff,[chartobject.xarray[0],chartobject.xarray[chartobject.xarray.length-1]],[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0)-get_coord(0,[chartobject.xarray[0],chartobject.xarray[chartobject.xarray.length-1]],[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0))
-	var barwidth=totalwidth
+		var totalwidth=chartobject.barchart_width*(get_coord(mindiff,[chartobject.xarray[0],chartobject.xarray[chartobject.xarray.length-1]],[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0)-get_coord(0,[chartobject.xarray[0],chartobject.xarray[chartobject.xarray.length-1]],[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0))
+		var barwidth=totalwidth
+
+		// cap barwidth based on overrunning the left or right side of the graph - ie bars should never break out of the axis box
+		if(totalwidth/2>get_coord(chartobject.xmin,[chartobject.xarray[0],chartobject.xarray[chartobject.xarray.length-1]],[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0)-axes[0] || totalwidth/2>axes[1]-get_coord(chartobject.xmax,[chartobject.xarray[0],chartobject.xarray[chartobject.xarray.length-1]],[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0)){
+			var totalwidth=get_coord(chartobject.xmin,[chartobject.xarray[0],chartobject.xarray[chartobject.xarray.length-1]],[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0)-axes[0]
+			var barwidth=totalwidth
+		}
+	} else {
+		// if the axis is categorical, get width based on that instead.
+		var totalwidth=chartobject.barchart_width*(get_coord(chartobject.flatdata[bar.xvar][0],[chartobject.xarray[0],chartobject.xarray[chartobject.xarray.length-1]],[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0)-get_coord(chartobject.flatdata[bar.xvar][1],[chartobject.xarray[0],chartobject.xarray[chartobject.xarray.length-1]],[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0))
+		var barwidth=totalwidth
+	}
+	console.log(barwidth)
 
 	// loop through observations in the dataset to draw bars
 	for(var i=0;i<chartobject.dataset.length;i++){
@@ -946,22 +971,37 @@ function draw_bars(axes,bar,snapobj){
 		// draw bar
 		snapobj.path('M'+x1+','+zero+'L'+x2+','+zero+'L'+x2+','+y_loc+'L'+x1+','+y_loc+'L'+x1+','+zero).attr({orient:'vertical','data_type':'bar','data_label':label,'group':current[bar.grouping.subgroup],'class':'dataelement','shape-rendering':'crispEdges',fill:color,colorchange:'fill',context:'data_context_menu'})
 	}
+
+	// always gotta pull the y=0 line to the front after creating a barchart
 }
 
-function get_coord(value,[limit_start,limit_end],[pixel_start,pixel_end],type,array,y){
+function get_coord(value,[limit_start,limit_end],[pixel_start,pixel_end],type,array,y,shift){
 	// universal function for converting a numerical or categorical value into a pixel value on the chart
+	// shift is for bar charts etc where the element is going to be centered over the value instead of beginning
+	// at the value. Shift doesn't affect categorical axes, where shifting is always performed.
+	// if(shiftx==1){x_step=domain/(xvar.length)}
+	var range=Math.abs(pixel_end-pixel_start)
+	var step=range/(array.length)
+
 	if(type!='text'){
 		if(y==1){
-			return pixel_start-(value-limit_start)/Math.abs(limit_end-limit_start)*Math.abs(pixel_end-pixel_start)
+			if(shift==1){
+				return pixel_start-(value-limit_start)/Math.abs(limit_end-limit_start)*Math.abs(pixel_end-pixel_start)+step
+			} else {
+				return pixel_start-(value-limit_start)/Math.abs(limit_end-limit_start)*Math.abs(pixel_end-pixel_start)
+			}
 		} else {
-			return pixel_start+(value-limit_start)/Math.abs(limit_end-limit_start)*Math.abs(pixel_end-pixel_start)
+			if(shift==1){
+				return pixel_start+(value-limit_start)/Math.abs(limit_end-limit_start)*Math.abs(pixel_end-pixel_start)+step
+			} else {
+				return pixel_start+(value-limit_start)/Math.abs(limit_end-limit_start)*Math.abs(pixel_end-pixel_start)
+			}
 		}
 	} else if(type=='text'){
 		if(y==1){
 
 		} else {
 			var position=array.indexOf(value)+1
-			console.log(value,position,array.length)
 			return pixel_start+((2*position-1)/(2*array.length))*(pixel_end-pixel_start)
 		}
 	}
@@ -1007,6 +1047,9 @@ function create_numerical_axis(data,limit) {
 	if(steps>=1){
 	    rounded=Math.round(steps)
 	    digits=rounded.toString().length
+    } else if(steps==0){
+    	alert('No variation in either your x or y axis.')
+    	return
     } else {
     	var places=steps.toString().split('.')[1]
     	var first_place=0
@@ -1408,6 +1451,7 @@ function multitext(txt,attributes,max_width,svgname){
 
 
 function draw_axes(playobj,xvar,yvar,shiftx,shifty) {
+	console.log(xvar,yvar)
 	// draws the axes for a graph
 	// shiftx and shifty are optional parameters. If shiftx or shifty==1, that axis will
 	// be shifted such that labels occur between ticks, appropriate for a bar graph. There
