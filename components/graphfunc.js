@@ -201,7 +201,7 @@ function redraw() {
 			// now apply the style object
 			chartobject.style(style)
 			console.log(style)
-			console.log(graph_type)
+
 			// initialize axes
 			chartobject.xaxis({'label':xlabel,'number_of_ticks':5,'decimal':undefined,'format':undefined})
 			chartobject.yaxis({'label':ylabel,'number_of_ticks':5,'decimal':undefined,'format':undefined})

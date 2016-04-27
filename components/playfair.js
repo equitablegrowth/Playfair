@@ -34,7 +34,6 @@ window.playfair = (function () {
 	// data comes in as the final_data object - this is an object where each
 	// key is a row-heading that corresponds to a list of values
 	Playfair.prototype.data = function(data,geom_dict) {
-		console.log(geom_dict)
 		var datadict=[]
 		for(var key in data){
 			var items=data[key].length
@@ -351,7 +350,6 @@ window.playfair = (function () {
 
 		// draw axes
 		var axes=draw_axes(this,xaxis,yaxis,graph_obj.shiftx,graph_obj.shifty)
-		console.log(axes)
 
 		// draw geoms
 		if(typeof(chartobject.line)!=='undefined'){draw_lines(axes,graph_obj.line,snapobj)}
@@ -939,22 +937,22 @@ function draw_bars(axes,bar,snapobj){
 	// create sets of options for each grouping variable
 	if(bar.grouping.color!=='none'){
 		var color_groups=[...new Set(chartobject.flatdata[bar.grouping.color])]
-	} 
+	} else { var color_groups=['placeholder'] }
 	if(bar.grouping.bargroup!=='none'){
+		// what is this even for? I honestly don't remember. But I had a frontend for it, so I must have had something in mind.
 		var bargroup_groups=[...new Set(chartobject.flatdata[bar.grouping.bargroup])]
-	}
+	} else { var bargroup_groups=['placeholder'] }
 
 	// to figure out the width of a bar, need to find the two values that are *closest* on the x-axis.
 	// the bar width should be just large enough that those two bars have a little space between them
 	// this is already stored in mindiff
 	if(chartobject.flatdata[bar.xvar].dtype!='text'){
 		var totalwidth=chartobject.barchart_width*(get_coord(chartobject.mindiff,[chartobject.xarray[0],chartobject.xarray[chartobject.xarray.length-1]],[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-get_coord(0,[chartobject.xarray[0],chartobject.xarray[chartobject.xarray.length-1]],[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx))
-		console.log(chartobject.mindiff,get_coord(chartobject.mindiff,[chartobject.xarray[0],chartobject.xarray[chartobject.xarray.length-1]],[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx),get_coord(0,[chartobject.xarray[0],chartobject.xarray[chartobject.xarray.length-1]],[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx))
 		var barwidth=totalwidth
 		// cap barwidth based on overrunning the left or right side of the graph - ie bars should never break out of the axis box
-		if(totalwidth/2>get_coord(chartobject.xmin,[chartobject.xarray[0],chartobject.xarray[chartobject.xarray.length-1]],[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,1)-axes[0] || totalwidth/2>axes[1]-get_coord(chartobject.xmax,[chartobject.xarray[0],chartobject.xarray[chartobject.xarray.length-1]],[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)){
+		if(totalwidth/2>get_coord(chartobject.xmin,[chartobject.xarray[0],chartobject.xarray[chartobject.xarray.length-1]],[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-axes[0] || totalwidth/2>axes[1]-get_coord(chartobject.xmax,[chartobject.xarray[0],chartobject.xarray[chartobject.xarray.length-1]],[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)){
 			console.log('clipping')
-			var totalwidth=get_coord(chartobject.mindiff,[chartobject.xarray[0],chartobject.xarray[chartobject.xarray.length-1]],[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,1)-get_coord(0,[chartobject.xarray[0],chartobject.xarray[chartobject.xarray.length-1]],[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,1)
+			var totalwidth=chartobject.barchart_width*2*(get_coord(chartobject.xmin,[chartobject.xarray[0],chartobject.xarray[chartobject.xarray.length-1]],[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-axes[0])
 			var barwidth=totalwidth
 		}
 	} else {
@@ -999,12 +997,11 @@ function get_coord(value,[limit_start,limit_end],[pixel_start,pixel_end],type,ar
 	var range=Math.abs(pixel_end-pixel_start)
 
 	if(type!='text'){
-
-		// var step=chartobject.mindiff
-		var step=(range/((limit_end-limit_start)/chartobject.mindiff))
+		var step=(range/((limit_end-limit_start+1)*2))
 		if(shift==1){
 			pixel_end=pixel_end-step
 			pixel_start=pixel_start+step
+			console.log(step,pixel_end,pixel_start)
 		}
 
 		if(y==1){
@@ -1466,7 +1463,7 @@ function multitext(txt,attributes,max_width,svgname){
 
 
 function draw_axes(playobj,xvar,yvar,shiftx,shifty) {
-	console.log(xvar,yvar)
+	// console.log(xvar,yvar)
 	// draws the axes for a graph
 	// shiftx and shifty are optional parameters. If shiftx or shifty==1, that axis will
 	// be shifted such that labels occur between ticks, appropriate for a bar graph. There
@@ -1721,8 +1718,10 @@ function draw_axes(playobj,xvar,yvar,shiftx,shifty) {
 	domain=xfinal_xcoord-xstart_xcoord
 	if(shiftx==1){
 		if(chartobject.xarray.dtype!='text'){
-			var xshift=domain/((chartobject.xmax-chartobject.xmin)/chartobject.mindiff)
+			var xshift=domain/((chartobject.xmax-chartobject.xmin+1)*2)
 			var x_step=(domain-2*xshift)/(xvar.length-1)
+			// var step=(range/((limit_end-limit_start+1)*2))
+
 		} else {
 			var x_step=domain/(xvar.length)
 			var xshift=x_step/2
