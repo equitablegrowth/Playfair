@@ -89,7 +89,7 @@ function redraw() {
 			var bargroup=$("#bar_select_group").val()
 			var barspace=document.getElementById('spacing').checked
 
-			geom_dict['bar']={'xvar':x_var,'yvar':y_var,spacing:barspace,'grouping':{'color':color,'bargroup':bargroup}}
+			geom_dict['bar']={'xvar':x_var,'yvar':y_var,spacing:barspace,'orientation':'vertical','grouping':{'color':color,'bargroup':bargroup}}
 			ready=1
 		}
 
