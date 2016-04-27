@@ -47,7 +47,7 @@ function changedimensions() {
 
 // redraw is the main graphing setup function. Gets variable values and passes them to playfair.js
 function redraw() {
-	// try{
+	try{
 		//set up geom_dict by looking at all the stuff in chart and gathering variables as appropriate
 		var geom_dict={}
 		var ready=0
@@ -106,6 +106,7 @@ function redraw() {
 
 			// initialize playfair.js. First use init_graph to set up workspace, then call the
 			// data method to set up data and variables.
+			
 			// Why not just use.clear()? Because it will destroy all the embedded font declarations
 			// this is apparently a known bug in Snap
 			grapharea.selectAll('rect').remove()
@@ -134,15 +135,6 @@ function redraw() {
 
 			// // barchart specific
 			barspace=document.getElementById('spacing').checked
-
-			// // line/scatter specific
-			// points=document.getElementById('points').checked
-			// labels=document.getElementById('labels').checked
-			// us_shading=document.getElementById('recession_shading').checked
-			// arbitrary_shading=$('#arbitrary_intervals').val()
-			// label=$("#line_select_label").val()
-			// connect=$("#line_select_connect").val()
-			// size=$("#line_select_pointsize").val()
 
 			//point type
 			point_type=$('input[name=linepoint]:checked').val()
@@ -247,119 +239,16 @@ function redraw() {
 						$('#customy').val(chartobject.yarray)
 					}
 				}
-
-				// if (graph_type=='Line/Scatter') {
-				// 	options={}
-
-				// 	// get shading input from frontend
-				// 	shading=[]
-				// 	if (us_shading==true){
-				// 		shad=[['June 1 1857','December 1 1858'],['October 1 1860','June 1 1861'],['April 1 1865','December 1 1867'],['June 1 1869','December 1 1870'],['October 1 1873','March 1 1879'],['March 1 1882','May 1 1885'],['March 1 1887','April 1 1888'],['July 1 1890','May 1 1891'],['January 1 1893','June 1 1894'],['December 1 1895','June 1 1897'],['June 1 1899','December 1 1900'],['September 1 1902','August 1 1904'],['May 1 1907','June 1 1908'],['January 1 1910','January 1 1912'],['January 1 1913','December 1 1914'],['August 1 1918','March 1 1919'],['January 1 1920','July 1 1921'],['May 1 1923','July 1 1924'],['October 1 1926','November 1 1927'],['August 1 1929','March 1 1933'],['May 1 1937','June 1 1938'],['February 1 1945','October 1 1945'],['November 1 1948','October 1 1949'],['July 1 1953','May 1 1954'],['August 1 1957','April 1 1958'],['April 1 1960','February 1 1961'],['December 1 1969','November 1 1970'],['November 1 1973','March 1 1975'],['January 1 1980','July 1 1980'],['July 1 1981','November 1 1982'],['July 1 1990','March 1 1991'],['March 1 2001','November 1 2001'],['December 1 2007','June 1 2009']]
-				// 		for (var i=0;i<shad.length;i++){
-				// 			shading.push([new Date(shad[i][0]),new Date(shad[i][1])])
-				// 		}
-				// 	} else if (arbitrary_shading!=''){
-				// 		sa=arbitrary_shading.split('],[')
-				// 		saf=[]
-				// 		for(var i=0;i<sa.length;i++){
-				// 			temp=sa[i].replace('[','')
-				// 			temp=temp.replace(']','')
-				// 			saf.push([temp.split(',')[0],temp.split(',')[1]])
-				// 		}
-				// 		if (moment(saf[0][0], ["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY","YYYYqQ"],true).isValid()==true){
-				// 			for(var i=0;i<saf.length;i++){
-				// 				shading.push([new Date(moment(saf[i][0], ["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY","YYYYqQ"],true)),new Date(moment(saf[i][0], ["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY"],true))])
-				// 			}
-				// 		} else {
-				// 			for(var i=0;i<saf.length;i++){
-				// 				shading.push([parseFloat(saf[i][0]),parseFloat(saf[i][1])])
-				// 			}
-				// 		}
-				// 	}
-
-				// 	options['shading']=shading
-
-				// 	// get trendline input from frontend
-				// 	slopes=document.getElementsByClassName('slope')
-				// 	intercepts=document.getElementsByClassName('intercept')
-
-				// 	trends=[]
-
-				// 	for (var i=0;i<slopes.length;i++){
-				// 		trends.push([slopes[i].value,intercepts[i].value])
-				// 	}
-
-				// 	options['abline']=trends
-
-				// 	// get info on labelling variable from front end
-				// 	if (label!=='none'){
-				// 		options['label']=label
-				// 	}
-
-				// 	// get info on connecting variable from front end
-				// 	if (connect!=='none'){
-				// 		options['connect']=connect
-				// 	}
-
-				// 	// get info on bubble size variable from front end
-				// 	if (size!=='none'){
-				// 		options['size']=size
-				// 	}
-
-				// 	// get info on whether points should be drawn from front end
-				// 	if (points==true){
-				// 		options['points']=true
-				// 	} else {
-				// 		options['points']=false
-				// 	}
-
-				// 	// get info on whether labels should show by default from front end
-				// 	if (labels==true){
-				// 		options['labels']=true
-				// 	} else {
-				// 		options['labels']=false
-				// 	}
-
-				// 	// custom axes
-				// 	if ($('#customx').val()!='' && $("#customxcheck").prop('checked')==true){
-				// 		chartobject.xarray=$('#customx').val().split(',')
-				// 	}
-				// 	if ($('#customy').val()!='' && $("#customycheck").prop('checked')==true){
-				// 		chartobject.yarray=$('#customy').val().split(',')
-				// 	}
-
-				// 	chartobject.linechart(options)
-
-				// 	if(Object.prototype.toString.call(chartobject.xarray[0])==='[object Date]'){
-				// 		temp=[]
-				// 		for(var i=0;i<chartobject.xarray.length;i++){
-				// 			temp.push(moment(chartobject.xarray[i]).format('MMMM YYYY'))
-				// 		}
-				// 		$('#customx').val(temp)
-				// 	} else{
-				// 		$('#customx').val(chartobject.xarray)
-				// 	}
-
-				// 	if(Object.prototype.toString.call(chartobject.yarray[0])==='[object Date]'){
-				// 		temp=[]
-				// 		for(var i=0;i<chartobject.xarray.length;i++){
-				// 			temp.push(moment(chartobject.xarray[i]).format('MMMM YYYY'))
-				// 		}
-				// 		$('#customx').val(temp)
-				// 	} else{
-				// 		$('#customy').val(chartobject.yarray)
-				// 	}
-				// }
 			})
 		} 
 		else {
 			throw 'Nothing to graph!'
 		}
-	// } catch(err){
-	// 	alert(err)
-	// 	console.log(new Error().stack)
-	// 	console.trace()
-	// }
+	} catch(err){
+		alert(err)
+		console.log(new Error().stack)
+		console.trace()
+	}
 }
 
 /////////////////////// END UPDATE GRAPH ///////////////////////////////

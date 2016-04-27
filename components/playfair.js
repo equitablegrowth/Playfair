@@ -1164,6 +1164,132 @@ function create_numerical_axis(data,limit) {
 }
 
 
+function create_date_axis(data,limit){
+	var datamin=data[0]
+	var datamax=data[1]
+	var limitmin=limit[0]
+	var limitmax=limit[1]
+	var range=datamax-datamin
+
+	console.log('range: ',range,'maxdata: ',datamin,'mindata: ',datamax,'minlimit: ',limitmin,'maxlimit: ',limitmax)
+
+	// figure out what magnitude the range is - should we measure in years, months, or days?
+	var daylength=86400000
+	var monthlength=2628288000
+	var yearlength=31536000000
+
+	// if the range is more than 4 years, then the axis should be denominated in years
+	if (range>=yearlength*4){
+		var drange=datamax.getUTCFullYear()-datamin.getUTCFullYear()
+		var digits=drange.toString().length
+		var candidate_arrays=[]
+		var candidate_steps=[]
+		var nice_ticks=[.1,.2,.3,.4,.5,.6,.7,.8,.9,1]
+
+	    for (var i=0;i<nice_ticks.length;i++){
+			if(nice_ticks[i]*Math.pow(10,digits)>=1){candidate_steps.push(nice_ticks[i]*Math.pow(10,digits))}
+			if(nice_ticks[i]*Math.pow(10,digits-1)>=1){candidate_steps.push(nice_ticks[i]*Math.pow(10,digits-1))}
+			if(nice_ticks[i]*Math.pow(10,digits+1)>=1){candidate_steps.push(nice_ticks[i]*Math.pow(10,digits+1))}
+	    }
+
+		console.log('drange: ',drange,'digits: ',digits,candidate_steps)
+
+		// create step arrays. For dates, the lowest value should always be the first date so the line
+		// starts right away.
+		for (var i=0;i<candidate_steps.length;i++){
+	    	steps=parseInt(candidate_steps[i])
+	    	var temp=new Date(String(datamin.getUTCFullYear()))
+			step_array=[temp]
+
+	    	var stepnum=1
+		    while (step_array[step_array.length-1]<datamax){
+		    	var temp=new Date(String(parseInt(step_array[0].getUTCFullYear())+steps*stepnum))
+		        step_array.push(temp)
+		        stepnum++
+		    }
+
+		    // this arbitrarily enforces step_arrays of length between 4 and 10
+		    if (step_array.length<11 && step_array.length>3){candidate_arrays.push(step_array)}
+	    }
+	}
+
+	// if the range is more than 4 months but <4 years, the axis should be denominated in months
+	else if (range>=monthlength*4){
+		drange=(datamax.getUTCMonth()+datamax.getUTCFullYear()*12)-(datamin.getUTCMonth()+datamin.getUTCFullYear()*12)
+		digits=drange.toString().length
+		candidate_arrays=[]
+		candidate_steps=[]
+		nice_ticks=[.1,.2,.3,.4,.5,.6,.7,.8,.9,1]
+
+	    for (var i=0;i<nice_ticks.length;i++){
+			if(nice_ticks[i]*Math.pow(10,digits)>=1){candidate_steps.push(nice_ticks[i]*Math.pow(10,digits))}
+			if(nice_ticks[i]*Math.pow(10,digits-1)>=1){candidate_steps.push(nice_ticks[i]*Math.pow(10,digits-1))}
+			if(nice_ticks[i]*Math.pow(10,digits+1)>=1){candidate_steps.push(nice_ticks[i]*Math.pow(10,digits+1))}
+	    }
+
+		console.log('drange: ',drange,'digits: ',digits,'candidates: ',candidate_steps)
+
+		// create step arrays. For dates, the lowest value should always be the first date so the line
+		// starts right away.
+		for (var i=0;i<candidate_steps.length;i++){
+	    	steps=parseInt(candidate_steps[i])
+	    	var temp=new Date()
+	    	temp.setFullYear(datamin.getUTCFullYear())
+	    	temp.setMonth(datamin.getUTCMonth())
+	    	temp.setDate(datamin.getUTCDate())
+			step_array=[temp]
+
+	    	var stepnum=1
+		    while (step_array[step_array.length-1]<datamax){
+		    	var temp=new Date
+		    	temp.setFullYear(datamin.getUTCFullYear())
+		    	temp.setMonth(datamin.getUTCMonth()+stepnum*steps)
+		    	temp.setDate(datamin.getUTCDate())
+		        step_array.push(temp)
+		        stepnum++
+		    }
+
+		    // this arbitrarily enforces step_arrays of length between 4 and 10
+		    if (step_array.length<11 && step_array.length>3){candidate_arrays.push(step_array)}
+	    }
+	} 
+	// Otherwise the axis should be denominated in days. If it's too small than this, then it
+	// really shouldn't be a date at all - seconds or hours can just be counted. There is the edge
+	// case of tracking hours over more than one day and this may be a worthwhile future feature.
+	else {
+
+	}
+
+	// sort candidate_arrays by length (smallest first)
+	candidate_arrays.sort(function(a,b) {
+		return a.length-b.length
+	})
+
+	// now evaluate all possibilities in the candidate_array
+	best_score=Number.POSITIVE_INFINITY
+	for (var i=0;i<candidate_arrays.length;i++){
+		candidate_range=candidate_arrays[i][candidate_arrays[i].length-1]-candidate_arrays[i][0]
+		wasted=(candidate_range-range)/candidate_range
+
+		penalty=1
+		if(candidate_arrays[i].length>6){
+			penalty=1+.1*(candidate_arrays[i].length-6)
+		}
+
+		score=Math.pow(10,wasted)*penalty
+
+		if (score<best_score){
+			best_score=score
+			best_array=candidate_arrays[i]
+		}
+
+		console.log('array: ',candidate_arrays[i],'score: ',score,'penalty: ',penalty)
+	}
+
+	return best_array
+}
+
+
 function create_axis(dataseries,parameters) {
 
 	ticks = parameters['ticks'] || 5
