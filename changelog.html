@@ -20,7 +20,6 @@ body{width:700px;margin-left:auto;margin-right:auto;padding-top:22px;padding-bot
 <li> The UI has been redesigned and a lot of stuff has been moved around</li>
 <li> Changelog looks less crappy</li>
 <li> Charts now generally follow the grammar of graphics as implemented in ggplot2. This allows you to implement any 'geom' (points, lines, bars, etc.) on to any chart in any combination. This vastly increases the types of charts you can create.</li>
-<li> You can now use categorical values as an axis for any geom type.</li>
 <li> The following geoms are currently implemented:</li>
     <ul>
         <li>points</li>
@@ -34,6 +33,7 @@ body{width:700px;margin-left:auto;margin-right:auto;padding-top:22px;padding-bot
         <li>steps</li>
     </ul>
 <li> Changes to data storage and refactoring of code to make adding geoms easier in the future</li>
+<li> All geoms/chart types are now agnostic as to the type of axis. So you can make bar charts with a date axis or a numerical axis, line charts with a categorical axis and etc.</li>
 </ul>
 
 <h1>v1.7</h1>
