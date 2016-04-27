@@ -236,41 +236,25 @@ function loadData(coerce_array) {
 }
 
 function populate_variables(final_data) {
-
-	// save current variable values
-	x_var=$(".x_select").val()
-	y_var=$(".y_select").val()
-	group_var=$(".group_select").val()
-	label=$("#line_select_label").val()
-	connect=$("#line_select_connect").val()
-	size=$("#line_select_pointsize").val()
-
-	// reset menus
-	$(".variable_select")
-		.find('option')
-		.remove()
-		.end()
-		.append('<option value="none">Nothing selected</option>')
-		.val('none')
-
-	for (var key in final_data) {
-		$(".variable_select")
-			.append($("<option></option>")
-			.attr("value",key)
-			.text(key));
-	}
-
 	$(".variable_select").prop('disabled',false)
+	$(".variable_select").each(function(index){
+		var temp=$(this).val()
+		$(this)
+			.find('option')
+			.remove()
+			.end()
+			.append('<option value="none">Nothing selected</option>')
+			.val('none')
 
-	// if possible, set menus to previous values
-	// this needs to be redone now that you can't just set all x_selects as the same thing
-	// $(".x_select").val(x_var)
-	// $(".y_select").val(y_var)
-	// $(".group_select").val(group_var)
-	// $("#line_select_label").val(label)
-	// $("#line_select_connect").val(connect)
-	// $("#line_select_pointsize").val(size)
+			for (var key in final_data) {
+				$(this)
+					.append($("<option></option>")
+					.attr("value",key)
+					.text(key));
+			}
 
+			$(this).val(temp)
+	})
 }
 
 ///////////////////////// END LOAD DATA ////////////////////////////////
