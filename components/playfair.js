@@ -486,11 +486,14 @@ window.playfair = (function () {
 			graphobj.logo_width=0
 			graphobj.footer_height=0
 
-			if(note_coords-(graphobj.y+graphobj.height-graphobj.footer_bottompad-graphobj.footer_toppad)>graphobj.footer_height){
-				var difference=note_coords-(graphobj.y+graphobj.height-graphobj.footer_bottompad-graphobj.footer_toppad)-graphobj.footer_height
+			// if(note_coords-(graphobj.y+graphobj.height-graphobj.footer_bottompad-graphobj.footer_toppad)>graphobj.footer_height){
+			if(note_coords>graphobj.y+graphobj.height){
+				console.log('shoving')
 				graphobj.footer_height=note_coords-(graphobj.y+graphobj.height-graphobj.footer_bottompad-graphobj.footer_toppad)
-				try{source.attr({y:parseFloat(source.attr('y')-difference)})}catch(err){}
-				try{note.attr({y:parseFloat(note.attr('y')-difference)})}catch(err){}
+				// var difference=note_coords-(graphobj.y+graphobj.height-graphobj.footer_bottompad-graphobj.footer_toppad)-graphobj.footer_height
+				// graphobj.footer_height=note_coords-(graphobj.y+graphobj.height-graphobj.footer_bottompad-graphobj.footer_toppad)
+				try{source.attr({y:graphobj.y+graphobj.height-graphobj.footer_height+graphobj.footer_toppad})}catch(err){}
+				try{note.attr({y:graphobj.y+graphobj.height-graphobj.footer_height+graphobj.footer_toppad})}catch(err){}
 			}
 
 			callback(1)
