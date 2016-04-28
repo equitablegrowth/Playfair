@@ -1027,8 +1027,10 @@ function get_coord(value,[limit_start,limit_end],[pixel_start,pixel_end],type,ar
 	// at the value. Shift doesn't affect categorical axes, where shifting is always performed.
 	// if(shiftx==1){x_step=domain/(xvar.length)}
 	var range=Math.abs(pixel_end-pixel_start)
+	console.log(range,type)
 
 	if(type!='text'){
+		console.log('boo')
 		if(chartobject.datedenom){
 			var step=(range/((limit_end-limit_start+1)/chartobject.datedenom*2))
 			if(shift==1){
@@ -1049,9 +1051,11 @@ function get_coord(value,[limit_start,limit_end],[pixel_start,pixel_end],type,ar
 			return pixel_start+(value-limit_start)/Math.abs(limit_end-limit_start)*Math.abs(pixel_end-pixel_start)
 		}
 	} else if(type=='text'){
+		console.log('hi')
 		if(y==1){
-
+			console.log('nothing here!')
 		} else {
+			console.log(array,value)
 			var position=array.indexOf(value)+1
 			return pixel_start+((2*position-1)/(2*array.length))*(pixel_end-pixel_start)
 		}
@@ -1946,7 +1950,7 @@ function draw_axes(playobj,xvar,yvar,shiftx,shifty) {
 		for(var j=0;j<lines.length;j++){
 			if (Object.prototype.toString.call(xvar[i])!='[object Date]' && ((parseInt(lines[j])>=1000 || parseInt(lines[j])<=-1000))){linesj=commas(lines[j])} else{linesj=lines[j]}
 			// var temp=snapobj.text(xstart_xcoord+xshift*shiftx+x_step*i,playobj.y+playobj.height-playobj.bottom_margin-playobj.footer_height-xlab_height-playobj.xtick_to_xlabel-total_yoffset+playobj.xtick_to_xaxis+j*parseInt(playobj.xtick_textsize),linesj).attr({fill:this.xtick_textfill,ident:'xaxis','font-size':playobj.xtick_textsize,'font-weight':playobj.xtick_textweight,'font-family':playobj.xtick_textface,'dominant-baseline':'text-before-edge','text-anchor':'middle',colorchange:'fill',context:'text_context_menu'})
-			var tempx=get_coord(string,playobj.xlimits,[xstart_xcoord,xfinal_xcoord],xvar,xvar.dtype,0,playobj.shiftx)
+			var tempx=get_coord(string,playobj.xlimits,[xstart_xcoord,xfinal_xcoord],xvar.dtype,xvar,0,playobj.shiftx)
 			var temp=snapobj.text(tempx,playobj.y+playobj.height-playobj.bottom_margin-playobj.footer_height-xlab_height-playobj.xtick_to_xlabel-total_yoffset+playobj.xtick_to_xaxis+j*parseInt(playobj.xtick_textsize),linesj).attr({fill:this.xtick_textfill,ident:'xaxis','font-size':playobj.xtick_textsize,'font-weight':playobj.xtick_textweight,'font-family':playobj.xtick_textface,'dominant-baseline':'text-before-edge','text-anchor':'middle',colorchange:'fill',context:'text_context_menu'})
 			temp.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 			coords=temp.getBBox()
@@ -1995,16 +1999,18 @@ function draw_axes(playobj,xvar,yvar,shiftx,shifty) {
 		lines=multitext(string,{ident:'yaxis','font-size':playobj.ytick_textsize,'font-weight':playobj.ytick_textweight,'font-family':playobj.ytick_textface,'dominant-baseline':'text-before-edge','text-anchor':'end'},maxwidth)
 		for(var j=0;j<lines.length;j++){
 			if (parseInt(lines[j])>=1000 || parseInt(lines[j])<=-1000){linesj=commas(lines[j])} else{linesj=lines[j]}
-			var temp=snapobj.text(playobj.x+total_xoffset-playobj.ytick_to_yaxis,ystart_ycoord-(y_step/2)*shifty-y_step*i+j*parseInt(playobj.xtick_textsize),linesj).attr({fill:this.ytick_textfill,ident:'yaxis','font-size':playobj.ytick_textsize,'font-weight':playobj.ytick_textweight,'font-family':playobj.ytick_textface,'dominant-baseline':'text-before-edge','text-anchor':'end',colorchange:'fill',context:'text_context_menu'})
+			// var temp=snapobj.text(playobj.x+total_xoffset-playobj.ytick_to_yaxis,ystart_ycoord-(y_step/2)*shifty-y_step*i+j*parseInt(playobj.xtick_textsize),linesj).attr({fill:this.ytick_textfill,ident:'yaxis','font-size':playobj.ytick_textsize,'font-weight':playobj.ytick_textweight,'font-family':playobj.ytick_textface,'dominant-baseline':'text-before-edge','text-anchor':'end',colorchange:'fill',context:'text_context_menu'})
+			var tempy=get_coord(string,playobj.ylimits,[ystart_ycoord,yfinal_ycoord],yvar.dtype,yvar,1,playobj.shifty)
+			var temp=snapobj.text(playobj.x+total_xoffset-playobj.ytick_to_yaxis,tempy,linesj).attr({fill:this.ytick_textfill,ident:'yaxis','font-size':playobj.ytick_textsize,'font-weight':playobj.ytick_textweight,'font-family':playobj.ytick_textface,'dominant-baseline':'text-before-edge','text-anchor':'end',colorchange:'fill',context:'text_context_menu'})
 			temp.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 			coords=temp.getBBox()
 			temp.attr({y:coords.y-lines.length*coords.height/2})
 		}
 
 		// y-axis ticks, grid lines, and minor grid lines
-		var temp_line=snapobj.line(playobj.x+total_xoffset,ystart_ycoord-y_step*i,playobj.x+playobj.width-playobj.right_margin,ystart_ycoord-y_step*i).attr({stroke:playobj.ygrid_fill,'stroke-width':playobj.ygrid_thickness,'stroke-dasharray':playobj.ygrid_dasharray,opacity:playobj.ygrid_opacity,'shape-rendering':'crispEdges'})
-		if(i!=yvar.length-1){var temp_minorline=snapobj.line(playobj.x+total_xoffset,ystart_ycoord-(y_step/2)-y_step*i,playobj.x+playobj.width-playobj.right_margin,ystart_ycoord-(y_step/2)-y_step*i).attr({stroke:playobj.ygrid_minorfill,'stroke-width':playobj.ygrid_minorthickness,opacity:playobj.ygrid_minoropacity,'stroke-dasharray':playobj.ygrid_minordasharray,'shape-rendering':'crispEdges'})}
-		var temp_tick=snapobj.line(playobj.x+total_xoffset,ystart_ycoord-y_step*i,playobj.x+total_xoffset-playobj.ytick_length,ystart_ycoord-y_step*i).attr({stroke:playobj.ytick_fill,'stroke-width':playobj.ytick_thickness,'shape-rendering':'crispEdges'})
+		var temp_line=snapobj.line(playobj.x+total_xoffset,tempy,playobj.x+playobj.width-playobj.right_margin,tempy).attr({stroke:playobj.ygrid_fill,'stroke-width':playobj.ygrid_thickness,'stroke-dasharray':playobj.ygrid_dasharray,opacity:playobj.ygrid_opacity,'shape-rendering':'crispEdges'})
+		if(i!=yvar.length-1){var temp_minorline=snapobj.line(playobj.x+total_xoffset,tempy,playobj.x+playobj.width-playobj.right_margin,tempy).attr({stroke:playobj.ygrid_minorfill,'stroke-width':playobj.ygrid_minorthickness,opacity:playobj.ygrid_minoropacity,'stroke-dasharray':playobj.ygrid_minordasharray,'shape-rendering':'crispEdges'})}
+		var temp_tick=snapobj.line(playobj.x+total_xoffset,tempy,playobj.x+total_xoffset-playobj.ytick_length,tempy).attr({stroke:playobj.ytick_fill,'stroke-width':playobj.ytick_thickness,'shape-rendering':'crispEdges'})
 
 		// handle y=0 as appropriate
 		if(Object.prototype.toString.call(yvar[i])!='[object Date]'){
