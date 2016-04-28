@@ -62,6 +62,7 @@ window.playfair = (function () {
 		this.stackedbar=geom_dict.stackedbar
 		this.shifty=0
 		this.shiftx=0
+		this.datedenom=[0,0]
 
 		var xmaxes=[]
 		var xmins=[]
@@ -92,7 +93,8 @@ window.playfair = (function () {
 
 					if(typeof(data[geom_dict[key]['xvar']][0])=='string'){
 						xstrings.push(...data[geom_dict[key]['xvar']])
-					}
+					} // nothing should be pushed to xmaxes if the dtype of the variable in question is string - this results in strings being interpreted as numbers
+					// FIX FIX FIX
 				}
 
 				// this on the other hand should work, summing on each possible value of x
@@ -225,7 +227,7 @@ window.playfair = (function () {
 		if(Object.prototype.toString.call(xmaxes[0])==='[object Date]'){
 			this.xmax=new Date(moment(Math.max(...xmaxes)))
 			this.xmin=new Date(moment(Math.min(...xmins)))
-		} else{
+		} else {
 			this.xmax=Math.max(...xmaxes)
 			this.xmin=Math.min(...xmins)
 		}
@@ -233,7 +235,7 @@ window.playfair = (function () {
 		if(Object.prototype.toString.call(ymaxes[0])==='[object Date]'){
 			this.ymax=new Date(moment(Math.max(...ymaxes)))
 			this.ymin=new Date(moment(Math.min(...ymins)))
-		} else{
+		} else {
 			this.ymax=Math.max(...ymaxes)
 			this.ymin=Math.min(...ymins)
 		}
@@ -299,14 +301,15 @@ window.playfair = (function () {
 				var xaxis=create_numerical_axis([graph_obj.xmin,graph_obj.xmax],[graph_obj.xmin,graph_obj.xmax])
 				xaxis.dtype='numeric'
 			} else if(Object.prototype.toString.call(graph_obj.xmax)==='[object Date]'){
-				var xaxis=create_date_axis([graph_obj.xmin,graph_obj.xmax],[options['xlimit_min'],options['xlimit_max']])
+				var xaxis=create_date_axis([graph_obj.xmin,graph_obj.xmax],[options['xlimit_min'],options['xlimit_max']],0)
 				xaxis.dtype='date'
 			}
 			graph_obj.xarray=xaxis
 		} else {
-			if(Object.prototype.toString.call(graph_obj.xarray[0])==='[object Date]'){
+			if(Object.prototype.toString.call(graph_obj.xmax)==='[object Date]'){
 				for (var i=0;i<graph_obj.xarray.length;i++){
 					graph_obj.xarray[i]=new Date(moment(graph_obj.xarray[i]))
+					graph_obj.xarray.dtype='date'
 				}
 			}
 		}
@@ -322,14 +325,15 @@ window.playfair = (function () {
 				var yaxis=create_numerical_axis([graph_obj.ymin,graph_obj.ymax],[graph_obj.ymin,graph_obj.ymax])
 				yaxis.dtype='numeric'
 			} else if(Object.prototype.toString.call(graph_obj.ymax)==='[object Date]'){
-				var yaxis=create_date_axis([graph_obj.ymin,graph_obj.ymax],[options['ylimit_min'],options['ylimit_max']])
+				var yaxis=create_date_axis([graph_obj.ymin,graph_obj.ymax],[options['ylimit_min'],options['ylimit_max']],1)
 				yaxis.dtype='date'
 			}
 			graph_obj.yarray=yaxis
 		} else {
-			if(Object.prototype.toString.call(graph_obj.yarray[0])==='[object Date]'){
+			if(Object.prototype.toString.call(graph_obj.ymax)==='[object Date]'){
 				for (var i=0;i<graph_obj.yarray.length;i++){
 					graph_obj.yarray[i]=new Date(moment(graph_obj.yarray[i]))
+					graph_obj.yarray.dtype='date'
 				}
 			}
 		}
@@ -349,24 +353,24 @@ window.playfair = (function () {
 		// versions of the axes. It's not clear to me that this is the right way to do this but the rationale is that
 		// this supports some flexibility in custom axes. You can have a custom axis like: [$3,4.00,5]. There are
 		// legitimate reasons to do this so for now this is what it is.
-		var xmaxis=[]
-		var ymaxis=[]
+		// var xmaxis=[]
+		// var ymaxis=[]
 
-		if(Object.prototype.toString.call(xaxis[0])==='[object Date]'){
-			xmaxis=xaxis
-		} else{
-			for(var i=0;i<xaxis.length;i++){
-				xmaxis.push(xaxis[i].replace(/[^0-9\.\-]+/g, ''))
-			}
-		}
+		// if(Object.prototype.toString.call(xaxis[0])==='[object Date]'){
+		// 	xmaxis=xaxis
+		// } else{
+		// 	for(var i=0;i<xaxis.length;i++){
+		// 		xmaxis.push(xaxis[i].replace(/[^0-9\.\-]+/g, ''))
+		// 	}
+		// }
 
-		if(Object.prototype.toString.call(yaxis[0])==='[object Date]'){
-			ymaxis=yaxis
-		} else{
-			for(var i=0;i<yaxis.length;i++){
-				ymaxis.push(yaxis[i].replace(/[^0-9\.\-]+/g, ''))
-			}
-		}
+		// if(Object.prototype.toString.call(yaxis[0])==='[object Date]'){
+		// 	ymaxis=yaxis
+		// } else{
+		// 	for(var i=0;i<yaxis.length;i++){
+		// 		ymaxis.push(yaxis[i].replace(/[^0-9\.\-]+/g, ''))
+		// 	}
+		// }
 
 		// YOU ARE HERE HANDLE GUI STUFF
 		// start drawing stuff.
@@ -1027,10 +1031,12 @@ function get_coord(value,[limit_start,limit_end],[pixel_start,pixel_end],type,ar
 	// at the value. Shift doesn't affect categorical axes, where shifting is always performed.
 	// if(shiftx==1){x_step=domain/(xvar.length)}
 	var range=Math.abs(pixel_end-pixel_start)
+	console.log(value,[limit_start,limit_end],[pixel_start,pixel_end],type,array,y,shift)
 
 	if(type!='text'){
-		if(chartobject.datedenom){
-			var step=(range/((limit_end-limit_start+1)/chartobject.datedenom*2))
+		if(chartobject.datedenom[y]>0){
+			var value=new Date(moment(value))
+			var step=(range/((limit_end-limit_start+1)/chartobject.datedenom[y]*2))
 			if(shift==1){
 				pixel_end=pixel_end-step
 				pixel_start=pixel_start+step
@@ -1193,7 +1199,7 @@ function create_numerical_axis(data,limit) {
 }
 
 
-function create_date_axis(data,limit){
+function create_date_axis(data,limit,y){
 	var datamin=data[0]
 	var datamax=data[1]
 	var limitmin=limit[0]
@@ -1209,7 +1215,7 @@ function create_date_axis(data,limit){
 
 	// if the range is more than 4 years, then the axis should be denominated in years
 	if (range>=yearlength*4){
-		chartobject.datedenom=yearlength
+		chartobject.datedenom[y]=yearlength
 		var drange=datamax.getUTCFullYear()-datamin.getUTCFullYear()
 		var digits=drange.toString().length
 		var candidate_arrays=[]
@@ -1245,7 +1251,7 @@ function create_date_axis(data,limit){
 
 	// if the range is more than 4 months but <4 years, the axis should be denominated in months
 	else if (range>=monthlength*4){
-		chartobject.datedenom=monthlength
+		chartobject.datedenom[y]=monthlength
 		drange=(datamax.getUTCMonth()+datamax.getUTCFullYear()*12)-(datamin.getUTCMonth()+datamin.getUTCFullYear()*12)
 		digits=drange.toString().length
 		candidate_arrays=[]
@@ -1885,8 +1891,8 @@ function draw_axes(playobj,xvar,yvar,shiftx,shifty) {
 	domain=xfinal_xcoord-xstart_xcoord
 	if(shiftx==1){
 		if(chartobject.xarray.dtype!='text'){
-			if(chartobject.datedenom){
-				var xshift=domain/((chartobject.xlimits[1]-chartobject.xlimits[0])/chartobject.datedenom*2)
+			if(chartobject.datedenom[0]>0){
+				var xshift=domain/((chartobject.xlimits[1]-chartobject.xlimits[0])/chartobject.datedenom[0]*2)
 				var x_step=(domain-2*xshift)/(xvar.length-1)
 			} else{
 				var xshift=domain/((chartobject.xlimits[1]-chartobject.xlimits[0])*2)
@@ -1946,7 +1952,8 @@ function draw_axes(playobj,xvar,yvar,shiftx,shifty) {
 		for(var j=0;j<lines.length;j++){
 			if (Object.prototype.toString.call(xvar[i])!='[object Date]' && ((parseInt(lines[j])>=1000 || parseInt(lines[j])<=-1000))){linesj=commas(lines[j])} else{linesj=lines[j]}
 			// var temp=snapobj.text(xstart_xcoord+xshift*shiftx+x_step*i,playobj.y+playobj.height-playobj.bottom_margin-playobj.footer_height-xlab_height-playobj.xtick_to_xlabel-total_yoffset+playobj.xtick_to_xaxis+j*parseInt(playobj.xtick_textsize),linesj).attr({fill:this.xtick_textfill,ident:'xaxis','font-size':playobj.xtick_textsize,'font-weight':playobj.xtick_textweight,'font-family':playobj.xtick_textface,'dominant-baseline':'text-before-edge','text-anchor':'middle',colorchange:'fill',context:'text_context_menu'})
-			var tempx=get_coord(string,playobj.xlimits,[xstart_xcoord,xfinal_xcoord],xvar.dtype,xvar,0,playobj.shiftx)
+			console.log(xvar)
+			var tempx=get_coord(xvar[i],playobj.xlimits,[xstart_xcoord,xfinal_xcoord],xvar.dtype,xvar,0,playobj.shiftx)
 			var temp=snapobj.text(tempx,playobj.y+playobj.height-playobj.bottom_margin-playobj.footer_height-xlab_height-playobj.xtick_to_xlabel-total_yoffset+playobj.xtick_to_xaxis+j*parseInt(playobj.xtick_textsize),linesj).attr({fill:this.xtick_textfill,ident:'xaxis','font-size':playobj.xtick_textsize,'font-weight':playobj.xtick_textweight,'font-family':playobj.xtick_textface,'dominant-baseline':'text-before-edge','text-anchor':'middle',colorchange:'fill',context:'text_context_menu'})
 			temp.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 			coords=temp.getBBox()
