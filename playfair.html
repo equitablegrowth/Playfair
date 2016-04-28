@@ -1534,7 +1534,7 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 	var tab=$('.nav-tabs .active').children()[0].getAttribute('href')
 	$(tab+'_first').click()
 
-	if ($('.nav-tabs .active').text()!='Design' && $('.nav-tabs .active').text()!='Settings') {
+	if ($('.nav-tabs .active').text()!='Design' && $('.nav-tabs .active').text()!='Settings' && $('.nav-tabs .active').text()!='Data') {
 		graph_type=$('.nav-tabs .active').text()
 	}
 });

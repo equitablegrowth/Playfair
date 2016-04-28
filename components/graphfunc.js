@@ -21,34 +21,46 @@ function changedimensions() {
 		height=$('#gheight').val()
 	}
 
-	if (parseFloat(width)>745){	
-		$('#help_general')[0].style.display='none'
-		$('#help_text')[0].style.display='none'
-	} else {
-		$('#help_general')[0].style.display='block'
-		$('#help_text')[0].style.display='none'	
-	}
+	// if (parseFloat(width)>745){	
+	// 	$('#help_general')[0].style.display='none'
+	// 	$('#help_text')[0].style.display='none'
+	// } else {
+	// 	$('#help_general')[0].style.display='block'
+	// 	$('#help_text')[0].style.display='none'	
+	// }
 
-	$('#grapharea').attr('height',height)
-	$('#grapharea').attr('width',width)
-	// $('#constraint').attr('style','max-width:'+width+';margin-left:auto;margin-right:auto')
+	// $('#grapharea').attr('height',height)
+	// $('#grapharea').attr('width',width)
+	// // $('#constraint').attr('style','max-width:'+width+';margin-left:auto;margin-right:auto')
 
-	grapharea.selectAll('rect').remove()
-	grapharea.selectAll('text').remove()
-	grapharea.selectAll('line').remove()
-	grapharea.selectAll('circle').remove()
-	grapharea.selectAll('path').remove()
-	grapharea.selectAll('image').remove()
+	// grapharea.selectAll('rect').remove()
+	// grapharea.selectAll('text').remove()
+	// grapharea.selectAll('line').remove()
+	// grapharea.selectAll('circle').remove()
+	// grapharea.selectAll('path').remove()
+	// grapharea.selectAll('image').remove()
 
-	placeholder()
-	redraw()
+	// placeholder()
+	// redraw()
 }
 
 
 // redraw is the main graphing setup function. Gets variable values and passes them to playfair.js
 function redraw() {
 	try{
-		//set up geom_dict by looking at all the stuff in chart and gathering variables as appropriate
+		// set size
+		$('#grapharea').attr('height',height)
+		$('#grapharea').attr('width',width)
+
+		if (parseFloat(width)>745){	
+			$('#help_general')[0].style.display='none'
+			$('#help_text')[0].style.display='none'
+		} else {
+			$('#help_general')[0].style.display='block'
+			$('#help_text')[0].style.display='none'	
+		}
+
+		// set up geom_dict by looking at all the stuff in chart and gathering variables as appropriate
 		var geom_dict={}
 		var ready=0
 

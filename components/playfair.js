@@ -1027,10 +1027,8 @@ function get_coord(value,[limit_start,limit_end],[pixel_start,pixel_end],type,ar
 	// at the value. Shift doesn't affect categorical axes, where shifting is always performed.
 	// if(shiftx==1){x_step=domain/(xvar.length)}
 	var range=Math.abs(pixel_end-pixel_start)
-	console.log(range,type)
 
 	if(type!='text'){
-		console.log('boo')
 		if(chartobject.datedenom){
 			var step=(range/((limit_end-limit_start+1)/chartobject.datedenom*2))
 			if(shift==1){
@@ -1051,11 +1049,9 @@ function get_coord(value,[limit_start,limit_end],[pixel_start,pixel_end],type,ar
 			return pixel_start+(value-limit_start)/Math.abs(limit_end-limit_start)*Math.abs(pixel_end-pixel_start)
 		}
 	} else if(type=='text'){
-		console.log('hi')
 		if(y==1){
 			console.log('nothing here!')
 		} else {
-			console.log(array,value)
 			var position=array.indexOf(value)+1
 			return pixel_start+((2*position-1)/(2*array.length))*(pixel_end-pixel_start)
 		}
