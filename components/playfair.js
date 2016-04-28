@@ -83,18 +83,20 @@ window.playfair = (function () {
 
 			if(key=='area' | key=='stackedbar'){
 				// this needs to eventually be changed. Right now the assumption is that stacked bars are
-				// stacked on the y-axis so no transformation of x is necessary.
+				// stacked on the y-axis so no transformation of x is necessary. Also it is currently going
+				// to sum on both axes which is clearly wrong. (ok not really but it needs to distinguish
+				// between which axis it should be summing on).
+
 				if(Object.prototype.toString.call(data[geom_dict[key]['xvar']][0])==='[object Date]'){
 					xmaxes.push(new Date(moment(Math.max(...data[geom_dict[key]['xvar']]))))
 					xmins.push(new Date(moment(Math.min(...data[geom_dict[key]['xvar']]))))
+				} else if(data[geom_dict[key]['xvar']].dtype=='text'){
+					xstrings.push(...data[geom_dict[key]['xvar']])
+					xmaxes.push('placeholder')
+					xmins.push('placeholder')
 				} else {
 					xmaxes.push(Math.max(...data[geom_dict[key]['xvar']]))
 					xmins.push(Math.min(...data[geom_dict[key]['xvar']]))
-
-					if(typeof(data[geom_dict[key]['xvar']][0])=='string'){
-						xstrings.push(...data[geom_dict[key]['xvar']])
-					} // nothing should be pushed to xmaxes if the dtype of the variable in question is string - this results in strings being interpreted as numbers
-					// FIX FIX FIX
 				}
 
 				// this on the other hand should work, summing on each possible value of x
@@ -184,11 +186,11 @@ window.playfair = (function () {
 				if(Object.prototype.toString.call(data[geom_dict[key]['xvar']][0])==='[object Date]'){
 					xmaxes.push(new Date(moment(Math.max(...data[geom_dict[key]['xvar']]))))
 					xmins.push(new Date(moment(Math.min(...data[geom_dict[key]['xvar']]))))
+				} else if (data[geom_dict[key]['xvar']].dtype=='text'){
+					xstrings.push(...data[geom_dict[key]['xvar']])
+					xmaxes.push('placeholder')
+					xmins.push('placeholder')
 				} else {
-					if(typeof(data[geom_dict[key]['xvar']][0])=='string'){
-						xstrings.push(...data[geom_dict[key]['xvar']])
-					}
-
 					xmaxes.push(Math.max(...data[geom_dict[key]['xvar']]))
 					xmins.push(Math.min(...data[geom_dict[key]['xvar']]))
 				}
@@ -196,11 +198,11 @@ window.playfair = (function () {
 				if(Object.prototype.toString.call(data[geom_dict[key]['yvar']][0])==='[object Date]'){
 					ymaxes.push(new Date(moment(Math.max(...data[geom_dict[key]['yvar']]))))
 					ymins.push(new Date(moment(Math.min(...data[geom_dict[key]['yvar']]))))
+				} else if(data[geom_dict[key]['yvar']].dtype=='text') {
+					ystrings.push(...data[geom_dict[key]['yvar']])
+					ymaxes.push('placeholder')
+					ymins.push('placeholder')
 				} else {
-					if(typeof(data[geom_dict[key]['yvar']][0])=='string'){
-						ystrings.push(...data[geom_dict[key]['yvar']])
-					}
-
 					ymaxes.push(Math.max(...data[geom_dict[key]['yvar']]))
 					ymins.push(Math.min(...data[geom_dict[key]['yvar']]))
 				}
