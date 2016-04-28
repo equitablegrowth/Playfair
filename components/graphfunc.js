@@ -106,7 +106,7 @@ function redraw() {
 
 			// initialize playfair.js. First use init_graph to set up workspace, then call the
 			// data method to set up data and variables.
-			
+
 			// Why not just use.clear()? Because it will destroy all the embedded font declarations
 			// this is apparently a known bug in Snap
 			grapharea.selectAll('rect').remove()
@@ -202,12 +202,18 @@ function redraw() {
 			chartobject.footer(source,note,function(){
 				// draw the initial graph, dependent on current value of graph_type
 				if (graph_type=='Chart') {
-
 					if ($('#customx').val()!='' && $("#customxcheck").prop('checked')==true){
 						chartobject.xarray=$('#customx').val().split(',')
 					}
 					if ($('#customy').val()!='' && $("#customycheck").prop('checked')==true){
 						chartobject.yarray=$('#customy').val().split(',')
+					}
+
+					if ($('#xlimits').val()!='' && $("#xlimitscheck").prop('checked')==true){
+						chartobject.xlimits=$('#xlimits').val().split(',')
+					}
+					if ($('#ylimits').val()!='' && $("#ylimitscheck").prop('checked')==true){
+						chartobject.ylimits=$('#ylimits').val().split(',')
 					}
 
 					var options={}

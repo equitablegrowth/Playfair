@@ -35,6 +35,7 @@ body{width:700px;margin-left:auto;margin-right:auto;padding-top:22px;padding-bot
 <li> Changes to data storage and refactoring of code to make adding geoms easier in the future</li>
 <li> All geoms/chart types are now agnostic as to the type of axis. So you can make bar charts with a date axis or a numerical axis, line charts with a categorical axis and etc.</li>
 <li>Saving has changed a fair bit and the geom structure is incompatible with the way Playfair used to handle charts, so pre 2.0 saves are incompatible with 2.0</li>
+<li>In addition to creating custom axes, you can now specify limits for you graph. For example, if you specify an axis of 1,1.5,2,2.5 and limits of .5,3, there will be ticks at the axis numbers, but the graph will will start and end at .5 and 3. It doesn't seem to work properly with the bar geom right now however.
 </ul>
 
 <h1>v1.7</h1>
