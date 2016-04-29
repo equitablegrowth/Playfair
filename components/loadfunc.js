@@ -7,8 +7,8 @@
 // a check for graphing functions.
 
 function gen_coerce_array() {
-	coerce_array=[]
-	temp=$('.dataselect select')
+	var coerce_array=[]
+	var temp=$('.dataselect select')
 	for(var i=0;i<temp.length;i++){
 		coerce_array.push($(temp[i]).val())
 	}
@@ -21,21 +21,23 @@ function loadData(coerce_array) {
 		coerce_array=[]
 	}
 
-	alerted=1
+	var alerted=1
 	alertbox=document.getElementById('bad_data')
 	alertbox.style.display='none'
-	delimit=null
+	var delimit=null
 	d=document.getElementById('data_text').value
 	d=d.trim()
 	d=d.split('\n')
+
+	// detect and set the delimiter. If you ever want to add more delimiters...
 	if (d[0].indexOf('	')>-1) {delimit='	'} else if (d[0].indexOf(',')>-1) {delimit=','}
 
 	// Does every row have the same number of columns?
-	columns=d[0].split(delimit).length
-	flag=0
+	var columns=d[0].split(delimit).length
+	var flag=0
 	for (var i=0;i<d.length;i++) {
 		if (d[i].split(delimit).length!=columns){
-			flag=1
+			var flag=1
 		}
 	}
 
@@ -59,16 +61,21 @@ function loadData(coerce_array) {
 
 	// loop through columns and data points, check each one for dates. *ALL* datapoints must be
 	// dates to qualify. If the column is not a date, check to see if it is numeric/text. A non-date
-	// column is flagged as text if any alpha characters are found.
+	// column is flagged as text if any alpha characters are found. 
+
+	// As of Playfair 2.0, this is a little more flexible. Missing data is omitted for the purpose
+	// of deciding what a column is.
+
 	if(coerce_array.length==0){
 		for (var i=0; i<columns;i++) {
-			date=true
-			type='numeric'
+			var date=true
+			var type='numeric'
 			for (var j=1;j<d.length;j++) {
-				if (moment(d[j][i], ["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY","MM/YYYY","MM-YYYY","YYYYqQ"],true).isValid()==false){
-					date=false
+				if(d[j][i]==''){var missing=1}
+				if (missing!=1 && moment(d[j][i], ["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY","MM/YYYY","MM-YYYY","YYYYqQ"],true).isValid()==false){
+					var date=false
 				}
-				if (d[j][i].search(alpha)>-1) {type='text'} else{
+				if (d[j][i].search(alpha)>-1) {type='text'} else {
 					// clean numeric junk
 					if(date==false){
 						d[j][i] = d[j][i].replace(/[^0-9\.-]+/g, "")

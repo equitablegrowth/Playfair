@@ -34,8 +34,9 @@ body{width:700px;margin-left:auto;margin-right:auto;padding-top:22px;padding-bot
     </ul>
 <li> Changes to data storage and refactoring of code to make adding geoms easier in the future</li>
 <li> All geoms/chart types are now agnostic as to the type of axis. So you can make bar charts with a date axis or a numerical axis, line charts with a categorical axis and etc.</li>
-<li>Saving has changed a fair bit and the geom structure is incompatible with the way Playfair used to handle charts, so pre 2.0 saves are incompatible with 2.0</li>
-<li>In addition to creating custom axes, you can now specify limits for you graph. For example, if you specify an axis of 1,1.5,2,2.5 and limits of .5,3, there will be ticks at the axis numbers, but the graph will will start and end at .5 and 3. It doesn't seem to work properly with the bar geom right now however.
+<li> Saving has changed a fair bit and the geom structure is incompatible with the way Playfair used to handle charts, so pre 2.0 saves are incompatible with 2.0</li>
+<li> In addition to creating custom axes, you can now specify limits for you graph. For example, if you specify an axis of 1,1.5,2,2.5 and limits of .5,3, there will be ticks at the axis numbers, but the graph will will start and end at .5 and 3. It doesn't seem to work properly with the bar geom right now however.
+<li> Missing data is handled much differently now. If your dataset has missing data, the row will not be subject to listwise deletion. Instead the row will be kept and, when possible, used for graphing. Moreover, if you are creating a line graph, missing data will be interpreted as interruptions in the line. If you don't want gaps in your line, remove missing data first. Missing data should be exactly that - missing. If comma delimited - ',,' etc. A dot from Stata or similar will work in some instances but not others.
 </ul>
 
 <h1>v1.7</h1>

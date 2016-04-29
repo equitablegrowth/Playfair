@@ -59,30 +59,6 @@ function savesvg() {
 	}
 }
 
-function savesettings() {
-	// figure out a server-side solution for this. Until then, this makes a text file
-	// that can be imported.
-	console.log(chartobject)
-	var svg = document.getElementById("grapharea").innerHTML
-	var data='['+JSON.stringify(chartobject)+','+svg+','+JSON.stringify(final_data)+']'
-	var url= 'data:text/json;charset=utf8,' + encodeURIComponent(data);
-	// window.location.href=url
-	window.open(url, '_blank');
-	window.focus();
-}
-
-function importsettings() {
-	// Load a text object, update the app using these indices:
-	// 0: the playfair chartobject
-	// 1: SVG innerhtml
-	// 2: the final_data object (used to populate variable dropdowns)
-	console.log(document.getElementById('importtext').value)
-
-	// chartobject=data[0]
-	// document.getElementById("grapharea").innerHTML=data[1]
-	// populate_variables(data[2])
-}
-
 function cloudsave() {
 	// remove any selected text boxes
 	try{
@@ -262,7 +238,6 @@ function load_populate(response) {
 		}
 		if(inputs[input][0]=='dropdown'){
 			$('#'+input).val(inputs[input][1])
-			// $('#'+input).selectpicker('refresh')
 		}
 		if(inputs[input][0]=='graphtype'){
 			graph_type=inputs[input][1]
@@ -278,7 +253,6 @@ function load_populate(response) {
 
 	$('#grapharea').attr('height',height)
 	$('#grapharea').attr('width',width)
-	// $('#constraint').attr('style','max-width:'+width+';margin-left:auto;margin-right:auto')
 
 	// load the correct number of slope/intercept fields and populate
 	if (inputs['slope'][0]!='text'){
@@ -329,7 +303,6 @@ function load_populate(response) {
 	// stick drag method on the things that need it.
 	drag_eles=grapharea.selectAll('rect[ident2="floatkey"]')
 	for(var i=0;i<drag_eles.length;i++){
-		// console.log(drag_eles[i])
 		drag_eles[i].drag(moveFuncfloat,function(){x=this.attr('x');y=this.attr('y');prevx=0;prevy=0})
 	}
 

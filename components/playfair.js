@@ -88,15 +88,17 @@ window.playfair = (function () {
 				// between which axis it should be summing on).
 
 				if(Object.prototype.toString.call(data[geom_dict[key]['xvar']][0])==='[object Date]'){
-					xmaxes.push(new Date(moment(Math.max(...data[geom_dict[key]['xvar']]))))
-					xmins.push(new Date(moment(Math.min(...data[geom_dict[key]['xvar']]))))
+					if(isNaN(data[geom_dict[key]['xvar']][i].getTime()==false)){
+						xmaxes.push(new Date(moment(Math.max(...data[geom_dict[key]['xvar']]))))
+						xmins.push(new Date(moment(Math.min(...data[geom_dict[key]['xvar']]))))
+					}
 				} else if(data[geom_dict[key]['xvar']].dtype=='text'){
 					xstrings.push(...data[geom_dict[key]['xvar']])
 					xmaxes.push('placeholder')
 					xmins.push('placeholder')
 				} else {
-					xmaxes.push(Math.max(...data[geom_dict[key]['xvar']]))
-					xmins.push(Math.min(...data[geom_dict[key]['xvar']]))
+					xmaxes.push(Math.max(...remove_missing(data[geom_dict[key]['xvar']])))
+					xmins.push(Math.min(...remove_missing(data[geom_dict[key]['xvar']])))
 				}
 
 				// this on the other hand should work, summing on each possible value of x
@@ -184,31 +186,46 @@ window.playfair = (function () {
 				}
 
 				if(Object.prototype.toString.call(data[geom_dict[key]['xvar']][0])==='[object Date]'){
-					xmaxes.push(new Date(moment(Math.max(...data[geom_dict[key]['xvar']]))))
-					xmins.push(new Date(moment(Math.min(...data[geom_dict[key]['xvar']]))))
+					for (var i=0;i<data[geom_dict[key]['xvar']].length;i++){
+						if(isNaN(data[geom_dict[key]['xvar']][i].getTime()==false)){
+							xmaxes.push(new Date(moment(Math.max(...data[geom_dict[key]['xvar']]))))
+							xmins.push(new Date(moment(Math.min(...data[geom_dict[key]['xvar']]))))
+						}
+					}
 				} else if (data[geom_dict[key]['xvar']].dtype=='text'){
-					xstrings.push(...data[geom_dict[key]['xvar']])
+					for (var i=0;i<data[geom_dict[key]['xvar']].length;i++){
+						if (data[geom_dict[key]['xvar']][i]!=''){
+							xstrings.push(...data[geom_dict[key]['xvar']])
+						}
+					}
 					xmaxes.push('placeholder')
 					xmins.push('placeholder')
 				} else {
-					xmaxes.push(Math.max(...data[geom_dict[key]['xvar']]))
-					xmins.push(Math.min(...data[geom_dict[key]['xvar']]))
+					xmaxes.push(Math.max(...remove_missing(data[geom_dict[key]['xvar']])))
+					xmins.push(Math.min(...remove_missing(data[geom_dict[key]['xvar']])))
 				}
 
 				if(Object.prototype.toString.call(data[geom_dict[key]['yvar']][0])==='[object Date]'){
-					ymaxes.push(new Date(moment(Math.max(...data[geom_dict[key]['yvar']]))))
-					ymins.push(new Date(moment(Math.min(...data[geom_dict[key]['yvar']]))))
+					if(isNaN(data[geom_dict[key]['yvar']][i].getTime()==false)){
+						ymaxes.push(new Date(moment(Math.max(...data[geom_dict[key]['yvar']]))))
+						ymins.push(new Date(moment(Math.min(...data[geom_dict[key]['yvar']]))))
+					}
 				} else if(data[geom_dict[key]['yvar']].dtype=='text') {
-					ystrings.push(...data[geom_dict[key]['yvar']])
+					for (var i=0;i<data[geom_dict[key]['yvar']].length;i++){
+						if (data[geom_dict[key]['yvar']][i]!=''){
+							ystrings.push(...data[geom_dict[key]['yvar']])
+						}
+					}					
 					ymaxes.push('placeholder')
 					ymins.push('placeholder')
 				} else {
-					ymaxes.push(Math.max(...data[geom_dict[key]['yvar']]))
-					ymins.push(Math.min(...data[geom_dict[key]['yvar']]))
+					ymaxes.push(Math.max(...remove_missing(data[geom_dict[key]['yvar']])))
+					ymins.push(Math.min(...remove_missing(data[geom_dict[key]['yvar']])))
 				}
 			}
 		}
 		
+		// if the user has specified one geom with a text axis and one geom with a date axis, exit here.
 		if(new Set(xtypes).size>1){
 				alert('Exiting. X variables provided are of different types. Types detected are: '+(new Set(xtypes)))
 				return
@@ -219,6 +236,7 @@ window.playfair = (function () {
 				return
 		}
 
+		// shiftx and shifty are flags that are used when drawing to shift points over so bars can be drawn
 		if(xtypes[0]=='text'){
 			this.shiftx=1
 		}
@@ -230,16 +248,16 @@ window.playfair = (function () {
 			this.xmax=new Date(moment(Math.max(...xmaxes)))
 			this.xmin=new Date(moment(Math.min(...xmins)))
 		} else {
-			this.xmax=Math.max(...xmaxes)
-			this.xmin=Math.min(...xmins)
+			this.xmax=Math.max(...remove_missing(xmaxes))
+			this.xmin=Math.min(...remove_missing(xmins))
 		}
 
 		if(Object.prototype.toString.call(ymaxes[0])==='[object Date]'){
 			this.ymax=new Date(moment(Math.max(...ymaxes)))
 			this.ymin=new Date(moment(Math.min(...ymins)))
 		} else {
-			this.ymax=Math.max(...ymaxes)
-			this.ymin=Math.min(...ymins)
+			this.ymax=Math.max(...remove_missing(ymaxes))
+			this.ymin=Math.min(...remove_missing(ymins))
 		}
 
 		this.xstrings=[...new Set(xstrings)]
@@ -810,22 +828,32 @@ window.playfair = (function () {
 ///////////////////// GEOMS /////////////////////
 /////////////////////////////////////////////////
 
+function remove_missing(array){
+	for(var i=array.length-1;i>=0;i--){
+		if(array[i]==='') {
+			array.splice(i,1)
+		}
+	}
+
+	return array
+}
+
 function draw_lines(axes,line,snapobj){
 	// axes are [xleft,xright,ybottom,ytop]
 	// var is {'xvar':x_var,'yvar':y_var,'connect':connect,'grouping':{'color':color,'size':size,'type':type}}
 
 	// create sets of options for each grouping variable
 	if(line.grouping.color!=='none'){
-		var color_groups=[...new Set(chartobject.flatdata[line.grouping.color])]
+		var color_groups=[...new Set(remove_missing(chartobject.flatdata[line.grouping.color]))]
 	} 
 	if(line.grouping.type!=='none'){
-		var type_groups=[...new Set(chartobject.flatdata[line.grouping.color])]
+		var type_groups=[...new Set(remove_missing(chartobject.flatdata[line.grouping.color]))]
 	}
 
 	// check for sizing variable and get min and max for scaling
 	if(line.grouping.size!=='none'){
-		var minsize=Math.min(...chartobject.flatdata[line.grouping.size])
-		var maxsize=Math.max(...chartobject.flatdata[line.grouping.size])
+		var minsize=Math.min(...remove_missing(chartobject.flatdata[line.grouping.size]))
+		var maxsize=Math.max(...remove_missing(chartobject.flatdata[line.grouping.size]))
 	}
 
 	// create full group list
@@ -841,61 +869,70 @@ function draw_lines(axes,line,snapobj){
 
 	// loop through groups in the dataset to draw lines
 	for(var i=0;i<groups.length;i++){
-		var current=chartobject.dataset.filter(function(row){
-			return row[line.grouping.color]===groups[i][0]
-		}).filter(function(row){
-			return row[line.grouping.type]===groups[i][1]
-		})
-
-		// order according to the connect variable
-		if(line.connect!=='none'){
-			current.sort(function(a,b){
-				return a[line.connect]>b[line.connect]
+		if(group[0]!='' && group[1]!=''){
+			var current=chartobject.dataset.filter(function(row){
+				return row[line.grouping.color]===groups[i][0]
+			}).filter(function(row){
+				return row[line.grouping.type]===groups[i][1]
 			})
-		}
 
-		// check for sizing variable and set line width
-		if(line.grouping.size!=='none'){
-			var linewidth=((current[0][line.grouping.size]-minsize)/(maxsize-minsize))*(parseFloat(chartobject.line_maxsize)-parseFloat(chartobject.line_minsize))+parseFloat(chartobject.line_minsize)
-		} else {
-			var linewidth=chartobject.line_size
-		}
-
-		// color
-		if(line.grouping.color!=='none'){
-			var color=chartobject.qualitative_color[color_groups.indexOf(current[0][line.grouping.color])]
-		} else {
-			var color=chartobject.qualitative_color[0]
-		}
-
-		// line type
-		if(line.grouping.type!=='none'){
-			var linetype=chartobject.line_types[type_groups.indexOf(current[0][line.grouping.type])]
-		} else {
-			var linetype=chartobject.line_types[0]
-		}
-
-		// label
-		var label=current[0][line.color]+', '+current[0][line.type]
-
-		var path=''
-		// now loop through points in the line
-		for(var j=0;j<current.length;j++){
-			var sub_current=current[j]
-
-			// set various values for points. locations
-			var x_loc=get_coord(sub_current[line.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[line.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
-			var y_loc=get_coord(sub_current[line.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[line.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
-			// add to path or start path
-			if(j==0){
-				path=path+'M'+x_loc+','+y_loc
-			} else{
-				path=path+'L'+x_loc+','+y_loc
+			// order according to the connect variable, connect on x by default
+			if(line.connect!=='none'){
+				current.sort(function(a,b){
+					return a[line.connect]>b[line.connect]
+				})
+			} else {
+				current.sort(function(a,b){
+					return a[line.xvar]>b[line.xvar]
+				})
 			}
-		}
 
-		// draw line
-		snapobj.path(path).attr({'data_label':label,class:'dataelement',stroke:color,'stroke-width':linewidth,fill:'none','group':groups[i],'fill-opacity':0,'stroke-opacity':chartobject.linechart_strokeopacity,'colorchange':'stroke',context:'pathdata_context_menu','stroke-dasharray':linetype})
+			// check for sizing variable and set line width
+			if(line.grouping.size!=='none'){
+				if(current[0][line.grouping.size]!=''){
+					var linewidth=((current[0][line.grouping.size]-minsize)/(maxsize-minsize))*(parseFloat(chartobject.line_maxsize)-parseFloat(chartobject.line_minsize))+parseFloat(chartobject.line_minsize)
+				}
+			} else {
+				var linewidth=chartobject.line_size
+			}
+
+			// color
+			if(line.grouping.color!=='none'){
+				var color=chartobject.qualitative_color[color_groups.indexOf(current[0][line.grouping.color])]
+			} else {
+				var color=chartobject.qualitative_color[0]
+			}
+
+			// line type
+			if(line.grouping.type!=='none'){
+				var linetype=chartobject.line_types[type_groups.indexOf(current[0][line.grouping.type])]
+			} else {
+				var linetype=chartobject.line_types[0]
+			}
+
+			// label
+			var label=current[0][line.color]+', '+current[0][line.type]
+
+			var path=''
+			// now loop through points in the line
+			for(var j=0;j<current.length;j++){
+				var sub_current=current[j]
+
+				if(sub_current[line.connect]!='')
+				// set various values for points. locations
+				var x_loc=get_coord(sub_current[line.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[line.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
+				var y_loc=get_coord(sub_current[line.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[line.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
+				// add to path or start path
+				if(j==0){
+					path=path+'M'+x_loc+','+y_loc
+				} else{
+					path=path+'L'+x_loc+','+y_loc
+				}
+			}
+
+			// draw line
+			snapobj.path(path).attr({'data_label':label,class:'dataelement',stroke:color,'stroke-width':linewidth,fill:'none','group':groups[i],'fill-opacity':0,'stroke-opacity':chartobject.linechart_strokeopacity,'colorchange':'stroke',context:'pathdata_context_menu','stroke-dasharray':linetype})
+		}
 	}
 }
 

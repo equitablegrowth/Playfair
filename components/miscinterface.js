@@ -63,10 +63,6 @@ $('.panel-custom').on('hide.bs.collapse', function () {
      $(this).removeClass('fun');
 });
 
-function newtrend(){
-	$('#trends').prepend('<div class="row"><div class="col-md-12"><div class="col-md-4"><div class="input-group"><span class="input-group-addon" data-toggle="tooltip" data-placement="top" title="Slope of the trend line to add to the plot."">Slope:</span><input type="text" class="form-control slope" placeholder="" id="slope"></div></div><div class="col-md-4"><div class="input-group"><span class="input-group-addon" data-toggle="tooltip" data-placement="top" title="Intercept of the trend line to add to the plot."">Intercept:</span><input type="text" class="form-control intercept" placeholder="" id="intercept"></div></div><div class="col-md-4"></div></div></div>')
-}
-
 /////////////////////// END MISCELLANEOUS //////////////////////////////
 ////////////////////////////////////////////////////////////////////////
 

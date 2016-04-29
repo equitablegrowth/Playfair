@@ -41,8 +41,6 @@ $(document).unbind('keydown').bind('keydown', function (event) {
 function unselect_text(ev) {
 	if (ev.target.nodeName!='text' & dragging==0){
 
-		// ghelp=$('#help_general')
-		// thelp=$('#help_text')
 		if(parseFloat(width)<=745){
 			$('#help_general')[0].style.display='block'
 			$('#help_text')[0].style.display='none'		
@@ -92,10 +90,8 @@ function edit_text(ev) {
 			selected_text=Snap(ev.target)
 			selected_tspan=selected_text
 			selected_text=Snap(selected_text.parent())
-			// selected_text.attr({'font-size':parseFloat(selected_text.attr('font-size'))-2+'px'})
 		} else {
 			selected_text=Snap(ev.target)
-			// selected_text.attr({'font-size':parseFloat(selected_text.attr('font-size'))-2+'px'})
 		}
 
 		// if text is rotated, un-rotate it
