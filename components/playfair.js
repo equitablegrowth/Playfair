@@ -380,10 +380,18 @@ window.playfair = (function () {
 		// as above but for limits to the graph instead of axes
 		if(typeof graph_obj.xlimits=='undefined'){
 			graph_obj.xlimits=[graph_obj.xarray[0],graph_obj.xarray[graph_obj.xarray.length-1]]
+		} else {
+			if (Object.prototype.toString.call(graph_obj.xmax)==='[object Date]'){
+				graph_obj.xlimits=[new Date(moment(graph_obj.xlimits[0])),new Date(moment(graph_obj.xlimits[1]))]
+			}
 		}
 
 		if(typeof graph_obj.ylimits=='undefined'){
 			graph_obj.ylimits=[graph_obj.yarray[0],graph_obj.yarray[graph_obj.yarray.length-1]]
+		} else {
+			if (Object.prototype.toString.call(graph_obj.ymax)==='[object Date]'){
+				graph_obj.ylimits=[new Date(moment(graph_obj.ylimits[0])),new Date(moment(graph_obj.ylimits[1]))]
+			}
 		}
 
 		// start drawing stuff
@@ -851,8 +859,6 @@ function draw_lines(axes,line,snapobj){
 		var maxsize=Math.max(...remove_missing(chartobject.flatdata[line.grouping.size]))
 	}
 
-	console.log('CHECK',color_groups,type_groups)
-
 	// create full group list
 	if(line.grouping.color!=='none' || line.grouping.type!=='none'){
 		var temp=[]
@@ -888,11 +894,9 @@ function draw_lines(axes,line,snapobj){
 		// order according to the connect variable, connect on x by default
 		if(line.connect!=='none'){
 			var connect=line.connect
-			console.log(current)
 			current.sort(function(a,b){
 				return a[line.connect]-b[line.connect]
 			})
-			console.log(current)
 		} else {
 			var connect=line.xvar
 			current.sort(function(a,b){
@@ -930,7 +934,6 @@ function draw_lines(axes,line,snapobj){
 		// now loop through points in the line
 		for(var j=0;j<current.length;j++){
 			var sub_current=current[j]
-			console.log(sub_current,sub_current[line.yvar],connect,line.xvar)
 
 			try{
 				var sub_next=current[j+1]
@@ -959,7 +962,6 @@ function draw_lines(axes,line,snapobj){
 					}
 				} else {}
 			}
-			console.log(path)
 			// draw line
 			snapobj.path(path).attr({'data_label':label,class:'dataelement',stroke:color,'stroke-width':linewidth,fill:'none','group':groups[i],'fill-opacity':0,'stroke-opacity':chartobject.linechart_strokeopacity,'colorchange':'stroke',context:'pathdata_context_menu','stroke-dasharray':linetype})
 		}
@@ -996,33 +998,35 @@ function draw_points(axes,point,snapobj){
 		}
 
 		// set various values for points. locations
-		var x_loc=get_coord(current[point.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[point.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
-		var y_loc=get_coord(current[point.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[point.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
+		if(current[point.xvar]!=undefined && current[point.yvar]!=undefined){
+			var x_loc=get_coord(current[point.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[point.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
+			var y_loc=get_coord(current[point.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[point.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
 
-		// color
-		if(point.grouping.color!=='none'){
-			var color=chartobject.qualitative_color[color_groups.indexOf(current[point.grouping.color])]
-		} else {
-			var color=chartobject.qualitative_color[0]
-		}
+			// color
+			if(point.grouping.color!=='none'){
+				var color=chartobject.qualitative_color[color_groups.indexOf(current[point.grouping.color])]
+			} else {
+				var color=chartobject.qualitative_color[0]
+			}
 
-		// point type
-		var pointtype=1
+			// point type
+			var pointtype=1
 
-		// label
-		var label=current[point.labels]
+			// label
+			var label=current[point.labels]
 
-		// draw point
-		if(pointtype==1){
-			snapobj.circle(x_loc,y_loc,pointsize).attr({fill:color,stroke:color,'stroke-width':chartobject.point_strokewidth,'data_type':'point','data_label':label,'group':'PLACEHOLDER FIX ME','class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu'})
-		}
+			// draw point
+			if(pointtype==1){
+				snapobj.circle(x_loc,y_loc,pointsize).attr({fill:color,stroke:color,'stroke-width':chartobject.point_strokewidth,'data_type':'point','data_label':label,'group':'PLACEHOLDER FIX ME','class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu'})
+			}
 
-		// label point
-		if (point.labelall==true) {
-			var label=snapobj.text(x_loc,y_loc-pointsize-3,current[point.labels]).attr({'font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'middle',fill:chartobject.datatextfill,colorchange:'fill',context:'text_context_menu'})
-			label.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
-			var coords=label.getBBox()
-			label.attr({y:coords.y-coords.height})
+			// label point
+			if (point.labelall==true) {
+				var label=snapobj.text(x_loc,y_loc-pointsize-3,current[point.labels]).attr({'font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'middle',fill:chartobject.datatextfill,colorchange:'fill',context:'text_context_menu'})
+				label.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
+				var coords=label.getBBox()
+				label.attr({y:coords.y-coords.height})
+			}
 		}
 	}
 }
@@ -1063,31 +1067,33 @@ function draw_bars(axes,bar,snapobj){
 	for(var i=0;i<chartobject.dataset.length;i++){
 		var current=chartobject.dataset[i]
 
-		// color + grouping
-		if(bar.grouping.color!=='none'){
-			var color=chartobject.qualitative_color[color_groups.indexOf(current[bar.grouping.color])]
-			console.log(barwidth,color_groups.length)
-			var barwidth=totalwidth/color_groups.length
-			// set various values for bar locations
-			var x1=get_coord(current[bar.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-(totalwidth/2)+barwidth*(color_groups.indexOf(current[bar.grouping.color]))
-			var x2=x1+barwidth
-			var y1=get_coord(current[bar.yvar],chartobject.ylimits[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
-			var y2=get_coord(0,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
-		} else {
-			var color=chartobject.qualitative_color[0]
+		if(current[point.xvar]!=undefined && current[point.yvar]!=undefined){
+			// color + grouping
+			if(bar.grouping.color!=='none'){
+				var color=chartobject.qualitative_color[color_groups.indexOf(current[bar.grouping.color])]
+				console.log(barwidth,color_groups.length)
+				var barwidth=totalwidth/color_groups.length
+				// set various values for bar locations
+				var x1=get_coord(current[bar.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-(totalwidth/2)+barwidth*(color_groups.indexOf(current[bar.grouping.color]))
+				var x2=x1+barwidth
+				var y1=get_coord(current[bar.yvar],chartobject.ylimits[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
+				var y2=get_coord(0,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
+			} else {
+				var color=chartobject.qualitative_color[0]
 
-			// set various values for bar locations
-			var x1=get_coord(current[bar.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-(barwidth/2)
-			var x2=x1+barwidth
-			var y1=get_coord(current[bar.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
-			var y2=get_coord(0,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
+				// set various values for bar locations
+				var x1=get_coord(current[bar.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-(barwidth/2)
+				var x2=x1+barwidth
+				var y1=get_coord(current[bar.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
+				var y2=get_coord(0,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
+			}
+
+			// label in this case should be the y-value
+			var label=current[bar.yvar]
+
+			// draw bar
+			snapobj.path('M'+x1+','+y2+'L'+x2+','+y2+'L'+x2+','+y1+'L'+x1+','+y1+'L'+x1+','+y2).attr({orient:'vertical','data_type':'bar','data_label':label,'group':current[bar.grouping.subgroup],'class':'dataelement','shape-rendering':'crispEdges',fill:color,colorchange:'fill',context:'data_context_menu'})
 		}
-
-		// label in this case should be the y-value
-		var label=current[bar.yvar]
-
-		// draw bar
-		snapobj.path('M'+x1+','+y2+'L'+x2+','+y2+'L'+x2+','+y1+'L'+x1+','+y1+'L'+x1+','+y2).attr({orient:'vertical','data_type':'bar','data_label':label,'group':current[bar.grouping.subgroup],'class':'dataelement','shape-rendering':'crispEdges',fill:color,colorchange:'fill',context:'data_context_menu'})
 	}
 
 	// always gotta pull the y=0 line to the front after creating a barchart

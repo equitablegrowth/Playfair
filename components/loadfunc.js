@@ -72,7 +72,7 @@ function loadData(coerce_array) {
 			var type='numeric'
 			for (var j=1;j<d.length;j++) {
 				var missing=0
-				if(isNaN(parseFloat(d[j][i]))==true){var missing=1}
+				if(isNaN(parseFloat(d[j][i]))==true && d[j][i]==''){var missing=1}
 				if (missing!=1 && moment(d[j][i], ["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY","MM/YYYY","MM-YYYY","YYYYqQ"],true).isValid()==false){
 					var date=false
 				}
@@ -267,14 +267,14 @@ function populate_variables(final_data) {
 			.append('<option value="none">Nothing selected</option>')
 			.val('none')
 
-			for (var key in final_data) {
-				$(this)
-					.append($("<option></option>")
-					.attr("value",key)
-					.text(key));
-			}
+		for (var key in final_data) {
+			$(this)
+				.append($("<option></option>")
+				.attr("value",key)
+				.text(key));
+		}
 
-			$(this).val(temp)
+		$(this).val(temp)
 	})
 }
 
