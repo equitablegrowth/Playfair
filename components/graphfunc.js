@@ -22,7 +22,8 @@ function changedimensions() {
 
 // redraw is the main graphing setup function. Gets variable values and passes them to playfair.js
 function redraw() {
-	try{
+	console.log(final_data)
+	// try{
 		// set size
 		$('#grapharea').attr('height',height)
 		$('#grapharea').attr('width',width)
@@ -237,11 +238,11 @@ function redraw() {
 		else {
 			throw 'Nothing to graph!'
 		}
-	} catch(err){
-		alert(err)
-		console.log(new Error().stack)
-		console.trace()
-	}
+	// } catch(err){
+	// 	alert(err)
+	// 	console.log(new Error().stack)
+	// 	console.trace()
+	// }
 }
 
 /////////////////////// END UPDATE GRAPH ///////////////////////////////

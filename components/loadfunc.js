@@ -71,7 +71,8 @@ function loadData(coerce_array) {
 			var date=true
 			var type='numeric'
 			for (var j=1;j<d.length;j++) {
-				if(d[j][i]==''){var missing=1}
+				var missing=0
+				if(isNaN(parseFloat(d[j][i]))==true){var missing=1}
 				if (missing!=1 && moment(d[j][i], ["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY","MM/YYYY","MM-YYYY","YYYYqQ"],true).isValid()==false){
 					var date=false
 				}
@@ -117,26 +118,26 @@ function loadData(coerce_array) {
 
 	for (var i=0;i<column_types.length;i++) {
 		if (column_types[i]=='numeric') {
-			column_obs=observations
+			var column_obs=observations
 			for (var j=1;j<d.length;j++) {
 				if (d[j][i].search(numeric)==-1) {
 					column_obs=column_obs-1
-					if(missing_array.indexOf(j)==-1){
-						missing_array.push(j)
-					}
+					// if(missing_array.indexOf(j)==-1){
+					// 	missing_array.push(j)
+					// }
 				}
 			}
 			if (column_obs==0) {red_flag=1}
 			if (column_obs!=observations) {yellow_flag=1}
 			column_observations.push(column_obs)
 		} else if (column_types[i]=='date') {
-			column_obs=observations
+			var column_obs=observations
 			for (var j=1;j<d.length;j++){
 				if (d[j][i].search(numeric)==-1) {
 					column_obs=column_obs-1
-					if(missing_array.indexOf(j)==-1){
-						missing_array.push(j)
-					}
+					// if(missing_array.indexOf(j)==-1){
+					// 	missing_array.push(j)
+					// }
 				}
 			}
 			if (column_obs==0) {red_flag=1}
@@ -147,9 +148,9 @@ function loadData(coerce_array) {
 		}
 	}
 
-	for (var i=missing_array.length-1;i>0;i--){
-		d.splice(missing_array[i],1)
-	}
+	// for (var i=missing_array.length-1;i>0;i--){
+	// 	d.splice(missing_array[i],1)
+	// }
 
 	// Final alerts section
 	if (red_flag==1) {
@@ -169,7 +170,7 @@ function loadData(coerce_array) {
 
 	if (yellow_flag==1 && red_flag==0) {
 		alertbox.className = "alert alert-warning";
-		alertbox.innerHTML = "<b>Some of your columns are missing data. These rows will be dropped. Here's what I think about each of your columns:</b><ul>"
+		alertbox.innerHTML = "<b>Some of your columns are missing data. These rows will be kept but could cause problems. Here's what I think about each of your columns:</b><ul>"
 		for (i=0;i<column_types.length;i++) {
 			if(column_types[i]=='text'){
 				alertbox.innerHTML = alertbox.innerHTML + '<ul><li>The <b>'+d[0][i]+'</b> column is a <div class="dataselect"><span class="small_caraty"><select id="coerce'+i+'" onchange=gen_coerce_array()><option value="numeric">numeric</option><option value="date">date</option><option value="text" selected>text</option></select></span></div> column, and it has '+column_observations[i]+' observations in it.</li></ul>';
@@ -206,13 +207,13 @@ function loadData(coerce_array) {
 				d[j].splice(i,1)
 			}
 		}
-		if (column_observations[i]>0 && column_observations[i]!=observations){
-			for (j=1;j<d.length;j++){
-				if (d[j][i].search(numeric)==-1){
-					d.splice(j,1)
-				}
-			}
-		}
+		// if (column_observations[i]>0 && column_observations[i]!=observations){
+		// 	for (j=1;j<d.length;j++){
+		// 		if (d[j][i].search(numeric)==-1){
+		// 			d.splice(j,1)
+		// 		}
+		// 	}
+		// }
 	}
 
 	for (i=0;i<d[0].length;i++){
@@ -225,11 +226,24 @@ function loadData(coerce_array) {
 			if (column_types[i]=='text'){
 				final_data[d[0][i]].push(d[j][i])
 			} else if (column_types[i]=='numeric') {
-				final_data[d[0][i]].push(parseFloat(d[j][i]))
+				if(d[j][i]==''){
+					console.log('MISSING')
+					final_data[d[0][i]].push(d[j][i])
+				} else {
+					final_data[d[0][i]].push(parseFloat(d[j][i]))
+				}
 			} else if (column_types[i]=='date' & coerce_array[i]=='date'){
-				final_data[d[0][i]].push(new Date(moment(d[j][i], ["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY","YYYYqQ"],false)))
+				if(d[j][i]==''){
+					final_data[d[0][i]].push(d[j][i])
+				} else {
+					final_data[d[0][i]].push(new Date(moment(d[j][i], ["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY","YYYYqQ"],false)))
+				}
 			} else if (column_types[i]=='date') {
-				final_data[d[0][i]].push(new Date(moment(d[j][i], ["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY","YYYYqQ"],true)))
+				if(d[j][i]==''){
+					final_data[d[0][i]].push(d[j][i])
+				} else {
+					final_data[d[0][i]].push(new Date(moment(d[j][i], ["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY","YYYYqQ"],true)))
+				}
 			}
 		}
 	}

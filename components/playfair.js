@@ -51,7 +51,6 @@ window.playfair = (function () {
 		// data is now row by variable. That is, it is an object where the
 		// primary keys are row numbers and then within each row there is
 		// a value for each variable in the dataset.
-
 		this.flatdata=data
 		this.dataset=datadict
 		this.line=geom_dict.line
@@ -78,8 +77,8 @@ window.playfair = (function () {
 
 		for(var key in geom_dict){
 			xtypes.push(typeof(data[geom_dict[key]['xvar']][0]))
-			console.log(data,key,data[geom_dict[key]],data[geom_dict[key]['yvar']],geom_dict[key])
 			ytypes.push(typeof(data[geom_dict[key]['yvar']][0]))
+			console.log(data,key,data[geom_dict[key]],data[geom_dict[key]['yvar']],geom_dict[key])
 
 			if(key=='area' | key=='stackedbar'){
 				// this needs to eventually be changed. Right now the assumption is that stacked bars are
@@ -88,7 +87,7 @@ window.playfair = (function () {
 				// between which axis it should be summing on).
 
 				if(Object.prototype.toString.call(data[geom_dict[key]['xvar']][0])==='[object Date]'){
-					if(isNaN(data[geom_dict[key]['xvar']][i].getTime()==false)){
+					if(isNaN(data[geom_dict[key]['xvar']][i].getTime())==false){
 						xmaxes.push(new Date(moment(Math.max(...data[geom_dict[key]['xvar']]))))
 						xmins.push(new Date(moment(Math.min(...data[geom_dict[key]['xvar']]))))
 					}
@@ -187,7 +186,7 @@ window.playfair = (function () {
 
 				if(Object.prototype.toString.call(data[geom_dict[key]['xvar']][0])==='[object Date]'){
 					for (var i=0;i<data[geom_dict[key]['xvar']].length;i++){
-						if(isNaN(data[geom_dict[key]['xvar']][i].getTime()==false)){
+						if(isNaN(data[geom_dict[key]['xvar']][i].getTime())==false){
 							xmaxes.push(new Date(moment(Math.max(...data[geom_dict[key]['xvar']]))))
 							xmins.push(new Date(moment(Math.min(...data[geom_dict[key]['xvar']]))))
 						}
@@ -206,7 +205,7 @@ window.playfair = (function () {
 				}
 
 				if(Object.prototype.toString.call(data[geom_dict[key]['yvar']][0])==='[object Date]'){
-					if(isNaN(data[geom_dict[key]['yvar']][i].getTime()==false)){
+					if(isNaN(data[geom_dict[key]['yvar']][i].getTime())==false){
 						ymaxes.push(new Date(moment(Math.max(...data[geom_dict[key]['yvar']]))))
 						ymins.push(new Date(moment(Math.min(...data[geom_dict[key]['yvar']]))))
 					}
@@ -221,6 +220,24 @@ window.playfair = (function () {
 				} else {
 					ymaxes.push(Math.max(...remove_missing(data[geom_dict[key]['yvar']])))
 					ymins.push(Math.min(...remove_missing(data[geom_dict[key]['yvar']])))
+				}
+			}
+		}
+
+		// this is the klugiest thing but... my strategy for handling missing values was bad(TM) so I am kinda
+		// patching it here by taking them and turning them into NaNs. I know. This is the worst.
+		for(var key in this.flat_data){
+			for(var i=0;i<this.flat_data[key];i++){
+				if(this.flat_data[key][i]=='' && typeof(this.flat_data[key][i])=='string'){
+					this.flat_data[key][i]=NaN
+				}
+			}
+		}
+
+		for(var i=0;i<this.dataset.length;i++){
+			for(var key in this.dataset[i]){
+				if(this.dataset[i][key]=='' && typeof(this.dataset[i][key])=='string'){
+					this.dataset[i][key]=NaN
 				}
 			}
 		}
@@ -829,13 +846,14 @@ window.playfair = (function () {
 /////////////////////////////////////////////////
 
 function remove_missing(array){
-	for(var i=array.length-1;i>=0;i--){
-		if(array[i]==='') {
-			array.splice(i,1)
+	var temp=array.slice(0)
+	for(var i=temp.length-1;i>=0;i--){
+		if(temp[i]==='') {
+			temp.splice(i,1)
 		}
 	}
 
-	return array
+	return temp
 }
 
 function draw_lines(axes,line,snapobj){
@@ -868,8 +886,9 @@ function draw_lines(axes,line,snapobj){
 	}
 
 	// loop through groups in the dataset to draw lines
+	console.log("GROUPS",groups)
 	for(var i=0;i<groups.length;i++){
-		if(group[0]!='' && group[1]!=''){
+		if(groups[0]!='' && groups[1]!=''){
 			var current=chartobject.dataset.filter(function(row){
 				return row[line.grouping.color]===groups[i][0]
 			}).filter(function(row){
@@ -878,10 +897,12 @@ function draw_lines(axes,line,snapobj){
 
 			// order according to the connect variable, connect on x by default
 			if(line.connect!=='none'){
+				var connect=line.connect
 				current.sort(function(a,b){
 					return a[line.connect]>b[line.connect]
 				})
 			} else {
+				var connect=line.xvar
 				current.sort(function(a,b){
 					return a[line.xvar]>b[line.xvar]
 				})
@@ -917,19 +938,37 @@ function draw_lines(axes,line,snapobj){
 			// now loop through points in the line
 			for(var j=0;j<current.length;j++){
 				var sub_current=current[j]
+				console.log(sub_current,sub_current[line.yvar],connect,line.xvar)
 
-				if(sub_current[line.connect]!='')
-				// set various values for points. locations
-				var x_loc=get_coord(sub_current[line.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[line.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
-				var y_loc=get_coord(sub_current[line.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[line.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
-				// add to path or start path
-				if(j==0){
-					path=path+'M'+x_loc+','+y_loc
-				} else{
-					path=path+'L'+x_loc+','+y_loc
+				try{
+					var sub_next=current[j+1]
+				} catch(err){}
+
+				if(isNaN(sub_current[connect])==false){
+					if((isNaN(sub_current[line.xvar])==true && connect==line.yvar) || (isNaN(sub_current[line.yvar])==true && connect==line.xvar)){
+						// set various values for points. locations
+						var x_loc=get_coord(sub_next[line.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[line.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
+						var y_loc=get_coord(sub_next[line.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[line.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
+						// add to path or start path
+						if(j==0){
+							path=path+'M'+x_loc+','+y_loc
+						} else{
+							path=path+'M'+x_loc+','+y_loc
+						}
+					} else if(isNaN(sub_current[line.xvar])==false && isNaN(sub_current[line.yvar])==false){
+						// set various values for points. locations
+						var x_loc=get_coord(sub_current[line.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[line.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
+						var y_loc=get_coord(sub_current[line.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[line.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
+						// add to path or start path
+						if(j==0){
+							path=path+'M'+x_loc+','+y_loc
+						} else{
+							path=path+'L'+x_loc+','+y_loc
+						}
+					} else {}
 				}
 			}
-
+			console.log(path)
 			// draw line
 			snapobj.path(path).attr({'data_label':label,class:'dataelement',stroke:color,'stroke-width':linewidth,fill:'none','group':groups[i],'fill-opacity':0,'stroke-opacity':chartobject.linechart_strokeopacity,'colorchange':'stroke',context:'pathdata_context_menu','stroke-dasharray':linetype})
 		}
@@ -1070,7 +1109,7 @@ function get_coord(value,[limit_start,limit_end],[pixel_start,pixel_end],type,ar
 	// at the value. Shift doesn't affect categorical axes, where shifting is always performed.
 	// if(shiftx==1){x_step=domain/(xvar.length)}
 	var range=Math.abs(pixel_end-pixel_start)
-	console.log(value,[limit_start,limit_end],[pixel_start,pixel_end],type,array,y,shift)
+	// console.log(value,[limit_start,limit_end],[pixel_start,pixel_end],type,array,y,shift)
 
 	if(type!='text'){
 		if(chartobject.datedenom[y]>0){
