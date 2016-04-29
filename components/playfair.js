@@ -229,7 +229,7 @@ window.playfair = (function () {
 		for(var key in this.flat_data){
 			for(var i=0;i<this.flat_data[key];i++){
 				if(this.flat_data[key][i]=='' && typeof(this.flat_data[key][i])=='string'){
-					this.flat_data[key][i]=NaN
+					this.flat_data[key][i]=undefined
 				}
 			}
 		}
@@ -237,7 +237,7 @@ window.playfair = (function () {
 		for(var i=0;i<this.dataset.length;i++){
 			for(var key in this.dataset[i]){
 				if(this.dataset[i][key]=='' && typeof(this.dataset[i][key])=='string'){
-					this.dataset[i][key]=NaN
+					this.dataset[i][key]=undefined
 				}
 			}
 		}
@@ -386,31 +386,7 @@ window.playfair = (function () {
 			graph_obj.ylimits=[graph_obj.yarray[0],graph_obj.yarray[graph_obj.yarray.length-1]]
 		}
 
-		// This bit is a little confusing - clean the axes and set up ymaxis and xmaxis, which are just all numeric
-		// versions of the axes. It's not clear to me that this is the right way to do this but the rationale is that
-		// this supports some flexibility in custom axes. You can have a custom axis like: [$3,4.00,5]. There are
-		// legitimate reasons to do this so for now this is what it is.
-		// var xmaxis=[]
-		// var ymaxis=[]
-
-		// if(Object.prototype.toString.call(xaxis[0])==='[object Date]'){
-		// 	xmaxis=xaxis
-		// } else{
-		// 	for(var i=0;i<xaxis.length;i++){
-		// 		xmaxis.push(xaxis[i].replace(/[^0-9\.\-]+/g, ''))
-		// 	}
-		// }
-
-		// if(Object.prototype.toString.call(yaxis[0])==='[object Date]'){
-		// 	ymaxis=yaxis
-		// } else{
-		// 	for(var i=0;i<yaxis.length;i++){
-		// 		ymaxis.push(yaxis[i].replace(/[^0-9\.\-]+/g, ''))
-		// 	}
-		// }
-
-		// YOU ARE HERE HANDLE GUI STUFF
-		// start drawing stuff.
+		// start drawing stuff
 		// set background fill
 		var graph_background=snapobj.rect(graph_obj.x,graph_obj.y+graph_obj.head_height,graph_obj.width,graph_obj.height-(graph_obj.head_height+graph_obj.footer_height)).attr({class:'background',fill:this.chartfill})
 
@@ -848,7 +824,7 @@ window.playfair = (function () {
 function remove_missing(array){
 	var temp=array.slice(0)
 	for(var i=temp.length-1;i>=0;i--){
-		if(temp[i]==='') {
+		if(typeof(temp[i])=='undefined') {
 			temp.splice(i,1)
 		}
 	}
@@ -862,6 +838,7 @@ function draw_lines(axes,line,snapobj){
 
 	// create sets of options for each grouping variable
 	if(line.grouping.color!=='none'){
+		console.log((chartobject.flatdata[line.grouping.color]),remove_missing(chartobject.flatdata[line.grouping.color]))
 		var color_groups=[...new Set(remove_missing(chartobject.flatdata[line.grouping.color]))]
 	} 
 	if(line.grouping.type!=='none'){
@@ -874,99 +851,113 @@ function draw_lines(axes,line,snapobj){
 		var maxsize=Math.max(...remove_missing(chartobject.flatdata[line.grouping.size]))
 	}
 
+	console.log('CHECK',color_groups,type_groups)
+
 	// create full group list
 	if(line.grouping.color!=='none' || line.grouping.type!=='none'){
 		var temp=[]
+		var temp2=[]
 		for(var i=0;i<chartobject.dataset.length;i++){
 			temp.push([chartobject.dataset[i][line.grouping.color],chartobject.dataset[i][line.grouping.type]])
 		}
-		var groups=[...new Set(temp)]
+
+		for(var i=0;i<temp.length;i++){
+			var dupe=0
+			for (var j=0;j<temp2.length;j++){
+				if(temp[i][0]==temp2[j][0] && temp[i][1]==temp2[j][1]){
+					var dupe=1
+				}
+			}
+			if(dupe==0){
+				temp2.push(temp[i])
+			}
+		}
+		groups=temp2
 	} else {
 		var groups=[[undefined,undefined]]
 	}
 
 	// loop through groups in the dataset to draw lines
-	console.log("GROUPS",groups)
 	for(var i=0;i<groups.length;i++){
-		if(groups[0]!='' && groups[1]!=''){
-			var current=chartobject.dataset.filter(function(row){
-				return row[line.grouping.color]===groups[i][0]
-			}).filter(function(row){
-				return row[line.grouping.type]===groups[i][1]
+		var current=chartobject.dataset.filter(function(row){
+			return row[line.grouping.color]===groups[i][0]
+		}).filter(function(row){
+			return row[line.grouping.type]===groups[i][1]
+		})
+
+		// order according to the connect variable, connect on x by default
+		if(line.connect!=='none'){
+			var connect=line.connect
+			console.log(current)
+			current.sort(function(a,b){
+				return a[line.connect]-b[line.connect]
 			})
+			console.log(current)
+		} else {
+			var connect=line.xvar
+			current.sort(function(a,b){
+				return a[line.xvar]-b[line.xvar]
+			})
+		}
 
-			// order according to the connect variable, connect on x by default
-			if(line.connect!=='none'){
-				var connect=line.connect
-				current.sort(function(a,b){
-					return a[line.connect]>b[line.connect]
-				})
-			} else {
-				var connect=line.xvar
-				current.sort(function(a,b){
-					return a[line.xvar]>b[line.xvar]
-				})
+		// check for sizing variable and set line width
+		if(line.grouping.size!=='none'){
+			if(current[0][line.grouping.size]!=undefined){
+				var linewidth=((current[0][line.grouping.size]-minsize)/(maxsize-minsize))*(parseFloat(chartobject.line_maxsize)-parseFloat(chartobject.line_minsize))+parseFloat(chartobject.line_minsize)
 			}
+		} else {
+			var linewidth=chartobject.line_size
+		}
 
-			// check for sizing variable and set line width
-			if(line.grouping.size!=='none'){
-				if(current[0][line.grouping.size]!=''){
-					var linewidth=((current[0][line.grouping.size]-minsize)/(maxsize-minsize))*(parseFloat(chartobject.line_maxsize)-parseFloat(chartobject.line_minsize))+parseFloat(chartobject.line_minsize)
-				}
-			} else {
-				var linewidth=chartobject.line_size
-			}
+		// color
+		if(line.grouping.color!=='none'){
+			var color=chartobject.qualitative_color[color_groups.indexOf(current[0][line.grouping.color])]
+		} else {
+			var color=chartobject.qualitative_color[0]
+		}
 
-			// color
-			if(line.grouping.color!=='none'){
-				var color=chartobject.qualitative_color[color_groups.indexOf(current[0][line.grouping.color])]
-			} else {
-				var color=chartobject.qualitative_color[0]
-			}
+		// line type
+		if(line.grouping.type!=='none'){
+			var linetype=chartobject.line_types[type_groups.indexOf(current[0][line.grouping.type])]
+		} else {
+			var linetype=chartobject.line_types[0]
+		}
 
-			// line type
-			if(line.grouping.type!=='none'){
-				var linetype=chartobject.line_types[type_groups.indexOf(current[0][line.grouping.type])]
-			} else {
-				var linetype=chartobject.line_types[0]
-			}
+		// label
+		var label=current[0][line.color]+', '+current[0][line.type]
 
-			// label
-			var label=current[0][line.color]+', '+current[0][line.type]
+		var path=''
+		// now loop through points in the line
+		for(var j=0;j<current.length;j++){
+			var sub_current=current[j]
+			console.log(sub_current,sub_current[line.yvar],connect,line.xvar)
 
-			var path=''
-			// now loop through points in the line
-			for(var j=0;j<current.length;j++){
-				var sub_current=current[j]
-				console.log(sub_current,sub_current[line.yvar],connect,line.xvar)
+			try{
+				var sub_next=current[j+1]
+			} catch(err){}
 
-				try{
-					var sub_next=current[j+1]
-				} catch(err){}
-
-				if(isNaN(sub_current[connect])==false){
-					if((isNaN(sub_current[line.xvar])==true && connect==line.yvar) || (isNaN(sub_current[line.yvar])==true && connect==line.xvar)){
-						// set various values for points. locations
-						var x_loc=get_coord(sub_next[line.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[line.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
-						var y_loc=get_coord(sub_next[line.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[line.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
-						// add to path or start path
-						if(j==0){
-							path=path+'M'+x_loc+','+y_loc
-						} else{
-							path=path+'M'+x_loc+','+y_loc
-						}
-					} else if(isNaN(sub_current[line.xvar])==false && isNaN(sub_current[line.yvar])==false){
-						// set various values for points. locations
-						var x_loc=get_coord(sub_current[line.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[line.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
-						var y_loc=get_coord(sub_current[line.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[line.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
-						// add to path or start path
-						if(j==0){
-							path=path+'M'+x_loc+','+y_loc
-						} else{
-							path=path+'L'+x_loc+','+y_loc
-						}
-					} else {}
-				}
+			if(isNaN(sub_current[connect])==false){
+				if((sub_current[line.xvar]==undefined && connect==line.yvar) || (sub_current[line.yvar]==undefined && connect==line.xvar)){
+					// set various values for points. locations
+					var x_loc=get_coord(sub_next[line.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[line.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
+					var y_loc=get_coord(sub_next[line.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[line.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
+					// add to path or start path
+					if(j==0){
+						path=path+'M'+x_loc+','+y_loc
+					} else{
+						path=path+'M'+x_loc+','+y_loc
+					}
+				} else if(sub_current[line.xvar]!=undefined && sub_current[line.yvar]!=undefined){
+					// set various values for points. locations
+					var x_loc=get_coord(sub_current[line.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[line.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
+					var y_loc=get_coord(sub_current[line.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[line.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
+					// add to path or start path
+					if(j==0){
+						path=path+'M'+x_loc+','+y_loc
+					} else{
+						path=path+'L'+x_loc+','+y_loc
+					}
+				} else {}
 			}
 			console.log(path)
 			// draw line
