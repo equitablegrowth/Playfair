@@ -853,9 +853,9 @@ function draw_lines(axes,line,snapobj){
 	}
 
 	// check for sizing variable and get min and max for scaling
-	if(line.grouping.size!=='none'){
-		var minsize=Math.min(...remove_missing(chartobject.flatdata[line.grouping.size]))
-		var maxsize=Math.max(...remove_missing(chartobject.flatdata[line.grouping.size]))
+	if(line.size!=='none'){
+		var minsize=Math.min(...remove_missing(chartobject.flatdata[line.size]))
+		var maxsize=Math.max(...remove_missing(chartobject.flatdata[line.size]))
 	}
 
 	// create full group list
@@ -906,9 +906,9 @@ function draw_lines(axes,line,snapobj){
 		}
 
 		// check for sizing variable and set line width
-		if(line.grouping.size!=='none'){
-			if(current[0][line.grouping.size]!=undefined){
-				var linewidth=((current[0][line.grouping.size]-minsize)/(maxsize-minsize))*(parseFloat(chartobject.line_maxsize)-parseFloat(chartobject.line_minsize))+parseFloat(chartobject.line_minsize)
+		if(line.size!=='none'){
+			if(current[0][line.size]!=undefined){
+				var linewidth=((current[0][line.size]-minsize)/(maxsize-minsize))*(parseFloat(chartobject.line_maxsize)-parseFloat(chartobject.line_minsize))+parseFloat(chartobject.line_minsize)
 			}
 		} else {
 			var linewidth=chartobject.line_size
@@ -983,9 +983,9 @@ function draw_points(axes,point,snapobj){
 	}
 
 	// check for sizing variable and get min and max for scaling
-	if(point.grouping.size!=='none'){
-		var minsize=Math.min(...chartobject.flatdata[point.grouping.size])
-		var maxsize=Math.max(...chartobject.flatdata[point.grouping.size])
+	if(point.size!=='none'){
+		var minsize=Math.min(...chartobject.flatdata[point.size])
+		var maxsize=Math.max(...chartobject.flatdata[point.size])
 	}
 
 	// loop through observations in the dataset to draw points
@@ -993,8 +993,8 @@ function draw_points(axes,point,snapobj){
 		var current=chartobject.dataset[i]
 
 		// check for sizing variable and set point size
-		if(point.grouping.size!=='none'){
-			var pointsize=((current[point.grouping.size]-minsize)/(maxsize-minsize))*(parseFloat(chartobject.point_maxsize)-parseFloat(chartobject.point_minsize))+parseFloat(chartobject.point_minsize)
+		if(point.size!=='none'){
+			var pointsize=((current[point.size]-minsize)/(maxsize-minsize))*(parseFloat(chartobject.point_maxsize)-parseFloat(chartobject.point_minsize))+parseFloat(chartobject.point_minsize)
 		} else {
 			var pointsize=chartobject.point_size
 		}

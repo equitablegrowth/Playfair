@@ -20,6 +20,54 @@ function changedimensions() {
 	}
 }
 
+// preview creates the geom_dict that would be used by redraw if it was invoked
+// this is primarily for creating key previews, which require some knowledge of
+// what is being graphed.
+function preview() {
+	// set up geom_dict by looking at all the stuff in chart and gathering variables as appropriate
+	var geom_dict={}
+	var ready=0
+
+	if($("#point_select_x").val()!='none' & $("#point_select_y").val()!='none'){
+		var x_var=$("#point_select_x").val()
+		var y_var=$("#point_select_y").val()
+
+		var color=$("#point_select_color").val()
+		var size=$("#point_select_size").val()
+		var label=$("#point_select_label").val()
+		var type=$("#point_select_type").val()
+
+		var pointlabel=document.getElementById('labels').checked
+		// var point_type=$('input[name=linepoint]:checked').val()
+
+		geom_dict['point']={'xvar':x_var,'yvar':y_var,'labels':label,'size':size,'labelall':pointlabel,'grouping':{'color':color,'type':type}}
+	}
+
+	if($("#line_select_x").val()!='none' & $("#line_select_y").val()!='none'){
+		var x_var=$("#line_select_x").val()
+		var y_var=$("#line_select_y").val()
+
+		var connect=$("#line_select_connect").val()
+		var color=$("#line_select_color").val()
+		var size=$("#line_select_size").val()
+		var type=$("#line_select_type").val()
+
+		geom_dict['line']={'xvar':x_var,'yvar':y_var,'connect':connect,'size':size,'grouping':{'color':color,'type':type}}
+	}
+
+	if($("#bar_select_x").val()!='none' & $("#bar_select_y").val()!='none'){
+		var x_var=$("#bar_select_x").val()
+		var y_var=$("#bar_select_y").val()
+
+		var color=$("#bar_select_color").val()
+		var bargroup=$("#bar_select_group").val()
+		var barspace=document.getElementById('spacing').checked
+
+		geom_dict['bar']={'xvar':x_var,'yvar':y_var,spacing:barspace,'orientation':'vertical','grouping':{'color':color,'bargroup':bargroup}}
+	}
+
+	return geom_dict
+
 // redraw is the main graphing setup function. Gets variable values and passes them to playfair.js
 function redraw() {
 	console.log(final_data)
