@@ -794,7 +794,7 @@ window.playfair = (function () {
 			'point_maxsize':25,
 			'point_minsize':3,
 			'linechart_strokeopacity':1,
-			'line_types':[[0,0],[4,4],[0],[0],[0]],
+			'line_types':[[0,0],[5,5],[8,4,2,4],[8,8],[2,5]],
 			'line_minsize':2,
 			'line_maxsize':20,
 			'line_size':2,
@@ -846,11 +846,10 @@ function draw_lines(axes,line,snapobj){
 
 	// create sets of options for each grouping variable
 	if(line.grouping.color!=='none'){
-		console.log((chartobject.flatdata[line.grouping.color]),remove_missing(chartobject.flatdata[line.grouping.color]))
 		var color_groups=[...new Set(remove_missing(chartobject.flatdata[line.grouping.color]))]
 	} 
 	if(line.grouping.type!=='none'){
-		var type_groups=[...new Set(remove_missing(chartobject.flatdata[line.grouping.color]))]
+		var type_groups=[...new Set(remove_missing(chartobject.flatdata[line.grouping.type]))]
 	}
 
 	// check for sizing variable and get min and max for scaling
@@ -882,6 +881,8 @@ function draw_lines(axes,line,snapobj){
 	} else {
 		var groups=[[undefined,undefined]]
 	}
+
+	console.log(groups)
 
 	// loop through groups in the dataset to draw lines
 	for(var i=0;i<groups.length;i++){
@@ -922,6 +923,7 @@ function draw_lines(axes,line,snapobj){
 
 		// line type
 		if(line.grouping.type!=='none'){
+			console.log('typing: ',type_groups,current[0],line.grouping.type)
 			var linetype=chartobject.line_types[type_groups.indexOf(current[0][line.grouping.type])]
 		} else {
 			var linetype=chartobject.line_types[0]
@@ -962,9 +964,9 @@ function draw_lines(axes,line,snapobj){
 					}
 				} else {}
 			}
-			// draw line
-			snapobj.path(path).attr({'data_label':label,class:'dataelement',stroke:color,'stroke-width':linewidth,fill:'none','group':groups[i],'fill-opacity':0,'stroke-opacity':chartobject.linechart_strokeopacity,'colorchange':'stroke',context:'pathdata_context_menu','stroke-dasharray':linetype})
 		}
+		// draw line
+		snapobj.path(path).attr({'data_label':label,class:'dataelement',stroke:color,'stroke-width':linewidth,fill:'none','group':groups[i],'fill-opacity':0,'stroke-opacity':chartobject.linechart_strokeopacity,'colorchange':'stroke',context:'pathdata_context_menu','stroke-dasharray':linetype})
 	}
 }
 
@@ -1067,7 +1069,7 @@ function draw_bars(axes,bar,snapobj){
 	for(var i=0;i<chartobject.dataset.length;i++){
 		var current=chartobject.dataset[i]
 
-		if(current[point.xvar]!=undefined && current[point.yvar]!=undefined){
+		if(current[bar.xvar]!=undefined && current[bar.yvar]!=undefined){
 			// color + grouping
 			if(bar.grouping.color!=='none'){
 				var color=chartobject.qualitative_color[color_groups.indexOf(current[bar.grouping.color])]
@@ -1076,7 +1078,7 @@ function draw_bars(axes,bar,snapobj){
 				// set various values for bar locations
 				var x1=get_coord(current[bar.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-(totalwidth/2)+barwidth*(color_groups.indexOf(current[bar.grouping.color]))
 				var x2=x1+barwidth
-				var y1=get_coord(current[bar.yvar],chartobject.ylimits[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
+				var y1=get_coord(current[bar.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
 				var y2=get_coord(0,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
 			} else {
 				var color=chartobject.qualitative_color[0]
@@ -2027,7 +2029,6 @@ function draw_axes(playobj,xvar,yvar,shiftx,shifty) {
 		for(var j=0;j<lines.length;j++){
 			if (Object.prototype.toString.call(xvar[i])!='[object Date]' && ((parseInt(lines[j])>=1000 || parseInt(lines[j])<=-1000))){linesj=commas(lines[j])} else{linesj=lines[j]}
 			// var temp=snapobj.text(xstart_xcoord+xshift*shiftx+x_step*i,playobj.y+playobj.height-playobj.bottom_margin-playobj.footer_height-xlab_height-playobj.xtick_to_xlabel-total_yoffset+playobj.xtick_to_xaxis+j*parseInt(playobj.xtick_textsize),linesj).attr({fill:this.xtick_textfill,ident:'xaxis','font-size':playobj.xtick_textsize,'font-weight':playobj.xtick_textweight,'font-family':playobj.xtick_textface,'dominant-baseline':'text-before-edge','text-anchor':'middle',colorchange:'fill',context:'text_context_menu'})
-			console.log(xvar)
 			var tempx=get_coord(xvar[i],playobj.xlimits,[xstart_xcoord,xfinal_xcoord],xvar.dtype,xvar,0,playobj.shiftx)
 			var temp=snapobj.text(tempx,playobj.y+playobj.height-playobj.bottom_margin-playobj.footer_height-xlab_height-playobj.xtick_to_xlabel-total_yoffset+playobj.xtick_to_xaxis+j*parseInt(playobj.xtick_textsize),linesj).attr({fill:this.xtick_textfill,ident:'xaxis','font-size':playobj.xtick_textsize,'font-weight':playobj.xtick_textweight,'font-family':playobj.xtick_textface,'dominant-baseline':'text-before-edge','text-anchor':'middle',colorchange:'fill',context:'text_context_menu'})
 			temp.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")

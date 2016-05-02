@@ -216,7 +216,7 @@ function redraw() {
 					if(Object.prototype.toString.call(chartobject.xarray[0])==='[object Date]'){
 						temp=[]
 						for(var i=0;i<chartobject.xarray.length;i++){
-							temp.push(moment(chartobject.xarray[i]).format('MMMM YYYY'))
+							temp.push((chartobject.xarray[i].getUTCMonth()+1)+'/'+chartobject.xarray[i].getUTCDate()+'/'+chartobject.xarray[i].getUTCFullYear())
 						}
 						$('#customx').val(temp)
 					} else{
@@ -225,10 +225,10 @@ function redraw() {
 
 					if(Object.prototype.toString.call(chartobject.yarray[0])==='[object Date]'){
 						temp=[]
-						for(var i=0;i<chartobject.xarray.length;i++){
-							temp.push(moment(chartobject.xarray[i]).format('MMMM YYYY'))
+						for(var i=0;i<chartobject.yarray.length;i++){
+							temp.push((chartobject.yarray[i].getUTCMonth()+1)+'/'+chartobject.yarray[i].getUTCDate()+'/'+chartobject.yarray[i].getUTCFullYear())
 						}
-						$('#customx').val(temp)
+						$('#customy').val(temp)
 					} else{
 						$('#customy').val(chartobject.yarray)
 					}
