@@ -1597,8 +1597,7 @@ $(".variable_select").change(function(){
 		for(var key in geom){
 			var groups=[]
 			for(var grouper in geom[key].grouping){
-				if(geom[key].grouping.grouper!='none'){
-					console.log(grouper)
+				if(geom[key].grouping[grouper]!='none'){
 					groups.push(geom[key].grouping[grouper])
 				}
 			}
@@ -1608,23 +1607,16 @@ $(".variable_select").change(function(){
 			// structure with the geom as key
 			console.log(groups)
 			if(groups.length>0){
-				var cats=[]
-				for(var i=0;i<groups.length;i++){
-					if([...new Set(final_data[groups[i]])].length>0){
-						cats.push([...new Set(final_data[groups[i]])])
-					}
-				}
-
-				if(cats.length>1){
-					structure[key]=cartesian(cats)
-				} else {
+				var cats=datadict.map(function(row){
 					var temp=[]
-					for(var j=0;j<cats.length;j++){
-						temp.push(cats[j])
+					for(var i=0;i<groups.length;i++){
+						temp.push(row[groups[i]])
 					}
-					console.log(temp)
-					structure[key]=temp[0]
-				}
+					return temp
+				})
+
+				cats=unique(cats)
+				structure[key]=cats
 			}
 		}
 	}
@@ -1632,11 +1624,8 @@ $(".variable_select").change(function(){
 	// structure looks like:
 	// {point:[[group1,group2],[group1,group3],[group2,group3]], line:[[group1],[group2]]}
 	// you can iterate through each of these keys to build one section of the key
-	// first though, use final_data to verify that these groupings even exist. If the group
-	// is just one variable, it def exists, but if it is a combination of 2 groupings (ie 
-	// [group1,group2]) then the grouping might not exist.
 
-	// second, check to see if there are exact duplicates within geoms. If any 2 geoms have 
+	// first, check to see if there are exact duplicates within geoms. If any 2 geoms have 
 	// the same x and y variables, and the same grouping variable/s, then those should be
 	// combined into one key item.
 
@@ -1646,24 +1635,36 @@ $(".variable_select").change(function(){
 	console.log(structure)
 })
 
-
-// from stackoverflow, @Bergi: http://stackoverflow.com/a/15310051/3001940
-function cartesian() {
-    var r = [], arg = arguments[0], max = arg.length-1;
-    console.log(arg)
-    function helper(arr, i) {
-        for (var j=0, l=arg[i].length; j<l; j++) {
-            var a = arr.slice(0); // clone arr
-            a.push(arg[i][j]);
-            if (i==max)
-                r.push(a);
-            else
-                helper(a, i+1);
+// from stackoverflow - Justin Johnson - http://stackoverflow.com/a/1890233/3001940
+function unique(arr) {
+    var hash = {}, result = [];
+    for ( var i = 0, l = arr.length; i < l; ++i ) {
+        if ( !hash.hasOwnProperty(arr[i]) ) { //it works with objects! in FF, at least
+            hash[ arr[i] ] = true;
+            result.push(arr[i]);
         }
     }
-    helper([], 0);
-    return r;
+    return result;
 }
+
+
+// from stackoverflow, @Bergi: http://stackoverflow.com/a/15310051/3001940
+// function cartesian() {
+//     var r = [], arg = arguments[0], max = arg.length-1;
+//     // console.log(arg)
+//     function helper(arr, i) {
+//         for (var j=0, l=arg[i].length; j<l; j++) {
+//             var a = arr.slice(0); // clone arr
+//             a.push(arg[i][j]);
+//             if (i==max)
+//                 r.push(a);
+//             else
+//                 helper(a, i+1);
+//         }
+//     }
+//     helper([], 0);
+//     return r;
+// }
 
 
 </script>

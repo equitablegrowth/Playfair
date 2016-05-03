@@ -250,6 +250,19 @@ function loadData(coerce_array) {
 
 	loaded_data=1
 
+	// create row_data
+	datadict=[]
+	for(var key in final_data){
+		var items=final_data[key].length
+	}
+	for(var i=0;i<items;i++){
+		var row={}
+		for(var key in final_data){
+			row[key]=final_data[key][i]
+		}
+		datadict.push(row)
+	}
+
 	// Call populate_variables to update all variable dropdowns with the variables in the data
 	populate_variables(final_data)
 	console.log(final_data)
