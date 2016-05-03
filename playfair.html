@@ -1619,20 +1619,23 @@ $(".variable_select").change(function(){
 				structure[key]=cats
 			}
 		}
+
+		// structure looks like:
+		// {point:[[group1,group2],[group1,group3],[group2,group3]], line:[[group1],[group2]]}
+		// you can iterate through each of these keys to build one section of the key
+
+		// first, check to see if there are exact duplicates within geoms. If any 2 geoms have 
+		// the same x and y variables, and the same grouping variable/s, then those should be
+		// combined into one key item.
+
+		for(var key in structure){
+
+		}
+		console.log(structure)
+
+		// final key item is:
+		// {line,point:[[1965,1],[1966,2], etc...],'bar':[[1,2],[3,4]]}
 	}
-
-	// structure looks like:
-	// {point:[[group1,group2],[group1,group3],[group2,group3]], line:[[group1],[group2]]}
-	// you can iterate through each of these keys to build one section of the key
-
-	// first, check to see if there are exact duplicates within geoms. If any 2 geoms have 
-	// the same x and y variables, and the same grouping variable/s, then those should be
-	// combined into one key item.
-
-	for(var key in structure){
-
-	}
-	console.log(structure)
 })
 
 // from stackoverflow - Justin Johnson - http://stackoverflow.com/a/1890233/3001940

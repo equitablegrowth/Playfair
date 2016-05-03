@@ -131,8 +131,8 @@ function fadeout(target) {
 
 function addtext(target) {
 	// coordinates of the SVG graphing area
-	var svgx=document.getElementById("grapharea").offsetLeft
-	var svgy=document.getElementById("grapharea").offsetTop
+	var svgx=document.getElementById("grapharea").getBoundingClientRect()['left']
+	var svgy=document.getElementById("grapharea").getBoundingClientRect()['top']
 
 	// Thanks for not telling me what to replace it with Chrome!
 	// 'SVGElement.offsetLeft' is deprecated and will be removed in M50, around April 2016. See https://www.chromestatus.com/features/5724912467574784 for more details.
@@ -150,7 +150,7 @@ function addtext(target) {
 		var annofill='black'
 	}
 
-	var text=grapharea.text(target.pageX-svgx,target.pageY-svgy,'Text Annotation').attr({'font-family':annoface,'font-size':annosize,'text-anchor':'start','fill':annofill,'font-weight':annoweight,'dominant-baseline':'text-before-edge',cursor:'pointer',colorchange:'fill',context:'text_context_menu'})
+	var text=grapharea.text(target.clientX-svgx,target.clientY-svgy,'Text Annotation').attr({'font-family':annoface,'font-size':annosize,'text-anchor':'start','fill':annofill,'font-weight':annoweight,'dominant-baseline':'text-before-edge',cursor:'pointer',colorchange:'fill',context:'text_context_menu'})
 	console.log(text,annosize)
 	text.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 }
@@ -276,8 +276,8 @@ function preventDefaultForScrollKeys(e) {
 
 function startpath(e) {
 	// coordinates of the SVG graphing area
-	var svgx=document.getElementById("grapharea").offsetLeft
-	var svgy=document.getElementById("grapharea").offsetTop
+	var svgx=document.getElementById("grapharea").getBoundingClientRect()['left']
+	var svgy=document.getElementById("grapharea").getBoundingClientRect()['top']
 
 	if(typeof(chartobject)!=='undefined'){
 		var callwidth=chartobject.callout_thickness
@@ -290,7 +290,7 @@ function startpath(e) {
 	}
 
 	drawpath=1
-	pathstart=[e.pageX-svgx,e.pageY-svgy]
+	pathstart=[e.clientX-svgx,e.clientY-svgy]
 	circstart=grapharea.circle(pathstart[0],pathstart[1],1.5).attr({class:'callout',stroke:callstroke,'stroke-width':callwidth,'shape-rendering':'geometricPrecision',fill:'none',context:'callout_context_menu','stroke-dasharray':calldash})
 	grapharea.click(endpath)
 	grapharea.mousemove(tracker)
@@ -298,35 +298,35 @@ function startpath(e) {
 
 function startarrow(e) {
 	// coordinates of the SVG graphing area
-	var svgx=document.getElementById("grapharea").offsetLeft
-	var svgy=document.getElementById("grapharea").offsetTop
+	var svgx=document.getElementById("grapharea").getBoundingClientRect()['left']
+	var svgy=document.getElementById("grapharea").getBoundingClientRect()['top']
 
 	drawpath=1
-	pathstart=[e.pageX-svgx,e.pageY-svgy]
+	pathstart=[e.clientX-svgx,e.clientY-svgy]
 	grapharea.click(endarrow)
 	grapharea.mousemove(tracker)
 }
 
 function tracker(e) {
 	// coordinates of the SVG graphing area
-	var svgx=document.getElementById("grapharea").offsetLeft
-	var svgy=document.getElementById("grapharea").offsetTop
+	var svgx=document.getElementById("grapharea").getBoundingClientRect()['left']
+	var svgy=document.getElementById("grapharea").getBoundingClientRect()['top']
 
 	try{trackline.remove()}catch(err){}
-	trackline=grapharea.line(pathstart[0],pathstart[1],e.pageX-svgx,e.pageY-svgy).attr({'stroke-width':1,'stroke':'black'})
+	trackline=grapharea.line(pathstart[0],pathstart[1],e.clientX-svgx,e.clientY-svgy).attr({'stroke-width':1,'stroke':'black'})
 }
 
 function endpath(e) {
 	// coordinates of the SVG graphing area
-	var svgx=document.getElementById("grapharea").offsetLeft
-	var svgy=document.getElementById("grapharea").offsetTop
+	var svgx=document.getElementById("grapharea").getBoundingClientRect()['left']
+	var svgy=document.getElementById("grapharea").getBoundingClientRect()['top']
 
 	drawpath=0
 	grapharea.unmousemove(tracker)
 	grapharea.unclick(endpath)
 	try{trackline.remove()}catch(err){}
 
-	if(e.pageY-svgy>pathstart[1]){
+	if(e.clientY-svgy>pathstart[1]){
 		yoffset=1
 	} else{
 		yoffset=-1
@@ -342,7 +342,7 @@ function endpath(e) {
 		var calldash=[]
 	}
 
-	path_string='M'+pathstart[0]+' '+(pathstart[1]+yoffset)+'L'+pathstart[0]+' '+(e.pageY-svgy)+'L'+(e.pageX-svgx)+' '+(e.pageY-svgy)
+	path_string='M'+pathstart[0]+' '+(pathstart[1]+yoffset)+'L'+pathstart[0]+' '+(e.clientY-svgy)+'L'+(e.clientX-svgx)+' '+(e.clientY-svgy)
 	finalline=grapharea.path(path_string).attr({class:'callout','stroke-width':callwidth,'stroke':callstroke,'shape-rendering':'crispEdges',fill:'none',colorchange:'stroke',context:'callout_context_menu','stroke-dasharray':calldash})
 	var temp_group=grapharea.group(finalline,circstart)
 	temp_group.drag()
@@ -350,8 +350,8 @@ function endpath(e) {
 
 function endarrow(e) {
 	// coordinates of the SVG graphing area
-	var svgx=document.getElementById("grapharea").offsetLeft
-	var svgy=document.getElementById("grapharea").offsetTop
+	var svgx=document.getElementById("grapharea").getBoundingClientRect()['left']
+	var svgy=document.getElementById("grapharea").getBoundingClientRect()['top']
 
 	if(typeof(chartobject)!=='undefined'){
 		var callwidth=chartobject.arrow_thickness
@@ -369,7 +369,7 @@ function endarrow(e) {
 	grapharea.unmousemove(tracker)
 	grapharea.unclick(endarrow)
 	try{trackline.remove()}catch(err){}
-	finalline=grapharea.line(pathstart[0],pathstart[1],e.pageX-svgx,e.pageY-svgy).attr({arrow:1,ident:'none',class:'callout','stroke-width':callwidth,'stroke':callstroke,'shape-rendering':'auto','marker-end':amarker,colorchange:'stroke',context:'callout_context_menu','stroke-dasharray':calldash})
+	finalline=grapharea.line(pathstart[0],pathstart[1],e.clientX-svgx,e.clientY-svgy).attr({arrow:1,ident:'none',class:'callout','stroke-width':callwidth,'stroke':callstroke,'shape-rendering':'auto','marker-end':amarker,colorchange:'stroke',context:'callout_context_menu','stroke-dasharray':calldash})
 	finalline.drag()
 }
 

@@ -39,6 +39,7 @@ body{width:700px;margin-left:auto;margin-right:auto;padding-top:22px;padding-bot
 <li> Missing data is handled much differently now. If your dataset has missing data, the row will not be subject to listwise deletion. Instead the row will be kept and, when possible, used for graphing. Moreover, if you are creating a line graph, missing data will be interpreted as interruptions in the line. If you don't want gaps in your line, remove missing data first. Missing data should be exactly that - missing. If comma delimited - ',,' etc. A dot from Stata or similar will work in some instances but not others.</li>
 <li> Please use custom axes and limits for dates cautiously right now and report any problems to me - in certain circumstances they may lead to incorrectly positioned data.</li>
 <li> You now have more flexibility when creating keys. The legend tab will show you a rough preview of what your key will look like. you can delete rows in the key by x'ing them out. You can also add a title to the key and you can restrict the with of the key, which may be useful if you have very long group names. Keep in mind that you can still change graph element attributes after the fact ie by right-clicking a line to make it dotted or etc, so not everything needs to be captured in your key, or in your graph setup, before graphing.</li>
+<li> Removed references to offsetLeft and offsetTop. Chrome has moved to using getBoundingClientRect and Firefox already was, so this improves compatibility for adding notations to the graph.</li>
 </ul>
 
 <h1>v1.7</h1>
