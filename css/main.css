@@ -38,8 +38,10 @@
 
 	/* legends */
 	.key-box{height:30px;border:1px dashed black;}
-	.key-group{}
-	.key-row{}
+	.connectedSortable{padding:10px;margin-top:16px;list-style-type:none;border-radius:1px;border:1px dashed #ccc;}
+	.ui-state-default{padding:8px;border-radius:2px;background:white;margin:2px;padding-right:15px;}
+	.xbox{height:20px;width:20px;float:right;vertical-align:middle;line-height:100%;}
+	.xbox:after{content:"\f00d";font-family:'FontAwesome';color:black;}
 
 	/* buttons */
 	.btn {border-radius:2px;display:inline-block;position:relative;border:1px solid #bbb;}

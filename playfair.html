@@ -519,7 +519,7 @@
 					</div>
 					<div class='cold-md-6'>
 						<div class='uibox_text'>Preview</div>
-						<div class='uibox'>
+						<div class='uibox' id='PREVIEW'>
 							Select your variables from the chart tab, then come back here to see a preview of the legend and to make modifications. Currently, no legend will be created.
 						</div>
 					</div>
@@ -1527,10 +1527,10 @@ var clickedevent
 var grapharea = Snap('#grapharea')
 var drawpath
 var loadfile
-annosize='14px'
-annoweight=400
-annoface='Lato'
-annofill='black'
+var annosize='14px'
+var annoweight=400
+var annoface='Lato'
+var annofill='black'
 var gfilters = '<filter id="f3" x="0" y="0" width="200%" height="200%"><feOffset result="offOut" in="SourceAlpha" dx="3" dy="3" /><feGaussianBlur result="blurOut" in="offOut" stdDeviation="3" /><feBlend in="SourceGraphic" in2="blurOut" mode="normal" /></filter>';
 grapharea.append(Snap.parse(gfilters))
 var shadowfilter=Snap('#f3')
@@ -1628,13 +1628,85 @@ $(".variable_select").change(function(){
 		// the same x and y variables, and the same grouping variable/s, then those should be
 		// combined into one key item.
 
-		for(var key in structure){
+		console.log(structure)
+		var deleted=[]
 
+		for(var key in structure){
+			if(deleted.indexOf(key)==-1){
+				var matching_geoms=[]
+				// re-create groups for the current key
+				var groups=[]
+				for (var grouper in geom[key].grouping){
+					if(geom[key].grouping[grouper]!='none'){
+						groups.push(geom[key].grouping[grouper])
+					}
+				}
+
+				// loop through other keys and see if groups is equal to temp_groups (that key's groups)
+				for(var entry in geom){
+					if(entry!=key){
+						var temp_groups=[]
+						for(var grouper in geom[entry].grouping){
+							if(geom[entry].grouping[grouper]!='none'){
+								temp_groups.push(geom[entry].grouping[grouper])
+							}
+						}
+
+						if(arraysAreIdentical(temp_groups,groups)==true){
+							// grouping variables are the same - are the x and y vars the same?
+							if(geom[key].xvar==geom[entry].xvar && geom[key].yvar==geom[entry].yvar){
+								matching_geoms.push(entry)
+							}
+						}
+
+						// use matching_geoms to alter the structure dict
+						if(matching_geoms.length>0){
+							matching_geoms.push(key)
+							console.log(key,matching_geoms)
+							for(var match in matching_geoms){
+								// delete the matching item
+								delete structure[match]
+								// alter the name of the matched item
+								structure[matching_geoms.join()]=structure[key]
+								delete structure[key]
+								deleted.push(key)
+								deleted.push(match)
+							}
+						}
+					}
+				}
+			}
 		}
+
 		console.log(structure)
 
 		// final key item is:
 		// {line,point:[[1965,1],[1966,2], etc...],'bar':[[1,2],[3,4]]}
+		// DO SOMETHING WITH FINAL KEY STRUCTURE
+		if(Object.keys(structure).length>0){
+			$('#PREVIEW').empty()
+			$('#PREVIEW').append("Use the preview below to delete key items you don't want (by clicking the x), change the order of items, and arrange them in groups.")
+
+			for(var key in structure){
+				$('#PREVIEW').append("<ul id='"+key+"sortable' class='connectedSortable'>")
+				for(var i=0;i<structure[key].length;i++){
+					$('#'+key+'sortable').append('<li class="ui-state-default" id="'+key+i+'list">'+key+' | '+structure[key][i]+'<div class="xbox" onclick=destroy("#'+key+i+'list")></div></li>')
+				}
+			}
+
+			var string='#'
+			for(var key in structure){
+				string=string+key+'sortable'+', '
+			}
+			string=string.slice(0,-2)
+			console.log(string)
+
+			$(function() {
+				$(string).sortable({
+					connectWith:'.connectedSortable'
+				}).disableSelection()
+			})
+		}
 	}
 })
 
@@ -1650,25 +1722,27 @@ function unique(arr) {
     return result;
 }
 
+// from stackoverflow - Adam Rackis - http://stackoverflow.com/a/22395370/3001940
+function arraysAreIdentical(arr1, arr2){
+    if (arr1.length !== arr2.length) return false;
+    for (var i = 0, len = arr1.length; i < len; i++){
+        if (arr1[i] !== arr2[i]){
+            return false;
+        }
+    }
+    return true; 
+}
 
-// from stackoverflow, @Bergi: http://stackoverflow.com/a/15310051/3001940
-// function cartesian() {
-//     var r = [], arg = arguments[0], max = arg.length-1;
-//     // console.log(arg)
-//     function helper(arr, i) {
-//         for (var j=0, l=arg[i].length; j<l; j++) {
-//             var a = arr.slice(0); // clone arr
-//             a.push(arg[i][j]);
-//             if (i==max)
-//                 r.push(a);
-//             else
-//                 helper(a, i+1);
-//         }
-//     }
-//     helper([], 0);
-//     return r;
-// }
+// xbox deletion
+$('.xbox').click(function(){
+	console.log('destruction!')
+	$(this).closest('.li').remove()
+})
 
+function destroy(id){
+	console.log(id)
+	$(id).remove()
+}
 
 </script>
 </html>
