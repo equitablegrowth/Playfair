@@ -36,6 +36,11 @@
 	.input-group-addon{border-radius:0px;font-size:1em;padding:5px;}
 	.form-control{border-radius:0px;box-shadow:none;height:auto;line-height:inherit;padding:5px;padding-left:10px;}
 
+	/* legends */
+	.key-box{height:30px;border:1px dashed black;}
+	.key-group{}
+	.key-row{}
+
 	/* buttons */
 	.btn {border-radius:2px;display:inline-block;position:relative;border:1px solid #bbb;}
 	.btn-group{display:inline-block;position:relative;}

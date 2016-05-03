@@ -982,6 +982,7 @@ function draw_points(axes,point,snapobj){
 		var type_groups=[...new Set(chartobject.flatdata[point.grouping.color])]
 	}
 
+	console.log(point,chartobject.flatdata)
 	// check for sizing variable and get min and max for scaling
 	if(point.size!=='none'){
 		var minsize=Math.min(...chartobject.flatdata[point.size])

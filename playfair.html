@@ -10,9 +10,9 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2014-11-29/FileSaver.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.4.1/snap.svg-min.js"></script>
-
 	<!-- playfair components -->
 	<script src="components/context.js"></script>
 	<script src="components/miscfunc.js"></script>
@@ -23,6 +23,7 @@
 	<script src="components/graphfunc.js"></script>
 
 	<!-- stylesheets -->
+	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
 	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="css/keys.css" type="text/css" />
@@ -351,12 +352,10 @@
 								</span>
 							</span>
 						</div>
-						<div class='uibox_text'>Key</div>
+						<div class='uibox_text'>Logo</div>
 						<div class='uibox'>
-							<!-- <input id='nokey' type='radio' name='key' value='none'><label for='nokey'><span><span></span></span>None</label> -->
-							<input id='topkey' type='radio' name='key' value='top'><label for='topkey'><span><span></span></span>Top</label>
-							<!-- <input id='rightkey' type='radio' name='key' value='right'><label for='rightkey'><span><span></span></span>Right</label> -->
-							<input id='floatkey' type='radio' name='key' value='float' checked><label for='floatkey'><span><span></span></span>Float</label>
+							<input id='nologo' type='radio' name='logo' value='nologo'><label for='nologo'><span><span></span></span>None</label>
+							<input id='brlogo' type='radio' name='logo' value='brlogo' checked><label for='brlogo'><span><span></span></span>Bottom-right</label>
 						</div>
 					</div>
 
@@ -376,12 +375,6 @@
 									<input type="text styled-input" placeholder="480" id='gheight' onchange="changedimensions()">
 								</span>
 							</div>
-						</div>
-
-						<div class='uibox_text'>Logo</div>
-						<div class='uibox'>
-							<input id='nologo' type='radio' name='logo' value='nologo'><label for='nologo'><span><span></span></span>None</label>
-							<input id='brlogo' type='radio' name='logo' value='brlogo' checked><label for='brlogo'><span><span></span></span>Bottom-right</label>
 						</div>
 					</div>
 				</div>
@@ -502,8 +495,34 @@
 
 			<div class='tab-content'>
 				<div class='row'>
-					
+					<div class="col-md-6">
+						<div class="labeled_ele">
+							<label>Title</label>
+							<span class='styled-input'>
+								<input type="text styled-input" placeholder="Leave this blank to omit a title." id='legtitle'>
+							</span>
+						</div>
+						<div class="labeled_ele">
+							<label>Max Width</label>
+							<span class='styled-input'>
+								<input type="text styled-input" placeholder="Restrict the width of the legend." id='legtitle'>
+							</span>
+						</div>
 
+						<div class='uibox_text'>Key</div>
+						<div class='uibox'>
+							<!-- <input id='nokey' type='radio' name='key' value='none'><label for='nokey'><span><span></span></span>None</label> -->
+							<input id='topkey' type='radio' name='key' value='top'><label for='topkey'><span><span></span></span>Top</label>
+							<!-- <input id='rightkey' type='radio' name='key' value='right'><label for='rightkey'><span><span></span></span>Right</label> -->
+							<input id='floatkey' type='radio' name='key' value='float' checked><label for='floatkey'><span><span></span></span>Float</label>
+						</div>
+					</div>
+					<div class='cold-md-6'>
+						<div class='uibox_text'>Preview</div>
+						<div class='uibox'>
+							Select your variables from the chart tab, then come back here to see a preview of the legend and to make modifications. Currently, no legend will be created.
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -1561,6 +1580,91 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 		graph_type=$('.nav-tabs .active').text()
 	}
 });
+
+
+//////////////////////// LEGEND INTERFACE //////////////////////////////
+// when a variable_select is changed, run preview() and check to see if
+// any geom types have been completed. If they have, create a preview of
+// what the key will look like by creating each grouping.
+
+$(".variable_select").change(function(){
+	console.log('legend interface')
+	var geom=preview()
+	var structure={}
+
+	if(Object.keys(geom).length>0){
+		// for each geom, start a separate loop to place any key items
+		for(var key in geom){
+			var groups=[]
+			for(var grouper in geom[key].grouping){
+				if(geom[key].grouping.grouper!='none'){
+					console.log(grouper)
+					groups.push(geom[key].grouping[grouper])
+				}
+			}
+
+			// so now you have groups=[grouping_var1,grouping_var2]
+			// figure out what the groups are and add each item to
+			// structure with the geom as key
+			console.log(groups)
+			if(groups.length>0){
+				var cats=[]
+				for(var i=0;i<groups.length;i++){
+					if([...new Set(final_data[groups[i]])].length>0){
+						cats.push([...new Set(final_data[groups[i]])])
+					}
+				}
+
+				if(cats.length>1){
+					structure[key]=cartesian(cats)
+				} else {
+					var temp=[]
+					for(var j=0;j<cats.length;j++){
+						temp.push(cats[j])
+					}
+					console.log(temp)
+					structure[key]=temp[0]
+				}
+			}
+		}
+	}
+
+	// structure looks like:
+	// {point:[[group1,group2],[group1,group3],[group2,group3]], line:[[group1],[group2]]}
+	// you can iterate through each of these keys to build one section of the key
+	// first though, use final_data to verify that these groupings even exist. If the group
+	// is just one variable, it def exists, but if it is a combination of 2 groupings (ie 
+	// [group1,group2]) then the grouping might not exist.
+
+	// second, check to see if there are exact duplicates within geoms. If any 2 geoms have 
+	// the same x and y variables, and the same grouping variable/s, then those should be
+	// combined into one key item.
+
+	for(var key in structure){
+
+	}
+	console.log(structure)
+})
+
+
+// from stackoverflow, @Bergi: http://stackoverflow.com/a/15310051/3001940
+function cartesian() {
+    var r = [], arg = arguments[0], max = arg.length-1;
+    console.log(arg)
+    function helper(arr, i) {
+        for (var j=0, l=arg[i].length; j<l; j++) {
+            var a = arr.slice(0); // clone arr
+            a.push(arg[i][j]);
+            if (i==max)
+                r.push(a);
+            else
+                helper(a, i+1);
+        }
+    }
+    helper([], 0);
+    return r;
+}
+
 
 </script>
 </html>

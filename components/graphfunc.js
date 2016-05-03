@@ -26,7 +26,6 @@ function changedimensions() {
 function preview() {
 	// set up geom_dict by looking at all the stuff in chart and gathering variables as appropriate
 	var geom_dict={}
-	var ready=0
 
 	if($("#point_select_x").val()!='none' & $("#point_select_y").val()!='none'){
 		var x_var=$("#point_select_x").val()
@@ -35,7 +34,7 @@ function preview() {
 		var color=$("#point_select_color").val()
 		var size=$("#point_select_size").val()
 		var label=$("#point_select_label").val()
-		var type=$("#point_select_type").val()
+		var type=$("#point_select_types").val()
 
 		var pointlabel=document.getElementById('labels').checked
 		// var point_type=$('input[name=linepoint]:checked').val()
@@ -67,6 +66,7 @@ function preview() {
 	}
 
 	return geom_dict
+}
 
 // redraw is the main graphing setup function. Gets variable values and passes them to playfair.js
 function redraw() {
@@ -95,12 +95,12 @@ function redraw() {
 			var color=$("#point_select_color").val()
 			var size=$("#point_select_size").val()
 			var label=$("#point_select_label").val()
-			var type=$("#point_select_type").val()
+			var type=$("#point_select_types").val()
 
 			var pointlabel=document.getElementById('labels').checked
 			// var point_type=$('input[name=linepoint]:checked').val()
 
-			geom_dict['point']={'xvar':x_var,'yvar':y_var,'labels':label,'labelall':pointlabel,'grouping':{'color':color,'size':size,'type':type}}
+			geom_dict['point']={'xvar':x_var,'yvar':y_var,'labels':label,'size':size,'labelall':pointlabel,'grouping':{'color':color,'type':type}}
 			ready=1
 		}
 
@@ -113,7 +113,7 @@ function redraw() {
 			var size=$("#line_select_size").val()
 			var type=$("#line_select_type").val()
 
-			geom_dict['line']={'xvar':x_var,'yvar':y_var,'connect':connect,'grouping':{'color':color,'size':size,'type':type}}
+			geom_dict['line']={'xvar':x_var,'yvar':y_var,'connect':connect,'size':size,'grouping':{'color':color,'type':type}}
 			ready=1
 		}
 
