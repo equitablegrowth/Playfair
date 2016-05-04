@@ -63,6 +63,10 @@ window.playfair = (function () {
 		this.shiftx=0
 		this.datedenom=[0,0]
 
+		if(geom_dict.bar && geom_dict.bar.orientation!='on'){
+			this.ybar=1
+		}
+
 		var xmaxes=[]
 		var xmins=[]
 
@@ -1082,20 +1086,20 @@ function draw_bars(axes,bar,snapobj){
 		}
 	} else {
 		if(chartobject.flatdata[bar.yvar].dtype!='text'){
-			var totalwidth=Math.abs(chartobject.barchart_width*(get_coord(chartobject.mindiff,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,0,chartobject.shifty)-get_coord(0,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,0,chartobject.shifty)))
+			var totalwidth=Math.abs(chartobject.barchart_width*(get_coord(chartobject.mindiff,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)-get_coord(0,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)))
 			var barwidth=totalwidth
 			console.log(barwidth)
 			// cap barwidth based on overrunning the left or right side of the graph - ie bars should never break out of the axis box
-			if(totalwidth/2>get_coord(chartobject.xmin,chartobject.xlimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,0,chartobject.shifty)-axes[0] || totalwidth/2>axes[1]-get_coord(chartobject.ymax,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,0,chartobject.shifty)){
+			if(totalwidth/2>get_coord(chartobject.ymin,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)-axes[0] || totalwidth/2>axes[1]-get_coord(chartobject.ymax,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)){
 				console.log('clipping')
-				var totalwidth=Math.abs(chartobject.barchart_width*2*(get_coord(chartobject.ymin,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,0,chartobject.shifty)-axes[2]))
+				var totalwidth=Math.abs(chartobject.barchart_width*2*(get_coord(chartobject.ymin,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)-axes[2]))
 				var barwidth=totalwidth
 				console.log(barwidth)
 			}
 		} else {
 			// if the axis is categorical, get width based on that instead.
-			console.log(get_coord(chartobject.flatdata[bar.yvar][0],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,0,chartobject.shifty))
-			var totalwidth=Math.abs(chartobject.barchart_width*(get_coord(chartobject.flatdata[bar.yvar][0],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,0,chartobject.shifty)-get_coord(chartobject.flatdata[bar.yvar][1],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,0,chartobject.shifty)))
+			console.log(get_coord(chartobject.flatdata[bar.yvar][0],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1))
+			var totalwidth=Math.abs(chartobject.barchart_width*(get_coord(chartobject.flatdata[bar.yvar][0],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)-get_coord(chartobject.flatdata[bar.yvar][1],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)))
 			var barwidth=totalwidth
 		}
 	}
@@ -1116,6 +1120,11 @@ function draw_bars(axes,bar,snapobj){
 					var x2=x1+barwidth
 					var y1=get_coord(current[bar.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
 					var y2=get_coord(0,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
+				} else {
+					var y1=get_coord(current[bar.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shiftx,1)-(totalwidth/2)+barwidth*(color_groups.indexOf(current[bar.grouping.color]))
+					var y2=y1+barwidth
+					var x1=get_coord(current[bar.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
+					var x2=get_coord(0,chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
 				}
 			} else {
 				var color=chartobject.qualitative_color[0]
@@ -1126,6 +1135,11 @@ function draw_bars(axes,bar,snapobj){
 					var x2=x1+barwidth
 					var y1=get_coord(current[bar.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
 					var y2=get_coord(0,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
+				} else {
+					var y1=get_coord(current[bar.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)-(barwidth/2)
+					var y2=y1+barwidth
+					var x1=get_coord(current[bar.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
+					var x2=get_coord(0,chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
 				}
 			}
 
@@ -1141,7 +1155,7 @@ function draw_bars(axes,bar,snapobj){
 	snapobj.append(snapobj.selectAll('[zeroline="1"]'))
 }
 
-function get_coord(value,[limit_start,limit_end],[pixel_start,pixel_end],type,array,y,shift){
+function get_coord(value,[limit_start,limit_end],[pixel_start,pixel_end],type,array,y,shift,ybar){
 	// universal function for converting a numerical or categorical value into a pixel value on the chart
 	// shift is for bar charts etc where the element is going to be centered over the value instead of beginning
 	// at the value. Shift doesn't affect categorical axes, where shifting is always performed.
@@ -1166,7 +1180,11 @@ function get_coord(value,[limit_start,limit_end],[pixel_start,pixel_end],type,ar
 		}
 
 		if(y==1){
-			return pixel_start-(value-limit_start)/Math.abs(limit_end-limit_start)*Math.abs(pixel_end-pixel_start)
+			if(ybar==1){
+				return pixel_start-(value-limit_start)/Math.abs(limit_end-limit_start)*Math.abs(pixel_end-pixel_start)
+			} else {
+				return pixel_start-(value-limit_start)/Math.abs(limit_end-limit_start)*Math.abs(pixel_end-pixel_start)
+			}
 		} else {
 			return pixel_start+(value-limit_start)/Math.abs(limit_end-limit_start)*Math.abs(pixel_end-pixel_start)
 		}
@@ -1174,7 +1192,11 @@ function get_coord(value,[limit_start,limit_end],[pixel_start,pixel_end],type,ar
 		if(y==1){
 			var position=array.indexOf(value)+1
 			console.log('TEST',pixel_start,pixel_end,array,position)
-			return pixel_start-((2*position-1)/(2*array.length-1))*Math.abs(pixel_end-pixel_start)
+			if(ybar==1){
+				return pixel_start-((2*position-1)/(2*array.length))*Math.abs(pixel_end-pixel_start)
+			} else {
+				return pixel_start-((2*position-1)/(2*array.length-1))*Math.abs(pixel_end-pixel_start)
+			}
 		} else {
 			var position=array.indexOf(value)+1
 			return pixel_start+((2*position-1)/(2*array.length))*(pixel_end-pixel_start)
@@ -2120,7 +2142,7 @@ function draw_axes(playobj,xvar,yvar,shiftx,shifty) {
 		for(var j=0;j<lines.length;j++){
 			if (parseInt(lines[j])>=1000 || parseInt(lines[j])<=-1000){linesj=commas(lines[j])} else{linesj=lines[j]}
 			// var temp=snapobj.text(playobj.x+total_xoffset-playobj.ytick_to_yaxis,ystart_ycoord-(y_step/2)*shifty-y_step*i+j*parseInt(playobj.xtick_textsize),linesj).attr({fill:this.ytick_textfill,ident:'yaxis','font-size':playobj.ytick_textsize,'font-weight':playobj.ytick_textweight,'font-family':playobj.ytick_textface,'dominant-baseline':'text-before-edge','text-anchor':'end',colorchange:'fill',context:'text_context_menu'})
-			var tempy=get_coord(string,playobj.ylimits,[ystart_ycoord,yfinal_ycoord],yvar.dtype,yvar,1,playobj.shifty)
+			var tempy=get_coord(string,playobj.ylimits,[ystart_ycoord,yfinal_ycoord],yvar.dtype,yvar,1,playobj.shifty,chartobject.ybar)
 			var temp=snapobj.text(playobj.x+total_xoffset-playobj.ytick_to_yaxis,tempy,linesj).attr({fill:this.ytick_textfill,ident:'yaxis','font-size':playobj.ytick_textsize,'font-weight':playobj.ytick_textweight,'font-family':playobj.ytick_textface,'dominant-baseline':'text-before-edge','text-anchor':'end',colorchange:'fill',context:'text_context_menu'})
 			temp.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 			coords=temp.getBBox()
