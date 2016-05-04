@@ -134,7 +134,7 @@ window.playfair = (function () {
 
 			} else {
 				if(key=='bar'){
-					if(geom_dict[key].orientation=='vertical'){
+					if(geom_dict[key].orientation=='on'){
 						ymins.push(0)
 						this.shiftx=1
 
@@ -836,20 +836,30 @@ function remove_missing(array){
 			temp.splice(i,1)
 		}
 	}
-
 	return temp
 }
 
 function draw_lines(axes,line,snapobj){
 	// axes are [xleft,xright,ybottom,ytop]
 	// var is {'xvar':x_var,'yvar':y_var,'connect':connect,'grouping':{'color':color,'size':size,'type':type}}
+	var key_dict={}
 
 	// create sets of options for each grouping variable
 	if(line.grouping.color!=='none'){
 		var color_groups=[...new Set(remove_missing(chartobject.flatdata[line.grouping.color]))]
+		key_dict['color']={}
 	} 
 	if(line.grouping.type!=='none'){
 		var type_groups=[...new Set(remove_missing(chartobject.flatdata[line.grouping.type]))]
+		key_dict['type']={}
+	}
+
+	if(color_groups && type_groups){
+		key_dict['color,type']=[]
+	} else if(color_groups){
+		key_dict['color']=[]
+	} else if(type_groups){
+		key_dict['type']=[]
 	}
 
 	// check for sizing variable and get min and max for scaling
@@ -928,6 +938,9 @@ function draw_lines(axes,line,snapobj){
 		} else {
 			var linetype=chartobject.line_types[0]
 		}
+
+		// fill key_dict
+		key_dict['color'].push
 
 		// label
 		var label=current[0][line.color]+', '+current[0][line.type]
@@ -1049,23 +1062,44 @@ function draw_bars(axes,bar,snapobj){
 	// to figure out the width of a bar, need to find the two values that are *closest* on the x-axis.
 	// the bar width should be just large enough that those two bars have a little space between them
 	// this is already stored in mindiff
-	if(chartobject.flatdata[bar.xvar].dtype!='text'){
-		var totalwidth=Math.abs(chartobject.barchart_width*(get_coord(chartobject.mindiff,chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-get_coord(0,chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)))
-		var barwidth=totalwidth
-		console.log(barwidth)
-		// cap barwidth based on overrunning the left or right side of the graph - ie bars should never break out of the axis box
-		if(totalwidth/2>get_coord(chartobject.xmin,chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-axes[0] || totalwidth/2>axes[1]-get_coord(chartobject.xmax,chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)){
-			console.log('clipping')
-			var totalwidth=Math.abs(chartobject.barchart_width*2*(get_coord(chartobject.xmin,chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-axes[0]))
+	if(chartobject.bar.orientation=='on'){
+		if(chartobject.flatdata[bar.xvar].dtype!='text'){
+			var totalwidth=Math.abs(chartobject.barchart_width*(get_coord(chartobject.mindiff,chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-get_coord(0,chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)))
 			var barwidth=totalwidth
 			console.log(barwidth)
+			// cap barwidth based on overrunning the left or right side of the graph - ie bars should never break out of the axis box
+			if(totalwidth/2>get_coord(chartobject.xmin,chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-axes[0] || totalwidth/2>axes[1]-get_coord(chartobject.xmax,chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)){
+				console.log('clipping')
+				var totalwidth=Math.abs(chartobject.barchart_width*2*(get_coord(chartobject.xmin,chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-axes[0]))
+				var barwidth=totalwidth
+				console.log(barwidth)
+			}
+		} else {
+			// if the axis is categorical, get width based on that instead.
+			console.log(get_coord(chartobject.flatdata[bar.xvar][0],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx))
+			var totalwidth=Math.abs(chartobject.barchart_width*(get_coord(chartobject.flatdata[bar.xvar][0],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-get_coord(chartobject.flatdata[bar.xvar][1],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)))
+			var barwidth=totalwidth
 		}
 	} else {
-		// if the axis is categorical, get width based on that instead.
-		console.log(get_coord(chartobject.flatdata[bar.xvar][0],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx))
-		var totalwidth=Math.abs(chartobject.barchart_width*(get_coord(chartobject.flatdata[bar.xvar][0],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-get_coord(chartobject.flatdata[bar.xvar][1],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)))
-		var barwidth=totalwidth
+		if(chartobject.flatdata[bar.yvar].dtype!='text'){
+			var totalwidth=Math.abs(chartobject.barchart_width*(get_coord(chartobject.mindiff,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,0,chartobject.shifty)-get_coord(0,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,0,chartobject.shifty)))
+			var barwidth=totalwidth
+			console.log(barwidth)
+			// cap barwidth based on overrunning the left or right side of the graph - ie bars should never break out of the axis box
+			if(totalwidth/2>get_coord(chartobject.xmin,chartobject.xlimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,0,chartobject.shifty)-axes[0] || totalwidth/2>axes[1]-get_coord(chartobject.ymax,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,0,chartobject.shifty)){
+				console.log('clipping')
+				var totalwidth=Math.abs(chartobject.barchart_width*2*(get_coord(chartobject.ymin,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,0,chartobject.shifty)-axes[2]))
+				var barwidth=totalwidth
+				console.log(barwidth)
+			}
+		} else {
+			// if the axis is categorical, get width based on that instead.
+			console.log(get_coord(chartobject.flatdata[bar.yvar][0],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,0,chartobject.shifty))
+			var totalwidth=Math.abs(chartobject.barchart_width*(get_coord(chartobject.flatdata[bar.yvar][0],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,0,chartobject.shifty)-get_coord(chartobject.flatdata[bar.yvar][1],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,0,chartobject.shifty)))
+			var barwidth=totalwidth
+		}
 	}
+
 	// loop through observations in the dataset to draw bars
 	for(var i=0;i<chartobject.dataset.length;i++){
 		var current=chartobject.dataset[i]
@@ -1077,18 +1111,22 @@ function draw_bars(axes,bar,snapobj){
 				console.log(barwidth,color_groups.length)
 				var barwidth=totalwidth/color_groups.length
 				// set various values for bar locations
-				var x1=get_coord(current[bar.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-(totalwidth/2)+barwidth*(color_groups.indexOf(current[bar.grouping.color]))
-				var x2=x1+barwidth
-				var y1=get_coord(current[bar.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
-				var y2=get_coord(0,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
+				if(chartobject.bar.orientation=='on'){
+					var x1=get_coord(current[bar.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-(totalwidth/2)+barwidth*(color_groups.indexOf(current[bar.grouping.color]))
+					var x2=x1+barwidth
+					var y1=get_coord(current[bar.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
+					var y2=get_coord(0,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
+				}
 			} else {
 				var color=chartobject.qualitative_color[0]
 
 				// set various values for bar locations
-				var x1=get_coord(current[bar.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-(barwidth/2)
-				var x2=x1+barwidth
-				var y1=get_coord(current[bar.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
-				var y2=get_coord(0,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
+				if(chartobject.bar.orientation=='on'){
+					var x1=get_coord(current[bar.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-(barwidth/2)
+					var x2=x1+barwidth
+					var y1=get_coord(current[bar.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
+					var y2=get_coord(0,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
+				}
 			}
 
 			// label in this case should be the y-value
@@ -1134,7 +1172,9 @@ function get_coord(value,[limit_start,limit_end],[pixel_start,pixel_end],type,ar
 		}
 	} else if(type=='text'){
 		if(y==1){
-			console.log('nothing here!')
+			var position=array.indexOf(value)+1
+			console.log('TEST',pixel_start,pixel_end,array,position)
+			return pixel_start-((2*position-1)/(2*array.length-1))*Math.abs(pixel_end-pixel_start)
 		} else {
 			var position=array.indexOf(value)+1
 			return pixel_start+((2*position-1)/(2*array.length))*(pixel_end-pixel_start)

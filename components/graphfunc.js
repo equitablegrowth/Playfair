@@ -124,8 +124,9 @@ function redraw() {
 			var color=$("#bar_select_color").val()
 			var bargroup=$("#bar_select_group").val()
 			var barspace=document.getElementById('spacing').checked
+			var orientation=$('input[name=orientation]:checked').val()
 
-			geom_dict['bar']={'xvar':x_var,'yvar':y_var,spacing:barspace,'orientation':'vertical','grouping':{'color':color,'bargroup':bargroup}}
+			geom_dict['bar']={'xvar':x_var,'yvar':y_var,spacing:barspace,'orientation':orientation,'grouping':{'color':color,'bargroup':bargroup}}
 			ready=1
 		}
 
@@ -272,9 +273,6 @@ function redraw() {
 					}
 
 					var options={}
-
-					// orientation - 'vertical' or 'horizontal'
-					// options['orientation']=$('input[name=barorient]:checked').val()
 
 					console.log(chartobject)
 					chartobject.chart(options)

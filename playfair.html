@@ -781,10 +781,18 @@
 					<div class='col-md-6'>
 						<div class='uibox_text'>Bar Style</div>
 						<div class='uibox'>
-							<div class='col-md-6'>
-								<div>
-									<input type="checkbox" id="spacing" name="spacing" class="switch" checked/>
-									<label for="spacing">Space between bars</label>
+							<div class='row'>
+								<div class='col-md-6'>
+									<div>
+										<input type="checkbox" id="spacing" name="spacing" class="switch" checked/>
+										<label for="spacing">Space between bars</label>
+									</div>
+								</div>
+								<div class='col-md-6'>
+									<div>
+										<input type="checkbox" id="orientation" name="orientation" class="switch" checked/>
+										<label for="orientation">Vertical Bars</label>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -1600,13 +1608,14 @@ $(".variable_select").change(function(){
 			var groups=[]
 			for(var grouper in geom[key].grouping){
 				if(geom[key].grouping[grouper]!='none'){
-					groups.push(geom[key].grouping[grouper])
+					groups.push([grouper,geom[key].grouping[grouper]])
 				}
 			}
 
 			// so now you have groups=[grouping_var1,grouping_var2]
 			// figure out what the groups are and add each item to
 			// structure with the geom as key
+			// groups is: [['color','group_var'],['type','group_var2']]
 			console.log(groups)
 			if(groups.length>0){
 				var cats=datadict.map(function(row){
