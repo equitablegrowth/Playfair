@@ -1116,11 +1116,13 @@ function draw_bars(axes,bar,snapobj){
 				var barwidth=totalwidth/color_groups.length
 				// set various values for bar locations
 				if(chartobject.bar.orientation=='on'){
+					var orient='vertical'
 					var x1=get_coord(current[bar.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-(totalwidth/2)+barwidth*(color_groups.indexOf(current[bar.grouping.color]))
 					var x2=x1+barwidth
 					var y1=get_coord(current[bar.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
 					var y2=get_coord(0,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
 				} else {
+					var orient='horizontal'
 					var y1=get_coord(current[bar.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shiftx,1)-(totalwidth/2)+barwidth*(color_groups.indexOf(current[bar.grouping.color]))
 					var y2=y1+barwidth
 					var x1=get_coord(current[bar.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
@@ -1131,11 +1133,13 @@ function draw_bars(axes,bar,snapobj){
 
 				// set various values for bar locations
 				if(chartobject.bar.orientation=='on'){
+					var orient='vertical'
 					var x1=get_coord(current[bar.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-(barwidth/2)
 					var x2=x1+barwidth
 					var y1=get_coord(current[bar.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
 					var y2=get_coord(0,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
 				} else {
+					var orient='horizontal'
 					var y1=get_coord(current[bar.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)-(barwidth/2)
 					var y2=y1+barwidth
 					var x1=get_coord(current[bar.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
@@ -1147,7 +1151,7 @@ function draw_bars(axes,bar,snapobj){
 			var label=current[bar.yvar]
 
 			// draw bar
-			snapobj.path('M'+x1+','+y2+'L'+x2+','+y2+'L'+x2+','+y1+'L'+x1+','+y1+'L'+x1+','+y2).attr({orient:'vertical','data_type':'bar','data_label':label,'group':current[bar.grouping.subgroup],'class':'dataelement','shape-rendering':'crispEdges',fill:color,colorchange:'fill',context:'data_context_menu'})
+			snapobj.path('M'+x1+','+y2+'L'+x2+','+y2+'L'+x2+','+y1+'L'+x1+','+y1+'L'+x1+','+y2).attr({orient:orient,'data_type':'bar','data_label':label,'group':current[bar.grouping.subgroup],'class':'dataelement','shape-rendering':'crispEdges',fill:color,colorchange:'fill',context:'data_context_menu'})
 		}
 	}
 

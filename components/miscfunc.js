@@ -39,6 +39,15 @@ function highlight_element(ev) {
 				hovered=1	
 			}
 		} catch(err){}
+
+
+		try{
+			if(ev.target.className.baseVal=='dataelement'){
+				coords=item.getBBox()
+				highlighttext=grapharea.text(coords.x+coords.width/2,coords.y+coords.height/2,item.attr('data_label')).attr({'font-family':'Lato, Arial, sans-serif','font-size':16,'text-anchor':'start','fill':'black','font-weight':400,cursor:'pointer'})
+				hovered=1
+			}
+		} catch(err){}
 	}
 }
 
