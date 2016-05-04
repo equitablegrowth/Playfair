@@ -131,14 +131,33 @@ function redraw() {
 
 		// grab all text elements from the design tab
 		// replace the apostrophe character from word if applicable: Source’s
-		var hed=$("#hed").val().replace("’","'")
-		var dek=$("#dek").val().replace(/\uFFFD/g,"'")
-		var source=$("#source").val().replace(/\uFFFD/g,"'")
-		var note=$("#note").val().replace(/\uFFFD/g,"'")
-		var xlabel=$("#xlabel").val().replace(/\uFFFD/g,"'")
-		var ylabel=$("#ylabel").val().replace(/\uFFFD/g,"'")
+		var hed=$("#hed").val()
+		var dek=$("#dek").val()
+		var source=$("#source").val()
+		var note=$("#note").val()
+		var xlabel=$("#xlabel").val()
+		var ylabel=$("#ylabel").val()
 
 		if (ready==1) {
+			// check legends box and retrieve whatever is in there as an object to pass to playfair
+			var legend={}
+			$('#PREVIEW ul').each(function(){
+				console.log(this)
+				$(this).find('li').each(function(){
+					var option=$(this).text().split(' | ')
+					if(Object.keys(legend).indexOf(option[0])==-1){
+						legend[option[0]]=[option[1]]
+					} else {
+						var temp=legend[option[0]]
+						console.log(temp)
+						temp.push(option[1])
+						legend[option[0]]=temp
+					}
+				})
+			})
+
+			// legend looks like:
+			// {line:[g1,g2,g3],point:[g4,g5]} or {line,point:[g1,g2,g3]}
 
 			// initialize playfair.js. First use init_graph to set up workspace, then call the
 			// data method to set up data and variables.

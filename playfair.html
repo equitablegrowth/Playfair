@@ -519,8 +519,10 @@
 					</div>
 					<div class='cold-md-6'>
 						<div class='uibox_text'>Preview</div>
-						<div class='uibox' id='PREVIEW'>
+						<div class='uibox' id='PREVIEWbase'>
+							<div id='PREVIEW'>
 							Select your variables from the chart tab, then come back here to see a preview of the legend and to make modifications. Currently, no legend will be created.
+							</div>
 						</div>
 					</div>
 				</div>
@@ -1684,8 +1686,9 @@ $(".variable_select").change(function(){
 		// {line,point:[[1965,1],[1966,2], etc...],'bar':[[1,2],[3,4]]}
 		// DO SOMETHING WITH FINAL KEY STRUCTURE
 		if(Object.keys(structure).length>0){
-			$('#PREVIEW').empty()
-			$('#PREVIEW').append("Use the preview below to delete key items you don't want (by clicking the x), change the order of items, and arrange them in groups.")
+			$('#PREVIEWbase').empty()
+			$('#PREVIEWbase').prepend("<div id='PREVIEW'></div>")
+			$('#PREVIEWbase').prepend("Use the preview below to delete key items you don't want (by clicking the x), change the order of items, and arrange them in groups.")
 
 			for(var key in structure){
 				$('#PREVIEW').append("<ul id='"+key+"sortable' class='connectedSortable'>")
@@ -1694,9 +1697,9 @@ $(".variable_select").change(function(){
 				}
 			}
 
-			var string='#'
+			var string=''
 			for(var key in structure){
-				string=string+key+'sortable'+', '
+				string=string+'#'+key+'sortable'+', '
 			}
 			string=string.slice(0,-2)
 			console.log(string)
