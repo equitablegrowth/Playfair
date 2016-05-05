@@ -34,6 +34,7 @@ window.playfair = (function () {
 	// data comes in as the final_data object - this is an object where each
 	// key is a row-heading that corresponds to a list of values
 	Playfair.prototype.data = function(data,geom_dict) {
+		console.log(data.date[1])
 		var datadict=[]
 		for(var key in data){
 			var items=data[key].length
@@ -66,7 +67,6 @@ window.playfair = (function () {
 		if(geom_dict.bar && geom_dict.bar.orientation!='on'){
 			this.ybar=1
 		}
-
 		var xmaxes=[]
 		var xmins=[]
 
@@ -143,7 +143,7 @@ window.playfair = (function () {
 						this.shiftx=1
 
 						if(data[geom_dict[key]['xvar']].dtype!='text'){
-							var temp=data[geom_dict[key]['xvar']]
+							var temp=data[geom_dict[key]['xvar']].slice(0)
 							temp.sort(function(a,b){
 								return a-b
 							})
@@ -175,7 +175,7 @@ window.playfair = (function () {
 						this.shifty=1
 
 						if(data[geom_dict[key]['yvar']].dtype!='text'){
-							var temp=data[geom_dict[key]['yvar']]
+							var temp=data[geom_dict[key]['yvar']].slice(0)
 							temp.sort(function(a,b){
 								return a>b
 							})
@@ -187,7 +187,7 @@ window.playfair = (function () {
 						}
 					}
 				}
-
+console.log(this.flatdata.date[1])
 				if(Object.prototype.toString.call(data[geom_dict[key]['xvar']][0])==='[object Date]'){
 					for (var i=0;i<data[geom_dict[key]['xvar']].length;i++){
 						if(isNaN(data[geom_dict[key]['xvar']][i].getTime())==false){
@@ -944,7 +944,7 @@ function draw_lines(axes,line,snapobj){
 		}
 
 		// fill key_dict
-		key_dict['color'].push
+		// key_dict['color'].push
 
 		// label
 		var label=current[0][line.color]+', '+current[0][line.type]

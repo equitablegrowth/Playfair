@@ -70,7 +70,6 @@ function preview() {
 
 // redraw is the main graphing setup function. Gets variable values and passes them to playfair.js
 function redraw() {
-	console.log(final_data)
 	// try{
 		// set size
 		$('#grapharea').attr('height',height)

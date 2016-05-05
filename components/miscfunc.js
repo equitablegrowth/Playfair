@@ -60,6 +60,14 @@ function unhighlight_element(ev) {
 				item.attr({filter:''})
 				hovered=0
 			}
+
+			try{
+				if(ev.target.className.baseVal=='dataelement'){
+					highlighttext.remove()
+					hovered=0
+				}
+			}catch(err){}
+			
 		} catch(err){}
 	}
 }
