@@ -1598,98 +1598,36 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 // what the key will look like by creating each grouping.
 
 $(".variable_select").change(function(){
-	console.log('legend interface')
 	var geom=preview()
-	var structure={}
+	var structure=[]
 
+	// geom: {point:{xvar:x,yvar:y,grouping:{color:g1,type:g2}},line:{xvar:x,yvar:y,grouping:{color:g1,type:g2}}}
 	if(Object.keys(geom).length>0){
-		// for each geom, start a separate loop to place any key items
 		for(var key in geom){
-			var groups=[]
-			for(var grouper in geom[key].grouping){
-				if(geom[key].grouping[grouper]!='none'){
-					groups.push([grouper,geom[key].grouping[grouper]])
-				}
-			}
-
-			// so now you have groups=[grouping_var1,grouping_var2]
-			// figure out what the groups are and add each item to
-			// structure with the geom as key
-			// groups is: [['color','group_var'],['type','group_var2']]
-			console.log(groups)
-			if(groups.length>0){
-				var cats=datadict.map(function(row){
-					var temp=[]
-					for(var i=0;i<groups.length;i++){
-						temp.push(row[groups[i]])
-					}
-					return temp
-				})
-
-				cats=unique(cats)
-				structure[key]=cats
-			}
-		}
-
-		// structure looks like:
-		// {point:[[group1,group2],[group1,group3],[group2,group3]], line:[[group1],[group2]]}
-		// you can iterate through each of these keys to build one section of the key
-
-		// first, check to see if there are exact duplicates within geoms. If any 2 geoms have 
-		// the same x and y variables, and the same grouping variable/s, then those should be
-		// combined into one key item.
-
-		console.log(structure)
-		var deleted=[]
-
-		for(var key in structure){
-			if(deleted.indexOf(key)==-1){
-				var matching_geoms=[]
-				// re-create groups for the current key
+			var temp=geom[key]
+			var xvar=geom['xvar']
+			var yvar=geom['yvar']
+			for(var grouper in temp.grouping){
+				// get all groups for this grouper - x and y must not be missing
 				var groups=[]
-				for (var grouper in geom[key].grouping){
-					if(geom[key].grouping[grouper]!='none'){
-						groups.push(geom[key].grouping[grouper])
+				for(var i=0;i<datadict.length;i++){
+					if(datadict[i][xvar]!=='' && datadict[i][yvar]!==''){
+						groups.push(datadict[temp.grouping[grouper]])
 					}
 				}
 
-				// loop through other keys and see if groups is equal to temp_groups (that key's groups)
-				for(var entry in geom){
-					if(entry!=key){
-						var temp_groups=[]
-						for(var grouper in geom[entry].grouping){
-							if(geom[entry].grouping[grouper]!='none'){
-								temp_groups.push(geom[entry].grouping[grouper])
-							}
-						}
-
-						if(arraysAreIdentical(temp_groups,groups)==true){
-							// grouping variables are the same - are the x and y vars the same?
-							if(geom[key].xvar==geom[entry].xvar && geom[key].yvar==geom[entry].yvar){
-								matching_geoms.push(entry)
-							}
-						}
-
-						// use matching_geoms to alter the structure dict
-						if(matching_geoms.length>0){
-							matching_geoms.push(key)
-							console.log(key,matching_geoms)
-							for(var match in matching_geoms){
-								// delete the matching item
-								delete structure[match]
-								// alter the name of the matched item
-								structure[matching_geoms.join()]=structure[key]
-								delete structure[key]
-								deleted.push(key)
-								deleted.push(match)
-							}
-						}
-					}
+				for(var i=0;i<groups.length;i++){
+					var key_entry={}
+					key_entry['geom']=key
+					key_entry['grouping']=grouper
+					key_entry['group_value']=groups[i]
+					key_entry['group_variable']=temp.grouping[grouper]
+					key_entry['xvar']=xvar
+					key_entry['yvar']=yvar
+					structure.push(key_entry)
 				}
 			}
 		}
-
-		console.log(structure)
 
 		// final key item is:
 		// {line,point:[[1965,1],[1966,2], etc...],'bar':[[1,2],[3,4]]}

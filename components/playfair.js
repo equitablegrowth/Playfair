@@ -34,7 +34,7 @@ window.playfair = (function () {
 	// data comes in as the final_data object - this is an object where each
 	// key is a row-heading that corresponds to a list of values
 	Playfair.prototype.data = function(data,geom_dict) {
-		console.log(data.date[1])
+
 		var datadict=[]
 		for(var key in data){
 			var items=data[key].length
@@ -167,7 +167,6 @@ window.playfair = (function () {
 							for(var i=1;i<temp2.length;i++){
 								difs.push(Math.abs(temp2[i]-temp2[i-1]))
 							}
-							console.log(difs)
 							this.mindiff=Math.min(...difs)
 						}
 					} else {
@@ -187,7 +186,7 @@ window.playfair = (function () {
 						}
 					}
 				}
-console.log(this.flatdata.date[1])
+
 				if(Object.prototype.toString.call(data[geom_dict[key]['xvar']][0])==='[object Date]'){
 					for (var i=0;i<data[geom_dict[key]['xvar']].length;i++){
 						if(isNaN(data[geom_dict[key]['xvar']][i].getTime())==false){
