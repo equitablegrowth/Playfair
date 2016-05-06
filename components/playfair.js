@@ -327,7 +327,7 @@ window.playfair = (function () {
 	// xlimit_max - upper limit for x
 	// ylimit_min
 	// ylimit_max
-	Playfair.prototype.chart=function(options) {
+	Playfair.prototype.chart=function(options,legend) {
 		var snapobj=this.svg
 		var graph_obj=this
 
@@ -408,6 +408,7 @@ window.playfair = (function () {
 		if(typeof(chartobject.line)!=='undefined'){draw_lines(axes,graph_obj.line,snapobj)}
 		if(typeof(chartobject.point)!=='undefined'){draw_points(axes,graph_obj.point,snapobj)}
 		if(typeof(chartobject.bar)!=='undefined'){draw_bars(axes,graph_obj.bar,snapobj)}
+		if(typeof(legend)!=='undefined'){draw_key(legend,graph_obj,snapobj)}
 
 		// redraw the key/fix key elements
 		snapobj.append(snapobj.selectAll('[ident2="keytop"]'))
@@ -763,6 +764,10 @@ window.playfair = (function () {
 			'legend_textweight':400,
 			'legend_textface':'Lato',
 			'legend_textfill':'black',
+			'legend_titletextsize':'12px',
+			'legend_titletextweight':600,
+			'legend_titletextface':'Lato',
+			'legend_titletextfill':'black',
 			'legend_toppad':4,
 			'legend_bottompad':0,
 			'legend_rightpad':0,
@@ -841,6 +846,85 @@ function remove_missing(array){
 	}
 	return temp
 }
+
+function draw_key(legend,playobj,snapobj){
+	// listener for drag events on a floating key
+	var moveFuncfloat=function(dx,dy,posx,posy){
+		key_elements=grapharea.selectAll('[ident="key"]')
+		for(var i=0;i<key_elements.length;i++){
+			coords=key_elements[i].getBBox()
+			if(key_elements[i].type=='circle'){
+				key_elements[i].attr({
+					cx:coords.cx-prevx+dx,
+					cy:coords.cy-prevy+dy
+				}) 
+			} else if (key_elements[i].type=='line'){
+				key_elements[i].attr({
+					x1:coords.x-prevx+dx,
+					y1:coords.y-prevy+dy,
+					x2:coords.x2-prevx+dx,
+					y2:coords.y2-prevy+dy,
+			})
+			} else{
+				key_elements[i].attr({
+					x:coords.x-prevx+dx,
+					y:coords.y-prevy+dy
+				})
+			}
+			grapharea.append(key_elements[i])
+		}
+		prevx=dx
+		prevy=dy
+	}
+
+	// use legend object to draw a key for the figure
+	var maxwidth=legend[0][1]
+	var ltitle=legend[0][0]
+	var floatkey=snapobj.rect(0,0,0,0).attr({ident2:'floatkey',ident:'key',fill:playobj.legend_floatbackground,stroke:playobj.legend_floatstroke,'stroke-width':playobj.legend_floatthickness,'shape-rendering':'crispEdges',colorchange:'fill'})
+
+	var maxitemwidth=0
+	var maxycoord=0
+	var starty=playobj.legend_toppad
+
+	if(ltitle!==undefined){
+		var t=snapobj.text(playobj.legend_leftpad,playobj.legend_toppad,ltitle).attr({ident2:'floatkey',ident:'key',fill:this.legend_titletextfill,'font-size':playobj.legend_titletextsize,'font-weight':playobj.legend_titletextweight,'font-family':playobj.legend_titletextface,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
+		if(maxitemwidth<t.getBBox().x2){maxitemwidth=t.getBBox().x2}
+		if(maxycoord<t.getBBox().y2){maxycoord=t.getBBox().y2}
+		starty=t.getBBox().y2
+	}
+
+	// remove title, maxwidth row
+	legend=legend.slice(1,legend.length)
+
+	// sort according to i and g
+	legend.sort(function(a,b){
+		return a.position-b.position
+	})
+
+	legend.sort(function(a,b){
+		return a.lgroup-b.lgroup
+	})
+
+	// get all groups and positions, so you can loop through those groups and positions
+
+	// draw items
+	for(var i=1;i<legend.length;i++){
+		var y=starty+(legend[i][lgroup]*legend[i][position]*playobj.legend_textsize)+(legend[i][lgroup]*playobj.legend_toppad)
+		var x=playobj.legend_leftpad
+		var xtext=playobj.legend_leftpad+playobj.legend_elementsize+playobj.legend_elementpad
+
+		snapobj.text(xtext,y,legend[i][group_value]).attr({ident2:'floatkey',ident:'key',fill:this.legend_textfill,'font-size':playobj.legend_textsize,'font-weight':playobj.legend_textweight,'font-family':playobj.legend_textface,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
+	
+		if(legend[i].geom=='point'){
+			snapobj.circle(x+playobj.legend_elementsize/2,y+playobj.legend_elementsize/2,pointsize).attr({fill:,stroke:,'stroke-width':playobj.point_strokewidth,'data_type':'point','data_label':label,'group':'PLACEHOLDER FIX ME','class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu'})
+		}
+
+	}
+
+	floatkey.drag(moveFuncfloat,function(){x=this.attr('x');y=this.attr('y');prevx=0;prevy=0});
+	// var item={'geom':'point','grouping':'color','group_value':'g1',group_variable:'groupvar',xvar:'xvar',yvar:'yvar',position:i,lgroup:g}
+}
+
 
 function draw_lines(axes,line,snapobj){
 	// axes are [xleft,xright,ybottom,ytop]
@@ -1787,177 +1871,9 @@ function draw_axes(playobj,xvar,yvar,shiftx,shifty) {
 
 	snapobj=playobj.svg
 
-	// If there is a groupvar, deal with it first - draw a dummy legend, get the dimensions,
-	// and incorporate them into the graph's margins appropriately.
-	legend_height=0
-
-	if (typeof(playobj.group)!=='undefined' && playobj.legend_location!=='none'){
-
-		// array with unique group values
-		grouptemp=playobj.dataset[playobj.group]
-		group=[]
-		for(var i=0;i<grouptemp.length;i++){
-			if(group.indexOf(grouptemp[i]) == -1){
-				if(Object.prototype.toString.call(grouptemp[i])==='[object Date]'){
-					group.push(formatDate(grouptemp[i],Math.max(...grouptemp)-Math.min(...grouptemp)))
-				} else{
-					group.push(grouptemp[i])
-				}
-			}
-		}
-
-		// available width for the key and starting point
-		avail_width=playobj.width-playobj.left_margin-playobj.right_margin-playobj.legend_leftpad-playobj.legend_rightpad
-		horizon_key_start_x=playobj.x+playobj.left_margin+playobj.legend_leftpad
-		horizon_key_start_y=playobj.y+playobj.header_toppad+playobj.header_bottompad+playobj.head_height+playobj.legend_toppad
-
-		// available height for the key
-		avail_height=playobj.height-playobj.footer_height-playobj.header_toppad-playobj.header_bottompad-playobj.head_height-playobj.legend_toppad-playobj.legend_bottompad
-		vertical_key_start_y=playobj.y+playobj.header_toppad+playobj.header_bottompad+playobj.head_height+playobj.legend_toppad
-		// The key_start_x depends on how long the category values are. It can be up to
-		// legend_maxwidth % wide but should be as short as possible.
-		longest=0
-		for(var i=0;i<group.length;i++){
-			var temp=snapobj.text(0,0,group[i]).attr({fill:this.legend_textfill,'font-size':playobj.legend_textsize,'font-weight':playobj.legend_textweight,'font-family':playobj.legend_textface,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
-			temp.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
-			coords=temp.getBBox()
-			if (coords.width>longest){
-				longest=coords.width
-			}
-			temp.remove()
-		}
-
-		// Is width of longest category or legend maxwidth greater?
-		if (longest>playobj.legend_maxwidth*avail_width){
-			longest=playobj.legend_maxwidth*avail_width
-		}
-
-		// finally, vertical_key_start_x
-		vertical_key_start_x=playobj.x+playobj.width-playobj.left_margin-longest-playobj.legend_rightpad
-
-		legend_height=0
-		legend_width=0
-
-		// Draw the key - location top
-		if (playobj.legend_location=='top'){
-			line=0
-			current_linewidth=0
-			for (var i=0;i<group.length;i++){
-				var temp=snapobj.text(0,0,group[i]).attr({fill:this.legend_textfill,'font-size':playobj.legend_textsize,'font-weight':playobj.legend_textweight,'font-family':playobj.legend_textface,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
-				temp.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
-				coords=temp.getBBox()
-				text=group[i]
-				if (coords.width+temptext+snapobj.legend_elementpad+snapobj.legend_elementsize>avail_width) {
-					text='your label is too long!'
-				}
-
-				temp.remove()
-
-				if (playobj.elementsize>=parseInt(playobj.legend_textsize)){
-					lineheight=playobj.elementsize
-				} else{
-					lineheight=parseInt(playobj.legend_textsize)
-				}
-
-				// Does the next key fit on the current line?
-				if (current_linewidth+coords.width+playobj.legend_elementsize+playobj.legend_elementpad<avail_width){
-					var temprect=snapobj.rect(current_linewidth,horizon_key_start_y+playobj.legend_elementpad*line+playobj.legend_toppad+line*lineheight,playobj.legend_elementsize,playobj.legend_elementsize).attr({ident:'key',ident2:'keytop',group:group[i],fill:playobj.qualitative_color[i],ident:'key','shape-rendering':'crispEdges',colorchange:'fill',context:'data_context_menu'})
-					var temptext=snapobj.text(current_linewidth+playobj.legend_elementpad+playobj.legend_elementsize,horizon_key_start_y+playobj.legend_elementpad*line+playobj.legend_toppad+line*lineheight,text).attr({fill:this.legend_textfill,ident2:'keytop','font-size':playobj.legend_textsize,'font-weight':playobj.legend_textweight,'font-family':playobj.legend_textface,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
-					temptext.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
-
-					coords2=temprect.getBBox()
-					coords3=temptext.getBBox()
-					totalwidth=coords2.width+coords3.width+playobj.legend_elementpad
-					console.log(this.legend_entrypadding)
-					current_linewidth=current_linewidth+totalwidth+playobj.legend_entrypadding
-				}
-				// if it doesn't, go to the next line, set current_linewidth to 0
-				else {
-					current_linewidth=0
-					line=line+1
-
-					var temprect=snapobj.rect(current_linewidth,horizon_key_start_y+playobj.legend_elementpad*line+playobj.legend_toppad+line*lineheight,playobj.legend_elementsize,playobj.legend_elementsize).attr({ident:'key',ident2:'keytop',group:group[i],fill:playobj.qualitative_color[i],ident:'key','shape-rendering':'crispEdges',colorchange:'fill',context:'data_context_menu'})
-					var temptext=snapobj.text(current_linewidth+playobj.legend_elementpad+playobj.legend_elementsize,horizon_key_start_y+playobj.legend_elementpad*line+playobj.legend_toppad+line*lineheight,text).attr({fill:this.legend_textfill,ident2:'keytop','font-size':playobj.legend_textsize,'font-weight':playobj.legend_textweight,'font-family':playobj.legend_textface,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
-					temptext.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
-
-					coords2=temprect.getBBox()
-					coords3=temptext.getBBox()
-					totalwidth=coords2.width+coords3.width+playobj.legend_elementpad
-					current_linewidth=current_linewidth+totalwidth
-				}
-			}
-
-			if (coords2.y2>coords3.y2) {
-				end_legend=coords2.y2
-			} else {
-				end_legend=coords3.y2
-			}
-
-			legend_height=end_legend-horizon_key_start_y
-		}
-
-		// listener for drag events on a floating key
-		var moveFuncfloat=function(dx,dy,posx,posy){
-			key_elements=grapharea.selectAll('[ident="key"]')
-			for(var i=0;i<key_elements.length;i++){
-				coords=key_elements[i].getBBox()
-				if(key_elements[i].type=='circle'){
-					key_elements[i].attr({
-						cx:coords.cx-prevx+dx,
-						cy:coords.cy-prevy+dy
-					}) 
-				} else if (key_elements[i].type=='line'){
-					key_elements[i].attr({
-						x1:coords.x-prevx+dx,
-						y1:coords.y-prevy+dy,
-						x2:coords.x2-prevx+dx,
-						y2:coords.y2-prevy+dy,
-				})
-				} else{
-					key_elements[i].attr({
-						x:coords.x-prevx+dx,
-						y:coords.y-prevy+dy
-					})
-				}
-				grapharea.append(key_elements[i])
-			}
-			prevx=dx
-			prevy=dy
-		}
-
-		// Draw the key - location float
-		if (playobj.legend_location=='float'){
-			length=0
-			for (var i=0;i<group.length;i++){
-				var temp=snapobj.text(0,0,group[i]).attr({fill:this.legend_textfill,'font-size':playobj.legend_textsize,'font-weight':playobj.legend_textweight,'font-family':playobj.legend_textface,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
-				temp.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
-				coords=temp.getBBox()
-				if (length<coords.width){length=coords.width}
-				temp.remove()
-			}
-
-			lineheight=playobj.legend_elementsize
-			if(parseInt(playobj.legend_textsize)>lineheight){lineheight=parseInt(playobj.legend_textsize)}
-
-			// floatgroup=snapobj.group()
-			var floatkey=snapobj.rect(0,0,playobj.legend_floatpad*2+playobj.legend_elementsize+playobj.legend_elementpad+length,playobj.legend_floatpad*2+lineheight*group.length+(group.length-1)*playobj.legend_elementpad).attr({ident2:'floatkey',ident:'key',fill:playobj.legend_floatbackground,stroke:playobj.legend_floatstroke,'stroke-width':playobj.legend_floatthickness,'shape-rendering':'crispEdges',colorchange:'fill'})
-			// floatgroup.append(floatkey)
-
-			for (var i=0;i<group.length;i++){
-				var temprect=snapobj.rect(playobj.legend_floatpad,playobj.legend_floatpad+lineheight*i+playobj.legend_elementpad*i,playobj.legend_elementsize,playobj.legend_elementsize).attr({group:group[i],fill:playobj.qualitative_color[i],ident:'key',ident2:'keybox','shape-rendering':'crispEdges',colorchange:'fill'})
-				var temp=snapobj.text(playobj.legend_floatpad+playobj.legend_elementsize+playobj.legend_elementpad,playobj.legend_floatpad+lineheight*i+playobj.legend_elementpad*i,group[i]).attr({fill:this.legend_textfill,ident:'key','font-size':playobj.legend_textsize,'font-weight':playobj.legend_textweight,'font-family':playobj.legend_textface,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
-				temp.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
-			}
-			// floatgroup.drag()
-			floatkey.drag(moveFuncfloat,function(){x=this.attr('x');y=this.attr('y');prevx=0;prevy=0});
-			// floatgroup.attr({transform:'t100 100'})
-		}
-	}
-
-	else {
-		playobj.legend_toppad=0
-		playobj.legend_bottompad=0
-	}
+	// placeholder until I figure out top keys
+	playobj.legend_toppad=0
+	playobj.legend_bottompad=0
 
 	// first draw the y-axis and add all elements to a group. Until the x-axis is drawn,
 	// the correct y-location for all these elements is unknown. Draw as if it will be

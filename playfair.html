@@ -505,7 +505,7 @@
 						<div class="labeled_ele">
 							<label>Max Width</label>
 							<span class='styled-input'>
-								<input type="text styled-input" placeholder="Restrict the width of the legend." id='legtitle'>
+								<input type="text styled-input" placeholder="Restrict the width of the legend." id='legwidth'>
 							</span>
 						</div>
 
@@ -1605,43 +1605,57 @@ $(".variable_select").change(function(){
 	if(Object.keys(geom).length>0){
 		for(var key in geom){
 			var temp=geom[key]
-			var xvar=geom['xvar']
-			var yvar=geom['yvar']
+			var xvar=temp['xvar']
+			var yvar=temp['yvar']
 			for(var grouper in temp.grouping){
-				// get all groups for this grouper - x and y must not be missing
-				var groups=[]
-				for(var i=0;i<datadict.length;i++){
-					if(datadict[i][xvar]!=='' && datadict[i][yvar]!==''){
-						groups.push(datadict[temp.grouping[grouper]])
+				if(temp.grouping[grouper]!=='none'){
+					// get all groups for this grouper - x and y must not be missing
+					var groups=[]
+					for(var i=0;i<datadict.length;i++){
+						if(datadict[i][xvar]!=='' && datadict[i][yvar]!==''){
+							groups.push(datadict[i][temp.grouping[grouper]])
+						}
 					}
-				}
 
-				for(var i=0;i<groups.length;i++){
-					var key_entry={}
-					key_entry['geom']=key
-					key_entry['grouping']=grouper
-					key_entry['group_value']=groups[i]
-					key_entry['group_variable']=temp.grouping[grouper]
-					key_entry['xvar']=xvar
-					key_entry['yvar']=yvar
-					structure.push(key_entry)
+					groups=[... new Set(groups)]
+
+					for(var i=0;i<groups.length;i++){
+						var key_entry={}
+						key_entry['geom']=key
+						key_entry['grouping']=grouper
+						key_entry['group_value']=groups[i]
+						key_entry['group_variable']=temp.grouping[grouper]
+						key_entry['xvar']=xvar
+						key_entry['yvar']=yvar
+						structure.push(key_entry)
+					}
 				}
 			}
 		}
 
-		// final key item is:
-		// {line,point:[[1965,1],[1966,2], etc...],'bar':[[1,2],[3,4]]}
-		// DO SOMETHING WITH FINAL KEY STRUCTURE
-		if(Object.keys(structure).length>0){
+		// final structure is:
+		// [ {geom='point',grouping='color',group_value='g1',group_variable='groupvar',xvar='xvar',yvar='yvar'} ... ]
+		console.log(structure)
+
+		if(structure.length>0){
 			$('#PREVIEWbase').empty()
 			$('#PREVIEWbase').prepend("<div id='PREVIEW'></div>")
 			$('#PREVIEWbase').prepend("Use the preview below to delete key items you don't want (by clicking the x), change the order of items, and arrange them in groups.")
 
-			for(var key in structure){
+			var geoms=[]
+
+			for(var i=0;i<structure.length;i++){
+				geoms.push(structure[i]['geom'])
+			}
+
+			for(var i=0;i<[... new Set(geoms)].length;i++){
+				var key=[... new Set(geoms)][i]
 				$('#PREVIEW').append("<ul id='"+key+"sortable' class='connectedSortable'>")
-				for(var i=0;i<structure[key].length;i++){
-					$('#'+key+'sortable').append('<li class="ui-state-default" id="'+key+i+'list">'+key+' | '+structure[key][i]+'<div class="xbox" onclick=destroy("#'+key+i+'list")></div></li>')
-				}
+			}
+
+			for(var i=0;i<structure.length;i++){
+				var temp=structure[i]
+				$('#'+temp.geom+'sortable').append('<li class="ui-state-default" id=keyitem'+i+' data-geom='+temp.geom+' data-grouping='+temp.grouping+' data-group_value='+temp.group_value+' data-group_variable='+temp.group_variable+' data-xvar='+temp.xvar+' data-yvar='+temp.yvar+' >'+temp.geom+' | '+temp.group_variable+' = '+temp.group_value+'<div class="xbox" onclick=destroy("keyitem'+i+'")></div></li>')
 			}
 
 			var string=''
@@ -1649,7 +1663,6 @@ $(".variable_select").change(function(){
 				string=string+'#'+key+'sortable'+', '
 			}
 			string=string.slice(0,-2)
-			console.log(string)
 
 			$(function() {
 				$(string).sortable({
@@ -1684,14 +1697,9 @@ function arraysAreIdentical(arr1, arr2){
 }
 
 // xbox deletion
-$('.xbox').click(function(){
-	console.log('destruction!')
-	$(this).closest('.li').remove()
-})
-
 function destroy(id){
 	console.log(id)
-	$(id).remove()
+	$('#'+id).remove()
 }
 
 </script>
