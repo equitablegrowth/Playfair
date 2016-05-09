@@ -1648,21 +1648,28 @@ $(".variable_select").change(function(){
 				geoms.push(structure[i]['geom'])
 			}
 
-			for(var i=0;i<[... new Set(geoms)].length;i++){
-				var key=[... new Set(geoms)][i]
-				$('#PREVIEW').append("<ul id='"+key+"sortable' class='connectedSortable'>")
+			console.log(geoms,structure)
+			var created=[]
+
+			for(var i=0;i<structure.length;i++){
+				var temp=structure[i]
+				if(created.indexOf(temp.geom+temp.grouping)==-1){
+					$('#PREVIEW').append("<ul id='"+temp.geom+temp.grouping+"sortable' class='connectedSortable'>")
+				}
+				created.push(temp.geom+temp.grouping)
 			}
 
 			for(var i=0;i<structure.length;i++){
 				var temp=structure[i]
-				$('#'+temp.geom+'sortable').append('<li class="ui-state-default" id=keyitem'+i+' data-geom='+temp.geom+' data-grouping='+temp.grouping+' data-group_value='+temp.group_value+' data-group_variable='+temp.group_variable+' data-xvar='+temp.xvar+' data-yvar='+temp.yvar+' >'+temp.geom+' | '+temp.group_variable+' = '+temp.group_value+'<div class="xbox" onclick=destroy("keyitem'+i+'")></div></li>')
+				$('#'+temp.geom+temp.grouping+'sortable').append('<li class="ui-state-default" id=keyitem'+i+' data-geom='+temp.geom+' data-grouping='+temp.grouping+' data-group_value='+temp.group_value+' data-group_variable='+temp.group_variable+' data-xvar='+temp.xvar+' data-yvar='+temp.yvar+' >'+temp.geom+' | '+temp.group_variable+' = '+temp.group_value+'<div class="xbox" onclick=destroy("keyitem'+i+'")></div></li>')
 			}
 
 			var string=''
 			for(var key in structure){
-				string=string+'#'+key+'sortable'+', '
+				string=string+'#'+structure[key].geom+structure[key].grouping+'sortable'+', '
 			}
 			string=string.slice(0,-2)
+			console.log(string)
 
 			$(function() {
 				$(string).sortable({
