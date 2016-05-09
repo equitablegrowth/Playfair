@@ -247,13 +247,15 @@ window.playfair = (function () {
 		
 		// if the user has specified one geom with a text axis and one geom with a date axis, exit here.
 		if(new Set(xtypes).size>1){
-				alert('Exiting. X variables provided are of different types. Types detected are: '+(new Set(xtypes)))
-				return
+			console.log('Exiting because of x types')
+			alert('Exiting. X variables provided are of different types. Types detected are: '+(new Set(xtypes)))
+			return
 		}
 
 		if(new Set(xtypes).size>1){
-				alert('Exiting. Y variables provided are of different types. Types detected are: '+(new Set(ytypes)))
-				return
+			console.log('Exiting because of y types')
+			alert('Exiting. Y variables provided are of different types. Types detected are: '+(new Set(ytypes)))
+			return
 		}
 
 		// shiftx and shifty are flags that are used when drawing to shift points over so bars can be drawn
@@ -879,23 +881,25 @@ function draw_key(legend,playobj,snapobj){
 
 	// use legend object to draw a key for the figure
 	var maxwidth=legend[0][1]
-	if(legend[0][1]===''){maxwidth=Math.POSITIVE_INFINITY}
+	if(legend[0][1]===''){maxwidth=Number.POSITIVE_INFINITY}
+	var longest=0
 	var ltitle=legend[0][0]
 	var floatkey=snapobj.rect(0,0,0,0).attr({ident2:'floatkey',ident:'key',fill:playobj.legend_floatbackground,stroke:playobj.legend_floatstroke,'stroke-width':playobj.legend_floatthickness,'shape-rendering':'crispEdges',colorchange:'fill'})
 
 	var maxitemwidth=0
 	var maxycoord=0
-	var starty=playobj.legend_toppad
+	var starty=playobj.legend_floatpad
 
 	if(ltitle!==''){
-		var t=snapobj.text(playobj.legend_leftpad,playobj.legend_toppad,ltitle).attr({ident2:'floatkey',ident:'key',fill:this.legend_titletextfill,'font-size':playobj.legend_titletextsize,'font-weight':playobj.legend_titletextweight,'font-family':playobj.legend_titletextface,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
+		var t=snapobj.text(playobj.legend_floatpad,playobj.legend_floatpad,ltitle).attr({ident2:'floatkey',ident:'key',fill:this.legend_titletextfill,'font-size':playobj.legend_titletextsize,'font-weight':playobj.legend_titletextweight,'font-family':playobj.legend_titletextface,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
 		if(maxitemwidth<t.getBBox().x2){maxitemwidth=t.getBBox().x2}
 		if(maxycoord<t.getBBox().y2){maxycoord=t.getBBox().y2}
-		starty=t.getBBox().y2
+		starty=t.getBBox().y2+playobj.legend_elementpad
 	}
 
-	// remove title, maxwidth row
-	legend=legend.slice(1,legend.length)
+		var lines=multitext(String(playobj.ylabel),{'font-size':playobj.ylabel_textsize,'font-weight':playobj.ylabel_textweight,'font-family':playobj.ylabel_textface},playobj.ylabel_maxlength)
+		selected_text.selectAll("tspan:not(:first-child)").attr({x:selected_text.attr('x'),dy:1.1*parseFloat(selected_text.attr('font-size'))})
+		temp3.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 
 	// sort according to i and g
 	// edit: is there any actual reason to do this?
@@ -909,29 +913,35 @@ function draw_key(legend,playobj,snapobj){
 
 	// store each item in a dict so it can be modified as necessary
 	// sample legend entry:
-	// {geom:point,group_value:1,group_variable:g1,grouping:color,xvar:x,yvar:y,position:1,lgroup:0}
+	// {geom:point,group_value:1,group_variable:g1,grouping:color,xvar:x,yvar:y,position:1,lgroup:0,overall:0}
 	var keyitem_dict={}
+	var lowery=0
+	console.log('LEGEND',legend)
 
 	// draw items
+	// starting at 1 skips the row that is maxwidth and title
 	for(var i=1;i<legend.length;i++){
-		var y=starty+(legend[i][lgroup]*legend[i][position]*playobj.legend_textsize)+(legend[i][lgroup]*playobj.legend_toppad)
-		var x=playobj.legend_leftpad
-		var xtext=playobj.legend_leftpad+playobj.legend_elementsize+playobj.legend_elementpad
+		var y=starty+(legend[i].overall*parseFloat(playobj.legend_textsize))+(legend[i].lgroup*playobj.legend_floatpad)
+		var x=playobj.legend_floatpad
+		var xtext=playobj.legend_floatpad+playobj.legend_elementsize+playobj.legend_elementpad
+
+		// console.log(x,y,xtext)
+		// console.log(starty,legend[i].overall,)
 
 		var keyitem_name=legend[i].geom+legend[i].g+legend[i].position
 
 		if(keyitem_dict[keyitem_name]==undefined){
-			snapobj.text(xtext,y,legend[i][group_value]).attr({ident2:'floatkey',ident:'key',fill:this.legend_textfill,'font-size':playobj.legend_textsize,'font-weight':playobj.legend_textweight,'font-family':playobj.legend_textface,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
+			snapobj.text(xtext,y,legend[i].group_value).attr({ident2:'floatkey',ident:'key',fill:this.legend_textfill,'font-size':playobj.legend_textsize,'font-weight':playobj.legend_textweight,'font-family':playobj.legend_textface,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
 		}
 
 		// points
 		if(legend[i].geom=='point' && keyitem_dict[keyitem_name]==undefined){
 			if(legend[i].grouping=='color'){
-				keyitem_dict[keyitem_name]=snapobj.circle(x+playobj.legend_elementsize/2,y+playobj.legend_elementsize/2,pointsize).attr({fill:chartobject.sequential_color[legend[i].position],stroke:chartobject.sequential_color[legend[i].position],'stroke-width':playobj.point_strokewidth,'data_type':'point','data_label':label,'group':legend[i].grouping_value,'class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu'})
+				keyitem_dict[keyitem_name]=snapobj.circle(x+playobj.legend_elementsize/2,y+playobj.legend_elementsize/2,playobj.point_size).attr({fill:chartobject.sequential_color[legend[i].position],stroke:chartobject.sequential_color[legend[i].position],'stroke-width':playobj.point_strokewidth,'data_type':'point','group':legend[i].grouping_value,'class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu',ident2:'floatkey',ident:'key'})
 			} else if(legend[i].grouping=='type'){
-				keyitem_dict[keyitem_name]=snapobj.circle(x+playobj.legend_elementsize/2,y+playobj.legend_elementsize/2,pointsize).attr({fill:'black',stroke:'black','stroke-width':playobj.point_strokewidth,'data_type':'point','data_label':label,'group':'PLACEHOLDER FIX ME','class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu'})
+				keyitem_dict[keyitem_name]=snapobj.circle(x+playobj.legend_elementsize/2,y+playobj.legend_elementsize/2,playobj.point_size).attr({fill:'black',stroke:'black','stroke-width':playobj.point_strokewidth,'data_type':'point','group':'PLACEHOLDER FIX ME','class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu',ident2:'floatkey',ident:'key'})
 			} else {
-				keyitem_dict[keyitem_name]=snapobj.circle(x+playobj.legend_elementsize/2,y+playobj.legend_elementsize/2,pointsize).attr({fill:chartobject.sequential_color[0],stroke:chartobject.sequential_color[0],'stroke-width':playobj.point_strokewidth,'data_type':'point','data_label':label,'group':legend[i].grouping_value,'class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu'})
+				keyitem_dict[keyitem_name]=snapobj.circle(x+playobj.legend_elementsize/2,y+playobj.legend_elementsize/2,playobj.point_size).attr({fill:chartobject.sequential_color[0],stroke:chartobject.sequential_color[0],'stroke-width':playobj.point_strokewidth,'data_type':'point','group':legend[i].grouping_value,'class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu',ident2:'floatkey',ident:'key'})
 			}
 		} else if(legend[i].geom=='point' && keyitem_dict[keyitem_name]!==undefined){
 			if(legend[i].grouping=='color'){
@@ -944,7 +954,13 @@ function draw_key(legend,playobj,snapobj){
 
 		// lines
 		if(legend[i].geom=='line' && keyitem_dict[keyitem_name]==undefined){
-			snapobj.line(x,y+playobj.legend_elementsize/2,x+playobj.legend_elementsize,y+playobj.legend_elementsize/2).attr({fill:'black',stroke:'black','stroke-width':playobj.point_strokewidth,'data_type':'point','data_label':label,'group':'PLACEHOLDER FIX ME','class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu'})
+			if(legend[i].grouping=='color'){
+				snapobj.line(x,y+playobj.legend_elementsize/2,x+playobj.legend_elementsize,y+playobj.legend_elementsize/2).attr({fill:'black',stroke:chartobject.sequential_color[legend[i].position],'stroke-width':playobj.point_strokewidth,'data_type':'point','data_label':label,'group':legend[i].grouping_value,'class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu',ident2:'floatkey',ident:'key'})
+			} else if(legend[i].grouping=='type'){
+				snapobj.line(x,y+playobj.legend_elementsize/2,x+playobj.legend_elementsize,y+playobj.legend_elementsize/2).attr({fill:'black',stroke:'black','stroke-width':playobj.point_strokewidth,'data_type':'point','data_label':label,'group':legend[i].grouping_value,'class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu'})
+			} else {
+				snapobj.line(x,y+playobj.legend_elementsize/2,x+playobj.legend_elementsize,y+playobj.legend_elementsize/2).attr({fill:'black',stroke:'black','stroke-width':playobj.point_strokewidth,'data_type':'point','data_label':label,'group':legend[i].grouping_value,'class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu'})
+			}
 		} else if(legend[i].geom=='line' && keyitem_dict[keyitem_name]!==undefined){
 			if(legend[i].grouping=='color'){
 				keyitem_dict[keyitem_name].attr({'stroke':chartobject.sequential_color[legend[i].position]})
@@ -955,8 +971,13 @@ function draw_key(legend,playobj,snapobj){
 
 		// bars
 
+
+
+		var lowbound=keyitem_dict[keyitem_name].getBBox().y2
+		if(lowbound>lowery){lowery=lowbound}
 	}
 
+	floatkey.attr({height:lowery+playobj.legend_floatpad,width:300})
 	floatkey.drag(moveFuncfloat,function(){x=this.attr('x');y=this.attr('y');prevx=0;prevy=0});
 	// var item={'geom':'point','grouping':'color','group_value':'g1',group_variable:'groupvar',xvar:'xvar',yvar:'yvar',position:i,lgroup:g}
 }
@@ -1906,6 +1927,7 @@ function draw_axes(playobj,xvar,yvar,shiftx,shifty) {
 	// will also be one more tick to accomodate this change
 
 	snapobj=playobj.svg
+	var legend_height=0
 
 	// placeholder until I figure out top keys
 	playobj.legend_toppad=0

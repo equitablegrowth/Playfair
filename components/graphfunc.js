@@ -143,13 +143,15 @@ function redraw() {
 			var legtitle=$("#legtitle").val()
 			var legwidth=$("#legwidth").val()
 			var legend=[[legtitle,legwidth]]
-			var i=0
 			var g=0
+			var o=0
 			$('#PREVIEW ul').each(function(){
+				var i=0
 				$(this).find('li').each(function(){
-					var item={'geom':$(this).attr('data-geom'),'grouping':$(this).attr('data-grouping'),'group_value':$(this).attr('data-group_value'),group_variable:$(this).attr('data-group_variable'),xvar:$(this).attr('data-xvar'),yvar:$(this).attr('data-yvar'),position:i,lgroup:g}
+					var item={'geom':$(this).attr('data-geom'),'grouping':$(this).attr('data-grouping'),'group_value':$(this).attr('data-group_value'),group_variable:$(this).attr('data-group_variable'),xvar:$(this).attr('data-xvar'),yvar:$(this).attr('data-yvar'),position:i,lgroup:g,overall:o}
 					legend.push(item)
 					i=i+1
+					o=o+1
 				})
 				g=g+1
 			})
