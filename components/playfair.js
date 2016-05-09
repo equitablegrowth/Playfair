@@ -879,6 +879,7 @@ function draw_key(legend,playobj,snapobj){
 
 	// use legend object to draw a key for the figure
 	var maxwidth=legend[0][1]
+	if(legend[0][1]===''){maxwidth=Math.POSITIVE_INFINITY}
 	var ltitle=legend[0][0]
 	var floatkey=snapobj.rect(0,0,0,0).attr({ident2:'floatkey',ident:'key',fill:playobj.legend_floatbackground,stroke:playobj.legend_floatstroke,'stroke-width':playobj.legend_floatthickness,'shape-rendering':'crispEdges',colorchange:'fill'})
 
@@ -886,7 +887,7 @@ function draw_key(legend,playobj,snapobj){
 	var maxycoord=0
 	var starty=playobj.legend_toppad
 
-	if(ltitle!==undefined){
+	if(ltitle!==''){
 		var t=snapobj.text(playobj.legend_leftpad,playobj.legend_toppad,ltitle).attr({ident2:'floatkey',ident:'key',fill:this.legend_titletextfill,'font-size':playobj.legend_titletextsize,'font-weight':playobj.legend_titletextweight,'font-family':playobj.legend_titletextface,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
 		if(maxitemwidth<t.getBBox().x2){maxitemwidth=t.getBBox().x2}
 		if(maxycoord<t.getBBox().y2){maxycoord=t.getBBox().y2}
@@ -897,15 +898,19 @@ function draw_key(legend,playobj,snapobj){
 	legend=legend.slice(1,legend.length)
 
 	// sort according to i and g
-	legend.sort(function(a,b){
-		return a.position-b.position
-	})
+	// edit: is there any actual reason to do this?
+	// legend.sort(function(a,b){
+	// 	return a.position-b.position
+	// })
 
-	legend.sort(function(a,b){
-		return a.lgroup-b.lgroup
-	})
+	// legend.sort(function(a,b){
+	// 	return a.lgroup-b.lgroup
+	// })
 
-	// get all groups and positions, so you can loop through those groups and positions
+	// store each item in a dict so it can be modified as necessary
+	// sample legend entry:
+	// {geom:point,group_value:1,group_variable:g1,grouping:color,xvar:x,yvar:y,position:1,lgroup:0}
+	var keyitem_dict={}
 
 	// draw items
 	for(var i=1;i<legend.length;i++){
@@ -913,11 +918,42 @@ function draw_key(legend,playobj,snapobj){
 		var x=playobj.legend_leftpad
 		var xtext=playobj.legend_leftpad+playobj.legend_elementsize+playobj.legend_elementpad
 
-		snapobj.text(xtext,y,legend[i][group_value]).attr({ident2:'floatkey',ident:'key',fill:this.legend_textfill,'font-size':playobj.legend_textsize,'font-weight':playobj.legend_textweight,'font-family':playobj.legend_textface,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
-	
-		if(legend[i].geom=='point'){
-			snapobj.circle(x+playobj.legend_elementsize/2,y+playobj.legend_elementsize/2,pointsize).attr({fill:,stroke:,'stroke-width':playobj.point_strokewidth,'data_type':'point','data_label':label,'group':'PLACEHOLDER FIX ME','class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu'})
+		var keyitem_name=legend[i].geom+legend[i].g+legend[i].position
+
+		if(keyitem_dict[keyitem_name]==undefined){
+			snapobj.text(xtext,y,legend[i][group_value]).attr({ident2:'floatkey',ident:'key',fill:this.legend_textfill,'font-size':playobj.legend_textsize,'font-weight':playobj.legend_textweight,'font-family':playobj.legend_textface,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
 		}
+
+		// points
+		if(legend[i].geom=='point' && keyitem_dict[keyitem_name]==undefined){
+			if(legend[i].grouping=='color'){
+				keyitem_dict[keyitem_name]=snapobj.circle(x+playobj.legend_elementsize/2,y+playobj.legend_elementsize/2,pointsize).attr({fill:chartobject.sequential_color[legend[i].position],stroke:chartobject.sequential_color[legend[i].position],'stroke-width':playobj.point_strokewidth,'data_type':'point','data_label':label,'group':legend[i].grouping_value,'class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu'})
+			} else if(legend[i].grouping=='type'){
+				keyitem_dict[keyitem_name]=snapobj.circle(x+playobj.legend_elementsize/2,y+playobj.legend_elementsize/2,pointsize).attr({fill:'black',stroke:'black','stroke-width':playobj.point_strokewidth,'data_type':'point','data_label':label,'group':'PLACEHOLDER FIX ME','class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu'})
+			} else {
+				keyitem_dict[keyitem_name]=snapobj.circle(x+playobj.legend_elementsize/2,y+playobj.legend_elementsize/2,pointsize).attr({fill:chartobject.sequential_color[0],stroke:chartobject.sequential_color[0],'stroke-width':playobj.point_strokewidth,'data_type':'point','data_label':label,'group':legend[i].grouping_value,'class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu'})
+			}
+		} else if(legend[i].geom=='point' && keyitem_dict[keyitem_name]!==undefined){
+			if(legend[i].grouping=='color'){
+				keyitem_dict[keyitem_name].attr({fill:chartobject.sequential_color[legend[i].position],'stroke':chartobject.sequential_color[legend[i].position]})
+			}
+			if(legend[i].grouping=='type'){
+				keyitem_dict[keyitem_name].attr({'stroke-width':chartobject.sequential_color[legend[i].position],})
+			}
+		}
+
+		// lines
+		if(legend[i].geom=='line' && keyitem_dict[keyitem_name]==undefined){
+			snapobj.line(x,y+playobj.legend_elementsize/2,x+playobj.legend_elementsize,y+playobj.legend_elementsize/2).attr({fill:'black',stroke:'black','stroke-width':playobj.point_strokewidth,'data_type':'point','data_label':label,'group':'PLACEHOLDER FIX ME','class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu'})
+		} else if(legend[i].geom=='line' && keyitem_dict[keyitem_name]!==undefined){
+			if(legend[i].grouping=='color'){
+				keyitem_dict[keyitem_name].attr({'stroke':chartobject.sequential_color[legend[i].position]})
+			} else if(legend[i].grouping=='type'){
+				keyitem_dict[keyitem_name].attr({'stroke-dasharray':chartobject.line_types[legend[i].position]})
+			}
+		}
+
+		// bars
 
 	}
 
