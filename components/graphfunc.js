@@ -59,7 +59,8 @@ function preview() {
 		var y_var=$("#bar_select_y").val()
 
 		var color=$("#bar_select_color").val()
-		var bargroup=$("#bar_select_group").val()
+		// var bargroup=$("#bar_select_group").val()
+		var bargroup='none'
 		var barspace=document.getElementById('spacing').checked
 
 		geom_dict['bar']={'xvar':x_var,'yvar':y_var,spacing:barspace,'orientation':'vertical','grouping':{'color':color,'bargroup':bargroup}}

@@ -614,7 +614,7 @@
 							<label>Point Types</label>
 							<span class='styled-select'>
 								<span class='select_carat'>
-									<select class="variable_select group_select" id='point_select_types' disabled>
+									<select class="variable_select2 group_select" id='point_select_types' disabled>
 										<option value='none'>Nothing selected</option>
 									</select>
 								</span>
@@ -1659,9 +1659,16 @@ $(".variable_select").change(function(){
 				created.push(temp.geom+temp.grouping)
 			}
 
+			var groupnumeric=0
+			var current=structure[0].geom+structure[0].grouping
 			for(var i=0;i<structure.length;i++){
 				var temp=structure[i]
-				$('#'+temp.geom+temp.grouping+'sortable').append('<li class="ui-state-default" id=keyitem'+i+' data-geom='+temp.geom+' data-grouping='+temp.grouping+' data-group_value="'+temp.group_value+'" data-group_variable="'+temp.group_variable+'" data-xvar="'+temp.xvar+'" data-yvar="'+temp.yvar+'" data-groupnumeric='+i+' >'+temp.geom+' | '+temp.group_variable+' = '+temp.group_value+'<div class="xbox" onclick=destroy("keyitem'+i+'")></div></li>')
+				if (temp.geom+temp.grouping!=current){
+					current=temp.geom+temp.grouping
+					var groupnumeric=0
+				}
+				$('#'+temp.geom+temp.grouping+'sortable').append('<li class="ui-state-default" id=keyitem'+i+' data-geom='+temp.geom+' data-grouping='+temp.grouping+' data-group_value="'+temp.group_value+'" data-group_variable="'+temp.group_variable+'" data-xvar="'+temp.xvar+'" data-yvar="'+temp.yvar+'" data-groupnumeric='+groupnumeric+' >'+temp.geom+' | '+temp.group_variable+' = '+temp.group_value+'<div class="xbox" onclick=destroy("keyitem'+i+'")></div></li>')
+				groupnumeric=groupnumeric+1
 			}
 
 			var string=''
