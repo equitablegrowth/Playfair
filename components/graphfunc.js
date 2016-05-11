@@ -149,8 +149,12 @@ function redraw() {
 			$('#PREVIEW ul').each(function(){
 				var i=0
 				$(this).find('li').each(function(){
-					var item={'geom':$(this).attr('data-geom'),'grouping':$(this).attr('data-grouping'),'group_value':$(this).attr('data-group_value'),group_variable:$(this).attr('data-group_variable'),xvar:$(this).attr('data-xvar'),yvar:$(this).attr('data-yvar'),groupnumeric:$(this).attr('data-groupnumeric'),position:i,lgroup:g,overall:o}
-					legend.push(item)
+					var ligeoms=$(this).attr('data-geom').split(',')
+					console.log(ligeoms)
+					for(var i=0;i<ligeoms.length;i++){
+						var item={'geom':ligeoms[i],'grouping':$(this).attr('data-grouping'),'group_value':$(this).attr('data-group_value'),group_variable:$(this).attr('data-group_variable'),xvar:$(this).attr('data-xvar'),yvar:$(this).attr('data-yvar'),groupnumeric:$(this).attr('data-groupnumeric'),position:i,lgroup:g,overall:o}
+						legend.push(item)
+					}
 					i=i+1
 					o=o+1
 				})

@@ -1602,88 +1602,98 @@ $(".variable_select").change(function(){
 	var structure=[]
 
 	// geom: {point:{xvar:x,yvar:y,grouping:{color:g1,type:g2}},line:{xvar:x,yvar:y,grouping:{color:g1,type:g2}}}
-	if(Object.keys(geom).length>0){
-		for(var key in geom){
-			var temp=geom[key]
-			var xvar=temp['xvar']
-			var yvar=temp['yvar']
-			for(var grouper in temp.grouping){
-				if(temp.grouping[grouper]!=='none'){
-					// get all groups for this grouper - x and y must not be missing
-					var groups=[]
-					for(var i=0;i<datadict.length;i++){
-						if(datadict[i][xvar]!=='' && datadict[i][yvar]!==''){
-							groups.push(datadict[i][temp.grouping[grouper]])
-						}
+	for(var key in geom){
+		var temp=geom[key]
+		var xvar=temp['xvar']
+		var yvar=temp['yvar']
+		for(var grouper in temp.grouping){
+			if(temp.grouping[grouper]!=='none'){
+				// get all groups for this grouper - x and y must not be missing
+				var groups=[]
+				for(var i=0;i<datadict.length;i++){
+					if(datadict[i][xvar]!=='' && datadict[i][yvar]!==''){
+						groups.push(datadict[i][temp.grouping[grouper]])
 					}
+				}
 
-					groups=[... new Set(groups)]
+				groups=[... new Set(groups)]
 
-					for(var i=0;i<groups.length;i++){
-						var key_entry={}
-						key_entry['geom']=key
-						key_entry['grouping']=grouper
-						key_entry['group_value']=groups[i]
-						key_entry['group_variable']=temp.grouping[grouper]
-						key_entry['xvar']=xvar
-						key_entry['yvar']=yvar
-						structure.push(key_entry)
-					}
+				for(var i=0;i<groups.length;i++){
+					var key_entry={}
+					key_entry['geom']=key
+					key_entry['grouping']=grouper
+					key_entry['group_value']=groups[i]
+					key_entry['group_variable']=temp.grouping[grouper]
+					key_entry['xvar']=xvar
+					key_entry['yvar']=yvar
+					structure.push(key_entry)
 				}
 			}
 		}
+	}
 
-		// final structure is:
-		// [ {geom='point',grouping='color',group_value='g1',group_variable='groupvar',xvar='xvar',yvar='yvar'} ... ]
-		console.log(structure)
+	// final structure is:
+	// [ {geom='point',grouping='color',group_value='g1',group_variable='groupvar',xvar='xvar',yvar='yvar'} ... ]
+	console.log(structure)
 
-		if(structure.length>0){
-			$('#PREVIEWbase').empty()
-			$('#PREVIEWbase').prepend("<div id='PREVIEW'></div>")
-			$('#PREVIEWbase').prepend("Use the preview below to delete key items you don't want (by clicking the x), change the order of items, and arrange them in groups.")
+	if(structure.length>0){
+		$('#PREVIEWbase').empty()
+		$('#PREVIEWbase').prepend("<div id='PREVIEW'></div>")
+		$('#PREVIEWbase').prepend("Use the preview below to delete key items you don't want (by clicking the x), change the order of items, and arrange them in groups.")
 
-			var geoms=[]
+		var geoms=[]
 
-			for(var i=0;i<structure.length;i++){
-				geoms.push(structure[i]['geom'])
-			}
-
-			console.log(geoms,structure)
-			var created=[]
-
-			for(var i=0;i<structure.length;i++){
-				var temp=structure[i]
-				if(created.indexOf(temp.geom+temp.grouping)==-1){
-					$('#PREVIEW').append("<ul id='"+temp.geom+temp.grouping+"sortable' class='connectedSortable'>")
-				}
-				created.push(temp.geom+temp.grouping)
-			}
-
-			var groupnumeric=0
-			var current=structure[0].geom+structure[0].grouping
-			for(var i=0;i<structure.length;i++){
-				var temp=structure[i]
-				if (temp.geom+temp.grouping!=current){
-					current=temp.geom+temp.grouping
-					var groupnumeric=0
-				}
-				$('#'+temp.geom+temp.grouping+'sortable').append('<li class="ui-state-default" id=keyitem'+i+' data-geom='+temp.geom+' data-grouping='+temp.grouping+' data-group_value="'+temp.group_value+'" data-group_variable="'+temp.group_variable+'" data-xvar="'+temp.xvar+'" data-yvar="'+temp.yvar+'" data-groupnumeric='+groupnumeric+' >'+temp.geom+' | '+temp.group_variable+' = '+temp.group_value+'<div class="xbox" onclick=destroy("keyitem'+i+'")></div></li>')
-				groupnumeric=groupnumeric+1
-			}
-
-			var string=''
-			for(var key in structure){
-				string=string+'#'+structure[key].geom+structure[key].grouping+'sortable'+', '
-			}
-			string=string.slice(0,-2)
-			console.log(string)
-
-			$(function() {
-				$(string).sortable({
-					connectWith:'.connectedSortable'
-				}).disableSelection()
-			})
+		for(var i=0;i<structure.length;i++){
+			geoms.push(structure[i]['geom'])
 		}
+
+		console.log(geoms,structure)
+		// combos stores xvar yvar grouping_variable combos to check future key items against for consolidation
+		var combos=[]
+		// created stores geom+grouping combos to set up the appropriate number of groups
+		var created=[]
+
+		for(var i=0;i<structure.length;i++){
+			created.push()
+			var temp=structure[i]
+			if(created.indexOf(temp.xvar+temp.yvar+temp.group_variable)==-1){
+				$('#PREVIEW').append("<ul id='"+temp.xvar+temp.yvar+temp.group_variable+"sortable' class='connectedSortable'>")
+			}
+			created.push(temp.xvar+temp.yvar+temp.group_variable)
+		}
+
+		var groupnumeric=0
+		var current=structure[0].geom+structure[0].grouping
+		for(var i=0;i<structure.length;i++){
+			var temp=structure[i]
+			if (temp.geom+temp.grouping!=current){
+				current=temp.geom+temp.grouping
+				var groupnumeric=0
+			}
+			if(combos.indexOf(temp.xvar+temp.yvar+temp.group_variable+temp.group_value)==-1){
+				$('#'+temp.xvar+temp.yvar+temp.group_variable+'sortable').append('<li class="ui-state-default" id=keyitem'+i+' data-string="'+temp.xvar+temp.yvar+temp.group_variable+temp.group_value+'" data-geom='+temp.geom+' data-grouping='+temp.grouping+' data-group_value="'+temp.group_value+'" data-group_variable="'+temp.group_variable+'" data-xvar="'+temp.xvar+'" data-yvar="'+temp.yvar+'" data-groupnumeric='+groupnumeric+' >'+temp.geom+' | '+temp.group_variable+' = '+temp.group_value+'<div class="xbox" onclick=destroy("keyitem'+i+'")></div></li>')
+				combos.push(temp.xvar+temp.yvar+temp.group_variable+temp.group_value)
+			} else {
+				console.log('modifying')
+				console.log($("[data-string='"+temp.xvar+temp.yvar+temp.group_variable+temp.group_value+"']"))
+				var exist_geom=$("[data-string='"+temp.xvar+temp.yvar+temp.group_variable+temp.group_value+"']").attr('data-geom')
+				$("[data-string='"+temp.xvar+temp.yvar+temp.group_variable+temp.group_value+"']").attr('data-geom',exist_geom+','+temp.geom)
+				$("[data-string='"+temp.xvar+temp.yvar+temp.group_variable+temp.group_value+"']").html(exist_geom+','+temp.geom+' | '+temp.group_variable+' = '+temp.group_value)
+			}
+			groupnumeric=groupnumeric+1
+		}
+
+		var string=''
+		for(var key in structure){
+			string=string+'#'+structure[key].geom+structure[key].grouping+'sortable'+', '
+		}
+		string=string.slice(0,-2)
+
+		$(function() {
+			$(string).sortable({
+				connectWith:'.connectedSortable'
+			}).disableSelection()
+		})
 	}
 })
 
