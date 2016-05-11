@@ -1661,7 +1661,7 @@ $(".variable_select").change(function(){
 
 			for(var i=0;i<structure.length;i++){
 				var temp=structure[i]
-				$('#'+temp.geom+temp.grouping+'sortable').append('<li class="ui-state-default" id=keyitem'+i+' data-geom='+temp.geom+' data-grouping='+temp.grouping+' data-group_value='+temp.group_value+' data-group_variable='+temp.group_variable+' data-xvar='+temp.xvar+' data-yvar='+temp.yvar+' >'+temp.geom+' | '+temp.group_variable+' = '+temp.group_value+'<div class="xbox" onclick=destroy("keyitem'+i+'")></div></li>')
+				$('#'+temp.geom+temp.grouping+'sortable').append('<li class="ui-state-default" id=keyitem'+i+' data-geom='+temp.geom+' data-grouping='+temp.grouping+' data-group_value="'+temp.group_value+'" data-group_variable="'+temp.group_variable+'" data-xvar="'+temp.xvar+'" data-yvar="'+temp.yvar+'" data-groupnumeric='+i+' >'+temp.geom+' | '+temp.group_variable+' = '+temp.group_value+'<div class="xbox" onclick=destroy("keyitem'+i+'")></div></li>')
 			}
 
 			var string=''

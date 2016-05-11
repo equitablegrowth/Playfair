@@ -849,7 +849,8 @@ function remove_missing(array){
 	return temp
 }
 
-function draw_key(legend,playobj,snapobj){
+function draw_key(legend,playobj,snapobj,vertical=1){
+	console.log(legend)
 	// listener for drag events on a floating key
 	var moveFuncfloat=function(dx,dy,posx,posy){
 		key_elements=grapharea.selectAll('[ident="key"]')
@@ -919,7 +920,7 @@ function draw_key(legend,playobj,snapobj){
 
 	// store each item in a dict so it can be modified as necessary
 	// sample legend entry:
-	// {geom:point,group_value:1,group_variable:g1,grouping:color,xvar:x,yvar:y,position:1,lgroup:0,overall:0}
+	// {geom:point,group_value:1,group_variable:g1,grouping:color,xvar:x,yvar:y,position:1,lgroup:0,overall:0,group_numeric:2}
 	var keyitem_dict={}
 	var lowery=0
 	console.log('LEGEND',legend)
@@ -927,9 +928,10 @@ function draw_key(legend,playobj,snapobj){
 	// draw items
 	// starting at 1 skips the row that is maxwidth and title
 	for(var i=1;i<legend.length;i++){
-		var y=starty+(legend[i].overall*parseFloat(playobj.legend_textsize))+(legend[i].lgroup*playobj.legend_floatpad)
+		var y=starty+(legend[i].overall*parseFloat(playobj.legend_elementsize))+(legend[i].lgroup*playobj.legend_floatpad)
 		var x=playobj.legend_floatpad
 		var xtext=playobj.legend_floatpad+playobj.legend_elementsize+playobj.legend_elementpad
+		var numeric=legend[i].groupnumeric
 
 		// console.log(x,y,xtext)
 		// console.log(starty,legend[i].overall,)
@@ -938,7 +940,8 @@ function draw_key(legend,playobj,snapobj){
 
 		if(keyitem_dict[keyitem_name]==undefined){
 			var lines=multitext(legend[i].group_value,{'font-size':playobj.legend_textsize,'font-weight':playobj.legend_textweight,'font-family':playobj.legend_textface},maxwidth)
-			var t=snapobj.text(xtext,y,lines).attr({ident2:'floatkey',ident:'key',fill:this.legend_textfill,'font-size':playobj.legend_textsize,'font-weight':playobj.legend_textweight,'font-family':playobj.legend_textface,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
+			// the +.5 here is a kluge that only applies to the values of legend_elementsize and legend_textsize you're using feels like it should be (legend_elementsize-legend_textsize)/2 but that doesn't get me what I want
+			var t=snapobj.text(xtext,y+.5,lines).attr({ident2:'floatkey',ident:'key',fill:this.legend_textfill,'font-size':playobj.legend_textsize,'font-weight':playobj.legend_textweight,'font-family':playobj.legend_textface,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
 			t.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 			t.selectAll("tspan:not(:first-child)").attr({x:t.attr('x'),dy:1.1*parseFloat(t.attr('font-size'))})
 			var xend=t.getBBox().x2
@@ -948,40 +951,46 @@ function draw_key(legend,playobj,snapobj){
 		// points
 		if(legend[i].geom=='point' && keyitem_dict[keyitem_name]==undefined){
 			if(legend[i].grouping=='color'){
-				keyitem_dict[keyitem_name]=snapobj.circle(x+playobj.legend_elementsize/2,y+playobj.legend_elementsize/2,playobj.point_size).attr({fill:chartobject.qualitative_color[legend[i].position],stroke:chartobject.qualitative_color[legend[i].position],'stroke-width':playobj.point_strokewidth,'data_type':'point','group':legend[i].grouping_value,'class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu',ident2:'floatkey',ident:'key'})
+				keyitem_dict[keyitem_name]=snapobj.circle(x+playobj.legend_elementsize/2,y+playobj.legend_elementsize/2,playobj.point_size).attr({fill:chartobject.qualitative_color[numeric],stroke:chartobject.qualitative_color[numeric],'stroke-width':playobj.point_strokewidth,'data_type':'point','group':legend[i].grouping_value,'class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu',ident2:'floatkey',ident:'key'})
 			} else if(legend[i].grouping=='type'){
-				keyitem_dict[keyitem_name]=snapobj.circle(x+playobj.legend_elementsize/2,y+playobj.legend_elementsize/2,playobj.point_size).attr({fill:'black',stroke:'black','stroke-width':playobj.point_strokewidth,'data_type':'point','group':'PLACEHOLDER FIX ME','class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu',ident2:'floatkey',ident:'key'})
+				keyitem_dict[keyitem_name]=snapobj.circle(x+playobj.legend_elementsize/2,y+playobj.legend_elementsize/2,playobj.point_size).attr({fill:chartobject.qualitative_color[numeric],stroke:chartobject.qualitative_color[numeric],'stroke-width':playobj.point_strokewidth,'data_type':'point','group':legend[i].grouping_value,'class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu',ident2:'floatkey',ident:'key'})
 			} else {
-				keyitem_dict[keyitem_name]=snapobj.circle(x+playobj.legend_elementsize/2,y+playobj.legend_elementsize/2,playobj.point_size).attr({fill:chartobject.qualitative_color[0],stroke:chartobject.qualitative_color[0],'stroke-width':playobj.point_strokewidth,'data_type':'point','group':legend[i].grouping_value,'class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu',ident2:'floatkey',ident:'key'})
+				keyitem_dict[keyitem_name]=snapobj.circle(x+playobj.legend_elementsize/2,y+playobj.legend_elementsize/2,playobj.point_size).attr({fill:chartobject.qualitative_color[numeric],stroke:chartobject.qualitative_color[numeric],'stroke-width':playobj.point_strokewidth,'data_type':'point','group':legend[i].grouping_value,'class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu',ident2:'floatkey',ident:'key'})
 			}
 		} else if(legend[i].geom=='point' && keyitem_dict[keyitem_name]!==undefined){
 			if(legend[i].grouping=='color'){
-				keyitem_dict[keyitem_name].attr({fill:chartobject.qualitative_color[legend[i].position],'stroke':chartobject.qualitative_color[legend[i].position]})
+				keyitem_dict[keyitem_name].attr({fill:chartobject.qualitative_color[numeric],'stroke':chartobject.qualitative_color[numeric]})
 			}
 			if(legend[i].grouping=='type'){
-				keyitem_dict[keyitem_name].attr({'stroke-width':chartobject.qualitative_color[legend[i].position],})
+				// keyitem_dict[keyitem_name].attr({'stroke-width':chartobject.qualitative_color[legend[i].position],})
 			}
 		}
 				// snapobj.path(path)																							.attr({'data_label':label,class:'dataelement',stroke:color,'stroke-width':linewidth,fill:'none','group':groups[i],'fill-opacity':0,'stroke-opacity':chartobject.linechart_strokeopacity,'colorchange':'stroke',context:'pathdata_context_menu','stroke-dasharray':linetype})
 
-		// lines
-		if(legend[i].geom=='line' && keyitem_dict[keyitem_name]==undefined){
+		// lines or steps
+		if((legend[i].geom=='line' || legend[i].geom=='step') && keyitem_dict[keyitem_name]==undefined){
 			if(legend[i].grouping=='color'){
-				snapobj.line(x,y+playobj.legend_elementsize/2,x+playobj.legend_elementsize,y+playobj.legend_elementsize/2).attr({fill:'black',stroke:chartobject.qualitative_color[legend[i].position],'stroke-width':playobj.line_size,'data_label':label,'group':legend[i].grouping_value,'class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu',ident2:'floatkey',ident:'key'})
+				snapobj.line(x,y+playobj.legend_elementsize/2,x+playobj.legend_elementsize,y+playobj.legend_elementsize/2).attr({fill:'black',stroke:chartobject.qualitative_color[legend[i].position],'stroke-width':playobj.line_size,'data_label':label,'group':legend[i].grouping_value,'class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'stroke',context:'point_context_menu',ident2:'floatkey',ident:'key'})
 			} else if(legend[i].grouping=='type'){
-				snapobj.line(x,y+playobj.legend_elementsize/2,x+playobj.legend_elementsize,y+playobj.legend_elementsize/2).attr({fill:'black',stroke:'black','stroke-width':playobj.point_strokewidth,'data_type':'point','data_label':label,'group':legend[i].grouping_value,'class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu'})
+				snapobj.line(x,y+playobj.legend_elementsize/2,x+playobj.legend_elementsize,y+playobj.legend_elementsize/2).attr({fill:'black',stroke:chartobject.qualitative_color[legend[i].position],'stroke-width':playobj.line_size,'data_label':label,'group':legend[i].grouping_value,'class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'stroke',context:'point_context_menu',ident2:'floatkey',ident:'key'})
 			} else {
-				snapobj.line(x,y+playobj.legend_elementsize/2,x+playobj.legend_elementsize,y+playobj.legend_elementsize/2).attr({fill:'black',stroke:'black','stroke-width':playobj.point_strokewidth,'data_type':'point','data_label':label,'group':legend[i].grouping_value,'class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu'})
+				snapobj.line(x,y+playobj.legend_elementsize/2,x+playobj.legend_elementsize,y+playobj.legend_elementsize/2).attr({fill:'black',stroke:chartobject.qualitative_color[legend[i].position],'stroke-width':playobj.line_size,'data_label':label,'group':legend[i].grouping_value,'class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'stroke',context:'point_context_menu',ident2:'floatkey',ident:'key'})
 			}
 		} else if(legend[i].geom=='line' && keyitem_dict[keyitem_name]!==undefined){
 			if(legend[i].grouping=='color'){
-				keyitem_dict[keyitem_name].attr({'stroke':chartobject.sequential_color[legend[i].position]})
+				keyitem_dict[keyitem_name].attr({'stroke':chartobject.qualitative_color[legend[i].position]})
 			} else if(legend[i].grouping=='type'){
 				keyitem_dict[keyitem_name].attr({'stroke-dasharray':chartobject.line_types[legend[i].position]})
 			}
 		}
 
-		// bars
+		// bars or stacked bars or area 
+		if((legend[i].geom=='bar' || legend[i].geom=='stackedbar' || legend[i].geom=='area') && keyitem_dict[keyitem_name]==undefined){
+
+
+
+		}
+
 
 
 
