@@ -503,9 +503,9 @@
 							</span>
 						</div>
 						<div class="labeled_ele">
-							<label>Max Width</label>
+							<label>Width</label>
 							<span class='styled-input'>
-								<input type="text styled-input" placeholder="Restrict the width of the legend." id='legwidth'>
+								<input type="text styled-input" placeholder="Set the width of the legend." id='legwidth'>
 							</span>
 						</div>
 
@@ -1606,6 +1606,7 @@ $(".variable_select").change(function(){
 		var temp=geom[key]
 		var xvar=temp['xvar']
 		var yvar=temp['yvar']
+		var groupingvars=0
 		for(var grouper in temp.grouping){
 			if(temp.grouping[grouper]!=='none'){
 				// get all groups for this grouper - x and y must not be missing
@@ -1628,7 +1629,20 @@ $(".variable_select").change(function(){
 					key_entry['yvar']=yvar
 					structure.push(key_entry)
 				}
+
+				groupingvars=1
 			}
+		}
+
+		if(groupingvars==0 && Object.keys(geom).length>1){
+			var key_entry={}
+			key_entry['geom']=key
+			key_entry['grouping']='none'
+			key_entry['group_value']='none'
+			key_entry['group_variable']='none'
+			key_entry['xvar']=xvar
+			key_entry['yvar']=yvar
+			structure.push(key_entry)
 		}
 	}
 
@@ -1694,6 +1708,10 @@ $(".variable_select").change(function(){
 				connectWith:'.connectedSortable'
 			}).disableSelection()
 		})
+	} else {
+		$('#PREVIEWbase').empty()
+		$('#PREVIEWbase').prepend("<div id='PREVIEW'></div>")
+		$('#PREVIEWbase').prepend("Select your variables from the chart tab, then come back here to see a preview of the legend and to make modifications. Currently, no legend will be created.")
 	}
 })
 
