@@ -1638,7 +1638,7 @@ $(".variable_select").change(function(){
 			var key_entry={}
 			key_entry['geom']=key
 			key_entry['grouping']='none'
-			key_entry['group_value']='none'
+			key_entry['group_value']=yvar
 			key_entry['group_variable']='none'
 			key_entry['xvar']=xvar
 			key_entry['yvar']=yvar
@@ -1666,6 +1666,8 @@ $(".variable_select").change(function(){
 		var combos=[]
 		// created stores geom+grouping combos to set up the appropriate number of groups
 		var created=[]
+		// keycount is used to track how many key items are created
+		var keycount=0
 
 		for(var i=0;i<structure.length;i++){
 			created.push()
@@ -1686,10 +1688,9 @@ $(".variable_select").change(function(){
 			}
 			if(combos.indexOf(temp.xvar+temp.yvar+temp.group_variable+temp.group_value)==-1){
 				$('#'+temp.xvar+temp.yvar+temp.group_variable+'sortable').append('<li class="ui-state-default" id=keyitem'+i+' data-string="'+temp.xvar+temp.yvar+temp.group_variable+temp.group_value+'" data-geom='+temp.geom+' data-grouping='+temp.grouping+' data-group_value="'+temp.group_value+'" data-group_variable="'+temp.group_variable+'" data-xvar="'+temp.xvar+'" data-yvar="'+temp.yvar+'" data-groupnumeric='+groupnumeric+' >'+temp.geom+' | '+temp.group_variable+' = '+temp.group_value+'<div class="xbox" onclick=destroy("keyitem'+i+'")></div></li>')
+				keycount=keycount+1
 				combos.push(temp.xvar+temp.yvar+temp.group_variable+temp.group_value)
 			} else {
-				console.log('modifying')
-				console.log($("[data-string='"+temp.xvar+temp.yvar+temp.group_variable+temp.group_value+"']"))
 				var exist_geom=$("[data-string='"+temp.xvar+temp.yvar+temp.group_variable+temp.group_value+"']").attr('data-geom')
 				$("[data-string='"+temp.xvar+temp.yvar+temp.group_variable+temp.group_value+"']").attr('data-geom',exist_geom+','+temp.geom)
 				$("[data-string='"+temp.xvar+temp.yvar+temp.group_variable+temp.group_value+"']").html(exist_geom+','+temp.geom+' | '+temp.group_variable+' = '+temp.group_value)
@@ -1708,6 +1709,12 @@ $(".variable_select").change(function(){
 				connectWith:'.connectedSortable'
 			}).disableSelection()
 		})
+
+		if(keycount===1){
+			$('#PREVIEWbase').empty()
+			$('#PREVIEWbase').prepend("<div id='PREVIEW'></div>")
+			$('#PREVIEWbase').prepend("Select your variables from the chart tab, then come back here to see a preview of the legend and to make modifications. Currently, no legend will be created.")
+		}
 	} else {
 		$('#PREVIEWbase').empty()
 		$('#PREVIEWbase').prepend("<div id='PREVIEW'></div>")

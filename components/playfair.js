@@ -1004,7 +1004,8 @@ function draw_key(legend,playobj,snapobj,vertical=1){
 			if(lowbound>lowery){lowery=lowbound}
 		}
 
-		floatkey.attr({height:lowery+playobj.legend_floatpad,width:longest+playobj.legend_floatpad})
+		if(legend[0][1]!==''){longest=maxwidth}
+		floatkey.attr({height:lowery+playobj.legend_floatpad,width:parseFloat(longest)+parseFloat(playobj.legend_floatpad)})
 		floatkey.drag(moveFuncfloat,function(){x=this.attr('x');y=this.attr('y');prevx=0;prevy=0});
 		// var item={'geom':'point','grouping':'color','group_value':'g1',group_variable:'groupvar',xvar:'xvar',yvar:'yvar',position:i,lgroup:g}
 	}
