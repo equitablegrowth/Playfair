@@ -57,6 +57,19 @@ function preview() {
 		ready=1
 	}
 
+	if($("#step_select_x").val()!='none' & $("#step_select_y").val()!='none'){
+		var x_var=$("#step_select_x").val()
+		var y_var=$("#step_select_y").val()
+
+		var connect=$("#step_select_connect").val()
+		var color=$("#step_select_color").val()
+		var size=$("#step_select_size").val()
+		var type=$("#step_select_type").val()
+
+		geom_dict['step']={'xvar':x_var,'yvar':y_var,'connect':connect,'size':size,'grouping':{'color':color,'type':type}}
+		ready=1
+	}
+
 	if($("#bar_select_x").val()!='none' & $("#bar_select_y").val()!='none'){
 		var x_var=$("#bar_select_x").val()
 		var y_var=$("#bar_select_y").val()
@@ -75,8 +88,9 @@ function preview() {
 		var y_var=$("#text_select_y").val()
 
 		var size=$("#text_select_size").val()
+		var text=$("#text_select_text").val()
 
-		geom_dict['text']={'xvar':x_var,'yvar':y_var,'size':size}
+		geom_dict['text']={'xvar':x_var,'yvar':y_var,'size':size,'text':text}
 		ready=1
 	}
 

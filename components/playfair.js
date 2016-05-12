@@ -59,6 +59,7 @@ window.playfair = (function () {
 		this.point=geom_dict.point
 		this.text=geom_dict.text
 		this.area=geom_dict.area
+		this.step=geom_dict.step
 		this.stackedbar=geom_dict.stackedbar
 		this.shifty=0
 		this.shiftx=0
@@ -407,53 +408,16 @@ window.playfair = (function () {
 		var axes=draw_axes(this,xaxis,yaxis,graph_obj.shiftx,graph_obj.shifty)
 
 		// draw geoms
+		if(typeof(chartobject.bar)!=='undefined'){draw_bars(axes,graph_obj.bar,snapobj)}
+		if(typeof(chartobject.step)!=='undefined'){draw_steps(axes,graph_obj.step,snapobj)}
 		if(typeof(chartobject.line)!=='undefined'){draw_lines(axes,graph_obj.line,snapobj)}
 		if(typeof(chartobject.point)!=='undefined'){draw_points(axes,graph_obj.point,snapobj)}
-		if(typeof(chartobject.bar)!=='undefined'){draw_bars(axes,graph_obj.bar,snapobj)}
+		if(typeof(chartobject.text)!=='undefined'){draw_text(axes,graph_obj.text,snapobj)}
 		if(typeof(legend)!=='undefined'){draw_key(legend,graph_obj,snapobj)}
 
 		// redraw the key/fix key elements
 		snapobj.append(snapobj.selectAll('[ident2="keytop"]'))
 	}
-
-	// The linechart/scatter plot method
-	Playfair.prototype.linechart = function(options) {
-		// KEY STUFF HERE TEMPORARILY UNTIL IT IS MOVED INTO MAIN CHART FUNCTION
-		// fix up the key - change rectangles to bubbles or lines as appropriate - float keys
-		keyobjs=snapobj.selectAll('rect[ident="key"][ident2="keybox"]')
-		for(var i=0;i<keyobjs.length;i++){
-			coords=keyobjs[i].getBBox()
-			keyobjs[i].remove()
-			if ('connect' in options){
-				if(i<this.qualitative_color.length){color=this.qualitative_color[i]}else{color=this.qualitative_color[this.qualitative_color.length-1]}
-				var line=snapobj.line(coords.x,coords.cy,coords.x2,coords.cy).attr({group:group[i],stroke:color,'stroke-width':2,ident:'key',ident2:'keybox','shape-rendering':'crispEdges','colorchange':'stroke',context:'path_context_menu'})
-				// try{floatgroup.append(line)}catch(err){console.log(err)}
-			}
-			if (options['points']==true){
-				if (pointsize>coords.x2-coords.cx){pointsize=coords.x2-coords.cx-4}
-				var center=snapobj.circle(coords.cx,coords.cy,pointsize).attr({group:group[i],fill:this.qualitative_color[i],stroke:this.qualitative_color[i],'stroke-width':this.point_strokewidth,ident:'key',ident2:'keybox','fill-opacity':this.point_fillopacity,colorchange:'both',context:'point_context_menu'})
-				// try{floatgroup.append(center)}catch(err){console.log(err)}
-			}
-		}
-
-		// fix up the key - change rectangles to bubbles or lines as appropriate - top keys
-		keyobjs=snapobj.selectAll('rect[ident="key"][ident2="keytop"]')
-		for(var i=0;i<keyobjs.length;i++){
-			coords=keyobjs[i].getBBox()
-			keyobjs[i].remove()
-			if ('connect' in options){
-				if(i<this.qualitative_color.length){color=this.qualitative_color[i]}else{color=this.qualitative_color[this.qualitative_color.length-1]}
-				var line=snapobj.line(coords.x,coords.cy,coords.x2,coords.cy).attr({group:group[i],stroke:color,'stroke-width':2,ident:'key',ident2:'keytop','shape-rendering':'crispEdges','colorchange':'stroke',context:'path_context_menu'})
-				// try{floatgroup.append(line)}catch(err){console.log(err)}
-			}
-			if (options['points']==true){
-				if (pointsize>coords.x2-coords.cx){pointsize=coords.x2-coords.cx-4}
-				var center=snapobj.circle(coords.cx,coords.cy,pointsize).attr({group:group[i],fill:this.qualitative_color[i],stroke:this.qualitative_color[i],'stroke-width':this.point_strokewidth,ident:'key',ident2:'keytop','fill-opacity':this.point_fillopacity,colorchange:'both',context:'point_context_menu'})
-				// try{floatgroup.append(center)}catch(err){console.log(err)}
-			}
-		}
-	}
-
 
 	Playfair.prototype.footer = function(source,note,callback) {
 		// draw the footer and return the height of the footer
@@ -810,8 +774,8 @@ window.playfair = (function () {
 			'line_size':2,
 
 			// text geom specific
-			'text_minsize':8
-			'text_maxsize':24
+			'text_minsize':8,
+			'text_maxsize':24,
 
 			// logo
 			'logo':0,
@@ -971,8 +935,8 @@ function draw_key(legend,playobj,snapobj,vertical=1){
 				}
 			}
 
-			// lines or steps
-			if((legend[i].geom=='line' || legend[i].geom=='step') && keyitem_dict[keyitem_name]==undefined){
+			// lines
+			if((legend[i].geom=='line') && keyitem_dict[keyitem_name]==undefined){
 				if(legend[i].grouping=='color'){
 					keyitem_dict[keyitem_name]=snapobj.line(x,y+playobj.legend_elementsize/2,x+playobj.legend_elementsize,y+playobj.legend_elementsize/2).attr({stroke:chartobject.qualitative_color[numeric],'stroke-width':playobj.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
 				} else if(legend[i].grouping=='type'){
@@ -981,6 +945,23 @@ function draw_key(legend,playobj,snapobj,vertical=1){
 					keyitem_dict[keyitem_name]=snapobj.line(x,y+playobj.legend_elementsize/2,x+playobj.legend_elementsize,y+playobj.legend_elementsize/2).attr({stroke:chartobject.qualitative_color[numeric],'stroke-width':playobj.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
 				}
 			} else if(legend[i].geom=='line' && keyitem_dict[keyitem_name]!==undefined){
+				if(legend[i].grouping=='color'){
+					keyitem_dict[keyitem_name].attr({'stroke':chartobject.qualitative_color[numeric]})
+				} else if(legend[i].grouping=='type'){
+					keyitem_dict[keyitem_name].attr({'stroke-dasharray':chartobject.line_types[numeric]})
+				}
+			}
+
+			// steps
+			if((legend[i].geom=='step') && keyitem_dict[keyitem_name]==undefined){
+				if(legend[i].grouping=='color'){
+					keyitem_dict[keyitem_name]=snapobj.path('M'+x+','+(y+chartobject.legend_elementsize*(2/3))+'L'+(x+chartobject.legend_elementsize/2)+','+(y+chartobject.legend_elementsize*(2/3))+'L'+(x+chartobject.legend_elementsize/2)+','+(y+chartobject.legend_elementsize*(1/3))+'L'+(x+chartobject.legend_elementsize)+','+(y+chartobject.legend_elementsize*(1/3))).attr({fill:'none',stroke:chartobject.qualitative_color[numeric],'stroke-width':playobj.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+				} else if(legend[i].grouping=='type'){
+					keyitem_dict[keyitem_name]=snapobj.path('M'+x+','+(y+chartobject.legend_elementsize*(2/3))+'L'+(x+chartobject.legend_elementsize/2)+','+(y+chartobject.legend_elementsize*(2/3))+'L'+(x+chartobject.legend_elementsize/2)+','+(y+chartobject.legend_elementsize*(1/3))+'L'+(x+chartobject.legend_elementsize)+','+(y+chartobject.legend_elementsize*(1/3))).attr({fill:'none',stroke:chartobject.qualitative_color[numeric],'stroke-width':playobj.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+				} else {
+					keyitem_dict[keyitem_name]=snapobj.path('M'+x+','+(y+chartobject.legend_elementsize*(2/3))+'L'+(x+chartobject.legend_elementsize/2)+','+(y+chartobject.legend_elementsize*(2/3))+'L'+(x+chartobject.legend_elementsize/2)+','+(y+chartobject.legend_elementsize*(1/3))+'L'+(x+chartobject.legend_elementsize)+','+(y+chartobject.legend_elementsize*(1/3))).attr({fill:'none',stroke:chartobject.qualitative_color[numeric],'stroke-width':playobj.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+				}
+			} else if(legend[i].geom=='step' && keyitem_dict[keyitem_name]!==undefined){
 				if(legend[i].grouping=='color'){
 					keyitem_dict[keyitem_name].attr({'stroke':chartobject.qualitative_color[numeric]})
 				} else if(legend[i].grouping=='type'){
@@ -1160,6 +1141,152 @@ function draw_lines(axes,line,snapobj){
 	}
 }
 
+function draw_steps(axes,step,snapobj){
+	// axes are [xleft,xright,ybottom,ytop]
+	// step is {'xvar':x_var,'yvar':y_var,'connect':connect,'size':size,'grouping':{'color':color,'type':type}}
+	var key_dict={}
+
+	// create sets of options for each grouping variable
+	if(step.grouping.color!=='none'){
+		var color_groups=[...new Set(remove_missing(chartobject.flatdata[step.grouping.color]))]
+		key_dict['color']={}
+	} 
+	if(step.grouping.type!=='none'){
+		var type_groups=[...new Set(remove_missing(chartobject.flatdata[step.grouping.type]))]
+		key_dict['type']={}
+	}
+
+	if(color_groups && type_groups){
+		key_dict['color,type']=[]
+	} else if(color_groups){
+		key_dict['color']=[]
+	} else if(type_groups){
+		key_dict['type']=[]
+	}
+
+	// check for sizing variable and get min and max for scaling
+	if(step.size!=='none'){
+		var minsize=Math.min(...remove_missing(chartobject.flatdata[step.size]))
+		var maxsize=Math.max(...remove_missing(chartobject.flatdata[step.size]))
+	}
+
+	// create full group list
+	if(step.grouping.color!=='none' || step.grouping.type!=='none'){
+		var temp=[]
+		var temp2=[]
+		for(var i=0;i<chartobject.dataset.length;i++){
+			temp.push([chartobject.dataset[i][step.grouping.color],chartobject.dataset[i][step.grouping.type]])
+		}
+
+		for(var i=0;i<temp.length;i++){
+			var dupe=0
+			for (var j=0;j<temp2.length;j++){
+				if(temp[i][0]==temp2[j][0] && temp[i][1]==temp2[j][1]){
+					var dupe=1
+				}
+			}
+			if(dupe==0){
+				temp2.push(temp[i])
+			}
+		}
+		groups=temp2
+	} else {
+		var groups=[[undefined,undefined]]
+	}
+
+	console.log(groups)
+
+	// loop through groups in the dataset to draw lines
+	for(var i=0;i<groups.length;i++){
+		var current=chartobject.dataset.filter(function(row){
+			return row[step.grouping.color]===groups[i][0]
+		}).filter(function(row){
+			return row[step.grouping.type]===groups[i][1]
+		})
+
+		// order according to the connect variable, connect on x by default
+		if(step.connect!=='none'){
+			var connect=step.connect
+			current.sort(function(a,b){
+				return a[step.connect]-b[step.connect]
+			})
+		} else {
+			var connect=step.xvar
+			current.sort(function(a,b){
+				return a[step.xvar]-b[step.xvar]
+			})
+		}
+
+		// check for sizing variable and set line width
+		if(step.size!=='none'){
+			if(current[0][step.size]!=undefined){
+				var linewidth=((current[0][step.size]-minsize)/(maxsize-minsize))*(parseFloat(chartobject.line_maxsize)-parseFloat(chartobject.line_minsize))+parseFloat(chartobject.line_minsize)
+			}
+		} else {
+			var linewidth=chartobject.line_size
+		}
+
+		// color
+		if(step.grouping.color!=='none'){
+			var color=chartobject.qualitative_color[color_groups.indexOf(current[0][step.grouping.color])]
+		} else {
+			var color=chartobject.qualitative_color[0]
+		}
+
+		// line type
+		if(step.grouping.type!=='none'){
+			console.log('typing: ',type_groups,current[0],step.grouping.type)
+			var linetype=chartobject.line_types[type_groups.indexOf(current[0][step.grouping.type])]
+		} else {
+			var linetype=chartobject.line_types[0]
+		}
+
+		// label
+		var label=current[0][step.color]+', '+current[0][step.type]
+
+		var path=''
+		// now loop through points in the line
+		for(var j=0;j<current.length;j++){
+			var sub_current=current[j]
+
+			try{
+				var sub_next=current[j+1]
+			} catch(err){}
+
+			if(isNaN(sub_current[connect])==false){
+				if((sub_current[step.xvar]==undefined && connect==step.yvar) || (sub_current[step.yvar]==undefined && connect==step.xvar)){
+					// set various values for points. locations
+					var x_loc=get_coord(sub_next[step.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[step.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
+					var y_loc=get_coord(sub_next[step.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[step.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
+					// add to path or start path
+					if(j==0){
+						path=path+'M'+x_loc+','+y_loc
+					} else{
+						path=path+'M'+x_loc+','+y_loc
+					}
+				} else if(sub_current[step.xvar]!=undefined && sub_current[step.yvar]!=undefined){
+					// set various values for points. locations
+					var x_loc=get_coord(sub_current[step.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[step.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
+					var y_loc=get_coord(sub_current[step.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[step.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
+					// add to path or start path
+					if(j==0){
+						path=path+'M'+x_loc+','+y_loc
+					} else{
+						path=path+'L'+x_loc+','+prev_y_loc+'L'+x_loc+','+y_loc
+					}
+				} else {}
+
+				var prev_x_loc=x_loc
+				var prev_y_loc=y_loc
+			}
+		}
+		console.log(path)
+		// draw line
+		snapobj.path(path).attr({'data_label':label,class:'dataelement',stroke:color,'stroke-width':linewidth,fill:'none','group':current[0][step.grouping.color],'fill-opacity':0,'stroke-opacity':chartobject.linechart_strokeopacity,'colorchange':'stroke',context:'pathdata_context_menu','stroke-dasharray':linetype})
+	}
+}
+
+
 function draw_points(axes,point,snapobj){
 	// axes are [xleft,xright,ybottom,ytop]
 	// point is {'xvar':x_var,'yvar':y_var,'labels':label,'labelall':pointlabel,'grouping':{'color':color,'size':size,'type':type}}
@@ -1226,7 +1353,7 @@ function draw_points(axes,point,snapobj){
 
 function draw_text(axes,text,snapobj){
 	// axes are [xleft,xright,ybottom,ytop]
-	// text is {'xvar':x_var,'yvar':y_var,'size':size}
+	// text is {'xvar':x_var,'yvar':y_var,'size':size,'text':text}
 
 	console.log(text,chartobject.flatdata)
 	// check for sizing variable and get min and max for scaling
@@ -1235,34 +1362,26 @@ function draw_text(axes,text,snapobj){
 		var maxsize=Math.max(...chartobject.flatdata[text.size])
 	}
 
-	// loop through observations in the dataset to draw points
+	// loop through observations in the dataset to draw text
 	for(var i=0;i<chartobject.dataset.length;i++){
 		var current=chartobject.dataset[i]
 
-		// check for sizing variable and set point size
+		// check for sizing variable and set text size
 		if(text.size!=='none'){
 			var size=((current[text.size]-minsize)/(maxsize-minsize))*(parseFloat(chartobject.text_maxsize)-parseFloat(chartobject.text_minsize))+parseFloat(chartobject.text_minsize)
 		} else {
 			var size=chartobject.annotatesize
 		}
 
-		// set various values for points. locations
-		if(current[text.xvar]!=undefined && current[text.yvar]!=undefined){
+		// set values for text locations
+		if(current[text.xvar]!=undefined && current[text.yvar]!=undefined && current[text.text]!=undefined){
 			var x_loc=get_coord(current[text.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[text.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
 			var y_loc=get_coord(current[text.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[text.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
 
 			// draw text
-			if(pointtype==1){
-				snapobj.circle(x_loc,y_loc,pointsize).attr({fill:color,stroke:color,'stroke-width':chartobject.point_strokewidth,'data_type':'point','data_label':label,'group':current[point.grouping.color],'class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu'})
-			}
-
-			// label point
-			if (point.labelall==true) {
-				var label=snapobj.text(x_loc,y_loc-pointsize-3,current[point.labels]).attr({'font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'middle',fill:chartobject.datatextfill,colorchange:'fill',context:'text_context_menu'})
-				label.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
-				var coords=label.getBBox()
-				label.attr({y:coords.y-coords.height})
-			}
+			var t=snapobj.text(x_loc,y_loc,current[text.text]).attr({fill:chartobject.annotatetextfill,'data_type':'text','class':'dataelement',colorchange:'fill',context:'text_context_menu','text-anchor':'middle','dominant-baseline':'text-before-edge','font-size':size,'font-family':chartobject.annotateface,'font-weight':chartobject.annotateweight})
+			t.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
+			center_baseline(t)
 		}
 	}
 }
