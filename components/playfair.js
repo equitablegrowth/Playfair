@@ -61,6 +61,7 @@ window.playfair = (function () {
 		this.area=geom_dict.area
 		this.step=geom_dict.step
 		this.stackedbar=geom_dict.stackedbar
+		this.shade=geom_dict.shade
 		this.shifty=0
 		this.shiftx=0
 		this.datedenom=[0,0]
@@ -81,8 +82,10 @@ window.playfair = (function () {
 		var ystrings=[]
 
 		for(var key in geom_dict){
-			xtypes.push(typeof(data[geom_dict[key]['xvar']][0]))
-			ytypes.push(typeof(data[geom_dict[key]['yvar']][0]))
+			try{
+				xtypes.push(typeof(data[geom_dict[key]['xvar']][0]))
+				ytypes.push(typeof(data[geom_dict[key]['yvar']][0]))
+			} catch(err){}
 			console.log(data,key,data[geom_dict[key]],data[geom_dict[key]['yvar']],geom_dict[key])
 
 			if(key=='area' | key=='stackedbar'){
@@ -408,6 +411,7 @@ window.playfair = (function () {
 		var axes=draw_axes(this,xaxis,yaxis,graph_obj.shiftx,graph_obj.shifty)
 
 		// draw geoms
+		if(typeof(chartobject.shade)!=='undefined'){draw_shade(axes,graph_obj.shade,snapobj)}
 		if(typeof(chartobject.bar)!=='undefined'){draw_bars(axes,graph_obj.bar,snapobj)}
 		if(typeof(chartobject.step)!=='undefined'){draw_steps(axes,graph_obj.step,snapobj)}
 		if(typeof(chartobject.line)!=='undefined'){draw_lines(axes,graph_obj.line,snapobj)}
@@ -1054,8 +1058,6 @@ function draw_lines(axes,line,snapobj){
 		var groups=[[undefined,undefined]]
 	}
 
-	console.log(groups)
-
 	// loop through groups in the dataset to draw lines
 	for(var i=0;i<groups.length;i++){
 		var current=chartobject.dataset.filter(function(row){
@@ -1198,8 +1200,6 @@ function draw_steps(axes,step,snapobj){
 		var groups=[[undefined,undefined]]
 	}
 
-	console.log(groups)
-
 	// loop through groups in the dataset to draw lines
 	for(var i=0;i<groups.length;i++){
 		var current=chartobject.dataset.filter(function(row){
@@ -1303,7 +1303,6 @@ function draw_points(axes,point,snapobj){
 		var type_groups=[...new Set(chartobject.flatdata[point.grouping.color])]
 	}
 
-	console.log(point,chartobject.flatdata)
 	// check for sizing variable and get min and max for scaling
 	if(point.size!=='none'){
 		var minsize=Math.min(...chartobject.flatdata[point.size])
@@ -1359,7 +1358,6 @@ function draw_text(axes,text,snapobj){
 	// axes are [xleft,xright,ybottom,ytop]
 	// text is {'xvar':x_var,'yvar':y_var,'size':size,'text':text}
 
-	console.log(text,chartobject.flatdata)
 	// check for sizing variable and get min and max for scaling
 	if(text.size!=='none'){
 		var minsize=Math.min(...chartobject.flatdata[text.size])
@@ -1367,6 +1365,61 @@ function draw_text(axes,text,snapobj){
 	}
 
 	// loop through observations in the dataset to draw text
+	for(var i=0;i<chartobject.dataset.length;i++){
+		var current=chartobject.dataset[i]
+
+		// check for sizing variable and set text size
+		if(text.size!=='none'){
+			var size=((current[text.size]-minsize)/(maxsize-minsize))*(parseFloat(chartobject.text_maxsize)-parseFloat(chartobject.text_minsize))+parseFloat(chartobject.text_minsize)
+		} else {
+			var size=chartobject.annotatesize
+		}
+
+		// set values for text locations
+		if(current[text.xvar]!=undefined && current[text.yvar]!=undefined && current[text.text]!=undefined){
+			var x_loc=get_coord(current[text.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[text.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
+			var y_loc=get_coord(current[text.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[text.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
+
+			// draw text
+			var t=snapobj.text(x_loc,y_loc,current[text.text]).attr({fill:chartobject.annotatetextfill,'data_type':'text','class':'dataelement',colorchange:'fill',context:'text_context_menu','text-anchor':'middle','dominant-baseline':'text-before-edge','font-size':size,'font-family':chartobject.annotateface,'font-weight':chartobject.annotateweight})
+			t.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
+			center_baseline(t)
+		}
+	}
+}
+
+function draw_shade(axes,shade,snapobj){
+	// axes are [xleft,xright,ybottom,ytop]
+	// shade is {'xvar':x_var,'yvar':y_var}
+
+	// loop through observations in the xvar and yvar
+	if(shade.xarr.length>0){
+		for(var i=0;i<shade.xarr.length;i++){
+			var current=shade.xvar[i]
+			var x_left=get_coord(current[0],chartobject.xlimits,[axes[0],axes[1]],'nottext',chartobject.xarray,0,chartobject.shiftx)
+			var x_right=get_coord(current[1],chartobject.xlimits,[axes[0],axes[1]],'nottext',chartobject.xarray,0,chartobject.shiftx)
+			var y_top=axes[2]
+			var y_bottom=axes[3]
+
+			snapobj.path('M'+x_left+','+y_top+'L'+x_right+','+y_top+'L'+x_right+','+y_bottom+'L'+x_left+','+y_bottom+'L'+x_left+','+y_top).attr({fill:'#fff','fill-opacity':.6})
+		}
+	}
+
+	if(shade.yarr.length>0){
+		for(var i=0;i<shade.xarr.length;i++){
+			var current=shade.yvar[i]
+			var x_left=axes[0]
+			var x_right=axes[1]
+			var y_top=get_coord(current[0],chartobject.ylimits,[axes[2],axes[3]],'nottext',chartobject.yarray,1,chartobject.shifty)
+			var y_bottom=get_coord(current[1],chartobject.ylimits,[axes[2],axes[3]],'nottext',chartobject.yarray,1,chartobject.shifty)
+
+			snapobj.path('M'+x_left+','+y_top+'L'+x_right+','+y_top+'L'+x_right+','+y_bottom+'L'+x_left+','+y_bottom+'L'+x_left+','+y_top).attr({fill:'#fff','fill-opacity':.6})
+		}
+	}
+
+
+
+
 	for(var i=0;i<chartobject.dataset.length;i++){
 		var current=chartobject.dataset[i]
 

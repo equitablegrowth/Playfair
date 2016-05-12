@@ -142,7 +142,7 @@ function preview() {
 			}
 		}
 
-		geom_dict['shade']={'xvar':x_var,'yvar':y_var}
+		geom_dict['shade']={'xarr':x_var,'yarr':y_var}
 		ready=1
 	}
 
