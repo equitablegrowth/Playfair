@@ -886,7 +886,25 @@
 			<div class='tab-content'>
 				<div class='row'>
 					<div class='col-md-6'>
-						test
+						<div class="labeled_elewide">
+							<label>Vertical Shading</label>
+							<span class='styled-inputwide'>
+								<input type="text styled-input" placeholder="e.g. [3,4],[9,10] or [01-1997,02-2000], ..." id='shade_select_x'>
+							</span>
+						</div>
+
+						<div class="labeled_elewide">
+							<label>Horizontal Shading</label>
+							<span class='styled-inputwide'>
+								<input type="text styled-input" placeholder="e.g. [3,4],[9,10] or [01-1997,02-2000], ..." id='shade_select_y'>
+							</span>
+						</div>
+					</div>
+					<div class='col-md-6'>
+						<div>
+							<input type="checkbox" id="recessions" name="recessions" class="switch"/>
+							<label for="recessions">Shade U.S. Recessions</label>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -1562,7 +1580,7 @@
 		<p><span class='helphighlight'><b>Double-click</b></span> on text to select it</p>
 		<p><span class='helphighlight'><b>Right-click</b></span> to insert annotations, label data points, change element colors, and more.</p>
 		<p><span class='helphighlight'><b>Drag</b></span> callouts, arrows, and floating keys.</p>
-		<p><b>Remember</b> if you click the redraw button you will lose anything you have done here!</p>
+		<p><b>Remember</b> if you click the redraw button you will lose anything you have added directly to the graph!</p>
 	</div>
 	<div class='helpbox' id='help_text'>
 		<p><kbd><i class="fa fa-arrow-left"></i></kbd> / <kbd><i class="fa fa-arrow-right"></i></kbd> : move cursor</p>
@@ -1678,7 +1696,7 @@ $('[data-toggle="tooltip"]').tooltip()
 
 // Initial graph state
 function placeholder(){
-	var bounding_box=grapharea.rect(0,0,width,height).attr({class:'background',fill:'none','stroke':'lightgray','stroke-width':3.5,'stroke-dasharray':'12,8'})
+	var bounding_box=grapharea.rect(0,0,width-.5,height-.5).attr({class:'background',fill:'none','stroke':'lightgray','stroke-width':3.5,'stroke-dasharray':'12,8','shape-rendering':'crispEdges'})
 }
 
 // Handlers for the graphing area

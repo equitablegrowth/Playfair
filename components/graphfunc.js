@@ -94,6 +94,58 @@ function preview() {
 		ready=1
 	}
 
+	if($("#shade_select_x").val()!=='' | $("#shade_select_y").val()!=='' | document.getElementById('recessions').checked==true){
+		var x_var=$("#shade_select_x").val()
+		var y_var=$("#shade_select_y").val()
+
+		var temp=x_var.split('],[')
+		for(var i=0;i<temp.length;i++){
+			temp[i]=temp[i].replace('[','')
+			temp[i]=temp[i].replace(']','')
+			temp[i]=temp[i].split(',')
+
+			x_var=[]
+			if(moment(temp[0][0],["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY","YYYYqQ"],true).isValid()==true){
+				for(var i=0;i<temp.length;i++){
+					x_var.push([new Date(temp[i][0]),new Date(temp[i][1])])
+				}
+			} else {
+				for(var i=0;i<temp.length;i++){
+					x_var.push([parseFloat(temp[i][0]),parseFloat(temp[i][1])])
+				}
+			}
+		}
+
+		var temp=y_var.split('],[')
+		for(var i=0;i<temp.length;i++){
+			temp[i]=temp[i].replace('[','')
+			temp[i]=temp[i].replace(']','')
+			temp[i]=temp[i].split(',')
+
+			y_var=[]
+			if(moment(temp[0][0],["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY","YYYYqQ"],true).isValid()==true){
+				for(var i=0;i<temp.length;i++){
+					y_var.push([new Date(temp[i][0]),new Date(temp[i][1])])
+				}
+			} else {
+				for(var i=0;i<temp.length;i++){
+					y_var.push([parseFloat(temp[i][0]),parseFloat(temp[i][1])])
+				}
+			}
+		}
+
+		if(document.getElementById('recessions').checked==true){
+			var temp=[['June 1 1857','December 1 1858'],['October 1 1860','June 1 1861'],['April 1 1865','December 1 1867'],['June 1 1869','December 1 1870'],['October 1 1873','March 1 1879'],['March 1 1882','May 1 1885'],['March 1 1887','April 1 1888'],['July 1 1890','May 1 1891'],['January 1 1893','June 1 1894'],['December 1 1895','June 1 1897'],['June 1 1899','December 1 1900'],['September 1 1902','August 1 1904'],['May 1 1907','June 1 1908'],['January 1 1910','January 1 1912'],['January 1 1913','December 1 1914'],['August 1 1918','March 1 1919'],['January 1 1920','July 1 1921'],['May 1 1923','July 1 1924'],['October 1 1926','November 1 1927'],['August 1 1929','March 1 1933'],['May 1 1937','June 1 1938'],['February 1 1945','October 1 1945'],['November 1 1948','October 1 1949'],['July 1 1953','May 1 1954'],['August 1 1957','April 1 1958'],['April 1 1960','February 1 1961'],['December 1 1969','November 1 1970'],['November 1 1973','March 1 1975'],['January 1 1980','July 1 1980'],['July 1 1981','November 1 1982'],['July 1 1990','March 1 1991'],['March 1 2001','November 1 2001'],['December 1 2007','June 1 2009']]
+			var x_var=[]
+			for(var i=0;i<temp.length;i++){
+				x_var.push([new Date(temp[i][0]),new Date(temp[i][1])])
+			}
+		}
+
+		geom_dict['shade']={'xvar':x_var,'yvar':y_var}
+		ready=1
+	}
+
 	return [geom_dict,ready]
 }
 
