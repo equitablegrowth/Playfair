@@ -191,42 +191,46 @@ window.playfair = (function () {
 					}
 				}
 
-				if(Object.prototype.toString.call(data[geom_dict[key]['xvar']][0])==='[object Date]'){
-					for (var i=0;i<data[geom_dict[key]['xvar']].length;i++){
-						if(isNaN(data[geom_dict[key]['xvar']][i].getTime())==false){
-							xmaxes.push(new Date(moment(Math.max(...data[geom_dict[key]['xvar']]))))
-							xmins.push(new Date(moment(Math.min(...data[geom_dict[key]['xvar']]))))
+				if(geom_dict[key].xvar!==undefined){
+					if(Object.prototype.toString.call(data[geom_dict[key]['xvar']][0])==='[object Date]'){
+						for (var i=0;i<data[geom_dict[key]['xvar']].length;i++){
+							if(isNaN(data[geom_dict[key]['xvar']][i].getTime())==false){
+								xmaxes.push(new Date(moment(Math.max(...data[geom_dict[key]['xvar']]))))
+								xmins.push(new Date(moment(Math.min(...data[geom_dict[key]['xvar']]))))
+							}
 						}
-					}
-				} else if (data[geom_dict[key]['xvar']].dtype=='text'){
-					for (var i=0;i<data[geom_dict[key]['xvar']].length;i++){
-						if (data[geom_dict[key]['xvar']][i]!=''){
-							xstrings.push(...data[geom_dict[key]['xvar']])
+					} else if (data[geom_dict[key]['xvar']].dtype=='text'){
+						for (var i=0;i<data[geom_dict[key]['xvar']].length;i++){
+							if (data[geom_dict[key]['xvar']][i]!=''){
+								xstrings.push(...data[geom_dict[key]['xvar']])
+							}
 						}
+						xmaxes.push('placeholder')
+						xmins.push('placeholder')
+					} else {
+						xmaxes.push(Math.max(...remove_missing(data[geom_dict[key]['xvar']])))
+						xmins.push(Math.min(...remove_missing(data[geom_dict[key]['xvar']])))
 					}
-					xmaxes.push('placeholder')
-					xmins.push('placeholder')
-				} else {
-					xmaxes.push(Math.max(...remove_missing(data[geom_dict[key]['xvar']])))
-					xmins.push(Math.min(...remove_missing(data[geom_dict[key]['xvar']])))
 				}
 
-				if(Object.prototype.toString.call(data[geom_dict[key]['yvar']][0])==='[object Date]'){
-					if(isNaN(data[geom_dict[key]['yvar']][i].getTime())==false){
-						ymaxes.push(new Date(moment(Math.max(...data[geom_dict[key]['yvar']]))))
-						ymins.push(new Date(moment(Math.min(...data[geom_dict[key]['yvar']]))))
-					}
-				} else if(data[geom_dict[key]['yvar']].dtype=='text') {
-					for (var i=0;i<data[geom_dict[key]['yvar']].length;i++){
-						if (data[geom_dict[key]['yvar']][i]!=''){
-							ystrings.push(...data[geom_dict[key]['yvar']])
+				if(geom_dict[key].yvar!==undefined){
+					if(Object.prototype.toString.call(data[geom_dict[key]['yvar']][0])==='[object Date]'){
+						if(isNaN(data[geom_dict[key]['yvar']][i].getTime())==false){
+							ymaxes.push(new Date(moment(Math.max(...data[geom_dict[key]['yvar']]))))
+							ymins.push(new Date(moment(Math.min(...data[geom_dict[key]['yvar']]))))
 						}
-					}					
-					ymaxes.push('placeholder')
-					ymins.push('placeholder')
-				} else {
-					ymaxes.push(Math.max(...remove_missing(data[geom_dict[key]['yvar']])))
-					ymins.push(Math.min(...remove_missing(data[geom_dict[key]['yvar']])))
+					} else if(data[geom_dict[key]['yvar']].dtype=='text') {
+						for (var i=0;i<data[geom_dict[key]['yvar']].length;i++){
+							if (data[geom_dict[key]['yvar']][i]!=''){
+								ystrings.push(...data[geom_dict[key]['yvar']])
+							}
+						}					
+						ymaxes.push('placeholder')
+						ymins.push('placeholder')
+					} else {
+						ymaxes.push(Math.max(...remove_missing(data[geom_dict[key]['yvar']])))
+						ymins.push(Math.min(...remove_missing(data[geom_dict[key]['yvar']])))
+					}
 				}
 			}
 		}
@@ -1395,7 +1399,7 @@ function draw_shade(axes,shade,snapobj){
 	// loop through observations in the xvar and yvar
 	if(shade.xarr.length>0){
 		for(var i=0;i<shade.xarr.length;i++){
-			var current=shade.xvar[i]
+			var current=shade.xarr[i]
 			var x_left=get_coord(current[0],chartobject.xlimits,[axes[0],axes[1]],'nottext',chartobject.xarray,0,chartobject.shiftx)
 			var x_right=get_coord(current[1],chartobject.xlimits,[axes[0],axes[1]],'nottext',chartobject.xarray,0,chartobject.shiftx)
 			var y_top=axes[2]
@@ -1406,39 +1410,15 @@ function draw_shade(axes,shade,snapobj){
 	}
 
 	if(shade.yarr.length>0){
+		console.log(shade.yarr)
 		for(var i=0;i<shade.xarr.length;i++){
-			var current=shade.yvar[i]
+			var current=shade.yarr[i]
 			var x_left=axes[0]
 			var x_right=axes[1]
 			var y_top=get_coord(current[0],chartobject.ylimits,[axes[2],axes[3]],'nottext',chartobject.yarray,1,chartobject.shifty)
 			var y_bottom=get_coord(current[1],chartobject.ylimits,[axes[2],axes[3]],'nottext',chartobject.yarray,1,chartobject.shifty)
 
 			snapobj.path('M'+x_left+','+y_top+'L'+x_right+','+y_top+'L'+x_right+','+y_bottom+'L'+x_left+','+y_bottom+'L'+x_left+','+y_top).attr({fill:'#fff','fill-opacity':.6})
-		}
-	}
-
-
-
-
-	for(var i=0;i<chartobject.dataset.length;i++){
-		var current=chartobject.dataset[i]
-
-		// check for sizing variable and set text size
-		if(text.size!=='none'){
-			var size=((current[text.size]-minsize)/(maxsize-minsize))*(parseFloat(chartobject.text_maxsize)-parseFloat(chartobject.text_minsize))+parseFloat(chartobject.text_minsize)
-		} else {
-			var size=chartobject.annotatesize
-		}
-
-		// set values for text locations
-		if(current[text.xvar]!=undefined && current[text.yvar]!=undefined && current[text.text]!=undefined){
-			var x_loc=get_coord(current[text.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[text.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
-			var y_loc=get_coord(current[text.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[text.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
-
-			// draw text
-			var t=snapobj.text(x_loc,y_loc,current[text.text]).attr({fill:chartobject.annotatetextfill,'data_type':'text','class':'dataelement',colorchange:'fill',context:'text_context_menu','text-anchor':'middle','dominant-baseline':'text-before-edge','font-size':size,'font-family':chartobject.annotateface,'font-weight':chartobject.annotateweight})
-			t.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
-			center_baseline(t)
 		}
 	}
 }
