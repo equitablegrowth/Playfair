@@ -26,6 +26,7 @@ function changedimensions() {
 function preview() {
 	// set up geom_dict by looking at all the stuff in chart and gathering variables as appropriate
 	var geom_dict={}
+	var ready=0
 
 	if($("#point_select_x").val()!='none' & $("#point_select_y").val()!='none'){
 		var x_var=$("#point_select_x").val()
@@ -40,6 +41,7 @@ function preview() {
 		// var point_type=$('input[name=linepoint]:checked').val()
 
 		geom_dict['point']={'xvar':x_var,'yvar':y_var,'labels':label,'size':size,'labelall':pointlabel,'grouping':{'color':color,'type':type}}
+		ready=1
 	}
 
 	if($("#line_select_x").val()!='none' & $("#line_select_y").val()!='none'){
@@ -52,6 +54,7 @@ function preview() {
 		var type=$("#line_select_type").val()
 
 		geom_dict['line']={'xvar':x_var,'yvar':y_var,'connect':connect,'size':size,'grouping':{'color':color,'type':type}}
+		ready=1
 	}
 
 	if($("#bar_select_x").val()!='none' & $("#bar_select_y").val()!='none'){
@@ -59,14 +62,25 @@ function preview() {
 		var y_var=$("#bar_select_y").val()
 
 		var color=$("#bar_select_color").val()
-		// var bargroup=$("#bar_select_group").val()
-		var bargroup='none'
+		var bargroup=$("#bar_select_group").val()
 		var barspace=document.getElementById('spacing').checked
+		var orientation=$('input[name=orientation]:checked').val()
 
-		geom_dict['bar']={'xvar':x_var,'yvar':y_var,spacing:barspace,'orientation':'vertical','grouping':{'color':color,'bargroup':bargroup}}
+		geom_dict['bar']={'xvar':x_var,'yvar':y_var,spacing:barspace,'orientation':orientation,'grouping':{'color':color,'bargroup':bargroup}}
+		ready=1
 	}
 
-	return geom_dict
+	if($("#text_select_x").val()!='none' & $("#text_select_y").val()!='none'){
+		var x_var=$("#text_select_x").val()
+		var y_var=$("#text_select_y").val()
+
+		var size=$("#text_select_size").val()
+
+		geom_dict['text']={'xvar':x_var,'yvar':y_var,'size':size}
+		ready=1
+	}
+
+	return [geom_dict,ready]
 }
 
 // redraw is the main graphing setup function. Gets variable values and passes them to playfair.js
@@ -85,50 +99,9 @@ function redraw() {
 		}
 
 		// set up geom_dict by looking at all the stuff in chart and gathering variables as appropriate
-		var geom_dict={}
-		var ready=0
-
-		if($("#point_select_x").val()!='none' & $("#point_select_y").val()!='none'){
-			var x_var=$("#point_select_x").val()
-			var y_var=$("#point_select_y").val()
-
-			var color=$("#point_select_color").val()
-			var size=$("#point_select_size").val()
-			var label=$("#point_select_label").val()
-			var type=$("#point_select_types").val()
-
-			var pointlabel=document.getElementById('labels').checked
-			// var point_type=$('input[name=linepoint]:checked').val()
-
-			geom_dict['point']={'xvar':x_var,'yvar':y_var,'labels':label,'size':size,'labelall':pointlabel,'grouping':{'color':color,'type':type}}
-			ready=1
-		}
-
-		if($("#line_select_x").val()!='none' & $("#line_select_y").val()!='none'){
-			var x_var=$("#line_select_x").val()
-			var y_var=$("#line_select_y").val()
-
-			var connect=$("#line_select_connect").val()
-			var color=$("#line_select_color").val()
-			var size=$("#line_select_size").val()
-			var type=$("#line_select_type").val()
-
-			geom_dict['line']={'xvar':x_var,'yvar':y_var,'connect':connect,'size':size,'grouping':{'color':color,'type':type}}
-			ready=1
-		}
-
-		if($("#bar_select_x").val()!='none' & $("#bar_select_y").val()!='none'){
-			var x_var=$("#bar_select_x").val()
-			var y_var=$("#bar_select_y").val()
-
-			var color=$("#bar_select_color").val()
-			var bargroup=$("#bar_select_group").val()
-			var barspace=document.getElementById('spacing').checked
-			var orientation=$('input[name=orientation]:checked').val()
-
-			geom_dict['bar']={'xvar':x_var,'yvar':y_var,spacing:barspace,'orientation':orientation,'grouping':{'color':color,'bargroup':bargroup}}
-			ready=1
-		}
+		var prev=preview()
+		var ready=prev[1]
+		var geom_dict=prev[0]
 
 		// grab all text elements from the design tab
 		// replace the apostrophe character from word if applicable: Source’s

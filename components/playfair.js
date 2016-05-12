@@ -809,6 +809,10 @@ window.playfair = (function () {
 			'line_maxsize':20,
 			'line_size':2,
 
+			// text geom specific
+			'text_minsize':8
+			'text_maxsize':24
+
 			// logo
 			'logo':0,
 			'logoscale':1,
@@ -1205,6 +1209,49 @@ function draw_points(axes,point,snapobj){
 			var label=current[point.labels]
 
 			// draw point
+			if(pointtype==1){
+				snapobj.circle(x_loc,y_loc,pointsize).attr({fill:color,stroke:color,'stroke-width':chartobject.point_strokewidth,'data_type':'point','data_label':label,'group':current[point.grouping.color],'class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu'})
+			}
+
+			// label point
+			if (point.labelall==true) {
+				var label=snapobj.text(x_loc,y_loc-pointsize-3,current[point.labels]).attr({'font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'middle',fill:chartobject.datatextfill,colorchange:'fill',context:'text_context_menu'})
+				label.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
+				var coords=label.getBBox()
+				label.attr({y:coords.y-coords.height})
+			}
+		}
+	}
+}
+
+function draw_text(axes,text,snapobj){
+	// axes are [xleft,xright,ybottom,ytop]
+	// text is {'xvar':x_var,'yvar':y_var,'size':size}
+
+	console.log(text,chartobject.flatdata)
+	// check for sizing variable and get min and max for scaling
+	if(text.size!=='none'){
+		var minsize=Math.min(...chartobject.flatdata[text.size])
+		var maxsize=Math.max(...chartobject.flatdata[text.size])
+	}
+
+	// loop through observations in the dataset to draw points
+	for(var i=0;i<chartobject.dataset.length;i++){
+		var current=chartobject.dataset[i]
+
+		// check for sizing variable and set point size
+		if(text.size!=='none'){
+			var size=((current[text.size]-minsize)/(maxsize-minsize))*(parseFloat(chartobject.text_maxsize)-parseFloat(chartobject.text_minsize))+parseFloat(chartobject.text_minsize)
+		} else {
+			var size=chartobject.annotatesize
+		}
+
+		// set various values for points. locations
+		if(current[text.xvar]!=undefined && current[text.yvar]!=undefined){
+			var x_loc=get_coord(current[text.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[text.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
+			var y_loc=get_coord(current[text.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[text.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
+
+			// draw text
 			if(pointtype==1){
 				snapobj.circle(x_loc,y_loc,pointsize).attr({fill:color,stroke:color,'stroke-width':chartobject.point_strokewidth,'data_type':'point','data_label':label,'group':current[point.grouping.color],'class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu'})
 			}

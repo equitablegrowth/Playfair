@@ -315,6 +315,9 @@ function load_populate(response) {
 	for(var i=0;i<drag_eles.length;i++){
 		drag_eles[i].drag()
 	}
+
+	// recreate shadowfilter
+	var shadowfilter=grapharea.filter(Snap.filter.shadow(0, 2, 3))
 }
 
 $(document).on('click', '.list-group a', function(e){

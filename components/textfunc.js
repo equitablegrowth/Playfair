@@ -408,7 +408,14 @@ var down_listener=function(ev) {
 	}
 
 	// Bold/italic handling (control+B, control+I)
+	// there is something wrong with this. It disables the ability to save as a png. Right click works fine
+	// with the exact same code. Text elements edited by right-click and by control-B have exactly the same
+	// code if you look at them. Control+I does not cause problems. So yeah, I have no idea what the fuck.
 	if(keycode==66 && ev.ctrlKey==true){
+		try{if(selected_text.nodeName=='tspan'){
+			selected_text=selected_text.parent()
+		}}catch(err){}
+		console.log(selected_text)
 		fontf=selected_text.attr('font-weight')
 		if(fontf==400 || fontf=='normal'){
 			selected_text.attr({'font-weight':600})
@@ -436,68 +443,72 @@ var down_listener=function(ev) {
 // listener for text
 var press_listener=function(ev) {
 	var keycode = (ev.charCode)
+	var modcode = (ev.keyCode)
+	// console.log(keycode)
 	// handle carriage returns
-	if(keycode==13){
-		if (typeof string=='object'){
-			if(tlocation[0]==string[tlocation[1]].length){
-				string.splice(tlocation[1]+1,0,'')
-				selected_text.attr({text:string})
-				selected_text.selectAll("tspan:not(:first-child)").attr({x:selected_text.attr('x'),dy:1.1*parseFloat(selected_text.attr('font-size'))})
-				tlocation[1]=tlocation[1]+1
-				tlocation[0]=0
+	if(ev.ctrlKey!=true){
+		if(keycode==13){
+			if (typeof string=='object'){
+				if(tlocation[0]==string[tlocation[1]].length){
+					string.splice(tlocation[1]+1,0,'')
+					selected_text.attr({text:string})
+					selected_text.selectAll("tspan:not(:first-child)").attr({x:selected_text.attr('x'),dy:1.1*parseFloat(selected_text.attr('font-size'))})
+					tlocation[1]=tlocation[1]+1
+					tlocation[0]=0
+				} else {
+					string.splice(tlocation[1]+1,0,string[tlocation[1]].substring(tlocation[0],string[tlocation[1]].length))
+					string[tlocation[1]]=string[tlocation[1]].substring(0,tlocation[0])
+					selected_text.attr({text:string})
+					selected_text.selectAll("tspan:not(:first-child)").attr({x:selected_text.attr('x'),dy:1.1*parseFloat(selected_text.attr('font-size'))})
+					tlocation[1]=tlocation[1]+1
+					tlocation[0]=0
+				}
 			} else {
-				string.splice(tlocation[1]+1,0,string[tlocation[1]].substring(tlocation[0],string[tlocation[1]].length))
-				string[tlocation[1]]=string[tlocation[1]].substring(0,tlocation[0])
-				selected_text.attr({text:string})
-				selected_text.selectAll("tspan:not(:first-child)").attr({x:selected_text.attr('x'),dy:1.1*parseFloat(selected_text.attr('font-size'))})
-				tlocation[1]=tlocation[1]+1
-				tlocation[0]=0
+				if(tlocation[0]==string.length){
+					string=[string]
+					string.push('')
+					selected_text.attr({text:string})
+					selected_text.selectAll("tspan:not(:first-child)").attr({x:selected_text.attr('x'),dy:1.1*parseFloat(selected_text.attr('font-size'))})
+					tlocation[1]=tlocation[1]+1
+					tlocation[0]=0
+				} else {
+					string=[string]
+					string.push(string[0].substring(tlocation[0],string[0].length))
+					string[0]=string[0].substring(0,tlocation[0])
+					selected_text.attr({text:string})
+					selected_text.selectAll("tspan:not(:first-child)").attr({x:selected_text.attr('x'),dy:1.1*parseFloat(selected_text.attr('font-size'))})
+					tlocation[1]=tlocation[1]+1
+					tlocation[0]=0
+				}
 			}
-		} else {
-			if(tlocation[0]==string.length){
-				string=[string]
-				string.push('')
-				selected_text.attr({text:string})
-				selected_text.selectAll("tspan:not(:first-child)").attr({x:selected_text.attr('x'),dy:1.1*parseFloat(selected_text.attr('font-size'))})
-				tlocation[1]=tlocation[1]+1
-				tlocation[0]=0
-			} else {
-				string=[string]
-				string.push(string[0].substring(tlocation[0],string[0].length))
-				string[0]=string[0].substring(0,tlocation[0])
-				selected_text.attr({text:string})
-				selected_text.selectAll("tspan:not(:first-child)").attr({x:selected_text.attr('x'),dy:1.1*parseFloat(selected_text.attr('font-size'))})
-				tlocation[1]=tlocation[1]+1
-				tlocation[0]=0
-			}
-		}
-
-		coords=selected_text.getBBox()
-		yheight=string.length*parseFloat(selected_text.attr('font-size'))*1.1
-		high_box.attr({x:coords.x-3,y:coords.y-3,width:coords.width+6,height:yheight+6})
-	} else{
-		// everything else
-		if(typeof string=='object'){
-			// string[string.length-1]=string[string.length-1]+String.fromCharCode(keycode)
-			string[tlocation[1]]=string[tlocation[1]].slice(0,tlocation[0])+String.fromCharCode(keycode)+string[tlocation[1]].slice(tlocation[0],tlocation[1].length)
-			selected_text.attr({text:string})
-			selected_text.selectAll("tspan:not(:first-child)").attr({x:selected_text.attr('x'),dy:1.1*parseFloat(selected_text.attr('font-size'))})
 
 			coords=selected_text.getBBox()
-			high_box.attr({x:coords.x-3,y:coords.y-3,width:coords.width+6,height:coords.height+6})
-			high_coords=high_box.getBBox()
-			tlocation[0]=tlocation[0]+1
-		} else {
-			string=string.slice(0,tlocation[0])+String.fromCharCode(keycode)+string.slice(tlocation[0],string.length)
-			selected_text.attr({text:string})
+			yheight=string.length*parseFloat(selected_text.attr('font-size'))*1.1
+			high_box.attr({x:coords.x-3,y:coords.y-3,width:coords.width+6,height:yheight+6})
+		} else{
+			// everything else
+			if(typeof string=='object'){
+				// string[string.length-1]=string[string.length-1]+String.fromCharCode(keycode)
+				string[tlocation[1]]=string[tlocation[1]].slice(0,tlocation[0])+String.fromCharCode(keycode)+string[tlocation[1]].slice(tlocation[0],tlocation[1].length)
+				selected_text.attr({text:string})
+				selected_text.selectAll("tspan:not(:first-child)").attr({x:selected_text.attr('x'),dy:1.1*parseFloat(selected_text.attr('font-size'))})
 
-			coords=selected_text.getBBox()
-			high_box.attr({x:coords.x-3,y:coords.y-3,width:coords.width+6,height:coords.height+6})
-			high_coords=high_box.getBBox()
-			tlocation[0]=tlocation[0]+1
+				coords=selected_text.getBBox()
+				high_box.attr({x:coords.x-3,y:coords.y-3,width:coords.width+6,height:coords.height+6})
+				high_coords=high_box.getBBox()
+				tlocation[0]=tlocation[0]+1
+			} else {
+				string=string.slice(0,tlocation[0])+String.fromCharCode(keycode)+string.slice(tlocation[0],string.length)
+				selected_text.attr({text:string})
+
+				coords=selected_text.getBBox()
+				high_box.attr({x:coords.x-3,y:coords.y-3,width:coords.width+6,height:coords.height+6})
+				high_coords=high_box.getBBox()
+				tlocation[0]=tlocation[0]+1
+			}
 		}
+		position_cursor(selected_text)
 	}
-	position_cursor(selected_text)
 }
 
 ///////////////////// END TEXT FUNCTIONS ///////////////////////////////
