@@ -1400,6 +1400,7 @@ function draw_text(axes,text,snapobj){
 }
 
 function draw_shade(axes,shade,snapobj){
+	console.log(axes)
 	// axes are [xleft,xright,ybottom,ytop]
 	// shade is {'xvar':x_var,'yvar':y_var}
 
@@ -1412,7 +1413,9 @@ function draw_shade(axes,shade,snapobj){
 			var y_top=axes[2]
 			var y_bottom=axes[3]
 
-			if(x_left>axes[0] | x_right<axes[1]){
+			if(x_left>=axes[0] | x_right<=axes[1]){
+				if(x_left<axes[0]){x_left=axes[0]}
+				if(x_right>axes[1]){x_right=axes[1]}
 				snapobj.path('M'+x_left+','+y_top+'L'+x_right+','+y_top+'L'+x_right+','+y_bottom+'L'+x_left+','+y_bottom+'L'+x_left+','+y_top).attr({fill:'#fff','fill-opacity':.6})
 			}
 		}
@@ -1426,7 +1429,11 @@ function draw_shade(axes,shade,snapobj){
 			var y_top=get_coord(current[0],chartobject.ylimits,[axes[2],axes[3]],'nottext',chartobject.yarray,1,chartobject.shifty)
 			var y_bottom=get_coord(current[1],chartobject.ylimits,[axes[2],axes[3]],'nottext',chartobject.yarray,1,chartobject.shifty)
 
-			snapobj.path('M'+x_left+','+y_top+'L'+x_right+','+y_top+'L'+x_right+','+y_bottom+'L'+x_left+','+y_bottom+'L'+x_left+','+y_top).attr({fill:'#fff','fill-opacity':.6})
+			if(y_top<=axes[3] | y_bottom>=axes[2]){
+				if(y_top<axes[3]){y_top=axes[3]}
+				if(y_bottom>axes[2]){y_bottom=axes[2]}
+				snapobj.path('M'+x_left+','+y_top+'L'+x_right+','+y_top+'L'+x_right+','+y_bottom+'L'+x_left+','+y_bottom+'L'+x_left+','+y_top).attr({fill:'#fff','fill-opacity':.6})
+			}
 		}
 	}
 }

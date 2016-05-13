@@ -101,40 +101,40 @@ function preview() {
 
 		if(x_var!==''){
 			var temp=x_var.split('],[')
+			x_var=[]
 			for(var i=0;i<temp.length;i++){
 				temp[i]=temp[i].replace('[','')
 				temp[i]=temp[i].replace(']','')
 				temp[i]=temp[i].split(',')
+			}
 
-				x_var=[]
-				if(moment(temp[0][0],["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY","YYYYqQ"],true).isValid()==true){
-					for(var i=0;i<temp.length;i++){
-						x_var.push([new Date(temp[i][0]),new Date(temp[i][1])])
-					}
-				} else {
-					for(var i=0;i<temp.length;i++){
-						x_var.push([parseFloat(temp[i][0]),parseFloat(temp[i][1])])
-					}
+			if(moment(temp[0][0],["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY","YYYYqQ"],true).isValid()==true){
+				for(var i=0;i<temp.length;i++){
+					x_var.push([new Date(temp[i][0]),new Date(temp[i][1])])
+				}
+			} else {
+				for(var i=0;i<temp.length;i++){
+					x_var.push([parseFloat(temp[i][0]),parseFloat(temp[i][1])])
 				}
 			}
 		}
 
 		if(y_var!==''){
 			var temp=y_var.split('],[')
+			y_var=[]
 			for(var i=0;i<temp.length;i++){
 				temp[i]=temp[i].replace('[','')
 				temp[i]=temp[i].replace(']','')
 				temp[i]=temp[i].split(',')
+			}
 
-				y_var=[]
-				if(moment(temp[0][0],["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY","YYYYqQ"],true).isValid()==true){
-					for(var i=0;i<temp.length;i++){
-						y_var.push([new Date(temp[i][0]),new Date(temp[i][1])])
-					}
-				} else {
-					for(var i=0;i<temp.length;i++){
-						y_var.push([parseFloat(temp[i][0]),parseFloat(temp[i][1])])
-					}
+			if(moment(temp[0][0],["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY","YYYYqQ"],true).isValid()==true){
+				for(var i=0;i<temp.length;i++){
+					y_var.push([new Date(temp[i][0]),new Date(temp[i][1])])
+				}
+			} else {
+				for(var i=0;i<temp.length;i++){
+					y_var.push([parseFloat(temp[i][0]),parseFloat(temp[i][1])])
 				}
 			}
 		}
