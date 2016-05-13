@@ -1503,6 +1503,7 @@ function draw_bars(axes,bar,snapobj){
 	// the bar width should be just large enough that those two bars have a little space between them
 	// this is already stored in mindiff
 	if(chartobject.bar.orientation=='on'){
+		var x_values=[...new Set(chartobject.flatdata[bar.yvar])]
 		if(chartobject.flatdata[bar.xvar].dtype!='text'){
 			var totalwidth=Math.abs(chartobject.barchart_width*(get_coord(chartobject.mindiff,chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-get_coord(0,chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)))
 			var barwidth=totalwidth
@@ -1517,10 +1518,11 @@ function draw_bars(axes,bar,snapobj){
 		} else {
 			// if the axis is categorical, get width based on that instead.
 			console.log(get_coord(chartobject.flatdata[bar.xvar][0],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx))
-			var totalwidth=Math.abs(chartobject.barchart_width*(get_coord(chartobject.flatdata[bar.xvar][0],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-get_coord(chartobject.flatdata[bar.xvar][1],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)))
+			var totalwidth=Math.abs(chartobject.barchart_width*(get_coord(x_values[0],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-get_coord(x_values[1],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)))
 			var barwidth=totalwidth
 		}
 	} else {
+		var y_values=[...new Set(chartobject.flatdata[bar.yvar])]
 		if(chartobject.flatdata[bar.yvar].dtype!='text'){
 			var totalwidth=Math.abs(chartobject.barchart_width*(get_coord(chartobject.mindiff,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)-get_coord(0,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)))
 			var barwidth=totalwidth
@@ -1535,7 +1537,7 @@ function draw_bars(axes,bar,snapobj){
 		} else {
 			// if the axis is categorical, get width based on that instead.
 			console.log(get_coord(chartobject.flatdata[bar.yvar][0],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1))
-			var totalwidth=Math.abs(chartobject.barchart_width*(get_coord(chartobject.flatdata[bar.yvar][0],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)-get_coord(chartobject.flatdata[bar.yvar][1],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)))
+			var totalwidth=Math.abs(chartobject.barchart_width*(get_coord(y_values[0],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)-get_coord(y_values[1],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)))
 			var barwidth=totalwidth
 		}
 	}
@@ -1607,6 +1609,7 @@ function draw_stackedbars(axes,bar,snapobj){
 	// the bar width should be just large enough that those two bars have a little space between them
 	// this is already stored in mindiff
 	if(bar.orientation=='on'){
+		var x_values=[...new Set(chartobject.flatdata[bar.xvar])]
 		var orient='vertical'
 		if(chartobject.flatdata[bar.xvar].dtype!='text'){
 			var totalwidth=Math.abs(chartobject.barchart_width*(get_coord(chartobject.mindiff,chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-get_coord(0,chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)))
@@ -1619,13 +1622,12 @@ function draw_stackedbars(axes,bar,snapobj){
 			}
 		} else {
 			// if the axis is categorical, get width based on that instead.
-			console.log(chartobject.flatdata[bar.xvar][0],chartobject.flatdata[bar.xvar][1])
-			console.log(get_coord(chartobject.flatdata[bar.xvar][0],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx),get_coord(chartobject.flatdata[bar.xvar][1],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx))
-			var totalwidth=Math.abs(chartobject.barchart_width*(get_coord(chartobject.flatdata[bar.xvar][0],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-get_coord(chartobject.flatdata[bar.xvar][1],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)))
+			var totalwidth=Math.abs(chartobject.barchart_width*(get_coord(x_values[0],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-get_coord(x_values[1],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)))
 			var barwidth=totalwidth
 		}
 	} else {
 		var orient='horizontal'
+		var y_values=[...new Set(chartobject.flatdata[bar.yvar])]
 		if(chartobject.flatdata[bar.yvar].dtype!='text'){
 			var totalwidth=Math.abs(chartobject.barchart_width*(get_coord(chartobject.mindiff,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)-get_coord(0,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)))
 			var barwidth=totalwidth
@@ -1637,7 +1639,7 @@ function draw_stackedbars(axes,bar,snapobj){
 		} else {
 			// if the axis is categorical, get width based on that instead.
 			console.log(get_coord(chartobject.flatdata[bar.yvar][0],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1))
-			var totalwidth=Math.abs(chartobject.barchart_width*(get_coord(chartobject.flatdata[bar.yvar][0],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)-get_coord(chartobject.flatdata[bar.yvar][1],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)))
+			var totalwidth=Math.abs(chartobject.barchart_width*(get_values[0],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)-get_coord(get_values[1],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)))
 			var barwidth=totalwidth
 		}
 	}
