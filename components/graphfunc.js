@@ -75,11 +75,10 @@ function preview() {
 		var y_var=$("#bar_select_y").val()
 
 		var color=$("#bar_select_color").val()
-		var bargroup=$("#bar_select_group").val()
 		var barspace=document.getElementById('spacing').checked
 		var orientation=$('input[name=orientation]:checked').val()
 
-		geom_dict['bar']={'xvar':x_var,'yvar':y_var,spacing:barspace,'orientation':orientation,'grouping':{'color':color,'bargroup':bargroup}}
+		geom_dict['bar']={'xvar':x_var,'yvar':y_var,spacing:barspace,'orientation':orientation,'grouping':{'color':color}}
 		ready=1
 	}
 
