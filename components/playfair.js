@@ -122,7 +122,7 @@ window.playfair = (function () {
 						if(datadict[i][xvar]==value){
 							yvalues.push(datadict[i][yvar])
 						}
-					}
+					} 
 
 					// sum the yvalues of all such rows, separating positive from negative
 					for(var i=0;i<yvalues.length;i++){
