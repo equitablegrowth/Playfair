@@ -83,6 +83,18 @@ function preview() {
 		ready=1
 	}
 
+	if($("#sbar_select_x").val()!='none' & $("#sbar_select_y").val()!='none' & $("#sbar_select_color").val()!='none'){
+		var x_var=$("#sbar_select_x").val()
+		var y_var=$("#sbar_select_y").val()
+
+		var color=$("#sbar_select_color").val()
+		var barspace=document.getElementById('sspacing').checked
+		var orientation=$('input[name=sorientation]:checked').val()
+
+		geom_dict['stackedbar']={'xvar':x_var,'yvar':y_var,spacing:barspace,'orientation':orientation,'grouping':{'color':color}}
+		ready=1
+	}
+
 	if($("#text_select_x").val()!='none' & $("#text_select_y").val()!='none'){
 		var x_var=$("#text_select_x").val()
 		var y_var=$("#text_select_y").val()

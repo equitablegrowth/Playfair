@@ -417,6 +417,7 @@ window.playfair = (function () {
 		// draw geoms
 		if(typeof(chartobject.shade)!=='undefined'){draw_shade(axes,graph_obj.shade,snapobj)}
 		if(typeof(chartobject.bar)!=='undefined'){draw_bars(axes,graph_obj.bar,snapobj)}
+		if(typeof(chartobject.stackedbar)!=='undefined'){draw_stackedbars(axes,graph_obj.stackedbar,snapobj)}
 		if(typeof(chartobject.step)!=='undefined'){draw_steps(axes,graph_obj.step,snapobj)}
 		if(typeof(chartobject.line)!=='undefined'){draw_lines(axes,graph_obj.line,snapobj)}
 		if(typeof(chartobject.point)!=='undefined'){draw_points(axes,graph_obj.point,snapobj)}
@@ -1416,7 +1417,7 @@ function draw_shade(axes,shade,snapobj){
 			if(x_left>=axes[0] | x_right<=axes[1]){
 				if(x_left<axes[0]){x_left=axes[0]}
 				if(x_right>axes[1]){x_right=axes[1]}
-				snapobj.path('M'+x_left+','+y_top+'L'+x_right+','+y_top+'L'+x_right+','+y_bottom+'L'+x_left+','+y_bottom+'L'+x_left+','+y_top).attr({fill:'#fff','fill-opacity':.6})
+				snapobj.path('M'+x_left+','+y_top+'L'+x_right+','+y_top+'L'+x_right+','+y_bottom+'L'+x_left+','+y_bottom+'L'+x_left+','+y_top).attr({fill:'#fff','fill-opacity':.6,'shape-rendering':'crispEdges'})
 			}
 		}
 	}
@@ -1432,7 +1433,7 @@ function draw_shade(axes,shade,snapobj){
 			if(y_top<=axes[3] | y_bottom>=axes[2]){
 				if(y_top<axes[3]){y_top=axes[3]}
 				if(y_bottom>axes[2]){y_bottom=axes[2]}
-				snapobj.path('M'+x_left+','+y_top+'L'+x_right+','+y_top+'L'+x_right+','+y_bottom+'L'+x_left+','+y_bottom+'L'+x_left+','+y_top).attr({fill:'#fff','fill-opacity':.6})
+				snapobj.path('M'+x_left+','+y_top+'L'+x_right+','+y_top+'L'+x_right+','+y_bottom+'L'+x_left+','+y_bottom+'L'+x_left+','+y_top).attr({fill:'#fff','fill-opacity':.6,'shape-rendering':'crispEdges'})
 			}
 		}
 	}
@@ -1540,6 +1541,82 @@ function draw_bars(axes,bar,snapobj){
 			// draw bar
 			snapobj.path('M'+x1+','+y2+'L'+x2+','+y2+'L'+x2+','+y1+'L'+x1+','+y1+'L'+x1+','+y2).attr({orient:orient,'data_type':'bar','data_label':label,'group':current[bar.grouping.color],'class':'dataelement','shape-rendering':'crispEdges',fill:color,colorchange:'fill',context:'data_context_menu'})
 		}
+	}
+
+	// always gotta pull the y=0 line to the front after creating a barchart
+	snapobj.append(snapobj.selectAll('[zeroline="1"]'))
+}
+
+function draw_stackedbars(axes,bar,snapobj){
+	// axes are [xleft,xright,ybottom,ytop]
+	// bar is {'xvar':x_var,'yvar':y_var,'grouping':{'color':color,'bargroup':bargroup}}
+	// create sets of options for each grouping variable
+	var color_groups=[...new Set(chartobject.flatdata[bar.grouping.color])]
+
+	// to figure out the width of a bar, need to find the two values that are *closest* on the x-axis.
+	// the bar width should be just large enough that those two bars have a little space between them
+	// this is already stored in mindiff
+	if(bar.orientation=='on'){
+		var orient='vertical'
+		if(chartobject.flatdata[bar.xvar].dtype!='text'){
+			var totalwidth=Math.abs(chartobject.barchart_width*(get_coord(chartobject.mindiff,chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-get_coord(0,chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)))
+			var barwidth=totalwidth
+			// cap barwidth based on overrunning the left or right side of the graph - ie bars should never break out of the axis box
+			if(totalwidth/2>get_coord(chartobject.xmin,chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-axes[0] || totalwidth/2>axes[1]-get_coord(chartobject.xmax,chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)){
+				console.log('clipping')
+				var totalwidth=Math.abs(chartobject.barchart_width*2*(get_coord(chartobject.xmin,chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-axes[0]))
+				var barwidth=totalwidth
+			}
+		} else {
+			// if the axis is categorical, get width based on that instead.
+			console.log(get_coord(chartobject.flatdata[bar.xvar][0],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx))
+			var totalwidth=Math.abs(chartobject.barchart_width*(get_coord(chartobject.flatdata[bar.xvar][0],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-get_coord(chartobject.flatdata[bar.xvar][1],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)))
+			var barwidth=totalwidth
+		}
+	} else {
+		var orient='horizontal'
+		if(chartobject.flatdata[bar.yvar].dtype!='text'){
+			var totalwidth=Math.abs(chartobject.barchart_width*(get_coord(chartobject.mindiff,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)-get_coord(0,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)))
+			var barwidth=totalwidth
+			// cap barwidth based on overrunning the left or right side of the graph - ie bars should never break out of the axis box
+			if(totalwidth/2>get_coord(chartobject.ymin,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)-axes[0] || totalwidth/2>axes[1]-get_coord(chartobject.ymax,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)){
+				var totalwidth=Math.abs(chartobject.barchart_width*2*(get_coord(chartobject.ymin,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)-axes[2]))
+				var barwidth=totalwidth
+			}
+		} else {
+			// if the axis is categorical, get width based on that instead.
+			console.log(get_coord(chartobject.flatdata[bar.yvar][0],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1))
+			var totalwidth=Math.abs(chartobject.barchart_width*(get_coord(chartobject.flatdata[bar.yvar][0],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)-get_coord(chartobject.flatdata[bar.yvar][1],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)))
+			var barwidth=totalwidth
+		}
+	}
+
+	if(bar.orientation=='on'){
+		// draw vertical bars
+		var y_ends=new Array(color_groups.length)
+		for(var i=0;i<y_ends.length;i++){
+			y_ends[i]=get_coord(0,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
+		}
+
+		for(var i=0;i<color_groups.length;i++){
+			var color=chartobject.qualitative_color[i]
+			for(var j=0;j<chartobject.dataset.length;j++){
+				var temp=chartobject.dataset[j]
+				if(temp[bar.grouping.color]==color_groups[i]){
+					var y1=y_ends[j]
+					var y2=y1+get_coord(temp[bar.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
+					var x1=get_coord(temp[bar.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-(totalwidth/2)
+					var x2=x1+barwidth
+					var label=temp[bar.yvar]
+					console.log('M'+x1+','+y2+'L'+x2+','+y2+'L'+x2+','+y1+'L'+x1+','+y1+'L'+x1+','+y2)
+					snapobj.path('M'+x1+','+y2+'L'+x2+','+y2+'L'+x2+','+y1+'L'+x1+','+y1+'L'+x1+','+y2).attr({orient:orient,'data_type':'bar','data_label':label,'group':temp[bar.grouping.color],'class':'dataelement','shape-rendering':'crispEdges',fill:color})
+
+					y_ends[j]=y2
+				}
+			}
+		}
+	} else {
+		// draw horizontal bars
 	}
 
 	// always gotta pull the y=0 line to the front after creating a barchart
