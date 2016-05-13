@@ -889,20 +889,26 @@
 						<div class="labeled_elewide">
 							<label>Vertical Shading</label>
 							<span class='styled-inputwide'>
-								<input type="text styled-input" placeholder="e.g. [3,4],[9,10] or [01-1997,02-2000], ..." id='shade_select_x'>
+								<input type="text styled-input" placeholder="e.g. [3,4],[9,10] or [01-1997,02-2000], ..." id='shade_select_x' onchange=$(".variable_select").change()>
 							</span>
 						</div>
 
 						<div class="labeled_elewide">
 							<label>Horizontal Shading</label>
 							<span class='styled-inputwide'>
-								<input type="text styled-input" placeholder="e.g. [3,4],[9,10] or [01-1997,02-2000], ..." id='shade_select_y'>
+								<input type="text styled-input" placeholder="e.g. [3,4],[9,10] or [01-1997,02-2000], ..." id='shade_select_y' onchange=$(".variable_select").change()>
 							</span>
 						</div>
 					</div>
 					<div class='col-md-6'>
+						<div class="labeled_elewide">
+							<label>Legend Label</label>
+							<span class='styled-inputwide'>
+								<input type="text styled-input" placeholder="Label for shading in legend" id='shade_label' onchange=$(".variable_select").change()>
+							</span>
+						</div>
 						<div>
-							<input type="checkbox" id="recessions" name="recessions" class="switch"/>
+							<input type="checkbox" id="recessions" name="recessions" class="switch" onclick=$(".variable_select").change() />
 							<label for="recessions">Shade U.S. Recessions</label>
 						</div>
 					</div>
@@ -1727,6 +1733,7 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 
 $(".variable_select").change(function(){
 	var geom=preview()[0]
+	console.log(geom)
 	var structure=[]
 
 	// geom: {point:{xvar:x,yvar:y,grouping:{color:g1,type:g2}},line:{xvar:x,yvar:y,grouping:{color:g1,type:g2}}}
@@ -1767,6 +1774,7 @@ $(".variable_select").change(function(){
 			key_entry['geom']=key
 			key_entry['grouping']='none'
 			key_entry['group_value']=yvar
+			if(key=='shade'){key_entry['group_value']=temp['legend_head']}
 			key_entry['group_variable']='none'
 			key_entry['xvar']=xvar
 			key_entry['yvar']=yvar

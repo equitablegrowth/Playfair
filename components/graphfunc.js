@@ -97,39 +97,44 @@ function preview() {
 	if($("#shade_select_x").val()!=='' | $("#shade_select_y").val()!=='' | document.getElementById('recessions').checked==true){
 		var x_var=$("#shade_select_x").val()
 		var y_var=$("#shade_select_y").val()
+		var label=$("#shade_label").val()
 
-		var temp=x_var.split('],[')
-		for(var i=0;i<temp.length;i++){
-			temp[i]=temp[i].replace('[','')
-			temp[i]=temp[i].replace(']','')
-			temp[i]=temp[i].split(',')
+		if(x_var!==''){
+			var temp=x_var.split('],[')
+			for(var i=0;i<temp.length;i++){
+				temp[i]=temp[i].replace('[','')
+				temp[i]=temp[i].replace(']','')
+				temp[i]=temp[i].split(',')
 
-			x_var=[]
-			if(moment(temp[0][0],["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY","YYYYqQ"],true).isValid()==true){
-				for(var i=0;i<temp.length;i++){
-					x_var.push([new Date(temp[i][0]),new Date(temp[i][1])])
-				}
-			} else {
-				for(var i=0;i<temp.length;i++){
-					x_var.push([parseFloat(temp[i][0]),parseFloat(temp[i][1])])
+				x_var=[]
+				if(moment(temp[0][0],["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY","YYYYqQ"],true).isValid()==true){
+					for(var i=0;i<temp.length;i++){
+						x_var.push([new Date(temp[i][0]),new Date(temp[i][1])])
+					}
+				} else {
+					for(var i=0;i<temp.length;i++){
+						x_var.push([parseFloat(temp[i][0]),parseFloat(temp[i][1])])
+					}
 				}
 			}
 		}
 
-		var temp=y_var.split('],[')
-		for(var i=0;i<temp.length;i++){
-			temp[i]=temp[i].replace('[','')
-			temp[i]=temp[i].replace(']','')
-			temp[i]=temp[i].split(',')
+		if(y_var!==''){
+			var temp=y_var.split('],[')
+			for(var i=0;i<temp.length;i++){
+				temp[i]=temp[i].replace('[','')
+				temp[i]=temp[i].replace(']','')
+				temp[i]=temp[i].split(',')
 
-			y_var=[]
-			if(moment(temp[0][0],["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY","YYYYqQ"],true).isValid()==true){
-				for(var i=0;i<temp.length;i++){
-					y_var.push([new Date(temp[i][0]),new Date(temp[i][1])])
-				}
-			} else {
-				for(var i=0;i<temp.length;i++){
-					y_var.push([parseFloat(temp[i][0]),parseFloat(temp[i][1])])
+				y_var=[]
+				if(moment(temp[0][0],["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY","YYYYqQ"],true).isValid()==true){
+					for(var i=0;i<temp.length;i++){
+						y_var.push([new Date(temp[i][0]),new Date(temp[i][1])])
+					}
+				} else {
+					for(var i=0;i<temp.length;i++){
+						y_var.push([parseFloat(temp[i][0]),parseFloat(temp[i][1])])
+					}
 				}
 			}
 		}
@@ -142,7 +147,8 @@ function preview() {
 			}
 		}
 
-		geom_dict['shade']={'xarr':x_var,'yarr':y_var}
+		geom_dict['shade']={'xarr':x_var,'yarr':y_var,'legend_head':label}
+		console.log(geom_dict)
 		ready=1
 	}
 
