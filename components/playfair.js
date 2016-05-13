@@ -140,6 +140,54 @@ window.playfair = (function () {
 					ymins.push(negatives)
 				})
 
+				if(key=='stackedbar'){
+					if(geom_dict[key].orientation=='on'){
+						this.shiftx=1
+
+						if(data[geom_dict[key]['xvar']].dtype!='text'){
+							var temp=data[geom_dict[key]['xvar']].slice(0)
+							temp.sort(function(a,b){
+								return a-b
+							})
+
+							if(data[geom_dict[key]['xvar']].dtype=='date'){
+								temp.forEach(function(date,i){
+									temp[i]=date.getTime()
+								})
+								var temp2=Array(...new Set(temp))
+								temp2.forEach(function(date,i){
+									temp2[i]=new Date(date)
+								})
+								temp.forEach(function(date,i){
+									temp[i]=new Date(date)
+								})
+							} else{
+								var temp2=Array(...new Set(temp))
+							}
+
+							var difs=[]
+							for(var i=1;i<temp2.length;i++){
+								difs.push(Math.abs(temp2[i]-temp2[i-1]))
+							}
+							this.mindiff=Math.min(...difs)
+						}
+					} else {
+						this.shifty=1
+
+						if(data[geom_dict[key]['yvar']].dtype!='text'){
+							var temp=data[geom_dict[key]['yvar']].slice(0)
+							temp.sort(function(a,b){
+								return a>b
+							})
+							var difs=[]
+							for(var i=1;i<data[geom_dict[key]['yvar']].length;i++){
+								difs.push(Math.abs(data[geom_dict[key]['yvar']][i]-data[geom_dict[key]['yvar']][i-1]))
+							}
+							this.mindiff=Math.min(difs)
+						}
+					}
+				}
+
 			} else {
 				if(key=='bar'){
 					if(geom_dict[key].orientation=='on'){
@@ -1492,6 +1540,8 @@ function draw_bars(axes,bar,snapobj){
 		}
 	}
 
+	console.log(barwidth)
+
 	// loop through observations in the dataset to draw bars
 	for(var i=0;i<chartobject.dataset.length;i++){
 		var current=chartobject.dataset[i]
@@ -1569,7 +1619,8 @@ function draw_stackedbars(axes,bar,snapobj){
 			}
 		} else {
 			// if the axis is categorical, get width based on that instead.
-			console.log(get_coord(chartobject.flatdata[bar.xvar][0],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx))
+			console.log(chartobject.flatdata[bar.xvar][0],chartobject.flatdata[bar.xvar][1])
+			console.log(get_coord(chartobject.flatdata[bar.xvar][0],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx),get_coord(chartobject.flatdata[bar.xvar][1],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx))
 			var totalwidth=Math.abs(chartobject.barchart_width*(get_coord(chartobject.flatdata[bar.xvar][0],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-get_coord(chartobject.flatdata[bar.xvar][1],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)))
 			var barwidth=totalwidth
 		}
@@ -1590,28 +1641,32 @@ function draw_stackedbars(axes,bar,snapobj){
 			var barwidth=totalwidth
 		}
 	}
-
+	console.log(barwidth)
 	if(bar.orientation=='on'){
 		// draw vertical bars
-		var y_ends=new Array(color_groups.length)
+		var x_values=[...new Set(chartobject.flatdata[bar.xvar])]
+		var y_ends=new Array(x_values.length)
 		for(var i=0;i<y_ends.length;i++){
 			y_ends[i]=get_coord(0,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
 		}
+		var zero=get_coord(0,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
 
 		for(var i=0;i<color_groups.length;i++){
 			var color=chartobject.qualitative_color[i]
 			for(var j=0;j<chartobject.dataset.length;j++){
 				var temp=chartobject.dataset[j]
 				if(temp[bar.grouping.color]==color_groups[i]){
-					var y1=y_ends[j]
-					var y2=y1+get_coord(temp[bar.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
+					var i_loc=x_values.indexOf(temp[bar.xvar])
+					var y1=y_ends[i_loc]
+					var y2=y1-(zero-get_coord(temp[bar.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty))
 					var x1=get_coord(temp[bar.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-(totalwidth/2)
 					var x2=x1+barwidth
 					var label=temp[bar.yvar]
 					console.log('M'+x1+','+y2+'L'+x2+','+y2+'L'+x2+','+y1+'L'+x1+','+y1+'L'+x1+','+y2)
 					snapobj.path('M'+x1+','+y2+'L'+x2+','+y2+'L'+x2+','+y1+'L'+x1+','+y1+'L'+x1+','+y2).attr({orient:orient,'data_type':'bar','data_label':label,'group':temp[bar.grouping.color],'class':'dataelement','shape-rendering':'crispEdges',fill:color})
 
-					y_ends[j]=y2
+					console.log(y_ends)
+					y_ends[i_loc]=y2
 				}
 			}
 		}
