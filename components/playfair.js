@@ -122,6 +122,12 @@ window.playfair = (function () {
 						if(datadict[i][xvar]==value){
 							yvalues.push(datadict[i][yvar])
 						}
+
+						try{
+							if(datadict[i][xvar].getTime()==value.getTime()){
+								yvalues.push(datadict[i][yvar])
+							}
+						} catch(err){}
 					} 
 
 					// sum the yvalues of all such rows, separating positive from negative
@@ -1073,8 +1079,8 @@ function draw_lines(axes,line,snapobj){
 	if(line.grouping.color!=='none'){
 		var color_groups=[...new Set(chartobject.flatdata[line.grouping.color])]
 	} 
-	if(step.grouping.type!=='none'){
-		var type_groups=[...new Set(chartobject.flatdata[step.grouping.type])]
+	if(line.grouping.type!=='none'){
+		var type_groups=[...new Set(chartobject.flatdata[line.grouping.type])]
 	}
 
 	// check for sizing variable and get min and max for scaling
@@ -1286,7 +1292,6 @@ function draw_area(axes,line,snapobj){
 				} else if(sub_current[line.xvar]!=undefined && sub_current[line.yvar]!=undefined){
 					// if this isn't the first pass, check the previous group and add the y-values up so the areas stack appropriately
 					if(i!==0){
-						console.log(sub_current,sub_prev)
 						var y_add=sub_current[line.yvar]+sub_prev[line.yvar]
 					} else {
 						var y_add=sub_current[line.yvar]
