@@ -95,7 +95,7 @@ window.playfair = (function () {
 				// between which axis it should be summing on).
 
 				if(Object.prototype.toString.call(data[geom_dict[key]['xvar']][0])==='[object Date]'){
-					if(isNaN(data[geom_dict[key]['xvar']][i].getTime())==false){
+					if(isNaN(data[geom_dict[key]['xvar']][0].getTime())==false){
 						xmaxes.push(new Date(moment(Math.max(...data[geom_dict[key]['xvar']]))))
 						xmins.push(new Date(moment(Math.min(...data[geom_dict[key]['xvar']]))))
 					}
@@ -1226,16 +1226,27 @@ function draw_area(axes,line,snapobj){
 	}
 
 	// create initial base path
+	var current=chartobject.dataset.filter(function(row){
+		return row[line.grouping.color]===groups[0][0]
+	})
+
 	var zero=get_coord(0,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[line.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
-	var base_path='L'+axes[1]+','+zero+'L'+axes[0]+','+zero
-	var left_y=zero
-	var right_y=zero
+	var x_left=get_coord(current[0][line.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[line.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
+	var x_right=get_coord(current[current.length-1][line.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[line.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
+
+	var base_path='L'+x_right+','+zero+'L'+x_left+','+zero
 
 	// loop through groups in the dataset to draw lines
 	for(var i=0;i<groups.length;i++){
 		var current=chartobject.dataset.filter(function(row){
 			return row[line.grouping.color]===groups[i][0]
 		})
+
+		try{
+			var prev_current=chartobject.dataset.filter(function(row){
+				return row[line.grouping.color]===groups[i-1][0]
+			})
+		} catch(err){}
 
 		// order according to the x variable
 		var connect=line.xvar
@@ -1265,18 +1276,30 @@ function draw_area(axes,line,snapobj){
 				var sub_next=current[j+1]
 			} catch(err){}
 
+			try{
+				var sub_prev=prev_current[j]
+			} catch(err){}
+
 			if(isNaN(sub_current[connect])==false){
 				if((sub_current[line.xvar]==undefined && connect==line.yvar) || (sub_current[line.yvar]==undefined && connect==line.xvar)){
 					alert("Can't graph areas when there are discontinuities in one or more lines - remove missing data and try again.")
 				} else if(sub_current[line.xvar]!=undefined && sub_current[line.yvar]!=undefined){
+					// if this isn't the first pass, check the previous group and add the y-values up so the areas stack appropriately
+					if(i!==0){
+						console.log(sub_current,sub_prev)
+						var y_add=sub_current[line.yvar]+sub_prev[line.yvar]
+					} else {
+						var y_add=sub_current[line.yvar]
+					}
+
 					if(j==0){
 						var start_x_loc=get_coord(sub_current[line.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[line.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
-						var start_y_loc=get_coord(sub_current[line.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[line.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
+						var start_y_loc=get_coord(y_add,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[line.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
 					}
 
 					// set various values for points. locations
 					var x_loc=get_coord(sub_current[line.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[line.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
-					var y_loc=get_coord(sub_current[line.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[line.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
+					var y_loc=get_coord(y_add,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[line.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
 					// add to path or start path
 					if(j==0){
 						path=path+'M'+x_loc+','+y_loc
