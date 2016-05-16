@@ -465,6 +465,7 @@ window.playfair = (function () {
 		// draw geoms
 		if(typeof(chartobject.shade)!=='undefined'){draw_shade(axes,graph_obj.shade,snapobj)}
 		if(typeof(chartobject.bar)!=='undefined'){draw_bars(axes,graph_obj.bar,snapobj)}
+		if(typeof(chartobject.area)!=='undefined'){draw_area(axes,graph_obj.area,snapobj)}
 		if(typeof(chartobject.stackedbar)!=='undefined'){draw_stackedbars(axes,graph_obj.stackedbar,snapobj)}
 		if(typeof(chartobject.step)!=='undefined'){draw_steps(axes,graph_obj.step,snapobj)}
 		if(typeof(chartobject.line)!=='undefined'){draw_lines(axes,graph_obj.line,snapobj)}
@@ -1068,24 +1069,12 @@ function draw_key(legend,playobj,snapobj,vertical=1){
 function draw_lines(axes,line,snapobj){
 	// axes are [xleft,xright,ybottom,ytop]
 	// var is {'xvar':x_var,'yvar':y_var,'connect':connect,'grouping':{'color':color,'size':size,'type':type}}
-	var key_dict={}
 
-	// create sets of options for each grouping variable
 	if(line.grouping.color!=='none'){
-		var color_groups=[...new Set(remove_missing(chartobject.flatdata[line.grouping.color]))]
-		key_dict['color']={}
+		var color_groups=[...new Set(chartobject.flatdata[line.grouping.color])]
 	} 
-	if(line.grouping.type!=='none'){
-		var type_groups=[...new Set(remove_missing(chartobject.flatdata[line.grouping.type]))]
-		key_dict['type']={}
-	}
-
-	if(color_groups && type_groups){
-		key_dict['color,type']=[]
-	} else if(color_groups){
-		key_dict['color']=[]
-	} else if(type_groups){
-		key_dict['type']=[]
+	if(step.grouping.type!=='none'){
+		var type_groups=[...new Set(chartobject.flatdata[step.grouping.type])]
 	}
 
 	// check for sizing variable and get min and max for scaling
@@ -1163,9 +1152,6 @@ function draw_lines(axes,line,snapobj){
 			var linetype=chartobject.line_types[0]
 		}
 
-		// fill key_dict
-		// key_dict['color'].push
-
 		// label
 		var label=current[0][line.color]+', '+current[0][line.type]
 
@@ -1207,27 +1193,122 @@ function draw_lines(axes,line,snapobj){
 	}
 }
 
+function draw_area(axes,line,snapobj){
+	// axes are [xleft,xright,ybottom,ytop]
+	// area is {'xvar':x_var,'yvar':y_var,'grouping':{'color':color}}
+
+	if(line.grouping.color!=='none'){
+		var color_groups=[...new Set(chartobject.flatdata[line.grouping.color])]
+	} 
+
+	// create full group list - this is not necessary when there's only one group but in case you add to it in the future, just edit line 5 under here
+	if(line.grouping.color!=='none'){
+		var temp=[]
+		var temp2=[]
+		for(var i=0;i<chartobject.dataset.length;i++){
+			temp.push([chartobject.dataset[i][line.grouping.color]])
+		}
+
+		for(var i=0;i<temp.length;i++){
+			var dupe=0
+			for (var j=0;j<temp2.length;j++){
+				if(temp[i][0]==temp2[j][0] && temp[i][1]==temp2[j][1]){
+					var dupe=1
+				}
+			}
+			if(dupe==0){
+				temp2.push(temp[i])
+			}
+		}
+		groups=temp2
+	} else {
+		var groups=[[undefined]]
+	}
+
+	// create initial base path
+	var zero=get_coord(0,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[line.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
+	var base_path='L'+axes[1]+','+zero+'L'+axes[0]+','+zero
+	var left_y=zero
+	var right_y=zero
+
+	// loop through groups in the dataset to draw lines
+	for(var i=0;i<groups.length;i++){
+		var current=chartobject.dataset.filter(function(row){
+			return row[line.grouping.color]===groups[i][0]
+		})
+
+		// order according to the x variable
+		var connect=line.xvar
+		current.sort(function(a,b){
+			return a[line.xvar]-b[line.xvar]
+		})
+
+		// color
+		if(line.grouping.color!=='none'){
+			var color=chartobject.qualitative_color[color_groups.indexOf(current[0][line.grouping.color])]
+		} else {
+			var color=chartobject.qualitative_color[0]
+		}
+
+		// label
+		var label=current[0][line.color]
+
+		// create empty path
+		var path=''
+		var new_base=''
+
+		// now loop through points in the line
+		for(var j=0;j<current.length;j++){
+			var sub_current=current[j]
+
+			try{
+				var sub_next=current[j+1]
+			} catch(err){}
+
+			if(isNaN(sub_current[connect])==false){
+				if((sub_current[line.xvar]==undefined && connect==line.yvar) || (sub_current[line.yvar]==undefined && connect==line.xvar)){
+					alert("Can't graph areas when there are discontinuities in one or more lines - remove missing data and try again.")
+				} else if(sub_current[line.xvar]!=undefined && sub_current[line.yvar]!=undefined){
+					if(j==0){
+						var start_x_loc=get_coord(sub_current[line.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[line.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
+						var start_y_loc=get_coord(sub_current[line.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[line.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
+					}
+
+					// set various values for points. locations
+					var x_loc=get_coord(sub_current[line.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[line.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
+					var y_loc=get_coord(sub_current[line.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[line.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
+					// add to path or start path
+					if(j==0){
+						path=path+'M'+x_loc+','+y_loc
+						new_base='L'+x_loc+','+y_loc+new_base
+					} else{
+						path=path+'L'+x_loc+','+y_loc
+						new_base='L'+x_loc+','+y_loc+new_base
+					}
+				} else {}
+			}
+		}
+
+		path=path+base_path+'L'+start_x_loc+','+start_y_loc
+		base_path=new_base
+
+		// draw line
+		snapobj.path(path).attr({'data_label':label,class:'dataelement',stroke:color,'stroke-width':0,fill:color,'group':current[0][line.grouping.color],'colorchange':'fill',context:'pathdata_context_menu'})
+	}
+
+	// pull the y=0 line to the front
+	snapobj.append(snapobj.selectAll('[zeroline="1"]'))
+}
+
 function draw_steps(axes,step,snapobj){
 	// axes are [xleft,xright,ybottom,ytop]
 	// step is {'xvar':x_var,'yvar':y_var,'connect':connect,'size':size,'grouping':{'color':color,'type':type}}
-	var key_dict={}
 
-	// create sets of options for each grouping variable
 	if(step.grouping.color!=='none'){
-		var color_groups=[...new Set(remove_missing(chartobject.flatdata[step.grouping.color]))]
-		key_dict['color']={}
+		var color_groups=[...new Set(chartobject.flatdata[step.grouping.color])]
 	} 
 	if(step.grouping.type!=='none'){
-		var type_groups=[...new Set(remove_missing(chartobject.flatdata[step.grouping.type]))]
-		key_dict['type']={}
-	}
-
-	if(color_groups && type_groups){
-		key_dict['color,type']=[]
-	} else if(color_groups){
-		key_dict['color']=[]
-	} else if(type_groups){
-		key_dict['type']=[]
+		var type_groups=[...new Set(chartobject.flatdata[step.grouping.type])]
 	}
 
 	// check for sizing variable and get min and max for scaling
@@ -1360,7 +1441,7 @@ function draw_points(axes,point,snapobj){
 		var color_groups=[...new Set(chartobject.flatdata[point.grouping.color])]
 	} 
 	if(point.grouping.type!=='none'){
-		var type_groups=[...new Set(chartobject.flatdata[point.grouping.color])]
+		var type_groups=[...new Set(chartobject.flatdata[point.grouping.type])]
 	}
 
 	// check for sizing variable and get min and max for scaling

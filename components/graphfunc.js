@@ -94,6 +94,16 @@ function preview() {
 		ready=1
 	}
 
+	if($("#area_select_x").val()!='none' & $("#area_select_y").val()!='none'){
+		var x_var=$("#area_select_x").val()
+		var y_var=$("#area_select_y").val()
+
+		var color=$("#area_select_color").val()
+
+		geom_dict['area']={'xvar':x_var,'yvar':y_var,'grouping':{'color':color}}
+		ready=1
+	}
+
 	if($("#text_select_x").val()!='none' & $("#text_select_y").val()!='none'){
 		var x_var=$("#text_select_x").val()
 		var y_var=$("#text_select_y").val()
