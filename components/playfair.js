@@ -62,6 +62,8 @@ window.playfair = (function () {
 		this.step=geom_dict.step
 		this.stackedbar=geom_dict.stackedbar
 		this.shade=geom_dict.shade
+		this.segment=geom_dict.segment
+		this.trend=geom_dict.trend
 		this.shifty=0
 		this.shiftx=0
 		this.datedenom=[0,0]
@@ -510,9 +512,9 @@ window.playfair = (function () {
 		if(typeof(chartobject.stackedbar)!=='undefined'){draw_stackedbars(axes,graph_obj.stackedbar,snapobj)}
 		if(typeof(chartobject.step)!=='undefined'){draw_steps(axes,graph_obj.step,snapobj)}
 		if(typeof(chartobject.line)!=='undefined'){draw_lines(axes,graph_obj.line,snapobj)}
+		if(typeof(chartobject.segment)!=='undefined'){draw_segments(axes,graph_obj.segment,snapobj)}
 		if(typeof(chartobject.point)!=='undefined'){draw_points(axes,graph_obj.point,snapobj)}
 		if(typeof(chartobject.text)!=='undefined'){draw_text(axes,graph_obj.text,snapobj)}
-		if(typeof(chartobject.segment)!=='undefined'){draw_segments(axes,graph_obj.segment,snapobj)}
 		if(typeof(chartobject.trend)!=='undefined'){draw_trends(axes,graph_obj.trend,snapobj)}
 		if(typeof(legend)!=='undefined'){draw_key(legend,graph_obj,snapobj)}
 
@@ -1048,7 +1050,25 @@ function draw_key(legend,playobj,snapobj,vertical=1){
 					keyitem_dict[keyitem_name]=snapobj.line(x,y+playobj.legend_elementsize/2,x+playobj.legend_elementsize,y+playobj.legend_elementsize/2).attr({stroke:chartobject.qualitative_color[0],'stroke-width':playobj.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
 				}
 			} else if(legend[i].geom=='line' && keyitem_dict[keyitem_name]!==undefined){
-				console.log('MODIFICATION')
+				if(legend[i].grouping=='color'){
+					console.log('color')
+					// keyitem_dict[keyitem_name].attr({'stroke':chartobject.qualitative_color[numeric]})
+				} else if(legend[i].grouping=='type'){
+					console.log('type')
+					keyitem_dict[keyitem_name].attr({'stroke-dasharray':chartobject.line_types[numeric]})
+				}
+			}
+
+			// segments
+			if((legend[i].geom=='segment') && keyitem_dict[keyitem_name]==undefined){
+				if(legend[i].grouping=='color'){
+					keyitem_dict[keyitem_name]=snapobj.line(x,y+playobj.legend_elementsize/2,x+playobj.legend_elementsize,y+playobj.legend_elementsize/2).attr({stroke:chartobject.grayscale_color[numeric],'stroke-width':playobj.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+				} else if(legend[i].grouping=='type'){
+					keyitem_dict[keyitem_name]=snapobj.line(x,y+playobj.legend_elementsize/2,x+playobj.legend_elementsize,y+playobj.legend_elementsize/2).attr({stroke:chartobject.grayscale_color[0],'stroke-width':playobj.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges','stroke-dasharray':chartobject.line_types[numeric]})
+				} else {
+					keyitem_dict[keyitem_name]=snapobj.line(x,y+playobj.legend_elementsize/2,x+playobj.legend_elementsize,y+playobj.legend_elementsize/2).attr({stroke:chartobject.grayscale_color[0],'stroke-width':playobj.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+				}
+			} else if(legend[i].geom=='segment' && keyitem_dict[keyitem_name]!==undefined){
 				if(legend[i].grouping=='color'){
 					console.log('color')
 					// keyitem_dict[keyitem_name].attr({'stroke':chartobject.qualitative_color[numeric]})
@@ -1559,8 +1579,9 @@ function draw_points(axes,point,snapobj){
 }
 
 function draw_segments(axes,segment,snapobj){
+	console.log('segments')
 	// axes are [xleft,xright,ybottom,ytop]
-	// segment is {'xstart':x_start,'ystart':y_start,'xend':x_end,'yend':y_end,'size':size,'grouping':{'color':color,'type':type}}
+	// segment is {'xvar':x_start,'yvar':y_start,'xvar2':x_end,'yvar2':y_end,'size':size,'grouping':{'color':color,'type':type}}
 
 	// create sets of options for each grouping variable
 	if(segment.grouping.color!=='none'){
@@ -1571,52 +1592,46 @@ function draw_segments(axes,segment,snapobj){
 	}
 
 	// check for sizing variable and get min and max for scaling
-	if(point.size!=='none'){
-		var minsize=Math.min(...chartobject.flatdata[point.size])
-		var maxsize=Math.max(...chartobject.flatdata[point.size])
+	if(segment.size!=='none'){
+		var minsize=Math.min(...chartobject.flatdata[segment.size])
+		var maxsize=Math.max(...chartobject.flatdata[segment.size])
 	}
 
-	// loop through observations in the dataset to draw points
+	// loop through observations in the dataset to draw segments
 	for(var i=0;i<chartobject.dataset.length;i++){
 		var current=chartobject.dataset[i]
 
 		// check for sizing variable and set point size
-		if(point.size!=='none'){
-			var pointsize=((current[point.size]-minsize)/(maxsize-minsize))*(parseFloat(chartobject.point_maxsize)-parseFloat(chartobject.point_minsize))+parseFloat(chartobject.point_minsize)
+		if(segment.size!=='none'){
+			var size=((current[segment.size]-minsize)/(maxsize-minsize))*(parseFloat(chartobject.line_maxsize)-parseFloat(chartobject.line_minsize))+parseFloat(chartobject.line_minsize)
 		} else {
-			var pointsize=chartobject.point_size
+			var size=chartobject.line_size
 		}
 
 		// set various values for points. locations
-		if(current[point.xvar]!=undefined && current[point.yvar]!=undefined){
-			var x_loc=get_coord(current[point.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[point.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
-			var y_loc=get_coord(current[point.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[point.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
+		if(current[segment.xvar]!=undefined && current[segment.yvar]!=undefined && current[segment.xvar2]!=undefined && current[segment.yvar2]!=undefined){
+			var x_loc1=get_coord(current[segment.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[segment.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
+			var y_loc1=get_coord(current[segment.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[segment.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
+			var x_loc2=get_coord(current[segment.xvar2],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[segment.xvar2].dtype,chartobject.xarray,0,chartobject.shiftx)
+			var y_loc2=get_coord(current[segment.yvar2],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[segment.yvar2].dtype,chartobject.yarray,1,chartobject.shifty)
 
 			// color
-			if(point.grouping.color!=='none'){
-				var color=chartobject.qualitative_color[color_groups.indexOf(current[point.grouping.color])]
+			if(segment.grouping.color!=='none'){
+				var color=chartobject.grayscale_color[color_groups.indexOf(current[segment.grouping.color])]
 			} else {
-				var color=chartobject.qualitative_color[0]
+				console.log('color')
+				var color=chartobject.grayscale_color[0]
 			}
 
-			// point type
-			var pointtype=1
-
-			// label
-			var label=current[point.labels]
-
-			// draw point
-			if(pointtype==1){
-				snapobj.circle(x_loc,y_loc,pointsize).attr({fill:color,stroke:color,'stroke-width':chartobject.point_strokewidth,'data_type':'point','data_label':label,'group':current[point.grouping.color],'class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu'})
+			// type
+			if(segment.grouping.type!=='none'){
+				var type=chartobject.line_types[type_groups.indexOf(current[segment.grouping.type])]
+			} else {
+				var type=chartobject.line_types[0]
 			}
 
-			// label point
-			if (point.labelall==true) {
-				var label=snapobj.text(x_loc,y_loc-pointsize-3,current[point.labels]).attr({'font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'middle',fill:chartobject.datatextfill,colorchange:'fill',context:'text_context_menu'})
-				label.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
-				var coords=label.getBBox()
-				label.attr({y:coords.y-coords.height})
-			}
+			// draw segment
+			snapobj.line(x_loc1,y_loc1,x_loc2,y_loc2).attr({class:'dataelement',stroke:color,'stroke-width':size,'group':current[segment.grouping.color],'stroke-opacity':chartobject.linechart_strokeopacity,'colorchange':'stroke',context:'pathdata_context_menu','stroke-dasharray':type})
 		}
 	}
 }
