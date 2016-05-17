@@ -479,6 +479,7 @@ window.playfair = (function () {
 		if(typeof(chartobject.line)!=='undefined'){draw_lines(axes,graph_obj.line,snapobj)}
 		if(typeof(chartobject.point)!=='undefined'){draw_points(axes,graph_obj.point,snapobj)}
 		if(typeof(chartobject.text)!=='undefined'){draw_text(axes,graph_obj.text,snapobj)}
+		if(typeof(chartobject.segment)!=='undefined'){draw_segments(axes,graph_obj.segment,snapobj)}
 		if(typeof(legend)!=='undefined'){draw_key(legend,graph_obj,snapobj)}
 
 		// redraw the key/fix key elements
@@ -1460,6 +1461,69 @@ function draw_steps(axes,step,snapobj){
 
 
 function draw_points(axes,point,snapobj){
+	// axes are [xleft,xright,ybottom,ytop]
+	// point is {'xvar':x_var,'yvar':y_var,'labels':label,'labelall':pointlabel,'grouping':{'color':color,'size':size,'type':type}}
+
+	// create sets of options for each grouping variable
+	if(point.grouping.color!=='none'){
+		var color_groups=[...new Set(chartobject.flatdata[point.grouping.color])]
+	} 
+	if(point.grouping.type!=='none'){
+		var type_groups=[...new Set(chartobject.flatdata[point.grouping.type])]
+	}
+
+	// check for sizing variable and get min and max for scaling
+	if(point.size!=='none'){
+		var minsize=Math.min(...chartobject.flatdata[point.size])
+		var maxsize=Math.max(...chartobject.flatdata[point.size])
+	}
+
+	// loop through observations in the dataset to draw points
+	for(var i=0;i<chartobject.dataset.length;i++){
+		var current=chartobject.dataset[i]
+
+		// check for sizing variable and set point size
+		if(point.size!=='none'){
+			var pointsize=((current[point.size]-minsize)/(maxsize-minsize))*(parseFloat(chartobject.point_maxsize)-parseFloat(chartobject.point_minsize))+parseFloat(chartobject.point_minsize)
+		} else {
+			var pointsize=chartobject.point_size
+		}
+
+		// set various values for points. locations
+		if(current[point.xvar]!=undefined && current[point.yvar]!=undefined){
+			var x_loc=get_coord(current[point.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[point.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
+			var y_loc=get_coord(current[point.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[point.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
+
+			// color
+			if(point.grouping.color!=='none'){
+				var color=chartobject.qualitative_color[color_groups.indexOf(current[point.grouping.color])]
+			} else {
+				var color=chartobject.qualitative_color[0]
+			}
+
+			// point type
+			var pointtype=1
+
+			// label
+			var label=current[point.labels]
+
+			// draw point
+			if(pointtype==1){
+				snapobj.circle(x_loc,y_loc,pointsize).attr({fill:color,stroke:color,'stroke-width':chartobject.point_strokewidth,'data_type':'point','data_label':label,'group':current[point.grouping.color],'class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu'})
+			}
+
+			// label point
+			if (point.labelall==true) {
+				var label=snapobj.text(x_loc,y_loc-pointsize-3,current[point.labels]).attr({'font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'middle',fill:chartobject.datatextfill,colorchange:'fill',context:'text_context_menu'})
+				label.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
+				var coords=label.getBBox()
+				label.attr({y:coords.y-coords.height})
+			}
+		}
+	}
+}
+
+function draw_segments(axes,segment,snapobj){
 	// axes are [xleft,xright,ybottom,ytop]
 	// point is {'xvar':x_var,'yvar':y_var,'labels':label,'labelall':pointlabel,'grouping':{'color':color,'size':size,'type':type}}
 

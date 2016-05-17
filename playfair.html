@@ -963,9 +963,98 @@
 
 <!-- SEGMENTS/TREND LINES -->
 			<div class='tab-content'>
-				<div class='row'>
-					<div class='col-md-6'>
-						test
+
+				<div class='uibox_text'>Segments</div>
+				<div class='uibox'>
+					<div class='row'>
+						<div class='col-md-6'>
+							<div class="labeled_ele">
+								<label>X Start</label>
+								<span class='styled-select'>
+									<span class='select_carat'>
+										<select class="variable_select x_select" id='segment_select_xstart' disabled>
+											<option value='none'>Nothing selected</option>
+										</select>
+									</span>
+								</span>
+							</div>
+
+							<div class="labeled_ele">
+								<label>X End</label>
+								<span class='styled-select'>
+									<span class='select_carat'>
+										<select class="variable_select x_select" id='segment_select_xend' disabled>
+											<option value='none'>Nothing selected</option>
+										</select>
+									</span>
+								</span>
+							</div>
+
+							<div class="labeled_ele">
+								<label>Color</label>
+								<span class='styled-select'>
+									<span class='select_carat'>
+										<select class="variable_select group_select" id='segment_select_size' disabled>
+											<option value='none'>Nothing selected</option>
+										</select>
+									</span>
+								</span>
+							</div>
+
+							<div class="labeled_ele">
+								<label>Size</label>
+								<span class='styled-select'>
+									<span class='select_carat'>
+										<select class="variable_select group_select" id='segment_select_size' disabled>
+											<option value='none'>Nothing selected</option>
+										</select>
+									</span>
+								</span>
+							</div>
+						</div>
+						<div class='col-md-6'>
+							<div class="labeled_ele">
+								<label>Y Start</label>
+								<span class='styled-select'>
+									<span class='select_carat'>
+										<select class="variable_select y_select" id='segment_select_ystart' disabled>
+											<option value='none'>Nothing selected</option>
+										</select>
+									</span>
+								</span>
+							</div>
+
+							<div class="labeled_ele">
+								<label>Y End</label>
+								<span class='styled-select'>
+									<span class='select_carat'>
+										<select class="variable_select group_select" id='segment_select_yend' disabled>
+											<option value='none'>Nothing selected</option>
+										</select>
+									</span>
+								</span>
+							</div>
+
+							<div class="labeled_ele">
+								<label>Types</label>
+								<span class='styled-select'>
+									<span class='select_carat'>
+										<select class="variable_select group_select" id='segment_select_type' disabled>
+											<option value='none'>Nothing selected</option>
+										</select>
+									</span>
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class='uibox_text'>Trendlines</div>
+				<div class='uibox'>
+					<div class='row'>
+						<div class='col-md-12'>
+							<textarea id='trend_text' rows="6" onchange=loadData()>To generate labeled trendlines, enter the start and end coordinates for each line as an array with two elements. For example: [[1,3],[2,4]], [[8,3],[-2,4]] would generate a trend line from the point (1,3) to (2,4) and also from (8,3) to (-2,4)</textarea>
+						</div>
 					</div>
 				</div>
 			</div>
