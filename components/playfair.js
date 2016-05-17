@@ -118,17 +118,19 @@ window.playfair = (function () {
 					var negatives=0
 					var yvalues=[]
 					// get all rows where x=value
-					for(var i=0;i<datadict.length;i++){
-						if(datadict[i][xvar]==value){
-							yvalues.push(datadict[i][yvar])
-						}
-
-						try{
+					if(Object.prototype.toString.call(data[geom_dict[key]['xvar']][0])==='[object Date]'){
+						for(var i=0;i<datadict.length;i++){
 							if(datadict[i][xvar].getTime()==value.getTime()){
 								yvalues.push(datadict[i][yvar])
 							}
-						} catch(err){}
-					} 
+						}
+					} else {
+						for(var i=0;i<datadict.length;i++){
+							if(datadict[i][xvar]==value){
+								yvalues.push(datadict[i][yvar])
+							}
+						} 
+					}
 
 					// sum the yvalues of all such rows, separating positive from negative
 					for(var i=0;i<yvalues.length;i++){
@@ -1241,18 +1243,13 @@ function draw_area(axes,line,snapobj){
 	var x_right=get_coord(current[current.length-1][line.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[line.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
 
 	var base_path='L'+x_right+','+zero+'L'+x_left+','+zero
+	var add_values=[]
 
 	// loop through groups in the dataset to draw lines
 	for(var i=0;i<groups.length;i++){
 		var current=chartobject.dataset.filter(function(row){
 			return row[line.grouping.color]===groups[i][0]
 		})
-
-		try{
-			var prev_current=chartobject.dataset.filter(function(row){
-				return row[line.grouping.color]===groups[i-1][0]
-			})
-		} catch(err){}
 
 		// order according to the x variable
 		var connect=line.xvar
@@ -1292,9 +1289,11 @@ function draw_area(axes,line,snapobj){
 				} else if(sub_current[line.xvar]!=undefined && sub_current[line.yvar]!=undefined){
 					// if this isn't the first pass, check the previous group and add the y-values up so the areas stack appropriately
 					if(i!==0){
-						var y_add=sub_current[line.yvar]+sub_prev[line.yvar]
+						var y_add=sub_current[line.yvar]+add_values[j]
+						add_values[j]=y_add
 					} else {
 						var y_add=sub_current[line.yvar]
+						add_values.push(y_add)
 					}
 
 					if(j==0){
@@ -1309,7 +1308,7 @@ function draw_area(axes,line,snapobj){
 					if(j==0){
 						path=path+'M'+x_loc+','+y_loc
 						new_base='L'+x_loc+','+y_loc+new_base
-					} else{
+					} else {
 						path=path+'L'+x_loc+','+y_loc
 						new_base='L'+x_loc+','+y_loc+new_base
 					}
