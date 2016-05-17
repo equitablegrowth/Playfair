@@ -85,6 +85,11 @@ window.playfair = (function () {
 			try{
 				xtypes.push(typeof(data[geom_dict[key]['xvar']][0]))
 				ytypes.push(typeof(data[geom_dict[key]['yvar']][0]))
+
+				try{
+					xtypes.push(typeof(data[geom_dict[key]['xvar2']][0]))
+					ytypes.push(typeof(data[geom_dict[key]['yvar2']][0]))
+				} catch(err){}
 			} catch(err){}
 			console.log(data,key,data[geom_dict[key]],data[geom_dict[key]['yvar']],geom_dict[key])
 
@@ -253,12 +258,21 @@ window.playfair = (function () {
 							if(isNaN(data[geom_dict[key]['xvar']][i].getTime())==false){
 								xmaxes.push(new Date(moment(Math.max(...data[geom_dict[key]['xvar']]))))
 								xmins.push(new Date(moment(Math.min(...data[geom_dict[key]['xvar']]))))
+
+								try{
+									xmaxes.push(new Date(moment(Math.max(...data[geom_dict[key]['xvar2']]))))
+									xmins.push(new Date(moment(Math.min(...data[geom_dict[key]['xvar2']]))))
+								} catch(err){}
 							}
 						}
 					} else if (data[geom_dict[key]['xvar']].dtype=='text'){
 						for (var i=0;i<data[geom_dict[key]['xvar']].length;i++){
 							if (data[geom_dict[key]['xvar']][i]!=''){
 								xstrings.push(...data[geom_dict[key]['xvar']])
+
+								try{
+									xstrings.push(...data[geom_dict[key]['xvar2']])
+								} catch(err){}
 							}
 						}
 						xmaxes.push('placeholder')
@@ -266,6 +280,11 @@ window.playfair = (function () {
 					} else {
 						xmaxes.push(Math.max(...remove_missing(data[geom_dict[key]['xvar']])))
 						xmins.push(Math.min(...remove_missing(data[geom_dict[key]['xvar']])))
+
+						try{
+							xmaxes.push(Math.max(...remove_missing(data[geom_dict[key]['xvar2']])))
+							xmins.push(Math.min(...remove_missing(data[geom_dict[key]['xvar2']])))
+						} catch(err){}
 					}
 				}
 
@@ -274,11 +293,20 @@ window.playfair = (function () {
 						if(isNaN(data[geom_dict[key]['yvar']][i].getTime())==false){
 							ymaxes.push(new Date(moment(Math.max(...data[geom_dict[key]['yvar']]))))
 							ymins.push(new Date(moment(Math.min(...data[geom_dict[key]['yvar']]))))
+
+							try{
+								ymaxes.push(new Date(moment(Math.max(...data[geom_dict[key]['yvar2']]))))
+								ymins.push(new Date(moment(Math.min(...data[geom_dict[key]['yvar2']]))))
+							} catch(err){}
 						}
 					} else if(data[geom_dict[key]['yvar']].dtype=='text') {
 						for (var i=0;i<data[geom_dict[key]['yvar']].length;i++){
 							if (data[geom_dict[key]['yvar']][i]!=''){
 								ystrings.push(...data[geom_dict[key]['yvar']])
+
+								try{
+									ystrings.push(...data[geom_dict[key]['yvar2']])
+								} catch(err){}
 							}
 						}					
 						ymaxes.push('placeholder')
@@ -286,6 +314,11 @@ window.playfair = (function () {
 					} else {
 						ymaxes.push(Math.max(...remove_missing(data[geom_dict[key]['yvar']])))
 						ymins.push(Math.min(...remove_missing(data[geom_dict[key]['yvar']])))
+
+						try{
+							ymaxes.push(Math.max(...remove_missing(data[geom_dict[key]['yvar2']])))
+							ymins.push(Math.min(...remove_missing(data[geom_dict[key]['yvar2']])))
+						} catch(err){}
 					}
 				}
 			}
@@ -818,6 +851,7 @@ window.playfair = (function () {
 			'diverging_color':["#523211","#8b5322","#dec17c","#80ccc0","#35968e"],
 			'sequential_color':["#205946","#33836A","#67c2a5","#b7dfd1","#e2f2ed"],
 			'qualitative_color':["#67c2a5","#fc8d62","#8da0cb","#e78ac3","#a6d854","#ffd92f","#e5c494","#b3b3b3"],
+			'grayscale_color':['#999999','#666666','#333333','#000000'],
 
 			// barchart specific style
 			'barchart_width':.8,
@@ -1526,14 +1560,14 @@ function draw_points(axes,point,snapobj){
 
 function draw_segments(axes,segment,snapobj){
 	// axes are [xleft,xright,ybottom,ytop]
-	// point is {'xvar':x_var,'yvar':y_var,'labels':label,'labelall':pointlabel,'grouping':{'color':color,'size':size,'type':type}}
+	// segment is {'xstart':x_start,'ystart':y_start,'xend':x_end,'yend':y_end,'size':size,'grouping':{'color':color,'type':type}}
 
 	// create sets of options for each grouping variable
-	if(point.grouping.color!=='none'){
-		var color_groups=[...new Set(chartobject.flatdata[point.grouping.color])]
+	if(segment.grouping.color!=='none'){
+		var color_groups=[...new Set(chartobject.flatdata[segment.grouping.color])]
 	} 
-	if(point.grouping.type!=='none'){
-		var type_groups=[...new Set(chartobject.flatdata[point.grouping.type])]
+	if(segment.grouping.type!=='none'){
+		var type_groups=[...new Set(chartobject.flatdata[segment.grouping.type])]
 	}
 
 	// check for sizing variable and get min and max for scaling

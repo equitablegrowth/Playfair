@@ -54,7 +54,7 @@ function preview() {
 		var size=$("#segment_select_size").val()
 		var type=$("#segment_select_type").val()
 
-		geom_dict['segment']={'xstart':x_start,'ystart':y_start,'xend':x_end,'yend':y_end,'size':size,'grouping':{'color':color,'type':type}}
+		geom_dict['segment']={'xvar':x_start,'yvar':y_start,'xvar2':x_end,'yvar2':y_end,'size':size,'grouping':{'color':color,'type':type}}
 		ready=1
 	}
 

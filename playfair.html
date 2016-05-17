@@ -1915,47 +1915,49 @@ $(".variable_select").change(function(){
 
 	// geom: {point:{xvar:x,yvar:y,grouping:{color:g1,type:g2}},line:{xvar:x,yvar:y,grouping:{color:g1,type:g2}}}
 	for(var key in geom){
-		var temp=geom[key]
-		var xvar=temp['xvar']
-		var yvar=temp['yvar']
-		var groupingvars=0
-		for(var grouper in temp.grouping){
-			if(temp.grouping[grouper]!=='none'){
-				// get all groups for this grouper - x and y must not be missing
-				var groups=[]
-				for(var i=0;i<datadict.length;i++){
-					if(datadict[i][xvar]!=='' && datadict[i][yvar]!==''){
-						groups.push(datadict[i][temp.grouping[grouper]])
+		if(key!=='trend'){
+			var temp=geom[key]
+			var xvar=temp['xvar']
+			var yvar=temp['yvar']
+			var groupingvars=0
+			for(var grouper in temp.grouping){
+				if(temp.grouping[grouper]!=='none'){
+					// get all groups for this grouper - x and y must not be missing
+					var groups=[]
+					for(var i=0;i<datadict.length;i++){
+						if(datadict[i][xvar]!=='' && datadict[i][yvar]!==''){
+							groups.push(datadict[i][temp.grouping[grouper]])
+						}
 					}
+
+					groups=[... new Set(groups)]
+
+					for(var i=0;i<groups.length;i++){
+						var key_entry={}
+						key_entry['geom']=key
+						key_entry['grouping']=grouper
+						key_entry['group_value']=groups[i]
+						key_entry['group_variable']=temp.grouping[grouper]
+						key_entry['xvar']=xvar
+						key_entry['yvar']=yvar
+						structure.push(key_entry)
+					}
+
+					groupingvars=1
 				}
-
-				groups=[... new Set(groups)]
-
-				for(var i=0;i<groups.length;i++){
-					var key_entry={}
-					key_entry['geom']=key
-					key_entry['grouping']=grouper
-					key_entry['group_value']=groups[i]
-					key_entry['group_variable']=temp.grouping[grouper]
-					key_entry['xvar']=xvar
-					key_entry['yvar']=yvar
-					structure.push(key_entry)
-				}
-
-				groupingvars=1
 			}
-		}
 
-		if(groupingvars==0 && Object.keys(geom).length>1){
-			var key_entry={}
-			key_entry['geom']=key
-			key_entry['grouping']='none'
-			key_entry['group_value']=yvar
-			if(key=='shade'){key_entry['group_value']=temp['legend_head']}
-			key_entry['group_variable']='none'
-			key_entry['xvar']=xvar
-			key_entry['yvar']=yvar
-			structure.push(key_entry)
+			if(groupingvars==0 && Object.keys(geom).length>1){
+				var key_entry={}
+				key_entry['geom']=key
+				key_entry['grouping']='none'
+				key_entry['group_value']=yvar
+				if(key=='shade'){key_entry['group_value']=temp['legend_head']}
+				key_entry['group_variable']='none'
+				key_entry['xvar']=xvar
+				key_entry['yvar']=yvar
+				structure.push(key_entry)
+			}
 		}
 	}
 
