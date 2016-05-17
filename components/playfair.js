@@ -349,12 +349,16 @@ window.playfair = (function () {
 			console.log('Exiting because of x types')
 			alert('Exiting. X variables provided are of different types. Types detected are: '+(new Set(xtypes)))
 			return
+		} else {
+			this.xaxis_dtype=xtypes[0]
 		}
 
 		if(new Set(xtypes).size>1){
 			console.log('Exiting because of y types')
 			alert('Exiting. Y variables provided are of different types. Types detected are: '+(new Set(ytypes)))
 			return
+		} else {
+			this.yaxis_dtype=ytypes[0]
 		}
 
 		// shiftx and shifty are flags that are used when drawing to shift points over so bars can be drawn
@@ -1126,6 +1130,24 @@ function draw_key(legend,playobj,snapobj,vertical=1){
 		floatkey.attr({height:lowery+playobj.legend_floatpad,width:parseFloat(longest)+parseFloat(playobj.legend_floatpad)})
 		floatkey.drag(moveFuncfloat,function(){x=this.attr('x');y=this.attr('y');prevx=0;prevy=0});
 		// var item={'geom':'point','grouping':'color','group_value':'g1',group_variable:'groupvar',xvar:'xvar',yvar:'yvar',position:i,lgroup:g}
+	}
+}
+
+function draw_trends(axes,trend,snapobj){
+	// axes are [xleft,xright,ybottom,ytop]
+	// trend is {'trends':trends}
+	// trends are: [[1,3],[4,2]]
+
+	// loop through trend object, draw a line for each pair of points
+	for(var i=0;i<trend.length;i++){
+
+		var x_loc1=get_coord(parseFloat(trend[i][0][0]),chartobject.xlimits,[axes[0],axes[1]],'nottext',chartobject.xarray,0,chartobject.shiftx)
+		var y_loc1=get_coord(parseFloat(trend[i][0][1]),chartobject.ylimits,[axes[2],axes[3]],'nottext',chartobject.yarray,1,chartobject.shifty)
+		var x_loc2=get_coord(parseFloat(trend[i][1][0]),chartobject.xlimits,[axes[0],axes[1]],'nottext',chartobject.xarray,0,chartobject.shiftx)
+		var y_loc2=get_coord(parseFloat(trend[i][1][1]),chartobject.ylimits,[axes[2],axes[3]],'nottext',chartobject.yarray,1,chartobject.shifty)
+	
+		var path='M'+x_loc1+','+y_loc1+'L'+x_loc2+','+y_loc2
+		// var temp=
 	}
 }
 

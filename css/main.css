@@ -45,6 +45,14 @@
 
 	/* buttons */
 	.btn {border-radius:2px;display:inline-block;position:relative;border:1px solid #bbb;}
+	.btn:hover {background:#67c2a5;border:1px solid black;color:white;}
+	.btn:hover i{color:white;}
+/*	.btn:active {background:#67c2a5;border:1px solid black;color:white;}
+	.btn:active i{color:white;}
+	.btn:focus {background:#67c2a5;border:1px solid black;color:white;}
+	.btn:focus i{color:white;}
+	.btn:visited {background:#67c2a5;border:1px solid black;color:white;}
+	.btn:visited i{color:white;}*/
 	.btn-group{display:inline-block;position:relative;}
 	.balign {margin-top:3px;border-radius:2px !important;}
 
