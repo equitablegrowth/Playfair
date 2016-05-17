@@ -480,6 +480,7 @@ window.playfair = (function () {
 		if(typeof(chartobject.point)!=='undefined'){draw_points(axes,graph_obj.point,snapobj)}
 		if(typeof(chartobject.text)!=='undefined'){draw_text(axes,graph_obj.text,snapobj)}
 		if(typeof(chartobject.segment)!=='undefined'){draw_segments(axes,graph_obj.segment,snapobj)}
+		if(typeof(chartobject.trend)!=='undefined'){draw_trends(axes,graph_obj.trend,snapobj)}
 		if(typeof(legend)!=='undefined'){draw_key(legend,graph_obj,snapobj)}
 
 		// redraw the key/fix key elements

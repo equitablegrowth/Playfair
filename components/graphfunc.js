@@ -44,6 +44,40 @@ function preview() {
 		ready=1
 	}
 
+	if($("#segment_select_xstart").val()!='none' & $("#segment_select_ystart").val()!='none' & $("#segment_select_xend").val()!='none' & $("#segment_select_yend").val()!='none'){
+		var x_start=$("#segment_select_xstart").val()
+		var y_start=$("#segment_select_ystart").val()
+		var x_end=$("#segment_select_xend").val()
+		var y_end=$("#segment_select_yend").val()
+
+		var color=$("#segment_select_color").val()
+		var size=$("#segment_select_size").val()
+		var type=$("#segment_select_type").val()
+
+		geom_dict['segment']={'xstart':x_start,'ystart':y_start,'xend':x_end,'yend':y_end,'size':size,'grouping':{'color':color,'type':type}}
+		ready=1
+	}
+
+	if(document.getElementById('trend_text').value!==''){
+		var trends=document.getElementById('trend_text').value
+		var trends=trends.split(']],[[')
+
+		for(var i=0;i<trends.length;i++){
+			var temp=trends[i].split('],[')
+
+			for(var j=0;j<temp.length;j++){
+				temp[j]=temp[j].replace(/\[/g,'')
+				temp[j]=temp[j].replace(/]/g,'')
+				temp[j]=temp[j].split(',')
+			}
+
+			trends[i]=temp
+		}
+
+		geom_dict['trend']={'trends':trends}
+		ready=1
+	}
+
 	if($("#line_select_x").val()!='none' & $("#line_select_y").val()!='none'){
 		var x_var=$("#line_select_x").val()
 		var y_var=$("#line_select_y").val()

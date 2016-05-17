@@ -269,7 +269,7 @@
 			<div class='tab-content'>
 				<div class='row'>
 					<div class='col-md-12'>
-						<textarea id='data_text' rows="6" onchange=loadData()>Paste your data into this box. You can paste directly from Excel or a CSV. Make sure you include the column headers and check the box that appears to make sure your data was parsed correctly.</textarea>
+						<textarea id='data_text' rows="6" onchange=loadData() placeholder='Paste your data into this box. You can paste directly from Excel or a CSV. Make sure you include the column headers and check the box that appears to make sure your data was parsed correctly.'></textarea>
 					</div>
 				</div>
 
@@ -1053,7 +1053,7 @@
 				<div class='uibox'>
 					<div class='row'>
 						<div class='col-md-12'>
-							<textarea id='trend_text' rows="6" onchange=loadData()>To generate labeled trendlines, enter the start and end coordinates for each line as an array with two elements. For example: [[1,3],[2,4]], [[8,3],[-2,4]] would generate a trend line from the point (1,3) to (2,4) and also from (8,3) to (-2,4)</textarea>
+							<textarea id='trend_text' rows="6" placeholder='To generate labeled trendlines, enter the start and end coordinates for each line as an array with two elements. For example: [[1,3],[2,4]], [[8,3],[-2,4]] would generate a trend line from the point (1,3) to (2,4) and also from (8,3) to (-2,4)'></textarea>
 						</div>
 					</div>
 				</div>

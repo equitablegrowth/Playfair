@@ -4,7 +4,7 @@
 	h3 {font-size:15px;margin-top:0px;margin-bottom:0px;font-family:Raleway;font-weight:500;}
 	h5 {font-size:24px;font-family:Raleway;font-weight:500;fill:'white';}
 	body {height:100%;padding-bottom:100px;font-family:"Open Sans";-webkit-font-smoothing: antialiased}
-	textarea {margin-top:0px;resize:none;display:block;margin-right:auto;margin-left:auto;width:100%;padding:8px;border:1px solid #bbb;font-family:"Courier";font-size:90%;}
+	textarea {margin:5px;resize:none;display:block;margin-right:auto;margin-left:auto;width:100%;padding:8px;border:1px solid #bbb;font-family:"Courier";font-size:90%;}
 	a {color:#205946;}
 	a:hover {color:#67c2a5;}
 	label{margin:0;}
