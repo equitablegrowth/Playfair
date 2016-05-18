@@ -1173,6 +1173,53 @@ function draw_trends(axes,trend,snapobj){
 		var tempheight=pathcoords.height
 		var unitslope=tempheight/tempwidth
 
+		// truncate trendlines that leave the graph
+		// fake box that covers the plotting region
+		var tempbox=snapobj.path('M'+axes[0]+','+axes[3]+'L'+axes[1]+','+axes[3]+'L'+axes[1]+','+axes[2]+'L'+axes[0]+','+axes[2]+'L'+axes[0]+','+axes[3]).attr({})
+		var areabox=tempbox.getBBox()
+		console.log(areabox)
+
+		// check to see if start and endpoints are inside the box. If they aren't, set them to the intersection of the trendline and the bounding box
+		// have to check 3 circumstances - where 1st point is off graph and 2nd is off, both off, etc.
+		if(Snap.path.isPointInsideBBox(areabox,x_loc1,y_loc1)==false & Snap.path.isPointInsideBBox(areabox,x_loc2,y_loc2)==false){
+			// both points are outside the box, path has to redrawn based on two intersection points
+			var intersects=Snap.path.intersection(temp,tempbox)
+
+			var x_loc1=intersects[0]['x']
+			var x_loc2=intersects[1]['x']
+			var y_loc1=intersects[0]['y']
+			var y_loc2=intersects[1]['y']
+
+			var path='M'+x_loc1+','+y_loc1+'L'+x_loc2+','+y_loc2
+			temp.remove()
+			var temp=snapobj.path(path).attr({stroke:chartobject.trend_fill,'stroke-width':chartobject.trend_width,'colorchange':'stroke',context:'path_context_menu'})
+		} else if(Snap.path.isPointInsideBBox(areabox,x_loc1,y_loc1)==false & Snap.path.isPointInsideBBox(areabox,x_loc2,y_loc2)==true){
+			// both points are outside the box, path has to redrawn based on two intersection points
+			var intersects=Snap.path.intersection(temp,tempbox)
+
+			var x_loc1=intersects[0]['x']
+			var y_loc1=intersects[0]['y']
+
+			var path='M'+x_loc1+','+y_loc1+'L'+x_loc2+','+y_loc2
+			temp.remove()
+			var temp=snapobj.path(path).attr({stroke:chartobject.trend_fill,'stroke-width':chartobject.trend_width,'colorchange':'stroke',context:'path_context_menu'})
+		} else if(Snap.path.isPointInsideBBox(areabox,x_loc1,y_loc1)==true & Snap.path.isPointInsideBBox(areabox,x_loc2,y_loc2)==false){
+			// both points are outside the box, path has to redrawn based on two intersection points
+			var intersects=Snap.path.intersection(temp,tempbox)
+
+			var x_loc2=intersects[1]['x']
+			var y_loc2=intersects[1]['y']
+
+			var path='M'+x_loc1+','+y_loc1+'L'+x_loc2+','+y_loc2
+			temp.remove()
+			var temp=snapobj.path(path).attr({stroke:chartobject.trend_fill,'stroke-width':chartobject.trend_width,'colorchange':'stroke',context:'path_context_menu'})
+		}
+
+		tempbox.remove()
+		var pathcoords=temp.getBBox()
+		console.log(pathcoords)
+
+		// finally add the text
 		var trendtext=snapobj.text((x_loc1+x_loc2)/2,(y_loc1+y_loc2)/2,'Trendline').attr({fill:chartobject.trend_textcolor,'font-family':chartobject.trend_textface,'font-weight':chartobject.trend_textweight,'dominant-baseline':'text-before-edge','text-anchor':'middle','colorchange':'fill',context:'text_context_menu'})
 		trendtext.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 		var coords=trendtext.getBBox()
