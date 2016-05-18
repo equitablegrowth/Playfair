@@ -897,6 +897,12 @@ window.playfair = (function () {
 			'arrow_color':'black',
 			'arrow_thickness':2,
 			'arrow_dasharray':[],
+
+			// segment style
+			'segment_width':1,
+			'segment_maxsize':20,
+			'segment_minsize':1,
+			'segment_linetypes':[[0,0],[5,5],[8,4,2,4],[8,8],[2,5]],
 		}
 
 		for (var property in default_parameters){
@@ -1134,7 +1140,6 @@ function draw_key(legend,playobj,snapobj,vertical=1){
 }
 
 function draw_trends(axes,trend,snapobj){
-	console.log("TRENDS")
 	// axes are [xleft,xright,ybottom,ytop]
 	// trend is {'trends':trends}
 	// trends are: [[1,3],[4,2]]
@@ -1163,7 +1168,6 @@ function draw_trends(axes,trend,snapobj){
 		var unitslope=tempheight/tempwidth
 
 		var path='M'+x_loc1+','+y_loc1+'L'+x_loc2+','+y_loc2
-		console.log(path)
 		var temp=snapobj.path(path).attr({stroke:chartobject.trend_fill,'stroke-width':chartobject.trend_width,'colorchange':'stroke',context:'path_context_menu'})
 		var trendtext=snapobj.text((x_loc1+x_loc2)/2,(y_loc1+y_loc2)/2,'Trendline').attr({fill:chartobject.trend_textcolor,'font-family':chartobject.trend_textface,'font-weight':chartobject.trend_textweight,'dominant-baseline':'text-before-edge','text-anchor':'middle','colorchange':'fill',context:'text_context_menu'})
 		trendtext.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
@@ -1171,7 +1175,6 @@ function draw_trends(axes,trend,snapobj){
 		trendtext.attr({y:coords.y-chartobject.trend_linetotext-coords.height})
 		var inclincation=-(Math.atan(parseFloat(unitslope))*360)/(2*Math.PI)
 		trendtext.transform('r'+inclincation+' '+coords.cx+' '+coords.cy)
-
 	}
 }
 
@@ -1649,9 +1652,9 @@ function draw_segments(axes,segment,snapobj){
 
 		// check for sizing variable and set point size
 		if(segment.size!=='none'){
-			var size=((current[segment.size]-minsize)/(maxsize-minsize))*(parseFloat(chartobject.line_maxsize)-parseFloat(chartobject.line_minsize))+parseFloat(chartobject.line_minsize)
+			var size=((current[segment.size]-minsize)/(maxsize-minsize))*(parseFloat(chartobject.segment_maxsize)-parseFloat(chartobject.segment_minsize))+parseFloat(chartobject.segment_minsize)
 		} else {
-			var size=chartobject.line_size
+			var size=chartobject.segment_width
 		}
 
 		// set various values for points. locations
@@ -1671,9 +1674,9 @@ function draw_segments(axes,segment,snapobj){
 
 			// type
 			if(segment.grouping.type!=='none'){
-				var type=chartobject.line_types[type_groups.indexOf(current[segment.grouping.type])]
+				var type=chartobject.segment_linetypes[type_groups.indexOf(current[segment.grouping.type])]
 			} else {
-				var type=chartobject.line_types[0]
+				var type=chartobject.segment_linetypes[0]
 			}
 
 			// draw segment

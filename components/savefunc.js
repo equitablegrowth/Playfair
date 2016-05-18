@@ -157,25 +157,6 @@ function savetoserver() {
 
 		input_dict['graphtype']=['graphtype',graph_type]
 
-		// get trendline input from frontend
-		slopes=document.getElementsByClassName('slope')
-		intercepts=document.getElementsByClassName('intercept')
-
-		fslopes=[]
-		fintercepts=[]
-
-		for (var i=0;i<slopes.length;i++){
-			if(slopes[i].value!=''){
-				fslopes.push([slopes[i].value])
-				fintercepts.push([intercepts[i].value])
-			}
-		}
-
-		input_dict['slope']=fslopes
-		input_dict['intercept']=fintercepts
-
-		dictionary['inputs']=JSON.stringify(input_dict)
-
 	// call the python script
 		$.ajax({
 			url:'cgi-bin/savetoserver.py',
@@ -218,8 +199,6 @@ function load_populate(response) {
 
 	console.log(inputs['intercept'])
 
-	$('#trends').empty()
-
 	document.getElementById('data_text').value=inputs['data_text'][1]
 	loadData()
 
@@ -253,19 +232,6 @@ function load_populate(response) {
 
 	$('#grapharea').attr('height',height)
 	$('#grapharea').attr('width',width)
-
-	// load the correct number of slope/intercept fields and populate
-	if (inputs['slope'][0]!='text'){
-
-		document.getElementsByClassName('slope')[0].value=inputs['slope'][0]
-		document.getElementsByClassName('intercept')[0].value=inputs['intercept'][0]
-
-		for(var i=1;i<inputs['slope'].length;i++){
-			newtrend()
-			document.getElementsByClassName('slope')[0].value=inputs['slope'][i]
-			document.getElementsByClassName('intercept')[0].value=inputs['intercept'][i]
-		}
-	}
 
 	// insert the returned svg into the svg slot
 	document.getElementById("grapharea").innerHTML=svg
