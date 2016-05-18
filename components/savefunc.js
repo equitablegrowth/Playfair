@@ -136,7 +136,7 @@ function savetoserver() {
 		input_dict['data_text']=['textarea',databox_value]
 
 		var segment_value=$('#trend_text').val();
-		input_dict['trend_text']=['textarea',databox_value]
+		input_dict['trend_text']=['textarea',segment_value]
 
 		// modified from StackOverflow, T.J. Crowder
 		// http://stackoverflow.com/a/2214077/3001940
@@ -202,9 +202,8 @@ function load_populate(response) {
 	chartobject=JSON.parse(settings)
 	inputs=JSON.parse(inputs)
 
-	console.log(inputs['intercept'])
-
 	document.getElementById('data_text').value=inputs['data_text'][1]
+	document.getElementById('trend_text').value=inputs['trend_text'][1]
 	loadData()
 
 	for(var input in inputs){
