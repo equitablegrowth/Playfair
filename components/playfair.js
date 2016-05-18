@@ -1134,20 +1134,44 @@ function draw_key(legend,playobj,snapobj,vertical=1){
 }
 
 function draw_trends(axes,trend,snapobj){
+	console.log("TRENDS")
 	// axes are [xleft,xright,ybottom,ytop]
 	// trend is {'trends':trends}
 	// trends are: [[1,3],[4,2]]
 
 	// loop through trend object, draw a line for each pair of points
-	for(var i=0;i<trend.length;i++){
+	for(var i=0;i<trend.trends.length;i++){
 
-		var x_loc1=get_coord(parseFloat(trend[i][0][0]),chartobject.xlimits,[axes[0],axes[1]],'nottext',chartobject.xarray,0,chartobject.shiftx)
-		var y_loc1=get_coord(parseFloat(trend[i][0][1]),chartobject.ylimits,[axes[2],axes[3]],'nottext',chartobject.yarray,1,chartobject.shifty)
-		var x_loc2=get_coord(parseFloat(trend[i][1][0]),chartobject.xlimits,[axes[0],axes[1]],'nottext',chartobject.xarray,0,chartobject.shiftx)
-		var y_loc2=get_coord(parseFloat(trend[i][1][1]),chartobject.ylimits,[axes[2],axes[3]],'nottext',chartobject.yarray,1,chartobject.shifty)
-	
+		var current=trend.trends[i]
+
+		if(chartobject.xaxis_dtype=='number'){
+			var x_loc1=get_coord(parseFloat(current[0][0]),chartobject.xlimits,[axes[0],axes[1]],'nottext',chartobject.xarray,0,chartobject.shiftx)
+			var x_loc2=get_coord(parseFloat(current[1][0]),chartobject.xlimits,[axes[0],axes[1]],'nottext',chartobject.xarray,0,chartobject.shiftx)
+		} else {
+
+		}
+
+		if(chartobject.yaxis_dtype=='number'){
+			var y_loc1=get_coord(parseFloat(current[0][1]),chartobject.ylimits,[axes[2],axes[3]],'nottext',chartobject.yarray,1,chartobject.shifty)
+			var y_loc2=get_coord(parseFloat(current[1][1]),chartobject.ylimits,[axes[2],axes[3]],'nottext',chartobject.yarray,1,chartobject.shifty)
+		} else {
+
+		}
+
+		var tempwidth=Math.abs(x_loc1-x_loc2)
+		var tempheight=Math.abs(y_loc1-y_loc2)
+		var unitslope=tempheight/tempwidth
+
 		var path='M'+x_loc1+','+y_loc1+'L'+x_loc2+','+y_loc2
-		// var temp=
+		console.log(path)
+		var temp=snapobj.path(path).attr({stroke:chartobject.trend_fill,'stroke-width':chartobject.trend_width,'colorchange':'stroke',context:'path_context_menu'})
+		var trendtext=snapobj.text((x_loc1+x_loc2)/2,(y_loc1+y_loc2)/2,'Trendline').attr({fill:chartobject.trend_textcolor,'font-family':chartobject.trend_textface,'font-weight':chartobject.trend_textweight,'dominant-baseline':'text-before-edge','text-anchor':'middle','colorchange':'fill',context:'text_context_menu'})
+		trendtext.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
+		var coords=trendtext.getBBox()
+		trendtext.attr({y:coords.y-chartobject.trend_linetotext-coords.height})
+		var inclincation=-(Math.atan(parseFloat(unitslope))*360)/(2*Math.PI)
+		trendtext.transform('r'+inclincation+' '+coords.cx+' '+coords.cy)
+
 	}
 }
 
