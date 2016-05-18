@@ -117,15 +117,14 @@ function cancelload() {
 }
 
 function savetoserver() {
-
 	try{
 		// build the dictionary to pass to ajax
 		var filename=$('#savename').val()
 		var svg = document.getElementById("grapharea").innerHTML
 
-		dictionary={}
+		var dictionary={}
 		dictionary['svg']=encodeURIComponent(svg)
-		temp=chartobject
+		var temp=chartobject
 		delete temp['svg']
 		delete temp['logo']
 		dictionary['chartobject']=JSON.stringify(temp)
@@ -133,8 +132,11 @@ function savetoserver() {
 
 		input_dict={}
 
-		databox_value=$('#data_text').val();
+		var databox_value=$('#data_text').val();
 		input_dict['data_text']=['textarea',databox_value]
+
+		var segment_value=$('#trend_text').val();
+		input_dict['trend_text']=['textarea',databox_value]
 
 		// modified from StackOverflow, T.J. Crowder
 		// http://stackoverflow.com/a/2214077/3001940
@@ -156,6 +158,7 @@ function savetoserver() {
 		}
 
 		input_dict['graphtype']=['graphtype',graph_type]
+		dictionary['inputs']=JSON.stringify(input_dict)
 
 	// call the python script
 		$.ajax({
@@ -194,6 +197,8 @@ function load_populate(response) {
 	settings=response.split('\n')[2]
 	inputs=response.split('\n')[3]
 
+	console.log(settings)
+	console.log(inputs)
 	chartobject=JSON.parse(settings)
 	inputs=JSON.parse(inputs)
 
@@ -210,10 +215,7 @@ function load_populate(response) {
 			$('#'+input).attr('checked',inputs[input][1])
 		}
 		if(inputs[input][0]=='checkbox'){
-			if(inputs[input][1]==true){state='on'}
-			if(inputs[input][1]==false){state='off'}
-			// FIX THIS! ! ! ! ! ! ! !
-			$('#'+input).bootstrapToggle(state)
+			$('#'+input).prop('checked',inputs[input][1])
 		}
 		if(inputs[input][0]=='dropdown'){
 			$('#'+input).val(inputs[input][1])
