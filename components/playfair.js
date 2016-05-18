@@ -2167,6 +2167,7 @@ function create_date_axis(data,limit,y){
 
 	// if the range is more than 4 years, then the axis should be denominated in years
 	if (range>=yearlength*4){
+		datamax=new Date(String(datamax.getUTCFullYear()))
 		chartobject.datedenom[y]=yearlength
 		var drange=datamax.getUTCFullYear()-datamin.getUTCFullYear()
 		var digits=drange.toString().length
@@ -2239,7 +2240,7 @@ function create_date_axis(data,limit,y){
 		    }
 
 		    // this arbitrarily enforces step_arrays of length between 4 and 10
-		    if (step_array.length<11 && step_array.length>3){candidate_arrays.push(step_array)}
+		    if (step_array.length<15 && step_array.length>3){candidate_arrays.push(step_array)}
 	    }
 	} 
 	// Otherwise the axis should be denominated in days. If it's too small than this, then it
@@ -2262,7 +2263,7 @@ function create_date_axis(data,limit,y){
 
 		penalty=1
 		if(candidate_arrays[i].length>6){
-			penalty=1+.1*(candidate_arrays[i].length-6)
+			penalty=1+.05*(candidate_arrays[i].length-6)
 		}
 
 		score=Math.pow(10,wasted)*penalty
@@ -2387,7 +2388,7 @@ function create_axis(dataseries,parameters) {
 			    }
 
 			    // this arbitrarily enforces step_arrays of length between 4 and 10
-			    if (step_array.length<11 && step_array.length>3){candidate_arrays.push(step_array)}
+			    if (step_array.length<12 && step_array.length>3){candidate_arrays.push(step_array)}
 		    }
 		} 
 		// Otherwise the axis should be denominated in days. If it's too small than this, then it
@@ -2410,7 +2411,7 @@ function create_axis(dataseries,parameters) {
 
 			penalty=1
 			if(candidate_arrays[i].length>6){
-				penalty=1+.1*(candidate_arrays[i].length-6)
+				penalty=1+.05*(candidate_arrays[i].length-6)
 			}
 
 			score=Math.pow(10,wasted)*penalty
