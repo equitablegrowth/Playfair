@@ -14,14 +14,9 @@ for file in files:
 	filelist.append([file])
 
 filelist.sort(key=lambda x:x[0])
-
 files=[file[0] for file in filelist]
 
-results=dumps(filelist)
+results=dumps(files)
 
-print "Content-Type: text/html"
+print "Content-Type: text/html\n\n"
 print results
-
-# print "Content-type: application/json"
-# print response={'list':filelist}
-# print json.JSONEncoder().encode(response)

@@ -228,7 +228,8 @@ function labeldata(target) {
 		}
 	} else if (item.node.nodeName=='path'){
 		coords=item.getBBox()
-		y=parseFloat(item.realPath.split(' ')[item.realPath.split(' ').length-1])
+		console.log(coords)
+		y=parseFloat(item.realPath.split(',')[item.realPath.split(',').length-1])
 		var datalabel=grapharea.text(coords.x2+5,y-parseInt(chartobject.datasize)+3,item.attr('data_label')).attr({ident:'foot','font-family':chartobject.dataface,'font-size':chartobject.datasize,'font-weight':chartobject.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
 		datalabel.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 	}

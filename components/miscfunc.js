@@ -88,38 +88,46 @@ $('.panel-custom').on('hide.bs.collapse', function () {
 ///////////////////////////// THEMES ///////////////////////////////////
 // Initialize the theme dropdown and handle changes
 
+
 $(document).ready(function(){
 	$.ajax({
 		url:'cgi-bin/listthemes.py',
 		method: 'post',
 		datatype: 'html',
+		data: 1,
 		success: function(response){
 			var response = JSON.parse(response);
+			console.log(response)
 			$.each(response,function(key,value){
-				value=value[0].split('.')[0]
+				value=value.split('.')[0]
 				$('#themes').append($('<option>',{value:value}).text(value))
 			})
 
 			$("#themes").val('Standard')
+			$('#themes').prop('disabled', false);
 			change_theme()
 		}
 	})
 })
 
 function change_theme(){
-	option=$('#themes').val()+'.txt'
-	dictionary={'loadtheme':option}
+	if($('#themes').val()!='none'){
+		var option=$('#themes').val()+'.txt'
+		var dictionary={'loadtheme':option}
 
-	$.ajax({
-		url:'cgi-bin/loadtheme.py',
-		method: 'post',
-		datatype: 'html',
-		data: dictionary,
-		success: function(response){
-			var response = JSON.parse(response);
-			theme=response
-		}
-	})
+		$.ajax({
+			url:'cgi-bin/loadtheme.py',
+			method: 'post',
+			datatype: 'html',
+			data: dictionary,
+			success: function(response){
+				var response = JSON.parse(response);
+				theme=response
+			}
+		})
+	} else {
+		theme={}
+	}
 }
 
 ///////////////////////// VERTICAL TABS ////////////////////////////////
