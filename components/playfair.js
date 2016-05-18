@@ -1153,22 +1153,26 @@ function draw_trends(axes,trend,snapobj){
 			var x_loc1=get_coord(parseFloat(current[0][0]),chartobject.xlimits,[axes[0],axes[1]],'nottext',chartobject.xarray,0,chartobject.shiftx)
 			var x_loc2=get_coord(parseFloat(current[1][0]),chartobject.xlimits,[axes[0],axes[1]],'nottext',chartobject.xarray,0,chartobject.shiftx)
 		} else {
-
+			var x_loc1=get_coord(new Date(current[0][0]),chartobject.xlimits,[axes[0],axes[1]],'nottext',chartobject.xarray,0,chartobject.shiftx)
+			var x_loc2=get_coord(new Date(current[1][0]),chartobject.xlimits,[axes[0],axes[1]],'nottext',chartobject.xarray,0,chartobject.shiftx)
 		}
 
 		if(chartobject.yaxis_dtype=='number'){
 			var y_loc1=get_coord(parseFloat(current[0][1]),chartobject.ylimits,[axes[2],axes[3]],'nottext',chartobject.yarray,1,chartobject.shifty)
 			var y_loc2=get_coord(parseFloat(current[1][1]),chartobject.ylimits,[axes[2],axes[3]],'nottext',chartobject.yarray,1,chartobject.shifty)
 		} else {
-
+			var y_loc1=get_coord(new Date(current[0][1]),chartobject.ylimits,[axes[2],axes[3]],'nottext',chartobject.yarray,1,chartobject.shifty)
+			var y_loc2=get_coord(new Date(current[1][1]),chartobject.ylimits,[axes[2],axes[3]],'nottext',chartobject.yarray,1,chartobject.shifty)
 		}
-
-		var tempwidth=Math.abs(x_loc1-x_loc2)
-		var tempheight=Math.abs(y_loc1-y_loc2)
-		var unitslope=tempheight/tempwidth
 
 		var path='M'+x_loc1+','+y_loc1+'L'+x_loc2+','+y_loc2
 		var temp=snapobj.path(path).attr({stroke:chartobject.trend_fill,'stroke-width':chartobject.trend_width,'colorchange':'stroke',context:'path_context_menu'})
+		var pathcoords=temp.getBBox()
+
+		var tempwidth=pathcoords.width
+		var tempheight=pathcoords.height
+		var unitslope=tempheight/tempwidth
+
 		var trendtext=snapobj.text((x_loc1+x_loc2)/2,(y_loc1+y_loc2)/2,'Trendline').attr({fill:chartobject.trend_textcolor,'font-family':chartobject.trend_textface,'font-weight':chartobject.trend_textweight,'dominant-baseline':'text-before-edge','text-anchor':'middle','colorchange':'fill',context:'text_context_menu'})
 		trendtext.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 		var coords=trendtext.getBBox()

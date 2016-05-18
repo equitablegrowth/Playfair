@@ -103,7 +103,7 @@ $(document).ready(function(){
 				$('#themes').append($('<option>',{value:value}).text(value))
 			})
 
-			$("#themes").val('Standard')
+			$("#themes").val('Equitable Growth')
 			$('#themes').prop('disabled', false);
 			change_theme()
 		}

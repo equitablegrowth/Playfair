@@ -290,17 +290,23 @@ function redraw() {
 			// legend
 			var legendloc=$('input[name=key]:checked').val()
 
-			// // barchart specific
+			// barchart specific
 			barspace=document.getElementById('spacing').checked
 
-			//point type
+			// point type
 			point_type=$('input[name=linepoint]:checked').val()
 
 			// create the style object
 			if(typeof theme !== 'undefined'){
-				style=theme
+				style=jQuery.extend(true, {}, theme)
 			} else {
 				style={}
+			}
+
+			// logo
+			var logoloc=$('input[name=logo]:checked').val()
+			if(logoloc=='nologo'){
+				style['logo']=0
 			}
 
 			// which grids should be drawn
