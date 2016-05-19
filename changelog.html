@@ -33,6 +33,7 @@ body{width:700px;margin-left:auto;margin-right:auto;padding-top:22px;padding-bot
         <li>steps</li>
     </ul>
 <li> Some geoms are more fleshed out than others. Stacked bars may be balky if you try to add other geoms to them, area charts can only be vertical, and there are some bugs associated with the line type option (although I think this is confined to keys).</li>
+<li> The new trendline geom will allow you to specify trendlines for date data yay. You now have to give it a start and end point instead of a slope and intercept.</li>
 <li> Existing geoms have gained some new options - you can now size lines according to a variable for example, if you want to create a slopegraph with a third dimensions.</li>
 <li> Changes to data storage and refactoring of code to make adding geoms easier in the future</li>
 <li> All geoms/chart types are now agnostic as to the type of axis. So you can make bar charts with a date axis or a numerical axis, line charts with a categorical axis and etc.</li>

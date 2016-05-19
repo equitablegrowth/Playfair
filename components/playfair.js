@@ -831,7 +831,7 @@ window.playfair = (function () {
 			'ylabel_maxlength':300,
 
 			// legend
-			'legend_location':'top',
+			'legend_location':'float',
 			'legend_maxwidth':.1,
 			'legend_textsize':'12px',
 			'legend_textweight':400,
@@ -931,8 +931,9 @@ function remove_missing(array){
 	return temp
 }
 
-function draw_key(legend,playobj,snapobj,vertical=1){
+function draw_key(legend,playobj,snapobj){
 	console.log(legend)
+	// check playobj.legend_location for 'float' or 'top' to draw correctly
 	// listener for drag events on a floating key
 	var moveFuncfloat=function(dx,dy,posx,posy){
 		key_elements=grapharea.selectAll('[ident="key"]')
@@ -951,7 +952,7 @@ function draw_key(legend,playobj,snapobj,vertical=1){
 					y2:coords.y2-prevy+dy,
 			})
 			} else if (key_elements[i].type=='text'){
-				key_elements[i].selectAll("tspan:not(:first-child)").attr({x:+x+dx})
+				key_elements[i].selectAll("tspan:not(:first-child)").attr({x:coords.x-prevx+dx})
 				key_elements[i].attr({
 					x:coords.x-prevx+dx,
 					y:coords.y-prevy+dy
@@ -971,7 +972,8 @@ function draw_key(legend,playobj,snapobj,vertical=1){
 	// use legend object to draw a key for the figure
 	if(legend.length>1){
 		var maxwidth=legend[0][1]
-		if(legend[0][1]===''){maxwidth=Number.POSITIVE_INFINITY}
+		var maxtextwidth=maxwidth-2*playobj.legend_floatpad-playobj.legend_elementsize
+		if(legend[0][1]===''){maxwidth=Number.POSITIVE_INFINITY;maxtextwidth=Number.POSITIVE_INFINITY}
 		var longest=0
 		var ltitle=legend[0][0]
 		var floatkey=snapobj.rect(0,0,0,0).attr({ident2:'floatkey',ident:'key',fill:playobj.legend_floatbackground,stroke:playobj.legend_floatstroke,'stroke-width':playobj.legend_floatthickness,'shape-rendering':'crispEdges',colorchange:'fill'})
@@ -981,14 +983,14 @@ function draw_key(legend,playobj,snapobj,vertical=1){
 		var starty=playobj.legend_floatpad
 
 		if(ltitle!==''){
-			var lines=multitext(ltitle,{'font-size':playobj.legend_titletextsize,'font-weight':playobj.legend_titletextweight,'font-family':playobj.legend_titletextface},maxwidth)
-			var t=snapobj.text(playobj.legend_floatpad,playobj.legend_floatpad,lines).attr({ident2:'floatkey',ident:'key',fill:this.legend_titletextfill,'font-size':playobj.legend_titletextsize,'font-weight':playobj.legend_titletextweight,'font-family':playobj.legend_titletextface,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
-			t.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
-			t.selectAll("tspan:not(:first-child)").attr({x:t.attr('x'),dy:1.1*parseFloat(t.attr('font-size'))})
-			if(maxitemwidth<t.getBBox().x2){maxitemwidth=t.getBBox().x2}
-			if(maxycoord<t.getBBox().y2){maxycoord=t.getBBox().y2}
-			starty=t.getBBox().y2+playobj.legend_elementpad
-			longest=t.getBBox().x2
+			var lines=multitext(ltitle,{'font-size':playobj.legend_titletextsize,'font-weight':playobj.legend_titletextweight,'font-family':playobj.legend_titletextface},maxwidth-2*playobj.legend_floatpad)
+			var title=snapobj.text(playobj.legend_floatpad,playobj.legend_floatpad,lines).attr({unique:'keytitle',ident2:'floatkey',ident:'key',fill:this.legend_titletextfill,'font-size':playobj.legend_titletextsize,'font-weight':playobj.legend_titletextweight,'font-family':playobj.legend_titletextface,'dominant-baseline':'text-before-edge',colorchange:'fill',context:'text_context_menu'})
+			title.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
+			title.selectAll("tspan:not(:first-child)").attr({x:title.attr('x'),dy:1*parseFloat(title.attr('font-size'))})
+			if(maxitemwidth<title.getBBox().x2){maxitemwidth=title.getBBox().x2}
+			if(maxycoord<title.getBBox().y2){maxycoord=title.getBBox().y2}
+			starty=title.getBBox().y2+playobj.legend_elementpad
+			longest=title.getBBox().x2
 		}
 
 		// sort according to i and g
@@ -1006,13 +1008,14 @@ function draw_key(legend,playobj,snapobj,vertical=1){
 		// {geom:point,group_value:1,group_variable:g1,grouping:color,xvar:x,yvar:y,position:1,lgroup:0,overall:0,group_numeric:2}
 		var keyitem_dict={}
 		var lowery=0
-		console.log('LEGEND',legend)
+		var extralines=0
 
 		// draw items
 		// starting at 1 skips the row that is maxwidth and title
 		for(var i=1;i<legend.length;i++){
+			var textoffset=parseFloat(playobj.legend_textsize)
 			console.log(legend[i])
-			var y=starty+(legend[i].overall*parseFloat(playobj.legend_elementsize))+(legend[i].lgroup*playobj.legend_floatpad)+(legend[i].overall*parseFloat(playobj.legend_elementpad))
+			var y=starty+(textoffset*extralines)+(legend[i].overall*parseFloat(playobj.legend_elementsize))+(legend[i].lgroup*playobj.legend_floatpad)+(legend[i].overall*parseFloat(playobj.legend_elementpad))
 			var x=playobj.legend_floatpad
 			var xtext=playobj.legend_floatpad+playobj.legend_elementsize+playobj.legend_elementpad
 			var numeric=legend[i].groupnumeric
@@ -1023,13 +1026,14 @@ function draw_key(legend,playobj,snapobj,vertical=1){
 			var keyitem_name=legend[i].geom+legend[i].grouping+legend[i].group_value
 
 			if(keyitem_dict[keyitem_name]==undefined){
-				var lines=multitext(legend[i].group_value,{'font-size':playobj.legend_textsize,'font-weight':playobj.legend_textweight,'font-family':playobj.legend_textface},maxwidth)
+				var lines=multitext(legend[i].group_value,{'font-size':playobj.legend_textsize,'font-weight':playobj.legend_textweight,'font-family':playobj.legend_textface},maxtextwidth)
 				// the +.5 here is a kluge that only applies to the values of legend_elementsize and legend_textsize you're using feels like it should be (legend_elementsize-legend_textsize)/2 but that doesn't get me what I want
 				var t=snapobj.text(xtext,y+.5,lines).attr({ident2:'floatkey',ident:'key',fill:this.legend_textfill,'font-size':playobj.legend_textsize,'font-weight':playobj.legend_textweight,'font-family':playobj.legend_textface,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
 				t.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
-				t.selectAll("tspan:not(:first-child)").attr({x:t.attr('x'),dy:1.1*parseFloat(t.attr('font-size'))})
+				t.selectAll("tspan:not(:first-child)").attr({x:t.attr('x'),dy:1*parseFloat(t.attr('font-size'))})
 				var xend=t.getBBox().x2
 				if(xend>longest){longest=xend}
+				extralines=extralines+(lines.length-1)
 			}
 
 			// points
@@ -1128,11 +1132,15 @@ function draw_key(legend,playobj,snapobj,vertical=1){
 				keyitem_dict[keyitem_name]=snapobj.rect(x,y,playobj.legend_elementsize,playobj.legend_elementsize).attr({fill:'#fff','fill-opacity':.6,'shape-rendering':'crispEdges',ident2:'floatkey',ident:'key'})
 			}
 
-			var lowbound=y+playobj.legend_elementsize
+			var lowbound=y+playobj.legend_elementsize+(lines.length-1)*textoffset
 			if(lowbound>lowery){lowery=lowbound}
 		}
 
 		if(legend[0][1]!==''){longest=maxwidth}
+		if(title){
+			title.attr({x:(parseFloat(longest)+parseFloat(playobj.legend_floatpad))/2})
+			title.selectAll("tspan:not(:first-child)").attr({x:title.attr('x'),dy:1*parseFloat(title.attr('font-size'))})
+		}
 		floatkey.attr({height:lowery+playobj.legend_floatpad,width:parseFloat(longest)+parseFloat(playobj.legend_floatpad)})
 		floatkey.drag(moveFuncfloat,function(){x=this.attr('x');y=this.attr('y');prevx=0;prevy=0});
 		// var item={'geom':'point','grouping':'color','group_value':'g1',group_variable:'groupvar',xvar:'xvar',yvar:'yvar',position:i,lgroup:g}

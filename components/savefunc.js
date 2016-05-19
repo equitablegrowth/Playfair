@@ -238,7 +238,6 @@ function load_populate(response) {
 	document.getElementById("grapharea").innerHTML=svg
 	grapharea.append(Snap.parse(gfilters))
 
-	// the movefunc for draggable keys
 	var moveFuncfloat=function(dx,dy,posx,posy){
 		key_elements=grapharea.selectAll('[ident="key"]')
 		for(var i=0;i<key_elements.length;i++){
@@ -254,8 +253,14 @@ function load_populate(response) {
 					y1:coords.y-prevy+dy,
 					x2:coords.x2-prevx+dx,
 					y2:coords.y2-prevy+dy,
+			})
+			} else if (key_elements[i].type=='text'){
+				key_elements[i].selectAll("tspan:not(:first-child)").attr({x:coords.x-prevx+dx})
+				key_elements[i].attr({
+					x:coords.x-prevx+dx,
+					y:coords.y-prevy+dy
 				})
-			} else{
+			} else {
 				key_elements[i].attr({
 					x:coords.x-prevx+dx,
 					y:coords.y-prevy+dy
