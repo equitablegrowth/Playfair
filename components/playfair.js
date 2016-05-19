@@ -520,7 +520,11 @@ window.playfair = (function () {
 		if(typeof(chartobject.point)!=='undefined'){draw_points(axes,graph_obj.point,snapobj)}
 		if(typeof(chartobject.text)!=='undefined'){draw_text(axes,graph_obj.text,snapobj)}
 		if(typeof(chartobject.trend)!=='undefined'){draw_trends(axes,graph_obj.trend,snapobj)}
-		if(typeof(legend)!=='undefined'){draw_key(legend,graph_obj,snapobj)}
+
+		// draw key
+		// check playobj.legend_location for 'float' or 'top' to draw correctly
+		if(typeof(legend)!=='undefined' & chartobject.legend_location=='float'){draw_key(legend,graph_obj,snapobj)}
+		if(typeof(legend)!=='undefined' & chartobject.legend_location=='top'){draw_key_top(legend,graph_obj,snapobj)}
 
 		// redraw the key/fix key elements
 		snapobj.append(snapobj.selectAll('[ident2="keytop"]'))
@@ -931,9 +935,19 @@ function remove_missing(array){
 	return temp
 }
 
-function draw_key(legend,playobj,snapobj){
+function draw_key_top(legend,playobj,snapobj){
 	console.log(legend)
-	// check playobj.legend_location for 'float' or 'top' to draw correctly
+	if(legend.length>1){
+		var maxwidth=legend[0][1]
+		if(legend[0][1]===''){maxwidth=playobj.width-playobj.left_margin-playobj.right_margin-playobj.legend_leftpad-playobj.legend_rightpad}
+		var ltitle=legend[0][0]
+		var starty=
+		var startx=playobj.left_margin+playobj.legend_leftpad
+	}
+}
+
+function draw_key(legend,playobj,snapobj,prelim){
+	console.log(legend)
 	// listener for drag events on a floating key
 	var moveFuncfloat=function(dx,dy,posx,posy){
 		key_elements=grapharea.selectAll('[ident="key"]')
