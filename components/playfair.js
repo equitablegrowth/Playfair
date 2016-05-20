@@ -507,7 +507,13 @@ window.playfair = (function () {
 		var graph_background=snapobj.rect(graph_obj.x,graph_obj.y+graph_obj.head_height,graph_obj.width,graph_obj.height-(graph_obj.head_height+graph_obj.footer_height)).attr({class:'background',fill:this.chartfill})
 
 		// draw axes
-		var axes=draw_axes(this,xaxis,yaxis,graph_obj.shiftx,graph_obj.shifty)
+		if(typeof(legend)!=='undefined' & chartobject.legend_location=='top'){
+			var key_height=draw_key_top(legend,graph_obj,snapobj)
+			var axes=draw_axes(this,xaxis,yaxis,graph_obj.shiftx,graph_obj.shifty,key_height)
+			console.log(key_height)
+		} else {
+			var axes=draw_axes(this,xaxis,yaxis,graph_obj.shiftx,graph_obj.shifty,0)
+		}
 
 		// draw geoms
 		if(typeof(chartobject.shade)!=='undefined'){draw_shade(axes,graph_obj.shade,snapobj)}
@@ -524,7 +530,7 @@ window.playfair = (function () {
 		// draw key
 		// check playobj.legend_location for 'float' or 'top' to draw correctly
 		if(typeof(legend)!=='undefined' & chartobject.legend_location=='float'){draw_key(legend,graph_obj,snapobj)}
-		if(typeof(legend)!=='undefined' & chartobject.legend_location=='top'){draw_key_top(legend,graph_obj,snapobj)}
+		// if(typeof(legend)!=='undefined' & chartobject.legend_location=='top'){draw_key_top(legend,graph_obj,snapobj)}
 
 		// redraw the key/fix key elements
 		snapobj.append(snapobj.selectAll('[ident2="keytop"]'))
@@ -946,40 +952,138 @@ function draw_key_top(legend,playobj,snapobj){
 
 		var line=0
 		var currentx=startx
+		var keyitem_dict={}
+		var keyitem_loc={}
 
 		for(var i=1;i<legend.length;i++){
-			var t=snapobj.text(currentx+playobj.legend_elementsize+playobj.legend_elementpad,starty,legend[i].group_value).attr({ident2:'floatkey',ident:'key',fill:this.legend_textfill,'font-size':playobj.legend_textsize,'font-weight':playobj.legend_textweight,'font-family':playobj.legend_textface,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
-			var box=t.getBBox()
-
-			if(box.x2>rightmost){
-
-			}
-			var y=starty+line*(parseFloat(playobj.legend_elementpad)+parseFloat(playobj.legend_elementsize))
-			var x=currentx
-			var xtext=playobj.legend_floatpad+playobj.legend_elementsize+playobj.legend_elementpad
-			var numeric=legend[i].groupnumeric
-
-			// console.log(x,y,xtext)
-			// console.log(starty,legend[i].overall,)
-
 			var keyitem_name=legend[i].geom+legend[i].grouping+legend[i].group_value
+			var keyitem_loc_name=legend[i].overall
+			var numeric=legend[i].groupnumeric
+			var x=currentx
+			var y=starty+line*(parseFloat(playobj.legend_textsize))
+			var keyitem_name=legend[i].geom+legend[i].grouping+legend[i].group_value
+			var xtext=x+playobj.legend_elementsize+playobj.legend_elementpad
+
+			if(keyitem_loc[keyitem_loc_name]==undefined){
+				keyitem_loc[keyitem_loc_name]={}
+				keyitem_loc[keyitem_loc_name]['x']=x
+				keyitem_loc[keyitem_loc_name]['y']=x
+			} else {
+				var x=keyitem_loc[keyitem_loc_name]['x']
+				var y=keyitem_loc[keyitem_loc_name]['y']
+			}
 
 			if(keyitem_dict[keyitem_name]==undefined){
-				var t=snapobj.text(xtext,y+.5,lines).attr({ident2:'floatkey',ident:'key',fill:this.legend_textfill,'font-size':playobj.legend_textsize,'font-weight':playobj.legend_textweight,'font-family':playobj.legend_textface,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
-				t.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
-				t.selectAll("tspan:not(:first-child)").attr({x:t.attr('x'),dy:1*parseFloat(t.attr('font-size'))})
-				var xend=t.getBBox().x2
-				if(xend>longest){longest=xend}
-				extralines=extralines+(lines.length-1)
+				var t=snapobj.text(xtext,y,legend[i].group_value).attr({ident2:'floatkey',ident:'key',fill:this.legend_textfill,'font-size':playobj.legend_textsize,'font-weight':playobj.legend_textweight,'font-family':playobj.legend_textface,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
+				var box=t.getBBox()
+				currentx=box.x2+playobj.legend_elementpad
+
+				if(box.x2>rightmost){
+					t.remove()
+					line=line+1
+					currentx=startx
+					var t=snapobj.text(currentx+playobj.legend_elementsize+playobj.legend_elementpad,starty,legend[i].group_value).attr({ident2:'floatkey',ident:'key',fill:this.legend_textfill,'font-size':playobj.legend_textsize,'font-weight':playobj.legend_textweight,'font-family':playobj.legend_textface,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
+				}
 			}
 
+			// points
+			if(legend[i].geom=='point' && keyitem_dict[keyitem_name]==undefined){
+				if(legend[i].grouping=='color'){
+					keyitem_dict[keyitem_name]=snapobj.circle(x+playobj.legend_elementsize/2,y+playobj.legend_elementsize/2,playobj.point_size).attr({fill:chartobject.qualitative_color[numeric],stroke:chartobject.qualitative_color[numeric],'stroke-width':playobj.point_strokewidth,'data_type':'point','group':legend[i].group_value,'class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu',ident2:'floatkey',ident:'key'})
+				} else if(legend[i].grouping=='type'){
+					keyitem_dict[keyitem_name]=snapobj.circle(x+playobj.legend_elementsize/2,y+playobj.legend_elementsize/2,playobj.point_size).attr({fill:chartobject.qualitative_color[numeric],stroke:chartobject.qualitative_color[numeric],'stroke-width':playobj.point_strokewidth,'data_type':'point','group':legend[i].group_value,'class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu',ident2:'floatkey',ident:'key'})
+				} else {
+					keyitem_dict[keyitem_name]=snapobj.circle(x+playobj.legend_elementsize/2,y+playobj.legend_elementsize/2,playobj.point_size).attr({fill:chartobject.qualitative_color[numeric],stroke:chartobject.qualitative_color[numeric],'stroke-width':playobj.point_strokewidth,'data_type':'point','group':legend[i].group_value,'class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu',ident2:'floatkey',ident:'key'})
+				}
+			} else if(legend[i].geom=='point' && keyitem_dict[keyitem_name]!==undefined){
+				if(legend[i].grouping=='color'){
+					keyitem_dict[keyitem_name].attr({fill:chartobject.qualitative_color[numeric],'stroke':chartobject.qualitative_color[numeric]})
+				}
+				if(legend[i].grouping=='type'){
+					// keyitem_dict[keyitem_name].attr({'stroke-width':chartobject.qualitative_color[legend[i].position],})
+				}
+			}
 
+			// lines
+			if((legend[i].geom=='line') && keyitem_dict[keyitem_name]==undefined){
+				if(legend[i].grouping=='color'){
+					keyitem_dict[keyitem_name]=snapobj.line(x,y+playobj.legend_elementsize/2,x+playobj.legend_elementsize,y+playobj.legend_elementsize/2).attr({stroke:chartobject.qualitative_color[numeric],'stroke-width':playobj.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+				} else if(legend[i].grouping=='type'){
+					keyitem_dict[keyitem_name]=snapobj.line(x,y+playobj.legend_elementsize/2,x+playobj.legend_elementsize,y+playobj.legend_elementsize/2).attr({stroke:chartobject.qualitative_color[0],'stroke-width':playobj.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges','stroke-dasharray':chartobject.line_types[numeric]})
+				} else {
+					keyitem_dict[keyitem_name]=snapobj.line(x,y+playobj.legend_elementsize/2,x+playobj.legend_elementsize,y+playobj.legend_elementsize/2).attr({stroke:chartobject.qualitative_color[0],'stroke-width':playobj.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+				}
+			} else if(legend[i].geom=='line' && keyitem_dict[keyitem_name]!==undefined){
+				if(legend[i].grouping=='color'){
+					console.log('color')
+					// keyitem_dict[keyitem_name].attr({'stroke':chartobject.qualitative_color[numeric]})
+				} else if(legend[i].grouping=='type'){
+					console.log('type')
+					keyitem_dict[keyitem_name].attr({'stroke-dasharray':chartobject.line_types[numeric]})
+				}
+			}
+
+			// segments
+			if((legend[i].geom=='segment') && keyitem_dict[keyitem_name]==undefined){
+				if(legend[i].grouping=='color'){
+					keyitem_dict[keyitem_name]=snapobj.line(x,y+playobj.legend_elementsize/2,x+playobj.legend_elementsize,y+playobj.legend_elementsize/2).attr({stroke:chartobject.grayscale_color[numeric],'stroke-width':playobj.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+				} else if(legend[i].grouping=='type'){
+					keyitem_dict[keyitem_name]=snapobj.line(x,y+playobj.legend_elementsize/2,x+playobj.legend_elementsize,y+playobj.legend_elementsize/2).attr({stroke:chartobject.grayscale_color[0],'stroke-width':playobj.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges','stroke-dasharray':chartobject.line_types[numeric]})
+				} else {
+					keyitem_dict[keyitem_name]=snapobj.line(x,y+playobj.legend_elementsize/2,x+playobj.legend_elementsize,y+playobj.legend_elementsize/2).attr({stroke:chartobject.grayscale_color[0],'stroke-width':playobj.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+				}
+			} else if(legend[i].geom=='segment' && keyitem_dict[keyitem_name]!==undefined){
+				if(legend[i].grouping=='color'){
+					console.log('color')
+					// keyitem_dict[keyitem_name].attr({'stroke':chartobject.qualitative_color[numeric]})
+				} else if(legend[i].grouping=='type'){
+					console.log('type')
+					keyitem_dict[keyitem_name].attr({'stroke-dasharray':chartobject.line_types[numeric]})
+				}
+			}
+
+			// steps
+			if((legend[i].geom=='step') && keyitem_dict[keyitem_name]==undefined){
+				if(legend[i].grouping=='color'){
+					keyitem_dict[keyitem_name]=snapobj.path('M'+x+','+(y+chartobject.legend_elementsize*(2/3))+'L'+(x+chartobject.legend_elementsize/2)+','+(y+chartobject.legend_elementsize*(2/3))+'L'+(x+chartobject.legend_elementsize/2)+','+(y+chartobject.legend_elementsize*(1/3))+'L'+(x+chartobject.legend_elementsize)+','+(y+chartobject.legend_elementsize*(1/3))).attr({fill:'none',stroke:chartobject.qualitative_color[numeric],'stroke-width':playobj.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+				} else if(legend[i].grouping=='type'){
+					keyitem_dict[keyitem_name]=snapobj.path('M'+x+','+(y+chartobject.legend_elementsize*(2/3))+'L'+(x+chartobject.legend_elementsize/2)+','+(y+chartobject.legend_elementsize*(2/3))+'L'+(x+chartobject.legend_elementsize/2)+','+(y+chartobject.legend_elementsize*(1/3))+'L'+(x+chartobject.legend_elementsize)+','+(y+chartobject.legend_elementsize*(1/3))).attr({fill:'none',stroke:chartobject.qualitative_color[0],'stroke-width':playobj.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges','stroke-dasharray':chartobject.line_types[numeric]})
+				} else {
+					keyitem_dict[keyitem_name]=snapobj.path('M'+x+','+(y+chartobject.legend_elementsize*(2/3))+'L'+(x+chartobject.legend_elementsize/2)+','+(y+chartobject.legend_elementsize*(2/3))+'L'+(x+chartobject.legend_elementsize/2)+','+(y+chartobject.legend_elementsize*(1/3))+'L'+(x+chartobject.legend_elementsize)+','+(y+chartobject.legend_elementsize*(1/3))).attr({fill:'none',stroke:chartobject.qualitative_color[0],'stroke-width':playobj.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+				}
+			} else if(legend[i].geom=='step' && keyitem_dict[keyitem_name]!==undefined){
+				if(legend[i].grouping=='color'){
+					keyitem_dict[keyitem_name].attr({'stroke':chartobject.qualitative_color[numeric]})
+				} else if(legend[i].grouping=='type'){
+					keyitem_dict[keyitem_name].attr({'stroke-dasharray':chartobject.line_types[numeric]})
+				}
+			}
+
+			// bars or stacked bars or area 
+			if((legend[i].geom=='bar' || legend[i].geom=='stackedbar' || legend[i].geom=='area') && keyitem_dict[keyitem_name]==undefined){
+				if(legend[i].grouping=='color'){
+					keyitem_dict[keyitem_name]=snapobj.rect(x,y,playobj.legend_elementsize,playobj.legend_elementsize).attr({fill:chartobject.qualitative_color[numeric],'group':legend[i].group_value,'class':'dataelement',colorchange:'fill',context:'data_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+				} else if(legend[i].grouping=='type'){
+					keyitem_dict[keyitem_name]=snapobj.rect(x,y,playobj.legend_elementsize,playobj.legend_elementsize).attr({fill:chartobject.qualitative_color[numeric],'group':legend[i].group_value,'class':'dataelement',colorchange:'fill',context:'data_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+				} else {
+					keyitem_dict[keyitem_name]=snapobj.rect(x,y,playobj.legend_elementsize,playobj.legend_elementsize).attr({fill:chartobject.qualitative_color[numeric],'group':legend[i].group_value,'class':'dataelement',colorchange:'fill',context:'data_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+				}
+			} else if((legend[i].geom=='bar' || legend[i].geom=='stackedbar' || legend[i].geom=='area') && keyitem_dict[keyitem_name]!==undefined){
+				if(legend[i].grouping=='color'){
+					keyitem_dict[keyitem_name].attr({'fill':chartobject.qualitative_color[numeric]})
+				} else if(legend[i].grouping=='type'){
+					// keyitem_dict[keyitem_name].attr({'stroke-dasharray':chartobject.line_types[numeric]})
+				}
+			}
+
+			// shade
+			if(legend[i].geom=='shade' && keyitem_dict[keyitem_name]===undefined){
+				keyitem_dict[keyitem_name]=snapobj.rect(x,y,playobj.legend_elementsize,playobj.legend_elementsize).attr({fill:chartobject.chartfill,'shape-rendering':'crispEdges',ident2:'floatkey',ident:'key'})
+				keyitem_dict[keyitem_name]=snapobj.rect(x,y,playobj.legend_elementsize,playobj.legend_elementsize).attr({fill:'#fff','fill-opacity':.6,'shape-rendering':'crispEdges',ident2:'floatkey',ident:'key'})
+			}
 		}
 
-
-
-
-
+		return (line+1)*parseFloat(playobj.legend_elementsize)+(line+1)*parseFloat(playobj.legend_elementpad)
 	}
 }
 
@@ -2698,7 +2802,7 @@ function multitext(txt,attributes,max_width,svgname){
 }
 
 
-function draw_axes(playobj,xvar,yvar,shiftx,shifty) {
+function draw_axes(playobj,xvar,yvar,shiftx,shifty,legend_height) {
 	// console.log(xvar,yvar)
 	// draws the axes for a graph
 	// shiftx and shifty are optional parameters. If shiftx or shifty==1, that axis will
@@ -2706,7 +2810,6 @@ function draw_axes(playobj,xvar,yvar,shiftx,shifty) {
 	// will also be one more tick to accomodate this change
 
 	snapobj=playobj.svg
-	var legend_height=0
 
 	// placeholder until I figure out top keys
 	playobj.legend_toppad=0
