@@ -954,7 +954,7 @@ function draw_key_top(legend,playobj,snapobj){
 		var currentx=startx
 		var keyitem_dict={}
 		var keyitem_loc={}
-		var current_geom=legend[1].geom
+		var current_group=legend[1].lgroup
 
 		for(var i=1;i<legend.length;i++){
 			var keyitem_name=legend[i].geom+legend[i].grouping+legend[i].group_value
@@ -963,22 +963,15 @@ function draw_key_top(legend,playobj,snapobj){
 			var x=currentx
 			var y=starty+line*(parseFloat(playobj.legend_elementsize))
 			var keyitem_name=legend[i].geom+legend[i].grouping+legend[i].group_value
-			if(legend[i].geom!==current_geom){
+			if(legend[i].lgroup!==current_group){
 				x=x+3*(playobj.legend_elementpad)
 			}
 			var xtext=x+playobj.legend_elementsize+playobj.legend_elementpad
-			var current_geom=legend[i].geom
+			var current_group=legend[i].lgroup
 
 			if(keyitem_loc[keyitem_loc_name]==undefined){
-				keyitem_loc[keyitem_loc_name]={}
-				keyitem_loc[keyitem_loc_name]['x']=x
-				keyitem_loc[keyitem_loc_name]['y']=x
-			} else {
-				var x=keyitem_loc[keyitem_loc_name]['x']
-				var y=keyitem_loc[keyitem_loc_name]['y']
-			}
+				console.log('new overall')
 
-			if(keyitem_dict[keyitem_name]==undefined){
 				var t=snapobj.text(xtext,y,legend[i].group_value).attr({ident2:'floatkey',ident:'key',fill:this.legend_textfill,'font-size':playobj.legend_textsize,'font-weight':playobj.legend_textweight,'font-family':playobj.legend_textface,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
 				var box=t.getBBox()
 				currentx=box.x2+playobj.legend_elementpad
@@ -989,6 +982,14 @@ function draw_key_top(legend,playobj,snapobj){
 					currentx=startx
 					var t=snapobj.text(currentx+playobj.legend_elementsize+playobj.legend_elementpad,starty,legend[i].group_value).attr({ident2:'floatkey',ident:'key',fill:this.legend_textfill,'font-size':playobj.legend_textsize,'font-weight':playobj.legend_textweight,'font-family':playobj.legend_textface,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
 				}
+
+				keyitem_loc[keyitem_loc_name]={}
+				keyitem_loc[keyitem_loc_name]['x']=x
+				keyitem_loc[keyitem_loc_name]['y']=y
+			} else {
+				console.log('old overall')
+				x=keyitem_loc[keyitem_loc_name]['x']
+				y=keyitem_loc[keyitem_loc_name]['y']
 			}
 
 			// points
