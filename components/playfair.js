@@ -954,15 +954,20 @@ function draw_key_top(legend,playobj,snapobj){
 		var currentx=startx
 		var keyitem_dict={}
 		var keyitem_loc={}
+		var current_geom=legend[1].geom
 
 		for(var i=1;i<legend.length;i++){
 			var keyitem_name=legend[i].geom+legend[i].grouping+legend[i].group_value
 			var keyitem_loc_name=legend[i].overall
 			var numeric=legend[i].groupnumeric
 			var x=currentx
-			var y=starty+line*(parseFloat(playobj.legend_textsize))
+			var y=starty+line*(parseFloat(playobj.legend_elementsize))
 			var keyitem_name=legend[i].geom+legend[i].grouping+legend[i].group_value
+			if(legend[i].geom!==current_geom){
+				x=x+3*(playobj.legend_elementpad)
+			}
 			var xtext=x+playobj.legend_elementsize+playobj.legend_elementpad
+			var current_geom=legend[i].geom
 
 			if(keyitem_loc[keyitem_loc_name]==undefined){
 				keyitem_loc[keyitem_loc_name]={}
