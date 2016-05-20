@@ -57,7 +57,7 @@ function unhighlight_element(ev) {
 
 		try{
 			if(item.attr('context')){
-				item.attr({filter:''})
+				item.node.removeAttribute('filter')
 				hovered=0
 			}
 

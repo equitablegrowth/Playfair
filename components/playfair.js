@@ -940,9 +940,46 @@ function draw_key_top(legend,playobj,snapobj){
 	if(legend.length>1){
 		var maxwidth=legend[0][1]
 		if(legend[0][1]===''){maxwidth=playobj.width-playobj.left_margin-playobj.right_margin-playobj.legend_leftpad-playobj.legend_rightpad}
-		var ltitle=legend[0][0]
-		var starty=
+		var rightmost=maxwidth+playobj.left_margin+playobj.legend_leftpad
+		var starty=playobj.y+playobj.header_toppad+playobj.header_bottompad+playobj.head_height+playobj.legend_toppad
 		var startx=playobj.left_margin+playobj.legend_leftpad
+
+		var line=0
+		var currentx=startx
+
+		for(var i=1;i<legend.length;i++){
+			var t=snapobj.text(currentx+playobj.legend_elementsize+playobj.legend_elementpad,starty,legend[i].group_value).attr({ident2:'floatkey',ident:'key',fill:this.legend_textfill,'font-size':playobj.legend_textsize,'font-weight':playobj.legend_textweight,'font-family':playobj.legend_textface,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
+			var box=t.getBBox()
+
+			if(box.x2>rightmost){
+
+			}
+			var y=starty+line*(parseFloat(playobj.legend_elementpad)+parseFloat(playobj.legend_elementsize))
+			var x=currentx
+			var xtext=playobj.legend_floatpad+playobj.legend_elementsize+playobj.legend_elementpad
+			var numeric=legend[i].groupnumeric
+
+			// console.log(x,y,xtext)
+			// console.log(starty,legend[i].overall,)
+
+			var keyitem_name=legend[i].geom+legend[i].grouping+legend[i].group_value
+
+			if(keyitem_dict[keyitem_name]==undefined){
+				var t=snapobj.text(xtext,y+.5,lines).attr({ident2:'floatkey',ident:'key',fill:this.legend_textfill,'font-size':playobj.legend_textsize,'font-weight':playobj.legend_textweight,'font-family':playobj.legend_textface,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
+				t.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
+				t.selectAll("tspan:not(:first-child)").attr({x:t.attr('x'),dy:1*parseFloat(t.attr('font-size'))})
+				var xend=t.getBBox().x2
+				if(xend>longest){longest=xend}
+				extralines=extralines+(lines.length-1)
+			}
+
+
+		}
+
+
+
+
+
 	}
 }
 

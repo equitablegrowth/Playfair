@@ -236,7 +236,6 @@ function load_populate(response) {
 
 	// insert the returned svg into the svg slot
 	document.getElementById("grapharea").innerHTML=svg
-	grapharea.append(Snap.parse(gfilters))
 
 	var moveFuncfloat=function(dx,dy,posx,posy){
 		key_elements=grapharea.selectAll('[ident="key"]')
@@ -289,7 +288,9 @@ function load_populate(response) {
 	}
 
 	// recreate shadowfilter
-	var shadowfilter=grapharea.filter(Snap.filter.shadow(0, 2, 3))
+	grapharea.select('filter').remove()
+	grapharea.filter(Snap.filter.shadow(0, 2, 3))
+	shadowfilter=grapharea.selectAll('filter')[0]
 }
 
 $(document).on('click', '.list-group a', function(e){

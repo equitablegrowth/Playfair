@@ -1797,6 +1797,7 @@
 		</style>
 	</defs>
 </svg>
+<svg id='shadowholder' height='0px' width='0px'></svg>
 </div>
 <div class='vspace'>
 </div>
@@ -1845,26 +1846,19 @@ var width=745
 var chartobject
 var clickedevent
 var grapharea = Snap('#grapharea')
+var shadowarea = Snap('#shadowholder')
 var drawpath
 var loadfile
 var annosize='14px'
 var annoweight=400
 var annoface='Lato'
 var annofill='black'
-var gfilters = '<filter id="f3" x="0" y="0" width="200%" height="200%"><feOffset result="offOut" in="SourceAlpha" dx="3" dy="3" /><feGaussianBlur result="blurOut" in="offOut" stdDeviation="3" /><feBlend in="SourceGraphic" in2="blurOut" mode="normal" /></filter>';
+// var gfilters = '<filter id="f3" x="0" y="0" width="200%" height="200%"><feOffset result="offOut" in="SourceAlpha" dx="3" dy="3" /><feGaussianBlur result="blurOut" in="offOut" stdDeviation="3" /><feBlend in="SourceGraphic" in2="blurOut" mode="normal" /></filter>';
 // grapharea.append(Snap.parse(gfilters))
 // var shadowfilter=Snap('#f3')
 var shadowfilter=grapharea.filter(Snap.filter.shadow(0, 2, 3))
 placeholder()
 setInterval(blink,1000)
-
-var insertListener = function(event){
-	if (event.animationName == "nodeInserted") {
-		// This is the debug for knowing our listener worked!
-		// event.target is the new node!
-		console.warn("Another node has been inserted! ", event, event.target);
-	}
-}
 
 // set up cursor blink
 function blink(){
