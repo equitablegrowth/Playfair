@@ -288,9 +288,13 @@ function populate_variables(final_data) {
 				.text(key));
 		}
 
-		if($(' option[value='+temp+']',this).length>0){
-			$(this).val(temp)
-		} else {
+		try{
+			if($(' option[value='+temp+']',this).length>0){
+				$(this).val(temp)
+			} else {
+				$(this).val('none')
+			}
+		} catch(err){
 			$(this).val('none')
 		}
 	})
