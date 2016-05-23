@@ -1959,7 +1959,7 @@ function draw_shade(axes,shade,snapobj){
 			var y_top=axes[2]
 			var y_bottom=axes[3]
 
-			if(x_left>=axes[0] | x_right<=axes[1]){
+			if((x_left>=axes[0] & x_left<=axes[1]) | (x_right<=axes[1] & x_right>=axes[0])){
 				if(x_left<axes[0]){x_left=axes[0]}
 				if(x_right>axes[1]){x_right=axes[1]}
 				snapobj.path('M'+x_left+','+y_top+'L'+x_right+','+y_top+'L'+x_right+','+y_bottom+'L'+x_left+','+y_bottom+'L'+x_left+','+y_top).attr({fill:'#fff','fill-opacity':.6,'shape-rendering':'crispEdges'})
@@ -2393,7 +2393,12 @@ function create_date_axis(data,limit,y){
 
 	// if the range is more than 4 years, then the axis should be denominated in years
 	if (range>=yearlength*4){
-		datamax=new Date(String(datamax.getUTCFullYear()))
+		// somewhat arbitrary rule: if the month is >3, round up in years, otherwise round down
+		if(datamax.getUTCMonth()>2){
+			datamax=new Date(String(datamax.getUTCFullYear()+1))
+		} else {
+			datamax=new Date(String(datamax.getUTCFullYear()))
+		}
 		chartobject.datedenom[y]=yearlength
 		var drange=datamax.getUTCFullYear()-datamin.getUTCFullYear()
 		var digits=drange.toString().length
