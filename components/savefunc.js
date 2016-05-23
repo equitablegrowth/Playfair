@@ -259,6 +259,12 @@ function load_populate(response) {
 					x:coords.x-prevx+dx,
 					y:coords.y-prevy+dy
 				})
+			} else if (key_elements[i].type=='path'){
+				var currentx=key_elements[i].matrix.e-prevx
+				var currenty=key_elements[i].matrix.f-prevy
+				var x=currentx+dx
+				var y=currenty+dy
+				key_elements[i].transform('t'+x+','+y)
 			} else {
 				key_elements[i].attr({
 					x:coords.x-prevx+dx,
