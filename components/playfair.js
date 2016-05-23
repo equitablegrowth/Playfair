@@ -1095,7 +1095,7 @@ function draw_key_top(legend,playobj,snapobj){
 
 function draw_key(legend,playobj,snapobj,prelim){
 	console.log(legend)
-	// listener for drag events on a floating key
+	// listener for drag events on a float ing key
 	var moveFuncfloat=function(dx,dy,posx,posy){
 		key_elements=grapharea.selectAll('[ident="key"]')
 		for(var i=0;i<key_elements.length;i++){

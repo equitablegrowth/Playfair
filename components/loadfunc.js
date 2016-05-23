@@ -264,6 +264,7 @@ function loadData(coerce_array) {
 	}
 
 	// Call populate_variables to update all variable dropdowns with the variables in the data
+	$(".variable_select").trigger('change')
 	populate_variables(final_data)
 	console.log(final_data)
 	return final_data
@@ -287,7 +288,11 @@ function populate_variables(final_data) {
 				.text(key));
 		}
 
-		$(this).val(temp)
+		if($(' option[value='+temp+']',this).length>0){
+			$(this).val(temp)
+		} else {
+			$(this).val('none')
+		}
 	})
 }
 
