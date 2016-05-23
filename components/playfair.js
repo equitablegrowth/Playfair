@@ -1118,6 +1118,10 @@ function draw_key(legend,playobj,snapobj,prelim){
 					x:coords.x-prevx+dx,
 					y:coords.y-prevy+dy
 				})
+			} else if (key_elements[i].type=='path'){
+				var x=dx
+				var y=dy
+				key_elements[i].transform('t'+x+','+y)
 			} else {
 				key_elements[i].attr({
 					x:coords.x-prevx+dx,
