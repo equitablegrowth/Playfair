@@ -3004,7 +3004,8 @@ function draw_axes(playobj,xvar,yvar,shiftx,shifty,legend_height) {
 	else{y_step=range/(yvar.length-1)}
 
 	// Now go back to the y ticks and redraw with appropriate coords
-	maxwidth=playobj.ytick_maxsize*playobj.width
+	maxwidth=(playobj.ytick_maxsize*playobj.width)-playobj.left_margin
+	console.log(maxwidth)
 	for(var i=0;i<yvar.length;i++){
 		// y-axis labels
 
@@ -3014,16 +3015,24 @@ function draw_axes(playobj,xvar,yvar,shiftx,shifty,legend_height) {
 			string=String(yvar[i])
 		}
 
+		if (parseInt(string)>=1000 || parseInt(string)<=-1000){linesj=commas(string)}
+		var tempy=get_coord(string,playobj.ylimits,[ystart_ycoord,yfinal_ycoord],yvar.dtype,yvar,1,playobj.shifty,chartobject.ybar)
 		lines=multitext(string,{ident:'yaxis','font-size':playobj.ytick_textsize,'font-weight':playobj.ytick_textweight,'font-family':playobj.ytick_textface,'dominant-baseline':'text-before-edge','text-anchor':'end'},maxwidth)
-		for(var j=0;j<lines.length;j++){
-			if (parseInt(lines[j])>=1000 || parseInt(lines[j])<=-1000){linesj=commas(lines[j])} else{linesj=lines[j]}
-			// var temp=snapobj.text(playobj.x+total_xoffset-playobj.ytick_to_yaxis,ystart_ycoord-(y_step/2)*shifty-y_step*i+j*parseInt(playobj.xtick_textsize),linesj).attr({fill:this.ytick_textfill,ident:'yaxis','font-size':playobj.ytick_textsize,'font-weight':playobj.ytick_textweight,'font-family':playobj.ytick_textface,'dominant-baseline':'text-before-edge','text-anchor':'end',colorchange:'fill',context:'text_context_menu'})
-			var tempy=get_coord(string,playobj.ylimits,[ystart_ycoord,yfinal_ycoord],yvar.dtype,yvar,1,playobj.shifty,chartobject.ybar)
-			var temp=snapobj.text(playobj.x+total_xoffset-playobj.ytick_to_yaxis,tempy,linesj).attr({fill:this.ytick_textfill,ident:'yaxis','font-size':playobj.ytick_textsize,'font-weight':playobj.ytick_textweight,'font-family':playobj.ytick_textface,'dominant-baseline':'text-before-edge','text-anchor':'end',colorchange:'fill',context:'text_context_menu'})
-			temp.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
-			coords=temp.getBBox()
-			temp.attr({y:coords.y-lines.length*coords.height/2})
-		}
+		var temp=snapobj.text(playobj.x+total_xoffset-playobj.ytick_to_yaxis,tempy,lines).attr({fill:this.ytick_textfill,ident:'yaxis','font-size':playobj.ytick_textsize,'font-weight':playobj.ytick_textweight,'font-family':playobj.ytick_textface,'dominant-baseline':'text-before-edge','text-anchor':'end',colorchange:'fill',context:'text_context_menu'})
+		temp.selectAll("tspan:not(:first-child)").attr({x:temp.attr('x'),dy:parseInt(playobj.ytick_textsize)})
+		temp.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
+		coords=temp.getBBox()
+		temp.attr({y:coords.y-coords.height/2})
+
+
+		// for(var j=0;j<lines.length;j++){
+		// 	if (parseInt(lines[j])>=1000 || parseInt(lines[j])<=-1000){linesj=commas(lines[j])} else{linesj=lines[j]}
+		// 	// var temp=snapobj.text(playobj.x+total_xoffset-playobj.ytick_to_yaxis,ystart_ycoord-(y_step/2)*shifty-y_step*i+j*parseInt(playobj.xtick_textsize),linesj).attr({fill:this.ytick_textfill,ident:'yaxis','font-size':playobj.ytick_textsize,'font-weight':playobj.ytick_textweight,'font-family':playobj.ytick_textface,'dominant-baseline':'text-before-edge','text-anchor':'end',colorchange:'fill',context:'text_context_menu'})
+		// 	var tempy=get_coord(string,playobj.ylimits,[ystart_ycoord,yfinal_ycoord],yvar.dtype,yvar,1,playobj.shifty,chartobject.ybar)
+		// 	var temp=snapobj.text(playobj.x+total_xoffset-playobj.ytick_to_yaxis,tempy,linesj).attr({fill:this.ytick_textfill,ident:'yaxis','font-size':playobj.ytick_textsize,'font-weight':playobj.ytick_textweight,'font-family':playobj.ytick_textface,'dominant-baseline':'text-before-edge','text-anchor':'end',colorchange:'fill',context:'text_context_menu'})
+		// 	temp.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
+
+		// }
 
 		// y-axis ticks, grid lines, and minor grid lines
 		var temp_line=snapobj.line(playobj.x+total_xoffset,tempy,playobj.x+playobj.width-playobj.right_margin,tempy).attr({stroke:playobj.ygrid_fill,'stroke-width':playobj.ygrid_thickness,'stroke-dasharray':playobj.ygrid_dasharray,opacity:playobj.ygrid_opacity,'shape-rendering':'crispEdges'})
