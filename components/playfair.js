@@ -84,13 +84,14 @@ window.playfair = (function () {
 		var ystrings=[]
 
 		for(var key in geom_dict){
+			console.log(key)
 			try{
-				xtypes.push(typeof(data[geom_dict[key]['xvar']][0]))
-				ytypes.push(typeof(data[geom_dict[key]['yvar']][0]))
+				xtypes.push(data[geom_dict[key]['xvar']].dtype)
+				ytypes.push(data[geom_dict[key]['yvar']].dtype)
 
 				try{
-					xtypes.push(typeof(data[geom_dict[key]['xvar2']][0]))
-					ytypes.push(typeof(data[geom_dict[key]['yvar2']][0]))
+					xtypes.push(data[geom_dict[key]['xvar2']].dtype)
+					ytypes.push(data[geom_dict[key]['yvar2']].dtype)
 				} catch(err){}
 			} catch(err){}
 			console.log(data,key,data[geom_dict[key]],data[geom_dict[key]['yvar']],geom_dict[key])
@@ -335,7 +336,7 @@ window.playfair = (function () {
 		}
 
 		// this is the klugiest thing but... my strategy for handling missing values was bad(TM) so I am kinda
-		// patching it here by taking them and turning them into NaNs. I know. This is the worst.
+		// patching it here by taking them and turning them into undefined. I know. This is the worst.
 		for(var key in this.flat_data){
 			for(var i=0;i<this.flat_data[key];i++){
 				if(this.flat_data[key][i]=='' && typeof(this.flat_data[key][i])=='string'){
