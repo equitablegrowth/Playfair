@@ -32,6 +32,12 @@ function highlight_element(ev) {
 	if(selected==0){
 		// this should handle basically every case of mousing over a data element and getting a highlight effect
 		item=Snap(ev.target)
+
+		try{
+			if(ev.target.nodeName=='tspan'){
+				item=item.parent()
+			}
+		} catch(err){}
 		
 		try{
 			if(item.attr('context')){
@@ -54,6 +60,12 @@ function highlight_element(ev) {
 function unhighlight_element(ev) {
 	if(selected==0 & hovered==1){
 		item=Snap(ev.target)
+
+		try{
+			if(ev.target.nodeName=='tspan'){
+				item=item.parent()
+			}
+		} catch(err){}
 
 		try{
 			if(item.attr('context')){
