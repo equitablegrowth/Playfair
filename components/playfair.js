@@ -254,22 +254,26 @@ window.playfair = (function () {
 					}
 				}
 
-				if(geom_dict[key].xvar!==undefined){
-					if(Object.prototype.toString.call(data[geom_dict[key]['xvar']][0])==='[object Date]'){
-						for (var i=0;i<data[geom_dict[key]['xvar']].length;i++){
-							if(isNaN(data[geom_dict[key]['xvar']][i].getTime())==false){
-								xmaxes.push(new Date(moment(Math.max(...data[geom_dict[key]['xvar']]))))
-								xmins.push(new Date(moment(Math.min(...data[geom_dict[key]['xvar']]))))
+				console.log(data)
 
-								try{
-									xmaxes.push(new Date(moment(Math.max(...data[geom_dict[key]['xvar2']]))))
-									xmins.push(new Date(moment(Math.min(...data[geom_dict[key]['xvar2']]))))
-								} catch(err){}
+				if(geom_dict[key].xvar!==undefined){
+					if(data[geom_dict[key]['xvar']].dtype==='date'){
+						for (var i=0;i<data[geom_dict[key]['xvar']].length;i++){
+							if(Object.prototype.toString.call(data[geom_dict[key]['xvar']][i])==='[object Date]'){
+								if(isNaN(data[geom_dict[key]['xvar']][i].getTime())==false){
+									xmaxes.push(new Date(moment(Math.max(...remove_missing(data[geom_dict[key]['xvar']])))))
+									xmins.push(new Date(moment(Math.min(...remove_missing(data[geom_dict[key]['xvar']])))))
+
+									try{
+										xmaxes.push(new Date(moment(Math.max(...remove_missing(data[geom_dict[key]['xvar2']])))))
+										xmins.push(new Date(moment(Math.min(...remove_missing(data[geom_dict[key]['xvar2']])))))
+									} catch(err){}
+								}
 							}
 						}
 					} else if (data[geom_dict[key]['xvar']].dtype=='text'){
 						for (var i=0;i<data[geom_dict[key]['xvar']].length;i++){
-							if (data[geom_dict[key]['xvar']][i]!=''){
+							if (data[geom_dict[key]['xvar']][i]!==''){
 								xstrings.push(...data[geom_dict[key]['xvar']])
 
 								try{
@@ -290,20 +294,24 @@ window.playfair = (function () {
 					}
 				}
 
-				if(geom_dict[key].yvar!==undefined){
-					if(Object.prototype.toString.call(data[geom_dict[key]['yvar']][0])==='[object Date]'){
-						if(isNaN(data[geom_dict[key]['yvar']][i].getTime())==false){
-							ymaxes.push(new Date(moment(Math.max(...data[geom_dict[key]['yvar']]))))
-							ymins.push(new Date(moment(Math.min(...data[geom_dict[key]['yvar']]))))
+				console.log(xmins,xmaxes)
 
-							try{
-								ymaxes.push(new Date(moment(Math.max(...data[geom_dict[key]['yvar2']]))))
-								ymins.push(new Date(moment(Math.min(...data[geom_dict[key]['yvar2']]))))
-							} catch(err){}
+				if(geom_dict[key].yvar!==undefined){
+					if(data[geom_dict[key]['yvar']].dtype==='date'){
+						if(Object.prototype.toString.call(data[geom_dict[key]['xvar']][i])==='[object Date]'){
+							if(isNaN(data[geom_dict[key]['yvar']][i].getTime())==false){
+								ymaxes.push(new Date(moment(Math.max(...remove_missing(data[geom_dict[key]['yvar']])))))
+								ymins.push(new Date(moment(Math.min(...remove_missing(data[geom_dict[key]['yvar']])))))
+
+								try{
+									ymaxes.push(new Date(moment(Math.max(...remove_missing(data[geom_dict[key]['yvar2']])))))
+									ymins.push(new Date(moment(Math.min(...remove_missing(data[geom_dict[key]['yvar2']])))))
+								} catch(err){}
+							}
 						}
 					} else if(data[geom_dict[key]['yvar']].dtype=='text') {
 						for (var i=0;i<data[geom_dict[key]['yvar']].length;i++){
-							if (data[geom_dict[key]['yvar']][i]!=''){
+							if (data[geom_dict[key]['yvar']][i]!==''){
 								ystrings.push(...data[geom_dict[key]['yvar']])
 
 								try{
@@ -934,7 +942,7 @@ window.playfair = (function () {
 function remove_missing(array){
 	var temp=array.slice(0)
 	for(var i=temp.length-1;i>=0;i--){
-		if(typeof(temp[i])=='undefined') {
+		if(typeof(temp[i])==='undefined' | temp[i]==='') {
 			temp.splice(i,1)
 		}
 	}
@@ -1409,6 +1417,12 @@ function draw_lines(axes,line,snapobj){
 	// axes are [xleft,xright,ybottom,ytop]
 	// var is {'xvar':x_var,'yvar':y_var,'connect':connect,'grouping':{'color':color,'size':size,'type':type}}
 
+	if(line.connect==='none'){
+		var connect=line.xvar
+	} else {
+		var connect=line.connect
+	}
+
 	if(line.grouping.color!=='none'){
 		var color_groups=[...new Set(chartobject.flatdata[line.grouping.color])]
 	} 
@@ -1455,21 +1469,21 @@ function draw_lines(axes,line,snapobj){
 		})
 
 		// order according to the connect variable, connect on x by default
-		if(line.connect!=='none'){
-			var connect=line.connect
+		console.log(connect)
+		console.log(current)
+		if(chartobject.flatdata[connect].dtype=='date'){
 			current.sort(function(a,b){
-				return a[line.connect]-b[line.connect]
+				return new Date(b.date) - new Date(a.date)
 			})
 		} else {
-			var connect=line.xvar
 			current.sort(function(a,b){
-				return a[line.xvar]-b[line.xvar]
+				return a[connect]-b[connect]
 			})
 		}
 
 		// check for sizing variable and set line width
 		if(line.size!=='none'){
-			if(current[0][line.size]!=undefined){
+			if(current[0][line.size]!==undefined){
 				var linewidth=((current[0][line.size]-minsize)/(maxsize-minsize))*(parseFloat(chartobject.line_maxsize)-parseFloat(chartobject.line_minsize))+parseFloat(chartobject.line_minsize)
 			}
 		} else {
@@ -1496,6 +1510,7 @@ function draw_lines(axes,line,snapobj){
 
 		var path=''
 		// now loop through points in the line
+		console.log(current)
 		for(var j=0;j<current.length;j++){
 			var sub_current=current[j]
 
@@ -1503,7 +1518,7 @@ function draw_lines(axes,line,snapobj){
 				var sub_next=current[j+1]
 			} catch(err){}
 
-			if(isNaN(sub_current[connect])==false){
+			if(isNaN(sub_current[connect])==false & sub_current[connect]!==undefined){
 				if((sub_current[line.xvar]==undefined && connect==line.yvar) || (sub_current[line.yvar]==undefined && connect==line.xvar)){
 					// set various values for points. locations
 					var x_loc=get_coord(sub_next[line.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[line.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
