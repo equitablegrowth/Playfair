@@ -1432,14 +1432,7 @@ function draw_lines(axes,line,snapobj){
 	}
 
 	if(line.grouping.color!=='none'){
-		var temp=chartobject.dataset.filter(function(row){
-			return row[line.xvar]!==undefined & row[line.yvar]!==undefined
-		})
-		var color_groups=[]
-		for(var i=0;i<temp.length;i++){
-			color_groups.push(temp[i][line.grouping.color])
-		}
-		var color_groups=[...new Set(color_groups)]
+		var color_groups=get_color_groups(line)
 	} 
 
 	if(line.grouping.type!=='none'){
@@ -1465,7 +1458,9 @@ function draw_lines(axes,line,snapobj){
 		var temp2=[]
 		for(var i=0;i<chartobject.dataset.length;i++){
 			if(chartobject.dataset[i][line.xvar]!==undefined & chartobject.dataset[i][line.yvar]!==undefined){
-				temp.push([chartobject.dataset[i][line.grouping.color],chartobject.dataset[i][line.grouping.type]])
+				if(chartobject.dataset[i][line.grouping.color]!==undefined || chartobject.dataset[i][line.grouping.type]!==undefined){
+					temp.push([chartobject.dataset[i][line.grouping.color],chartobject.dataset[i][line.grouping.type]])
+				}
 			}
 		}
 
