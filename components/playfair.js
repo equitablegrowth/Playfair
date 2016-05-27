@@ -1425,11 +1425,26 @@ function draw_lines(axes,line,snapobj){
 	}
 
 	if(line.grouping.color!=='none'){
-		var color_groups=[...new Set(chartobject.flatdata[line.grouping.color])]
+		var temp=chartobject.dataset.filter(function(row){
+			return row[line.xvar]!==undefined & row[line.yvar]!==undefined
+		})
+		var color_groups=[]
+		for(var i=0;i<temp.length;i++){
+			color_groups.push(temp[i][line.grouping.color])
+		}
+		var color_groups=[...new Set(color_groups)]
 	} 
+
 	if(line.grouping.type!=='none'){
-		var type_groups=[...new Set(chartobject.flatdata[line.grouping.type])]
-	}
+		var temp=chartobject.dataset.filter(function(row){
+			return row[line.xvar]!==undefined & row[line.yvar]!==undefined
+		})
+		var type_groups=[]
+		for(var i=0;i<temp.length;i++){
+			type_groups.push(temp[i][line.grouping.type])
+		}
+		var type_groups=[...new Set(type_groups)]
+	} 
 
 	// check for sizing variable and get min and max for scaling
 	if(line.size!=='none'){
@@ -1442,7 +1457,9 @@ function draw_lines(axes,line,snapobj){
 		var temp=[]
 		var temp2=[]
 		for(var i=0;i<chartobject.dataset.length;i++){
-			temp.push([chartobject.dataset[i][line.grouping.color],chartobject.dataset[i][line.grouping.type]])
+			if(chartobject.dataset[i][line.xvar]!==undefined & chartobject.dataset[i][line.yvar]!==undefined){
+				temp.push([chartobject.dataset[i][line.grouping.color],chartobject.dataset[i][line.grouping.type]])
+			}
 		}
 
 		for(var i=0;i<temp.length;i++){
@@ -1461,6 +1478,8 @@ function draw_lines(axes,line,snapobj){
 		var groups=[[undefined,undefined]]
 	}
 
+	console.log(groups)
+
 	// loop through groups in the dataset to draw lines
 	for(var i=0;i<groups.length;i++){
 		var current=chartobject.dataset.filter(function(row){
@@ -1470,8 +1489,6 @@ function draw_lines(axes,line,snapobj){
 		})
 
 		// order according to the connect variable, connect on x by default
-		console.log(connect)
-		console.log(current)
 		if(chartobject.flatdata[connect].dtype=='date'){
 			current.sort(function(a,b){
 				return new Date(b.date) - new Date(a.date)
