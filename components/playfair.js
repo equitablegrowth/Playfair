@@ -49,6 +49,14 @@ window.playfair = (function () {
 			datadict.push(row)
 		}
 
+		for(var key in data){
+			for(i=0;i<data[key].length;i++){
+				if(data[key][i]===''){
+					data[key][i]=undefined
+				}
+			}
+		}
+
 		// data is now row by variable. That is, it is an object where the
 		// primary keys are row numbers and then within each row there is
 		// a value for each variable in the dataset.
@@ -1417,7 +1425,6 @@ function draw_trends(axes,trend,snapobj){
 function draw_lines(axes,line,snapobj){
 	// axes are [xleft,xright,ybottom,ytop]
 	// var is {'xvar':x_var,'yvar':y_var,'connect':connect,'grouping':{'color':color,'size':size,'type':type}}
-
 	if(line.connect==='none'){
 		var connect=line.xvar
 	} else {
@@ -1570,7 +1577,14 @@ function draw_area(axes,line,snapobj){
 	// area is {'xvar':x_var,'yvar':y_var,'grouping':{'color':color}}
 
 	if(line.grouping.color!=='none'){
-		var color_groups=[...new Set(chartobject.flatdata[line.grouping.color])]
+		var temp=chartobject.dataset.filter(function(row){
+			return row[line.xvar]!==undefined & row[line.yvar]!==undefined
+		})
+		var color_groups=[]
+		for(var i=0;i<temp.length;i++){
+			color_groups.push(temp[i][line.grouping.color])
+		}
+		var color_groups=[...new Set(color_groups)]
 	} 
 
 	// create full group list - this is not necessary when there's only one group but in case you add to it in the future, just edit line 5 under here
@@ -1578,7 +1592,9 @@ function draw_area(axes,line,snapobj){
 		var temp=[]
 		var temp2=[]
 		for(var i=0;i<chartobject.dataset.length;i++){
-			temp.push([chartobject.dataset[i][line.grouping.color]])
+			if(chartobject.dataset[i][line.xvar]!==undefined & chartobject.dataset[i][line.yvar]!==undefined){
+				temp.push([chartobject.dataset[i][line.grouping.color]])
+			}
 		}
 
 		for(var i=0;i<temp.length;i++){
@@ -1696,11 +1712,26 @@ function draw_steps(axes,step,snapobj){
 	// step is {'xvar':x_var,'yvar':y_var,'connect':connect,'size':size,'grouping':{'color':color,'type':type}}
 
 	if(step.grouping.color!=='none'){
-		var color_groups=[...new Set(chartobject.flatdata[step.grouping.color])]
+		var temp=chartobject.dataset.filter(function(row){
+			return row[step.xvar]!==undefined & row[step.yvar]!==undefined
+		})
+		var color_groups=[]
+		for(var i=0;i<temp.length;i++){
+			color_groups.push(temp[i][step.grouping.color])
+		}
+		var color_groups=[...new Set(color_groups)]
 	} 
+
 	if(step.grouping.type!=='none'){
-		var type_groups=[...new Set(chartobject.flatdata[step.grouping.type])]
-	}
+		var temp=chartobject.dataset.filter(function(row){
+			return row[step.xvar]!==undefined & row[step.yvar]!==undefined
+		})
+		var type_groups=[]
+		for(var i=0;i<temp.length;i++){
+			type_groups.push(temp[i][step.grouping.type])
+		}
+		var type_groups=[...new Set(type_groups)]
+	} 
 
 	// check for sizing variable and get min and max for scaling
 	if(step.size!=='none'){
@@ -1713,7 +1744,9 @@ function draw_steps(axes,step,snapobj){
 		var temp=[]
 		var temp2=[]
 		for(var i=0;i<chartobject.dataset.length;i++){
-			temp.push([chartobject.dataset[i][step.grouping.color],chartobject.dataset[i][step.grouping.type]])
+			if(chartobject.dataset[i][line.xvar]!==undefined & chartobject.dataset[i][line.yvar]!==undefined){
+				temp.push([chartobject.dataset[i][step.grouping.color],chartobject.dataset[i][step.grouping.type]])
+			}
 		}
 
 		for(var i=0;i<temp.length;i++){
@@ -1829,11 +1862,26 @@ function draw_points(axes,point,snapobj){
 
 	// create sets of options for each grouping variable
 	if(point.grouping.color!=='none'){
-		var color_groups=[...new Set(chartobject.flatdata[point.grouping.color])]
+		var temp=chartobject.dataset.filter(function(row){
+			return row[point.xvar]!==undefined & row[point.yvar]!==undefined
+		})
+		var color_groups=[]
+		for(var i=0;i<temp.length;i++){
+			color_groups.push(temp[i][point.grouping.color])
+		}
+		var color_groups=[...new Set(color_groups)]
 	} 
+
 	if(point.grouping.type!=='none'){
-		var type_groups=[...new Set(chartobject.flatdata[point.grouping.type])]
-	}
+		var temp=chartobject.dataset.filter(function(row){
+			return row[point.xvar]!==undefined & row[point.yvar]!==undefined
+		})
+		var type_groups=[]
+		for(var i=0;i<temp.length;i++){
+			type_groups.push(temp[i][point.grouping.type])
+		}
+		var type_groups=[...new Set(type_groups)]
+	} 
 
 	// check for sizing variable and get min and max for scaling
 	if(point.size!=='none'){
@@ -1893,11 +1941,26 @@ function draw_segments(axes,segment,snapobj){
 
 	// create sets of options for each grouping variable
 	if(segment.grouping.color!=='none'){
-		var color_groups=[...new Set(chartobject.flatdata[segment.grouping.color])]
+		var temp=chartobject.dataset.filter(function(row){
+			return row[segment.xvar]!==undefined & row[segment.yvar]!==undefined
+		})
+		var color_groups=[]
+		for(var i=0;i<temp.length;i++){
+			color_groups.push(temp[i][segment.grouping.color])
+		}
+		var color_groups=[...new Set(color_groups)]
 	} 
+
 	if(segment.grouping.type!=='none'){
-		var type_groups=[...new Set(chartobject.flatdata[segment.grouping.type])]
-	}
+		var temp=chartobject.dataset.filter(function(row){
+			return row[segment.xvar]!==undefined & row[segment.yvar]!==undefined
+		})
+		var type_groups=[]
+		for(var i=0;i<temp.length;i++){
+			type_groups.push(temp[i][segment.grouping.type])
+		}
+		var type_groups=[...new Set(type_groups)]
+	} 
 
 	// check for sizing variable and get min and max for scaling
 	if(segment.size!=='none'){
@@ -2022,10 +2085,14 @@ function draw_bars(axes,bar,snapobj){
 	// bar is {'xvar':x_var,'yvar':y_var,'grouping':{'color':color,'bargroup':bargroup}}
 	// create sets of options for each grouping variable
 	if(bar.grouping.color!=='none'){
-		var color_groups=[...new Set(chartobject.flatdata[bar.grouping.color])]
-	} else { var color_groups=['placeholder'] }
+		var color_groups=get_color_groups(bar)	
+	} else { 
+		var color_groups=['placeholder'] 
+	}
+
 	if(bar.grouping.bargroup!=='none'){
 		// what is this even for? I honestly don't remember. But I had a frontend for it, so I must have had something in mind.
+		// I think this is supposed to be for coloring non-grouped bars so ie you could have bars <some date be one color, >some date another or positive/negative revenues
 		var bargroup_groups=[...new Set(chartobject.flatdata[bar.grouping.bargroup])]
 	} else { var bargroup_groups=['placeholder'] }
 
@@ -2133,7 +2200,18 @@ function draw_stackedbars(axes,bar,snapobj){
 	// axes are [xleft,xright,ybottom,ytop]
 	// bar is {'xvar':x_var,'yvar':y_var,'grouping':{'color':color,'bargroup':bargroup}}
 	// create sets of options for each grouping variable
-	var color_groups=[...new Set(chartobject.flatdata[bar.grouping.color])]
+	if(bar.grouping.color!=='none'){
+		var temp=chartobject.dataset.filter(function(row){
+			return row[bar.xvar]!==undefined & row[bar.yvar]!==undefined
+		})
+		var color_groups=[]
+		for(var i=0;i<temp.length;i++){
+			color_groups.push(temp[i][bar.grouping.color])
+		}
+		var color_groups=[...new Set(color_groups)]	
+	} else { 
+		var color_groups=['placeholder'] 
+	}
 
 	// to figure out the width of a bar, need to find the two values that are *closest* on the x-axis.
 	// the bar width should be just large enough that those two bars have a little space between them
@@ -2224,6 +2302,18 @@ function draw_stackedbars(axes,bar,snapobj){
 
 	// always gotta pull the y=0 line to the front after creating a barchart
 	snapobj.append(snapobj.selectAll('[zeroline="1"]'))
+}
+
+function get_color_groups(geom){
+	var temp=chartobject.dataset.filter(function(row){
+		return row[geom.xvar]!==undefined & row[geom.yvar]!==undefined & row[geom.grouping.color]!==undefined
+	})
+	var color_groups=[]
+	for(var i=0;i<temp.length;i++){
+		color_groups.push(temp[i][geom.grouping.color])
+	}
+	var color_groups=[...new Set(color_groups)]	
+	return color_groups
 }
 
 function get_coord(value,[limit_start,limit_end],[pixel_start,pixel_end],type,array,y,shift,ybar){

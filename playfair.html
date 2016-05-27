@@ -1917,7 +1917,7 @@ $(".variable_select").change(function(){
 					// get all groups for this grouper - x and y must not be missing
 					var groups=[]
 					for(var i=0;i<datadict.length;i++){
-						if(datadict[i][xvar]!=='' && datadict[i][yvar]!==''){
+						if(datadict[i][xvar]!=='' && datadict[i][yvar]!=='' && datadict[i][temp.grouping[grouper]]!==''){
 							groups.push(datadict[i][temp.grouping[grouper]])
 						}
 					}
