@@ -1500,6 +1500,8 @@ function draw_lines(axes,line,snapobj){
 			current.sort(function(a,b){
 				return new Date(b.date) - new Date(a.date)
 			})
+		} else if(chartobject.flatdata[connect].dtype=='text'){
+		
 		} else {
 			current.sort(function(a,b){
 				return a[connect]-b[connect]
@@ -1524,7 +1526,6 @@ function draw_lines(axes,line,snapobj){
 
 		// line type
 		if(line.grouping.type!=='none'){
-			console.log('typing: ',type_groups,current[0],line.grouping.type)
 			var linetype=chartobject.line_types[type_groups.indexOf(current[0][line.grouping.type])]
 		} else {
 			var linetype=chartobject.line_types[0]
@@ -1535,19 +1536,19 @@ function draw_lines(axes,line,snapobj){
 
 		var path=''
 		// now loop through points in the line
-		console.log(current)
+		console.log(current,connect)
 		for(var j=0;j<current.length;j++){
 			var sub_current=current[j]
 
 			try{
 				var sub_next=current[j+1]
 			} catch(err){}
-
-			if(isNaN(sub_current[connect])==false & sub_current[connect]!==undefined){
+			if(sub_current[connect]!==undefined){
 				if((sub_current[line.xvar]==undefined && connect==line.yvar) || (sub_current[line.yvar]==undefined && connect==line.xvar)){
 					// set various values for points. locations
 					var x_loc=get_coord(sub_next[line.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[line.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
 					var y_loc=get_coord(sub_next[line.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[line.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
+					console.log('1',x_loc,y_loc)
 					// add to path or start path
 					if(j==0){
 						path=path+'M'+x_loc+','+y_loc
@@ -1558,6 +1559,7 @@ function draw_lines(axes,line,snapobj){
 					// set various values for points. locations
 					var x_loc=get_coord(sub_current[line.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[line.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
 					var y_loc=get_coord(sub_current[line.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[line.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
+					console.log('2',x_loc,y_loc)
 					// add to path or start path
 					if(j==0){
 						path=path+'M'+x_loc+','+y_loc
@@ -1862,14 +1864,7 @@ function draw_points(axes,point,snapobj){
 
 	// create sets of options for each grouping variable
 	if(point.grouping.color!=='none'){
-		var temp=chartobject.dataset.filter(function(row){
-			return row[point.xvar]!==undefined & row[point.yvar]!==undefined
-		})
-		var color_groups=[]
-		for(var i=0;i<temp.length;i++){
-			color_groups.push(temp[i][point.grouping.color])
-		}
-		var color_groups=[...new Set(color_groups)]
+		var color_groups=get_color_groups(point)
 	} 
 
 	if(point.grouping.type!=='none'){
@@ -1901,7 +1896,7 @@ function draw_points(axes,point,snapobj){
 		}
 
 		// set various values for points. locations
-		if(current[point.xvar]!=undefined && current[point.yvar]!=undefined){
+		if(current[point.xvar]!=undefined && current[point.yvar]!=undefined  && ((point.grouping.color=='none') || (point.grouping.color!=='none' && current[point.grouping.color]!==undefined))){
 			var x_loc=get_coord(current[point.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[point.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
 			var y_loc=get_coord(current[point.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[point.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
 
@@ -1941,14 +1936,7 @@ function draw_segments(axes,segment,snapobj){
 
 	// create sets of options for each grouping variable
 	if(segment.grouping.color!=='none'){
-		var temp=chartobject.dataset.filter(function(row){
-			return row[segment.xvar]!==undefined & row[segment.yvar]!==undefined
-		})
-		var color_groups=[]
-		for(var i=0;i<temp.length;i++){
-			color_groups.push(temp[i][segment.grouping.color])
-		}
-		var color_groups=[...new Set(color_groups)]
+		color_groups=get_color_groups(segment)
 	} 
 
 	if(segment.grouping.type!=='none'){
@@ -1980,7 +1968,7 @@ function draw_segments(axes,segment,snapobj){
 		}
 
 		// set various values for points. locations
-		if(current[segment.xvar]!=undefined && current[segment.yvar]!=undefined && current[segment.xvar2]!=undefined && current[segment.yvar2]!=undefined){
+		if(current[segment.xvar]!=undefined && current[segment.yvar]!=undefined && current[segment.xvar2]!=undefined && current[segment.yvar2]!=undefined  && ((segment.grouping.color=='none') || (segment.grouping.color!=='none' && current[segment.grouping.color]!==undefined))){
 			var x_loc1=get_coord(current[segment.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[segment.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
 			var y_loc1=get_coord(current[segment.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[segment.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
 			var x_loc2=get_coord(current[segment.xvar2],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[segment.xvar2].dtype,chartobject.xarray,0,chartobject.shiftx)
@@ -2145,7 +2133,7 @@ function draw_bars(axes,bar,snapobj){
 	for(var i=0;i<chartobject.dataset.length;i++){
 		var current=chartobject.dataset[i]
 
-		if(current[bar.xvar]!=undefined && current[bar.yvar]!=undefined){
+		if(current[bar.xvar]!=undefined && current[bar.yvar]!=undefined && ((bar.grouping.color=='none') || (bar.grouping.color!=='none' && current[bar.grouping.color]!==undefined))){
 			// color + grouping
 			if(bar.grouping.color!=='none'){
 				var color=chartobject.qualitative_color[color_groups.indexOf(current[bar.grouping.color])]
@@ -2188,6 +2176,7 @@ function draw_bars(axes,bar,snapobj){
 			var label=current[bar.yvar]
 
 			// draw bar
+
 			snapobj.path('M'+x1+','+y2+'L'+x2+','+y2+'L'+x2+','+y1+'L'+x1+','+y1+'L'+x1+','+y2).attr({orient:orient,'data_type':'bar','data_label':label,'group':current[bar.grouping.color],'class':'dataelement','shape-rendering':'crispEdges',fill:color,colorchange:'fill',context:'data_context_menu'})
 		}
 	}
