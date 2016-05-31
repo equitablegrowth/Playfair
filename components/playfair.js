@@ -134,11 +134,13 @@ window.playfair = (function () {
 					var negatives=0
 					var yvalues=[]
 					// get all rows where x=value
-					if(Object.prototype.toString.call(data[geom_dict[key]['xvar']][0])==='[object Date]'){
+					if(chartobject.flatdata[xvar].dtype=='date'){
 						for(var i=0;i<datadict.length;i++){
-							if(datadict[i][xvar].getTime()==value.getTime()){
-								yvalues.push(datadict[i][yvar])
-							}
+							try{
+								if(datadict[i][xvar].getTime()==value.getTime()){
+									yvalues.push(datadict[i][yvar])
+								}
+							} catch(err){}
 						}
 					} else {
 						for(var i=0;i<datadict.length;i++){
@@ -1554,7 +1556,6 @@ function draw_lines(axes,line,snapobj){
 					// set various values for points. locations
 					var x_loc=get_coord(sub_current[line.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[line.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
 					var y_loc=get_coord(sub_current[line.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[line.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
-					console.log('2',x_loc,y_loc)
 					// add to path or start path
 					if(j==0){
 						path=path+'M'+x_loc+','+y_loc
@@ -1574,14 +1575,7 @@ function draw_area(axes,line,snapobj){
 	// area is {'xvar':x_var,'yvar':y_var,'grouping':{'color':color}}
 
 	if(line.grouping.color!=='none'){
-		var temp=chartobject.dataset.filter(function(row){
-			return row[line.xvar]!==undefined & row[line.yvar]!==undefined
-		})
-		var color_groups=[]
-		for(var i=0;i<temp.length;i++){
-			color_groups.push(temp[i][line.grouping.color])
-		}
-		var color_groups=[...new Set(color_groups)]
+		var color_groups=get_color_groups(line)
 	} 
 
 	// create full group list - this is not necessary when there's only one group but in case you add to it in the future, just edit line 5 under here
@@ -1589,7 +1583,7 @@ function draw_area(axes,line,snapobj){
 		var temp=[]
 		var temp2=[]
 		for(var i=0;i<chartobject.dataset.length;i++){
-			if(chartobject.dataset[i][line.xvar]!==undefined & chartobject.dataset[i][line.yvar]!==undefined){
+			if(chartobject.dataset[i][line.xvar]!==undefined & chartobject.dataset[i][line.yvar]!==undefined & chartobject.dataset[i][line.grouping.color]!==undefined){
 				temp.push([chartobject.dataset[i][line.grouping.color]])
 			}
 		}
@@ -1709,14 +1703,7 @@ function draw_steps(axes,step,snapobj){
 	// step is {'xvar':x_var,'yvar':y_var,'connect':connect,'size':size,'grouping':{'color':color,'type':type}}
 
 	if(step.grouping.color!=='none'){
-		var temp=chartobject.dataset.filter(function(row){
-			return row[step.xvar]!==undefined & row[step.yvar]!==undefined
-		})
-		var color_groups=[]
-		for(var i=0;i<temp.length;i++){
-			color_groups.push(temp[i][step.grouping.color])
-		}
-		var color_groups=[...new Set(color_groups)]
+		var color_groups=get_color_groups(step)
 	} 
 
 	if(step.grouping.type!=='none'){
@@ -1741,7 +1728,7 @@ function draw_steps(axes,step,snapobj){
 		var temp=[]
 		var temp2=[]
 		for(var i=0;i<chartobject.dataset.length;i++){
-			if(chartobject.dataset[i][line.xvar]!==undefined & chartobject.dataset[i][line.yvar]!==undefined){
+			if(chartobject.dataset[i][step.xvar]!==undefined & chartobject.dataset[i][step.yvar]!==undefined){
 				temp.push([chartobject.dataset[i][step.grouping.color],chartobject.dataset[i][step.grouping.type]])
 			}
 		}
