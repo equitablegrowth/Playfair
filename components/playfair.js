@@ -1541,21 +1541,25 @@ function draw_lines(axes,line,snapobj){
 				var sub_next=current[j+1]
 			} catch(err){}
 			if(sub_current[connect]!==undefined){
+				console.log(sub_current[line.xvar],sub_current[line.yvar])
 				if((sub_current[line.xvar]==undefined && connect==line.yvar) || (sub_current[line.yvar]==undefined && connect==line.xvar)){
 					// set various values for points. locations
 					var x_loc=get_coord(sub_next[line.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[line.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
 					var y_loc=get_coord(sub_next[line.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[line.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
 					console.log('1',x_loc,y_loc)
 					// add to path or start path
-					if(j==0){
-						path=path+'M'+x_loc+','+y_loc
-					} else{
-						path=path+'M'+x_loc+','+y_loc
+					if(isNaN(y_loc)==false){
+						if(j==0){
+							path=path+'M'+x_loc+','+y_loc
+						} else{
+							path=path+'M'+x_loc+','+y_loc
+						}
 					}
 				} else if(sub_current[line.xvar]!=undefined && sub_current[line.yvar]!=undefined){
 					// set various values for points. locations
 					var x_loc=get_coord(sub_current[line.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[line.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
 					var y_loc=get_coord(sub_current[line.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[line.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
+					console.log('2',x_loc,y_loc)
 					// add to path or start path
 					if(j==0){
 						path=path+'M'+x_loc+','+y_loc
