@@ -1626,6 +1626,8 @@ function draw_area(axes,line,snapobj){
 			return row[line.grouping.color]===groups[i][0]
 		})
 
+		console.log(current)
+
 		// order according to the x variable
 		var connect=line.xvar
 		current.sort(function(a,b){

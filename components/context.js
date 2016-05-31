@@ -10,12 +10,13 @@ $(function() {
 		height2=window.innerHeight
 		width2=window.innerWidth
 
-		// console.log(e,e.target,e.target.nodeName,e.target.parentNode.nodeName)
 		if(doubleClicked == false && drawpath!=1) {
 			disableScroll()
 			if(e.target.attributes.context){
 				menu='#'+e.target.attributes.context.value
-			} else{
+			} else if(e.target.nodeName=='tspan'){
+				menu='#text_context_menu'
+			} else {
 				menu='#other_context_menu'
 			}
 			console.log(e.target.attributes.context)
