@@ -26,17 +26,26 @@ function loadData(coerce_array) {
 	alertbox.style.display='none'
 	var delimit=null
 	d=document.getElementById('data_text').value
-	d=d.trim()
+	// d=d.trim()
 	d=d.split('\n')
+
+	for(var i=d.length-1;i>0;i--){
+		if(d[i]===''){
+			d.splice(i,1)
+		}
+	}
 
 	// detect and set the delimiter. If you ever want to add more delimiters...
 	if (d[0].indexOf('	')>-1) {delimit='	'} else if (d[0].indexOf(',')>-1) {delimit=','}
+	console.log('delimiter: ',delimit)
 
 	// Does every row have the same number of columns?
 	var columns=d[0].split(delimit).length
+	console.log('columns: ',columns)
 	var flag=0
 	for (var i=0;i<d.length;i++) {
 		if (d[i].split(delimit).length!=columns){
+			console.log(i+' has wrong number of columns: ',d[i].split(delimit))
 			var flag=1
 		}
 	}
