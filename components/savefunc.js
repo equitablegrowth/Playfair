@@ -294,10 +294,12 @@ function load_populate(response) {
 	}
 
 	// recreate shadowfilter
-	grapharea.select('filter').remove()
+	try{
+		grapharea.select('filter').remove()
+	} catch(err){}
 	grapharea=Snap('#grapharea')
-	grapharea.filter(Snap.filter.shadow(0, 2, 3))
-	shadowfilter=grapharea.selectAll('filter')[0]
+	shadowfilter=grapharea.filter(Snap.filter.shadow(0, 2, 3))
+	grapharea.append(shadowfilter)
 }
 
 $(document).on('click', '.list-group a', function(e){
