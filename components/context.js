@@ -158,6 +158,11 @@ function addtext(target) {
 
 function change_color(target,color) {
 	var item=Snap(target)
+
+	if (target.nodeName=='tspan'){
+		item=item.parent()
+	}
+
 	console.log(item.attr('colorchange'))
 	if(item.attr('colorchange')=='fill'){
 		item.attr({fill:color})

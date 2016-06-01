@@ -55,7 +55,9 @@ function unselect_text(ev) {
 			selected_text.attr({filter:''})
 			selected_text.attr({transform:trans})
 			active_element.attr({fill:text_element_fill})
+			console.log(text_element_fill)
 			selected=0
+			active_element=undefined
 		} catch(err){}
 	}
 	dragging=0
@@ -80,6 +82,7 @@ function edit_text(ev) {
 			selected_text.undrag()
 			selected_text.attr({filter:''})
 			active_element.attr({fill:text_element_fill})
+			console.log(text_element_fill)
 
 			// re-rotate previous selection
 			selected_text.attr({transform:trans})
@@ -117,8 +120,8 @@ function edit_text(ev) {
 		// new selection
 		select_box=grapharea.group()
 		active_element=selected_text
-		try{text_element_fill=selected_text.node.attributes.fill.value}
-		catch(err){text_element_fill='black'}
+		try{text_element_fill=selected_text.node.attributes.fill.value;console.log(text_element_fill)}
+		catch(err){console.log('not sure what original text color was');text_element_fill='black'}
 
 		// highlight text with a box to visually indicate selection, change text color to white
 		coords=selected_text.getBBox()
