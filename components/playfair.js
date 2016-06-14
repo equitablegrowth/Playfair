@@ -1493,9 +1493,8 @@ function draw_lines(axes,line,snapobj){
 		})
 
 		// order according to the connect variable, connect on x by default
-		if(chartobject.flatdata[connect].dtype=='date'){
+		if(chartobject.flatdata[connect].dtype=='blah ignore this'){
 			current.sort(function(a,b){
-				return new Date(b.date) - new Date(a.date)
 			})
 		} else if(chartobject.flatdata[connect].dtype=='text'){
 		

@@ -13,7 +13,7 @@
 
 	/* misc */
 	.bottom{background-color:#eeeeee;padding-top:30px;padding-bottom:30px;margin-top:40px;}
-	.h4 {font-family:Raleway;font-weight:300;margin-top:0px;font-size:.3em;}
+	.h4 {font-family:Raleway;font-weight:300;margin:5px;font-size:1em;text-align:center;}
 	.helpboxouter{position:relative;}
 	.container {margin-top:20px;margin-bottom:250px;height:100%;}
 	.nav-tabs {margin-top:10px;border:0px;}
