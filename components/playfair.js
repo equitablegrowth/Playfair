@@ -567,6 +567,9 @@ window.playfair = (function () {
 		var height=this.height
 		var graphobj=this
 
+		var notefill=this.notetextfill
+		var sourcefill=this.sourcetextfill
+
 		if (this.logo!=0){
 			var logo=snapobj.image(this.logo,0,0)
 			logo.node.addEventListener('load',function(){
@@ -578,7 +581,7 @@ window.playfair = (function () {
 				if(graphobj.source.length>0){
 					source='Source: '+graphobj.source
 					lines=multitext(source,{'font-family':graphobj.sourceface,'font-size':graphobj.sourcesize,'font-weight':graphobj.sourceweight,'dominant-baseline':'text-before-edge',fill:this.sourcetextfill},graphobj.width-graphobj.footer_leftpad-graphobj.footer_rightpad-logo_coords.width-20)
-					var source=snapobj.text(graphobj.x+graphobj.footer_leftpad,graphobj.y+graphobj.height-logo_coords.height-graphobj.footer_bottompad,lines).attr({fill:this.sourcetextfill,ident:'foot','font-family':graphobj.sourceface,'font-size':graphobj.sourcesize,'font-weight':graphobj.sourceweight,'dominant-baseline':'text-before-edge',colorchange:'fill',context:'text_context_menu'})
+					var source=snapobj.text(graphobj.x+graphobj.footer_leftpad,graphobj.y+graphobj.height-logo_coords.height-graphobj.footer_bottompad,lines).attr({fill:notefill,ident:'foot','font-family':graphobj.sourceface,'font-size':graphobj.sourcesize,'font-weight':graphobj.sourceweight,'dominant-baseline':'text-before-edge',colorchange:'fill',context:'text_context_menu'})
 					source.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 					source.selectAll("tspan:not(:first-child)").attr({x:source.attr('x'),dy:parseInt(graphobj.sourcesize)})
 					source_coords=source.getBBox().y2
@@ -587,7 +590,7 @@ window.playfair = (function () {
 				if(graphobj.note.length>0){
 					note='Note: '+graphobj.note
 					lines=multitext(note,{fill:this.notetextfill,'font-family':graphobj.noteface,'font-size':graphobj.notesize,'font-weight':graphobj.noteweight,'dominant-baseline':'text-before-edge'},graphobj.width-graphobj.footer_leftpad-graphobj.footer_rightpad-logo_coords.width-20)
-					var note=snapobj.text(graphobj.x+graphobj.footer_leftpad,source_coords,lines).attr({fill:this.notetextfill,ident:'foot','font-family':graphobj.noteface,'font-size':graphobj.notesize,'font-weight':graphobj.noteweight,'dominant-baseline':'text-before-edge',colorchange:'fill',context:'text_context_menu'})
+					var note=snapobj.text(graphobj.x+graphobj.footer_leftpad,source_coords,lines).attr({fill:sourcefill,ident:'foot','font-family':graphobj.noteface,'font-size':graphobj.notesize,'font-weight':graphobj.noteweight,'dominant-baseline':'text-before-edge',colorchange:'fill',context:'text_context_menu'})
 					note.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 					note.selectAll("tspan:not(:first-child)").attr({x:note.attr('x'),dy:parseInt(graphobj.notesize)})
 					note_coords=note.getBBox().y2
@@ -621,7 +624,7 @@ window.playfair = (function () {
 			if(graphobj.source.length>0){
 				source='Source: '+graphobj.source
 				lines=multitext(source,{'font-family':graphobj.sourceface,'font-size':graphobj.sourcesize,'font-weight':graphobj.sourceweight,'dominant-baseline':'text-before-edge',fill:this.sourcetextfill},graphobj.width-graphobj.footer_leftpad-graphobj.footer_rightpad)
-				var source=snapobj.text(graphobj.x+graphobj.footer_leftpad,graphobj.y+graphobj.height-graphobj.footer_bottompad,lines).attr({ident:'foot','font-family':graphobj.sourceface,fill:this.sourcetextfill,'font-size':graphobj.sourcesize,'font-weight':graphobj.sourceweight,'dominant-baseline':'text-before-edge',colorchange:'fill',context:'text_context_menu'})
+				var source=snapobj.text(graphobj.x+graphobj.footer_leftpad,graphobj.y+graphobj.height-graphobj.footer_bottompad,lines).attr({ident:'foot','font-family':graphobj.sourceface,fill:sourcefill,'font-size':graphobj.sourcesize,'font-weight':graphobj.sourceweight,'dominant-baseline':'text-before-edge',colorchange:'fill',context:'text_context_menu'})
 				source.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 				source.selectAll("tspan:not(:first-child)").attr({x:source.attr('x'),dy:parseInt(graphobj.sourcesize)})
 				source_coords=source.getBBox().y2
@@ -630,7 +633,7 @@ window.playfair = (function () {
 			if(graphobj.note.length>0){
 				note='Note: '+graphobj.note
 				lines=multitext(note,{fill:this.notetextfill,'font-family':graphobj.noteface,'font-size':graphobj.notesize,'font-weight':graphobj.noteweight,'dominant-baseline':'text-before-edge'},graphobj.width-graphobj.footer_leftpad-graphobj.footer_rightpad)
-				var note=snapobj.text(graphobj.x+graphobj.footer_leftpad,source_coords,lines).attr({fill:this.notetextfill,ident:'foot','font-family':graphobj.noteface,'font-size':graphobj.notesize,'font-weight':graphobj.noteweight,'dominant-baseline':'text-before-edge',colorchange:'fill',context:'text_context_menu'})
+				var note=snapobj.text(graphobj.x+graphobj.footer_leftpad,source_coords,lines).attr({fill:notefill,ident:'foot','font-family':graphobj.noteface,'font-size':graphobj.notesize,'font-weight':graphobj.noteweight,'dominant-baseline':'text-before-edge',colorchange:'fill',context:'text_context_menu'})
 				note.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 				note.selectAll("tspan:not(:first-child)").attr({x:note.attr('x'),dy:parseInt(graphobj.notesize)})
 				note_coords=note.getBBox().y2
@@ -692,7 +695,7 @@ window.playfair = (function () {
 		} else {var stop=lines.length}
 
 		for(var i=0;i<stop;i++){
-			var dek=snapobj.text(this.x+this.header_leftpad,this.y+this.header_toppad+hed_coords.y2+i*parseInt(dekfontsize)*1.1,lines[i]).attr({'font-family':this.dekface,'font-size':dekfontsize,'font-weight':this.dekweight,'dominant-baseline':'text-before-edge',ident:'dek',fill:this.dektextfill,colorchange:'fill',context:'text_context_menu'})
+			var dek=snapobj.text(this.x+this.header_leftpad,this.y+hed_coords.y2+i*parseInt(dekfontsize)*1.1,lines[i]).attr({'font-family':this.dekface,'font-size':dekfontsize,'font-weight':this.dekweight,'dominant-baseline':'text-before-edge',ident:'dek',fill:this.dektextfill,colorchange:'fill',context:'text_context_menu'})
 			dek.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 		}
 		
@@ -725,7 +728,7 @@ window.playfair = (function () {
 		default_parameters={
 			// margins
 			'top_margin':25,
-			'bottom_margin':8,
+			'bottom_margin':20,
 			'left_margin':20,
 			'right_margin':40,
 
@@ -734,15 +737,15 @@ window.playfair = (function () {
 			'footer_height':0,
 
 			// hed
-			'hedsize':'20px',
-			'hedsizemin':'18px',
+			'hedsize':'24px',
+			'hedsizemin':'22px',
 			'hedweight':700,
 			'hedface':'Lato',
 			'hedtextfill':'black',
 
 			// dek
-			'deksize':'16px',
-			'deksizemin':'15px',
+			'deksize':'18px',
+			'deksizemin':'16px',
 			'dekweight':400,
 			'dekface':'Lato',
 			'dektextfill':'black',
@@ -761,42 +764,42 @@ window.playfair = (function () {
 			'annotatetextfill':'black',
 
 			// source
-			'sourcesize':'10px',
+			'sourcesize':'12px',
 			'sourceweight':400,
 			'sourceface':'Lato',
-			'sourcetextfill':'black',
+			'sourcetextfill':'white',
 
 			// note
-			'notesize':'10px',
+			'notesize':'12px',
 			'noteweight':400,
 			'noteface':'Lato',
-			'notetextfill':'black',
+			'notetextfill':'white',
 
 			// chart formatting
-			'chartfill':'#ece9e8',
+			'chartfill':'#eee',
 			'chart_toppad':0,
 			'chart_bottompad':0,
 			'chart_leftpad':0,
 			'chart_rightpad':0,
 
 			// header formatting
-			'headerfill':'#ffffff',
-			'header_toppad':0,
-			'header_bottompad':12,
-			'header_leftpad':0,
+			'headerfill':'#eee',
+			'header_toppad':11,
+			'header_bottompad':4,
+			'header_leftpad':18,
 			'header_rightpad':0,
 
 			// footer formatting
-			'footerfill':'#ffffff',
-			'footer_toppad':4,
+			'footerfill':'#67c2a5',
+			'footer_toppad':8,
 			'footer_bottompad':5,
-			'footer_leftpad':0,
-			'footer_rightpad':0,
+			'footer_leftpad':18,
+			'footer_rightpad':14,
 
 			// x grids
-			'xgrid_fill':'white',
-			'xgrid_zerofill':'white',
-			'xgrid_minorfill':'white',
+			'xgrid_fill':'#bbb',
+			'xgrid_zerofill':'#bbb',
+			'xgrid_minorfill':'#bbb',
 			'xgrid_thickness':1,
 			'xgrid_zerothickness':2,
 			'xgrid_minorthickness':1,
@@ -808,9 +811,9 @@ window.playfair = (function () {
 			'xgrid_minoropacity':0,
 
 			// y grids
-			'ygrid_fill':'white',
-			'ygrid_zerofill':'white',
-			'ygrid_minorfill':'white',
+			'ygrid_fill':'#bbb',
+			'ygrid_zerofill':'#bbb',
+			'ygrid_minorfill':'#bbb',
 			'ygrid_thickness':1,
 			'ygrid_zerothickness':2,
 			'ygrid_minorthickness':1,
@@ -822,26 +825,26 @@ window.playfair = (function () {
 			'ygrid_minoropacity':0,
 
 			// x ticks
-			'xtick_textsize':'14px',
+			'xtick_textsize':'16px',
 			'xtick_textweight':400,
 			'xtick_textface':'Lato',
-			'xtick_textfill':'black',
+			'xtick_textfill':'#444',
 			'xtick_maxsize':.15,
 			'xtick_length':4,
 			'xtick_thickness':1,
-			'xtick_fill':'white',
+			'xtick_fill':'#bbb',
 			'xtick_to_xlabel':5,
 			'xtick_to_xaxis':5,
 
 			// y ticks
-			'ytick_textsize':'14px',
+			'ytick_textsize':'16px',
 			'ytick_textweight':400,
 			'ytick_textface':'Lato',
-			'ytick_textfill':'black',
+			'ytick_textfill':'#444',
 			'ytick_maxsize':.25,
 			'ytick_length':16,
 			'ytick_thickness':1,
-			'ytick_fill':'white',
+			'ytick_fill':'#bbb',
 			'ytick_to_ylabel':6,
 			'ytick_to_yaxis':20,
 
@@ -908,15 +911,11 @@ window.playfair = (function () {
 			'line_types':[[0,0],[5,5],[8,4,2,4],[8,8],[2,5]],
 			'line_minsize':2,
 			'line_maxsize':20,
-			'line_size':2,
+			'line_size':3,
 
 			// text geom specific
 			'text_minsize':8,
 			'text_maxsize':24,
-
-			// logo
-			'logo':0,
-			'logoscale':1,
 
 			// callout style
 			'callout_color':'#ababab',
@@ -932,6 +931,10 @@ window.playfair = (function () {
 			'segment_maxsize':20,
 			'segment_minsize':1,
 			'segment_linetypes':[[0,0],[5,5],[8,4,2,4],[8,8],[2,5]],
+
+			// logo
+			'logo':"data:image/png;base64,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",
+			'logoscale':2,
 		}
 
 		for (var property in default_parameters){
@@ -2695,7 +2698,7 @@ function draw_axes(playobj,xvar,yvar,shiftx,shifty,legend_height) {
 		} else {
 			string=String(yvar[i])
 		}
-		var temp=snapobj.text(playobj.left_margin+ylab_width+playobj.ytick_to_ylabel,0,string).attr({fill:this.ytick_textfill,ident:'yaxis','font-size':playobj.ytick_textsize,'font-weight':playobj.ytick_textweight,'font-family':playobj.ytick_textface,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
+		var temp=snapobj.text(playobj.left_margin+ylab_width+playobj.ytick_to_ylabel,0,string).attr({fill:playobj.ytick_textfill,ident:'yaxis','font-size':playobj.ytick_textsize,'font-weight':playobj.ytick_textweight,'font-family':playobj.ytick_textface,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
 		temp.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 		coords=temp.getBBox()
 		if (coords.x2>total_xoffset){total_xoffset=coords.x2}
@@ -2765,7 +2768,7 @@ function draw_axes(playobj,xvar,yvar,shiftx,shifty,legend_height) {
 
 		lines=multitext(string,{ident:'xaxis','font-size':playobj.xtick_textsize,'font-weight':playobj.xlabel_textweight,'font-family':playobj.xlabel_textface,'dominant-baseline':'text-before-edge','text-anchor':'middle'},maxwidth)
 		for(var j=0;j<lines.length;j++){
-			var temp=snapobj.text(0,j*parseInt(playobj.xtick_textsize),lines[j]).attr({fill:this.xtick_textfill,ident:'xaxis','font-size':playobj.xtick_textsize,'font-weight':playobj.xtick_textweight,'font-family':playobj.xtick_textface,'dominant-baseline':'text-before-edge','text-anchor':'middle',colorchange:'fill',context:'text_context_menu'})
+			var temp=snapobj.text(0,j*parseInt(playobj.xtick_textsize),lines[j]).attr({fill:playobj.xtick_textfill,ident:'xaxis','font-size':playobj.xtick_textsize,'font-weight':playobj.xtick_textweight,'font-family':playobj.xtick_textface,'dominant-baseline':'text-before-edge','text-anchor':'middle',colorchange:'fill',context:'text_context_menu'})
 			temp.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 			coords=temp.getBBox()
 			temp.attr({y:coords.y-coords.height})
@@ -2795,7 +2798,7 @@ function draw_axes(playobj,xvar,yvar,shiftx,shifty,legend_height) {
 			if (Object.prototype.toString.call(xvar[i])!='[object Date]' && ((parseInt(lines[j])>=1000 || parseInt(lines[j])<=-1000))){linesj=commas(lines[j])} else{linesj=lines[j]}
 			// var temp=snapobj.text(xstart_xcoord+xshift*shiftx+x_step*i,playobj.y+playobj.height-playobj.bottom_margin-playobj.footer_height-xlab_height-playobj.xtick_to_xlabel-total_yoffset+playobj.xtick_to_xaxis+j*parseInt(playobj.xtick_textsize),linesj).attr({fill:this.xtick_textfill,ident:'xaxis','font-size':playobj.xtick_textsize,'font-weight':playobj.xtick_textweight,'font-family':playobj.xtick_textface,'dominant-baseline':'text-before-edge','text-anchor':'middle',colorchange:'fill',context:'text_context_menu'})
 			var tempx=get_coord(xvar[i],playobj.xlimits,[xstart_xcoord,xfinal_xcoord],xvar.dtype,xvar,0,playobj.shiftx)
-			var temp=snapobj.text(tempx,playobj.y+playobj.height-playobj.bottom_margin-playobj.footer_height-xlab_height-playobj.xtick_to_xlabel-total_yoffset+playobj.xtick_to_xaxis+j*parseInt(playobj.xtick_textsize),linesj).attr({fill:this.xtick_textfill,ident:'xaxis','font-size':playobj.xtick_textsize,'font-weight':playobj.xtick_textweight,'font-family':playobj.xtick_textface,'dominant-baseline':'text-before-edge','text-anchor':'middle',colorchange:'fill',context:'text_context_menu'})
+			var temp=snapobj.text(tempx,playobj.y+playobj.height-playobj.bottom_margin-playobj.footer_height-xlab_height-playobj.xtick_to_xlabel-total_yoffset+playobj.xtick_to_xaxis+j*parseInt(playobj.xtick_textsize),linesj).attr({fill:playobj.xtick_textfill,ident:'xaxis','font-size':playobj.xtick_textsize,'font-weight':playobj.xtick_textweight,'font-family':playobj.xtick_textface,'dominant-baseline':'text-before-edge','text-anchor':'middle',colorchange:'fill',context:'text_context_menu'})
 			temp.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 			coords=temp.getBBox()
 			temp.attr({y:coords.y-coords.height})
@@ -2844,7 +2847,7 @@ function draw_axes(playobj,xvar,yvar,shiftx,shifty,legend_height) {
 		if (parseInt(string)>=1000 || parseInt(string)<=-1000){linesj=commas(string)}
 		var tempy=get_coord(string,playobj.ylimits,[ystart_ycoord,yfinal_ycoord],yvar.dtype,yvar,1,playobj.shifty,chartobject.ybar)
 		lines=multitext(string,{ident:'yaxis','font-size':playobj.ytick_textsize,'font-weight':playobj.ytick_textweight,'font-family':playobj.ytick_textface,'dominant-baseline':'text-before-edge','text-anchor':'end'},maxwidth)
-		var temp=snapobj.text(playobj.x+total_xoffset-playobj.ytick_to_yaxis,tempy,lines).attr({fill:this.ytick_textfill,ident:'yaxis','font-size':playobj.ytick_textsize,'font-weight':playobj.ytick_textweight,'font-family':playobj.ytick_textface,'dominant-baseline':'text-before-edge','text-anchor':'end',colorchange:'fill',context:'text_context_menu'})
+		var temp=snapobj.text(playobj.x+total_xoffset-playobj.ytick_to_yaxis,tempy,lines).attr({fill:playobj.ytick_textfill,ident:'yaxis','font-size':playobj.ytick_textsize,'font-weight':playobj.ytick_textweight,'font-family':playobj.ytick_textface,'dominant-baseline':'text-before-edge','text-anchor':'end',colorchange:'fill',context:'text_context_menu'})
 		temp.selectAll("tspan:not(:first-child)").attr({x:temp.attr('x'),dy:parseInt(playobj.ytick_textsize)})
 		temp.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 		coords=temp.getBBox()
