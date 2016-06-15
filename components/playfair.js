@@ -1495,6 +1495,10 @@ function draw_lines(axes,line,snapobj){
 			return row[line.grouping.type]===groups[i][1]
 		})
 
+		var current=chartobject.dataset.filter(function(row){
+			return row[connect]!==undefined
+		})
+
 		// order according to the connect variable, connect on x by default
 		if(chartobject.flatdata[connect].dtype=='blah ignore this'){
 			current.sort(function(a,b){
@@ -1506,6 +1510,8 @@ function draw_lines(axes,line,snapobj){
 				return a[connect]-b[connect]
 			})
 		}
+
+		console.log(current)
 
 		// check for sizing variable and set line width
 		if(line.size!=='none'){
@@ -1535,7 +1541,6 @@ function draw_lines(axes,line,snapobj){
 
 		var path=''
 		// now loop through points in the line
-		console.log(current,connect)
 		for(var j=0;j<current.length;j++){
 			var sub_current=current[j]
 
@@ -1543,12 +1548,10 @@ function draw_lines(axes,line,snapobj){
 				var sub_next=current[j+1]
 			} catch(err){}
 			if(sub_current[connect]!==undefined){
-				console.log(sub_current[line.xvar],sub_current[line.yvar])
 				if((sub_current[line.xvar]==undefined && connect==line.yvar) || (sub_current[line.yvar]==undefined && connect==line.xvar)){
 					// set various values for points. locations
 					var x_loc=get_coord(sub_next[line.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[line.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
 					var y_loc=get_coord(sub_next[line.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[line.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
-					console.log('1',x_loc,y_loc)
 					// add to path or start path
 					if(isNaN(y_loc)==false){
 						if(j==0){
@@ -1561,7 +1564,6 @@ function draw_lines(axes,line,snapobj){
 					// set various values for points. locations
 					var x_loc=get_coord(sub_current[line.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[line.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
 					var y_loc=get_coord(sub_current[line.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[line.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
-					console.log('2',x_loc,y_loc)
 					// add to path or start path
 					if(j==0){
 						path=path+'M'+x_loc+','+y_loc
