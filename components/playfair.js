@@ -1495,7 +1495,7 @@ function draw_lines(axes,line,snapobj){
 			return row[line.grouping.type]===groups[i][1]
 		})
 
-		var current=chartobject.dataset.filter(function(row){
+		current=current.filter(function(row){
 			return row[connect]!==undefined
 		})
 
@@ -1765,6 +1765,10 @@ function draw_steps(axes,step,snapobj){
 			return row[step.grouping.color]===groups[i][0]
 		}).filter(function(row){
 			return row[step.grouping.type]===groups[i][1]
+		})
+
+		current=current.filter(function(row){
+			return row[connect]!==undefined
 		})
 
 		// order according to the connect variable, connect on x by default
