@@ -127,6 +127,13 @@ function savetoserver() {
 		var temp=chartobject
 		delete temp['svg']
 		delete temp['logo']
+
+		// store dtypes so they can be retrieved after load (stringify obliterates them)
+		temp['dtypes']={}
+		for (var key in temp.flatdata){
+			temp.dtypes[key]=temp.flatdata[key].dtype
+		}
+
 		dictionary['chartobject']=JSON.stringify(temp)
 		dictionary['filename']=filename
 
@@ -191,7 +198,6 @@ function loadfromserver() {
 }
 
 function load_populate(response) {
-
 	svg=response.split('\n')[1]
 	svg=decodeURIComponent(svg)
 	settings=response.split('\n')[2]
@@ -300,6 +306,15 @@ function load_populate(response) {
 	grapharea=Snap('#grapharea')
 	shadowfilter=grapharea.filter(Snap.filter.shadow(0, 2, 3))
 	grapharea.append(shadowfilter)
+
+	// re-populate key - this won't get you the same key options as the saved graph
+	// - just a totally new fresh key.
+	$(".variable_select").change()
+
+	// re-associate dtypes with appropriate variables
+	for(var key in chartobject.flatdata){
+		chartobject.flatdata[key].dtype=chartobject.dtypes[key]
+	}
 }
 
 $(document).on('click', '.list-group a', function(e){
