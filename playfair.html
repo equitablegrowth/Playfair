@@ -1194,6 +1194,8 @@
 				<li tab='settings_color'>Color Scales</li>
 				<li tab='settings_barcharts'>Barcharts</li>
 				<li tab='settings_linescatter'>Line/Scatter</li>
+				<li tab='settings_callouts'>Callouts</li>
+				<li tab='settings_callouts'>Miscellaneous</li>
 			</ul>
 
 			<div class='tab-content'>
@@ -1308,13 +1310,18 @@
 			<div class='tab-content'>
 				<div class='row'>
 					<div class='col-md-4'>
-						<div class="labeled_elewide"><label>Hed size</label><span class='styled-inputwide'><input type="text styled-input" placeholder="20px" id='hedsize'></span></div>
+						<div class="labeled_elewide"><label>Hed size</label><span class='styled-inputwide'><input type="text styled-input" placeholder="24px" id='hedsize'></span></div>
 					</div>
 					<div class='col-md-4'>
 						<div class="labeled_elewide"><label>Hed weight</label><span class='styled-inputwide'><input type="text styled-input" placeholder="700" id='hedweight'></span></div>
 					</div>
 					<div class='col-md-4'>
 						<div class="labeled_elewide"><label>Hed face</label><span class='styled-inputwide'><input type="text styled-input" placeholder="Lato" id='hedface'></span></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Hed size min</label><span class='styled-inputwide'><input type="text styled-input" placeholder="22px" id='hedsizemin'></span></div>
 					</div>
 				</div>
 				<div class='row'>
@@ -1326,6 +1333,14 @@
 					</div>
 					<div class='col-md-4'>
 						<div class="labeled_elewide"><label>Dek face</label><span class='styled-inputwide'><input type="text styled-input" placeholder="Lato" id='dekface'></span></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Dek size min</label><span class='styled-inputwide'><input type="text styled-input" placeholder="16px" id='deksizemin'></span></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Dek max lines</label><span class='styled-inputwide'><input type="text styled-input" placeholder="2" id='maxdeklines'></span></div>
 					</div>
 				</div>
 				<div class='row'>
@@ -1407,6 +1422,11 @@
 				</div>
 				<div class='row'>
 					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>X label max length</label><span class='styled-inputwide'><input type="text styled-input" placeholder="300" id='xlabel_maxlength'></span></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
 						<div class="labeled_elewide"><label>Y label size</label><span class='styled-inputwide'><input type="text styled-input" placeholder="14px" id='ylabel_textsize'></span></div>
 					</div>
 					<div class='col-md-4'>
@@ -1418,6 +1438,11 @@
 				</div>
 				<div class='row'>
 					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Y label max length</label><span class='styled-inputwide'><input type="text styled-input" placeholder="300" id='ylabel_maxlength'></span></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
 						<div class="labeled_elewide"><label>Legend size</label><span class='styled-inputwide'><input type="text styled-input" placeholder="12px" id='legend_textsize'></span></div>
 					</div>
 					<div class='col-md-4'>
@@ -1425,6 +1450,17 @@
 					</div>
 					<div class='col-md-4'>
 						<div class="labeled_elewide"><label>Legend face</label><span class='styled-inputwide'><input type="text styled-input" placeholder="Lato" id='legend_textface'></span></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Legend title size</label><span class='styled-inputwide'><input type="text styled-input" placeholder="12px" id='legend_titletextsize'></span></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Legend title weight</label><span class='styled-inputwide'><input type="text styled-input" placeholder="600" id='legend_titletextweight'></span></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Legend title face</label><span class='styled-inputwide'><input type="text styled-input" placeholder="Lato" id='legend_titletextface'></span></div>
 					</div>
 				</div>
 				<div class='row'>
@@ -1481,6 +1517,11 @@
 					<div class='col-md-4'>
 						<div class="labeled_elewide"><label>Ylabel fill</label><span class='styled-inputwide'><input type="text styled-input" placeholder="black" id='ylabel_textfill'></span></div>
 					</div>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Legend title fill</label><span class='styled-inputwide'><input type="text styled-input" placeholder="black" id='legend_titletextfill'></span></div>
+					</div>
+				</div>
+				<div class='row'>
 					<div class='col-md-4'>
 						<div class="labeled_elewide"><label>Trend fill</label><span class='styled-inputwide'><input type="text styled-input" placeholder="#c64027" id='trend_textcolor'></span></div>
 					</div>
@@ -1625,7 +1666,7 @@
 			<div class='tab-content'>
 				<div class='row'>
 					<div class='col-md-4'>
-						<div class="labeled_elewide"><label>Legend location</label><span class='styled-inputwide'><input type="text styled-input" placeholder="top" id='legend_location'></span></div>
+						<div class="labeled_elewide"><label>Legend location</label><span class='styled-inputwide'><input type="text styled-input" placeholder="float" id='legend_location'></span></div>
 					</div>
 					<div class='col-md-4'>
 						<div class="labeled_elewide"><label>Legend maxwidth</label><span class='styled-inputwide'><input type="text styled-input" placeholder=".1" id='legend_maxwidth'></span></div>
@@ -1690,6 +1731,11 @@
 						<div class="labeled_elewide"><label>Qualitative color</label><span class='styled-inputwide'><input type="text styled-input" placeholder='["#67c2a5","#fc8d62","#8da0cb","#e78ac3","#a6d854","#ffd92f","#e5c494","#b3b3b3"]' id='qualitative_color'></span></div>
 					</div>
 				</div>
+				<div class='row'>
+					<div class='col-md-12'>
+						<div class="labeled_elewide"><label>Grayscale Color</label><span class='styled-inputwide'><input type="text styled-input" placeholder='["#999999","#666666","#333333","#000000"]' id='grayscale_color'></span></div>
+					</div>
+				</div>
 			</div>
 
 			<div class='tab-content'>
@@ -1740,7 +1786,18 @@
 				</div>
 				<div class='row'>
 					<div class='col-md-4'>
-						<div class="labeled_elewide"><label>Linechart lineopacity</label><span class='styled-inputwide'><input type="text styled-input" placeholder="1" id='linechart_strokeopacity'></span></div>
+						<div class="labeled_elewide"><label>Line types</label><span class='styled-inputwide'><input type="text styled-input" placeholder="[[0,0],[5,5],[8,4,2,4],[8,8],[2,5]]" id='line_types'></span></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Line min width</label><span class='styled-inputwide'><input type="text styled-input" placeholder="2" id='line_minsize'></span></div>
+					</div>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Line max width</label><span class='styled-inputwide'><input type="text styled-input" placeholder="30" id='line_maxsize'></span></div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-4'>
+						<div class="labeled_elewide"><label>Line width</label><span class='styled-inputwide'><input type="text styled-input" placeholder="3" id='line_size'></span></div>
 					</div>
 					<div class='col-md-4'>
 					</div>
@@ -1750,6 +1807,8 @@
 			</div>
 		</div>
 	</div>
+
+
 
 
 <!-- ************************* END TAB CONTENT **************************** -->
