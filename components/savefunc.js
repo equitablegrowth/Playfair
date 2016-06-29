@@ -217,7 +217,7 @@ function load_populate(response) {
 			$('#'+input).val(inputs[input][1])
 		}
 		if(inputs[input][0]=='radio'){
-			$('#'+input).attr('checked',inputs[input][1])
+			$('#'+input).prop('checked',inputs[input][1])
 		}
 		if(inputs[input][0]=='checkbox'){
 			$('#'+input).prop('checked',inputs[input][1])

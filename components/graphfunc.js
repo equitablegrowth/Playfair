@@ -211,7 +211,7 @@ function preview() {
 }
 
 // redraw is the main graphing setup function. Gets variable values and passes them to playfair.js
-function redraw() {
+function redraw(keep) {
 	// try{
 		// set size
 		$('#grapharea').attr('height',height)
@@ -266,6 +266,11 @@ function redraw() {
 
 			// Why not just use.clear()? Because it will destroy all the embedded font declarations
 			// this is apparently a known bug in Snap
+			if(keep){
+				console.log('keep')
+				annotations=grapharea.selectAll("[annotation]")
+			} 
+
 			grapharea.selectAll('rect').remove()
 			grapharea.selectAll('text').remove()
 			grapharea.selectAll('line').remove()
@@ -404,6 +409,13 @@ function redraw() {
 						$('#customy').val(temp)
 					} else{
 						$('#customy').val(chartobject.yarray)
+					}
+				}
+
+				if(keep){
+					console.log('keeping')
+					for (var i=0;i<annotations.length;i++){
+						grapharea.append(annotations[i])
 					}
 				}
 			})

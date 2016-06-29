@@ -1938,18 +1938,23 @@
 
 <div class='text-center unselectable bottom'>
 
-<div class='btn-group'>
-	<button type="button" title='Reset the interactive' class="btn btn-default balign" onclick='redraw()'><i class="fa fa-refresh"></i> Redraw</button><br><br>
+
+<div class='btn-group' role='group'>
+	<button type="button" class="btn btn-default" id='redraw1' onclick='redraw()'><i class="fa fa-refresh"></i> Redraw</button>
+	<button type="button" class="btn btn-default" id='redraw2' onclick='redraw(1)'>Redraw w/annotations</button>
 </div>
 
 <div class="btn-group" role="group">
 	<button type="button" class="btn btn-default" id='savepng' onclick=savepng()><i class="fa fa-download"></i> Download PNG</button>
 	<button type="button" class="btn btn-default" id='savesvg' onclick=savesvg()><i class="fa fa-arrows-h"></i> Download SVG</button>
 </div>
+
 <div class="btn-group" role="group">
 	<button type="button" class="btn btn-default" id='savetext' onclick=cloudsave()><i class="fa fa-cloud-upload"></i> Save</button>
-	<button type="button" class="btn btn-default btn-file" id='importtext' onclick=cloudload()><i class="fa fa-cloud-download"></i> Load</button>
-</div><hr>
+	<button type="button" class="btn btn-default" id='importtext' onclick=cloudload()><i class="fa fa-cloud-download"></i> Load</button>
+</div>
+
+<hr>
 <small>[<a href='https://github.com/equitablegrowth/Playfair/#boards?repos=44823593'>report a bug</a>]</small>
 </div>
 
@@ -2234,7 +2239,7 @@ function reset(){
 			$('#'+input).val(base_input_dict[input][1])
 		}
 		if(base_input_dict[input][0]=='radio'){
-			$('#'+input).attr('checked',base_input_dict[input][1])
+			$('#'+input).prop('checked',base_input_dict[input][1])
 		}
 		if(base_input_dict[input][0]=='checkbox'){
 			$('#'+input).prop('checked',base_input_dict[input][1])

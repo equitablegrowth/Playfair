@@ -151,7 +151,7 @@ function addtext(target) {
 		var annofill='black'
 	}
 
-	var text=grapharea.text(target.clientX-svgx,target.clientY-svgy,'Text Annotation').attr({'font-family':annoface,'font-size':annosize,'text-anchor':'start','fill':annofill,'font-weight':annoweight,'dominant-baseline':'text-before-edge',cursor:'pointer',colorchange:'fill',context:'text_context_menu'})
+	var text=grapharea.text(target.clientX-svgx,target.clientY-svgy,'Text Annotation').attr({'font-family':annoface,'font-size':annosize,'text-anchor':'start','fill':annofill,'font-weight':annoweight,'dominant-baseline':'text-before-edge',cursor:'pointer',colorchange:'fill',context:'text_context_menu',annotation:1})
 	console.log(text,annosize)
 	text.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 }
@@ -298,7 +298,7 @@ function startpath(e) {
 
 	drawpath=1
 	pathstart=[e.clientX-svgx,e.clientY-svgy]
-	circstart=grapharea.circle(pathstart[0],pathstart[1],1.5).attr({class:'callout',stroke:callstroke,'stroke-width':callwidth,'shape-rendering':'geometricPrecision',fill:'none',context:'callout_context_menu','stroke-dasharray':calldash})
+	circstart=grapharea.circle(pathstart[0],pathstart[1],1.5).attr({annotation:1,class:'callout',stroke:callstroke,'stroke-width':callwidth,'shape-rendering':'geometricPrecision',fill:'none',context:'callout_context_menu','stroke-dasharray':calldash})
 	grapharea.click(endpath)
 	grapharea.mousemove(tracker)
 }
@@ -350,7 +350,7 @@ function endpath(e) {
 	}
 
 	path_string='M'+pathstart[0]+' '+(pathstart[1]+yoffset)+'L'+pathstart[0]+' '+(e.clientY-svgy)+'L'+(e.clientX-svgx)+' '+(e.clientY-svgy)
-	finalline=grapharea.path(path_string).attr({class:'callout','stroke-width':callwidth,'stroke':callstroke,'shape-rendering':'crispEdges',fill:'none',colorchange:'stroke',context:'callout_context_menu','stroke-dasharray':calldash})
+	finalline=grapharea.path(path_string).attr({annotation:1,class:'callout','stroke-width':callwidth,'stroke':callstroke,'shape-rendering':'crispEdges',fill:'none',colorchange:'stroke',context:'callout_context_menu','stroke-dasharray':calldash})
 	var temp_group=grapharea.group(finalline,circstart)
 	temp_group.drag()
 }
@@ -370,13 +370,13 @@ function endarrow(e) {
 		var calldash=[]
 	}
 
-	var arrow = grapharea.path('M0,0 L0,4 L6,2 L0,0').attr({})
-	var amarker = arrow.marker(0,0,6,4,0,2).attr({});
+	var arrow = grapharea.path('M0,0 L0,4 L6,2 L0,0').attr({annotation:1})
+	var amarker = arrow.marker(0,0,6,4,0,2).attr({annotation:1});
 	drawpath=0
 	grapharea.unmousemove(tracker)
 	grapharea.unclick(endarrow)
 	try{trackline.remove()}catch(err){}
-	finalline=grapharea.line(pathstart[0],pathstart[1],e.clientX-svgx,e.clientY-svgy).attr({arrow:1,ident:'none',class:'callout','stroke-width':callwidth,'stroke':callstroke,'shape-rendering':'auto','marker-end':amarker,colorchange:'stroke',context:'callout_context_menu','stroke-dasharray':calldash})
+	finalline=grapharea.line(pathstart[0],pathstart[1],e.clientX-svgx,e.clientY-svgy).attr({annotation:1,arrow:1,ident:'none',class:'callout','stroke-width':callwidth,'stroke':callstroke,'shape-rendering':'auto','marker-end':amarker,colorchange:'stroke',context:'callout_context_menu','stroke-dasharray':calldash})
 	finalline.drag()
 }
 
