@@ -125,11 +125,12 @@
 
 	/* main menus */
 	.nav>li>a {padding:4px;padding-left:8px;padding-right:8px;border-bottom:0px;}
-	.nav-tabs>li>a {border-radius:0px;border-top:0px;border-right:0px;border-left:0px;}
-	.nav-tabs>li.active>a {border-bottom:3px solid #67c2a5;border-top:0px;border-right:0px;border-left:0px}
-	.nav-tabs>li.active>a:focus {border-bottom:3px solid #67c2a5;border-top:0px;border-right:0px;border-left:0px}
-	.nav-tabs>li.active>a:hover {border-bottom:3px solid #67c2a5;border-top:0px;border-right:0px;border-left:0px;background-color:none;}
-	.nav_tabs>li:hover {border-bottom:3px solid #67c2a5}
+	.nav-tabs>li:not(.list_button)>a {border-radius:0px;border-top:0px;border-right:0px;border-left:0px;}
+	.nav-tabs>li:not(.list_button).active>a {border-bottom:3px solid #67c2a5;border-top:0px;border-right:0px;border-left:0px}
+	.nav-tabs>li:not(.list_button).active>a:focus {border-bottom:3px solid #67c2a5;border-top:0px;border-right:0px;border-left:0px}
+	.nav-tabs>li:not(.list_button).active>a:hover {border-bottom:3px solid #67c2a5;border-top:0px;border-right:0px;border-left:0px;background-color:none;}
+	.nav_tabs>li:not(.list_button):hover {border-bottom:3px solid #67c2a5}
+	.nav>.list_button{cursor:pointer;font-size:.8em;border:1px solid #67c2a5;border-radius:2px;background:#dff0d8;padding:2 4 2 4;margin-left:16px;margin-top:4px;}
 
 	/* submenus */
 	.v-nav{width:100%;margin:0;margin-top:1px;}

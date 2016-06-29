@@ -253,6 +253,7 @@
 	<!-- <li class='disabled'><a href="#waffle">Waffle</a></li>	 -->
 	<!-- <li class='disabled'><a href="#maps">Choropleth</a></li>  -->
 	<li><a data-toggle='tab' href="#settings">Settings</a></li>
+	<li class='list_button' onclick='reset()'>Reset all fields</a></span>
 </ul>
 
 <div class="tab-content">
@@ -373,7 +374,7 @@
 							<div class="labeled_ele">
 								<label>Height</label>
 								<span class='styled-input'>
-									<input type="text styled-input" placeholder="480" id='gheight' onchange="changedimensions()">
+									<input type="text styled-input" placeholder="520" id='gheight' onchange="changedimensions()">
 								</span>
 							</div>
 						</div>
@@ -2194,6 +2195,67 @@ function arraysAreIdentical(arr1, arr2){
 function destroy(id){
 	console.log(id)
 	$('#'+id).remove()
+}
+
+// reset all fields
+$(document).ready(function(){
+	base_input_dict={}
+	var inputs, index;
+
+	inputs = document.getElementsByTagName('input');
+	for (index = 0; index < inputs.length; ++index) {
+	    if(inputs[index].type=='radio' || inputs[index].type=='checkbox'){
+	    	base_input_dict[inputs[index].id]=[inputs[index].type,inputs[index].checked]
+	    } else if (inputs[index].type=='text'){
+	    	base_input_dict[inputs[index].id]=[inputs[index].type,inputs[index].value]
+	    }
+	}
+
+	selects=document.getElementsByTagName('select');
+	for (index=0; index < selects.length; ++index){
+		base_input_dict[selects[index].id]=['dropdown',selects[index].value]
+	}
+
+	base_input_dict['graphtype']=['graphtype',graph_type]
+})
+
+function reset(){
+	$('#data_text').val('').blur()
+	loadData()
+	$(".variable_select").trigger('change')
+	populate_variables()
+
+	alertbox.className = "alert alert-success";
+	alertbox.innerHTML = "<b>Enter some data and I'll diagnose it for you</b>"
+	alertbox.style.display='block'
+
+	for(var input in base_input_dict){
+		if(base_input_dict[input][0]=='text'){
+			$('#'+input).val(base_input_dict[input][1])
+		}
+		if(base_input_dict[input][0]=='radio'){
+			$('#'+input).attr('checked',base_input_dict[input][1])
+		}
+		if(base_input_dict[input][0]=='checkbox'){
+			$('#'+input).prop('checked',base_input_dict[input][1])
+		}
+		if(base_input_dict[input][0]=='dropdown'){
+			$('#'+input).val(base_input_dict[input][1])
+		}
+		if(base_input_dict[input][0]=='graphtype'){
+			graph_type=base_input_dict[input][1]
+		}
+	}
+
+	if (base_input_dict['gwidth'][1]!=''){
+		width=parseFloat(base_input_dict['gwidth'][1])
+	} else {width=745}
+	if (base_input_dict['gheight'][1]!=''){
+		height=parseFloat(base_input_dict['gheight'][1])
+	} else {height=520}
+
+	$('#grapharea').attr('height',height)
+	$('#grapharea').attr('width',width)
 }
 
 </script>
