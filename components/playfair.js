@@ -92,7 +92,6 @@ window.playfair = (function () {
 		var ystrings=[]
 
 		for(var key in geom_dict){
-			console.log(key)
 			try{
 				xtypes.push(data[geom_dict[key]['xvar']].dtype)
 				ytypes.push(data[geom_dict[key]['yvar']].dtype)
@@ -304,8 +303,6 @@ window.playfair = (function () {
 						} catch(err){}
 					}
 				}
-
-				console.log(xmins,xmaxes)
 
 				if(geom_dict[key].yvar!==undefined){
 					if(data[geom_dict[key]['yvar']].dtype==='date'){
@@ -2026,7 +2023,7 @@ function draw_text(axes,text,snapobj){
 }
 
 function draw_shade(axes,shade,snapobj){
-	console.log(axes)
+	// console.log(axes)
 	// axes are [xleft,xright,ybottom,ytop]
 	// shade is {'xvar':x_var,'yvar':y_var}
 
@@ -2048,14 +2045,14 @@ function draw_shade(axes,shade,snapobj){
 	}
 
 	if(shade.yarr.length>0){
-		for(var i=0;i<shade.xarr.length;i++){
+		for(var i=0;i<shade.yarr.length;i++){
 			var current=shade.yarr[i]
 			var x_left=axes[0]
 			var x_right=axes[1]
-			var y_top=get_coord(current[0],chartobject.ylimits,[axes[2],axes[3]],'nottext',chartobject.yarray,1,chartobject.shifty)
-			var y_bottom=get_coord(current[1],chartobject.ylimits,[axes[2],axes[3]],'nottext',chartobject.yarray,1,chartobject.shifty)
+			var y_bottom=get_coord(current[0],chartobject.ylimits,[axes[2],axes[3]],'nottext',chartobject.yarray,1,chartobject.shifty)
+			var y_top=get_coord(current[1],chartobject.ylimits,[axes[2],axes[3]],'nottext',chartobject.yarray,1,chartobject.shifty)
 
-			if(y_top<=axes[3] | y_bottom>=axes[2]){
+			if((y_top>=axes[3] & y_top<=axes[2]) | (y_bottom<=axes[2] & y_bottom>=axes[3])){
 				if(y_top<axes[3]){y_top=axes[3]}
 				if(y_bottom>axes[2]){y_bottom=axes[2]}
 				snapobj.path('M'+x_left+','+y_top+'L'+x_right+','+y_top+'L'+x_right+','+y_bottom+'L'+x_left+','+y_bottom+'L'+x_left+','+y_top).attr({fill:'#fff','fill-opacity':.6,'shape-rendering':'crispEdges'})
@@ -2776,7 +2773,7 @@ function draw_axes(playobj,xvar,yvar,shiftx,shifty,legend_height) {
 		for(var j=0;j<lines.length;j++){
 			var temp=snapobj.text(0,j*parseInt(playobj.xtick_textsize),lines[j]).attr({fill:playobj.xtick_textfill,ident:'xaxis','font-size':playobj.xtick_textsize,'font-weight':playobj.xtick_textweight,'font-family':playobj.xtick_textface,'dominant-baseline':'text-before-edge','text-anchor':'middle',colorchange:'fill',context:'text_context_menu'})
 			temp.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
-			coords=temp.getBBox()
+			var coords=temp.getBBox()
 			temp.attr({y:coords.y-coords.height})
 			temp.remove()
 		}
@@ -2784,14 +2781,15 @@ function draw_axes(playobj,xvar,yvar,shiftx,shifty,legend_height) {
 	}
 
 	// subtract graph start y from yoffset and add xtick_to_xaxis to get the actual width of the yoffset.
-	total_yoffset=total_yoffset+playobj.xtick_to_xaxis
+	var total_yoffset=total_yoffset+playobj.xtick_to_xaxis
 
 	// now make a second pass on both axes and draw the actual ticks/lines/tick labels using known yoffset and xoffset
 	// x axis objects first, y_end is the top of the functional graphing area:
-	y_end=playobj.y+playobj.head_height+playobj.header_bottompad+playobj.header_toppad+playobj.top_margin+legend_height+playobj.legend_toppad+playobj.legend_bottompad
+	var y_end=playobj.y+playobj.head_height+playobj.header_bottompad+playobj.header_toppad+playobj.top_margin+legend_height+playobj.legend_toppad+playobj.legend_bottompad
 	
 	for(var i=0;i<xvar.length;i++){
 		// x-axis labels
+		var mid=Math.abs((parseFloat(xvar[1])-parseFloat(xvar[0]))/2)
 
 		if(Object.prototype.toString.call(xvar[i])==='[object Date]'){
 			string=formatDate(xvar[i],Math.max(...xvar)-Math.min(...xvar))
@@ -2804,15 +2802,16 @@ function draw_axes(playobj,xvar,yvar,shiftx,shifty,legend_height) {
 			if (Object.prototype.toString.call(xvar[i])!='[object Date]' && ((parseInt(lines[j])>=1000 || parseInt(lines[j])<=-1000))){linesj=commas(lines[j])} else{linesj=lines[j]}
 			// var temp=snapobj.text(xstart_xcoord+xshift*shiftx+x_step*i,playobj.y+playobj.height-playobj.bottom_margin-playobj.footer_height-xlab_height-playobj.xtick_to_xlabel-total_yoffset+playobj.xtick_to_xaxis+j*parseInt(playobj.xtick_textsize),linesj).attr({fill:this.xtick_textfill,ident:'xaxis','font-size':playobj.xtick_textsize,'font-weight':playobj.xtick_textweight,'font-family':playobj.xtick_textface,'dominant-baseline':'text-before-edge','text-anchor':'middle',colorchange:'fill',context:'text_context_menu'})
 			var tempx=get_coord(xvar[i],playobj.xlimits,[xstart_xcoord,xfinal_xcoord],xvar.dtype,xvar,0,playobj.shiftx)
+			var tempxmid=get_coord(parseFloat(xvar[i])+parseFloat(mid),playobj.xlimits,[xstart_xcoord,xfinal_xcoord],xvar.dtype,xvar,0,playobj.shiftx)
 			var temp=snapobj.text(tempx,playobj.y+playobj.height-playobj.bottom_margin-playobj.footer_height-xlab_height-playobj.xtick_to_xlabel-total_yoffset+playobj.xtick_to_xaxis+j*parseInt(playobj.xtick_textsize),linesj).attr({fill:playobj.xtick_textfill,ident:'xaxis','font-size':playobj.xtick_textsize,'font-weight':playobj.xtick_textweight,'font-family':playobj.xtick_textface,'dominant-baseline':'text-before-edge','text-anchor':'middle',colorchange:'fill',context:'text_context_menu'})
 			temp.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
-			coords=temp.getBBox()
+			var coords=temp.getBBox()
 			temp.attr({y:coords.y-coords.height})
 		}
 		// x-axis ticks, grid lines, and minor grid lines
 		y_start=playobj.y+playobj.height-total_yoffset-playobj.footer_height-playobj.bottom_margin-xlab_height-playobj.xtick_to_xlabel-coords.height
 		var temp_line=snapobj.line(tempx,y_start,tempx,y_end).attr({stroke:playobj.xgrid_fill,'stroke-width':playobj.xgrid_thickness,'stroke-dasharray':playobj.xgrid_dasharray,opacity:playobj.xgrid_opacity,'shape-rendering':'crispEdges'})
-		if (i!=xvar.length-1){var temp_minorline=snapobj.line(tempx,y_start,tempx,y_end).attr({stroke:playobj.xgrid_minorfill,'stroke-width':playobj.xgrid_minorthickness,opacity:playobj.xgrid_minoropacity,'stroke-dasharray':playobj.xgrid_minordasharray,'shape-rendering':'crispEdges'})}
+		if (i!=xvar.length-1){var temp_minorline=snapobj.line(tempxmid,y_start,tempxmid,y_end).attr({stroke:playobj.xgrid_minorfill,'stroke-width':playobj.xgrid_minorthickness,opacity:playobj.xgrid_minoropacity,'stroke-dasharray':playobj.xgrid_minordasharray,'shape-rendering':'crispEdges'})}
 		var temp_tick=snapobj.line(tempx,y_start,tempx,y_start+playobj.xtick_length).attr({stroke:playobj.xtick_fill,'stroke-width':playobj.xtick_thickness,'shape-rendering':'crispEdges'})
 		
 		// handle x=0 as appropriate
@@ -2840,9 +2839,10 @@ function draw_axes(playobj,xvar,yvar,shiftx,shifty,legend_height) {
 
 	// Now go back to the y ticks and redraw with appropriate coords
 	maxwidth=(playobj.ytick_maxsize*playobj.width)-playobj.left_margin
-	console.log(maxwidth)
+	// console.log(maxwidth)
 	for(var i=0;i<yvar.length;i++){
 		// y-axis labels
+		var mid2=Math.abs((parseFloat(yvar[1])-parseFloat(yvar[0]))/2)
 
 		if(Object.prototype.toString.call(yvar[i])==='[object Date]'){
 			string=formatDate(yvar[i],Math.max(...yvar)-Math.min(...yvar))
@@ -2852,6 +2852,7 @@ function draw_axes(playobj,xvar,yvar,shiftx,shifty,legend_height) {
 
 		if (parseInt(string)>=1000 || parseInt(string)<=-1000){linesj=commas(string)}
 		var tempy=get_coord(string,playobj.ylimits,[ystart_ycoord,yfinal_ycoord],yvar.dtype,yvar,1,playobj.shifty,chartobject.ybar)
+		var tempymid=get_coord(parseFloat(string)+mid2,playobj.ylimits,[ystart_ycoord,yfinal_ycoord],yvar.dtype,yvar,1,playobj.shifty,chartobject.ybar)
 		lines=multitext(string,{ident:'yaxis','font-size':playobj.ytick_textsize,'font-weight':playobj.ytick_textweight,'font-family':playobj.ytick_textface,'dominant-baseline':'text-before-edge','text-anchor':'end'},maxwidth)
 		var temp=snapobj.text(playobj.x+total_xoffset-playobj.ytick_to_yaxis,tempy,lines).attr({fill:playobj.ytick_textfill,ident:'yaxis','font-size':playobj.ytick_textsize,'font-weight':playobj.ytick_textweight,'font-family':playobj.ytick_textface,'dominant-baseline':'text-before-edge','text-anchor':'end',colorchange:'fill',context:'text_context_menu'})
 		temp.selectAll("tspan:not(:first-child)").attr({x:temp.attr('x'),dy:parseInt(playobj.ytick_textsize)})
@@ -2871,7 +2872,7 @@ function draw_axes(playobj,xvar,yvar,shiftx,shifty,legend_height) {
 
 		// y-axis ticks, grid lines, and minor grid lines
 		var temp_line=snapobj.line(playobj.x+total_xoffset,tempy,playobj.x+playobj.width-playobj.right_margin,tempy).attr({stroke:playobj.ygrid_fill,'stroke-width':playobj.ygrid_thickness,'stroke-dasharray':playobj.ygrid_dasharray,opacity:playobj.ygrid_opacity,'shape-rendering':'crispEdges'})
-		if(i!=yvar.length-1){var temp_minorline=snapobj.line(playobj.x+total_xoffset,tempy,playobj.x+playobj.width-playobj.right_margin,tempy).attr({stroke:playobj.ygrid_minorfill,'stroke-width':playobj.ygrid_minorthickness,opacity:playobj.ygrid_minoropacity,'stroke-dasharray':playobj.ygrid_minordasharray,'shape-rendering':'crispEdges'})}
+		if(i!=yvar.length-1){var temp_minorline=snapobj.line(playobj.x+total_xoffset,tempymid,playobj.x+playobj.width-playobj.right_margin,tempymid).attr({stroke:playobj.ygrid_minorfill,'stroke-width':playobj.ygrid_minorthickness,opacity:playobj.ygrid_minoropacity,'stroke-dasharray':playobj.ygrid_minordasharray,'shape-rendering':'crispEdges'})}
 		var temp_tick=snapobj.line(playobj.x+total_xoffset,tempy,playobj.x+total_xoffset-playobj.ytick_length,tempy).attr({stroke:playobj.ytick_fill,'stroke-width':playobj.ytick_thickness,'shape-rendering':'crispEdges'})
 
 		// handle y=0 as appropriate
