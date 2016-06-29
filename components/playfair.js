@@ -1315,7 +1315,7 @@ function draw_key(legend,playobj,snapobj,prelim){
 			// shade
 			if(legend[i].geom=='shade' && keyitem_dict[keyitem_name]===undefined){
 				keyitem_dict[keyitem_name]=snapobj.rect(x,y,playobj.legend_elementsize,playobj.legend_elementsize).attr({fill:chartobject.chartfill,'shape-rendering':'crispEdges',ident2:'floatkey',ident:'key'})
-				keyitem_dict[keyitem_name]=snapobj.rect(x,y,playobj.legend_elementsize,playobj.legend_elementsize).attr({fill:'#fff','fill-opacity':.6,'shape-rendering':'crispEdges',ident2:'floatkey',ident:'key'})
+				keyitem_dict[keyitem_name]=snapobj.rect(x,y,playobj.legend_elementsize,playobj.legend_elementsize).attr({'stroke':'#aaa','stroke-width':1,fill:'#fff','fill-opacity':.6,'shape-rendering':'crispEdges',ident2:'floatkey',ident:'key'})
 			}
 
 			var lowbound=y+playobj.legend_elementsize+(lines.length-1)*textoffset
