@@ -587,7 +587,7 @@ window.playfair = (function () {
 				if(graphobj.note.length>0){
 					note='Note: '+graphobj.note
 					lines=multitext(note,{fill:this.notetextfill,'font-family':graphobj.noteface,'font-size':graphobj.notesize,'font-weight':graphobj.noteweight,'dominant-baseline':'text-before-edge'},graphobj.width-graphobj.footer_leftpad-graphobj.footer_rightpad-logo_coords.width-20)
-					var note=snapobj.text(graphobj.x+graphobj.footer_leftpad,source_coords,lines).attr({fill:sourcefill,ident:'foot','font-family':graphobj.noteface,'font-size':graphobj.notesize,'font-weight':graphobj.noteweight,'dominant-baseline':'text-before-edge',colorchange:'fill',context:'text_context_menu'})
+					var note=snapobj.text(graphobj.x+graphobj.footer_leftpad,source_coords+this.notetoppad,lines).attr({fill:sourcefill,ident:'foot','font-family':graphobj.noteface,'font-size':graphobj.notesize,'font-weight':graphobj.noteweight,'dominant-baseline':'text-before-edge',colorchange:'fill',context:'text_context_menu'})
 					note.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 					note.selectAll("tspan:not(:first-child)").attr({x:note.attr('x'),dy:parseInt(graphobj.notesize)})
 					note_coords=note.getBBox().y2
@@ -771,6 +771,7 @@ window.playfair = (function () {
 			'noteweight':400,
 			'noteface':'Lato',
 			'notetextfill':'white',
+			'notetoppad':4,
 
 			// chart formatting
 			'chartfill':'#eee',
