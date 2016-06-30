@@ -961,7 +961,7 @@ function remove_missing(array){
 }
 
 function draw_key_top(legend,playobj,snapobj){
-	console.log(legend)
+	console.log(legend,legend.length)
 	if(legend.length>1){
 		var maxwidth=legend[0][1]
 		if(legend[0][1]===''){maxwidth=playobj.width-playobj.left_margin-playobj.right_margin-playobj.legend_leftpad-playobj.legend_rightpad}
@@ -980,7 +980,7 @@ function draw_key_top(legend,playobj,snapobj){
 			var keyitem_loc_name=legend[i].overall
 			var numeric=legend[i].groupnumeric
 			var x=currentx
-			var y=starty+line*(parseFloat(playobj.legend_elementsize))
+			var y=starty+line*(parseFloat(playobj.legend_elementsize))+line*(parseFloat(playobj.legend_elementpad))
 			var keyitem_name=legend[i].geom+legend[i].grouping+legend[i].group_value
 			if(legend[i].lgroup!==current_group){
 				x=x+3*(playobj.legend_elementpad)
@@ -989,8 +989,6 @@ function draw_key_top(legend,playobj,snapobj){
 			var current_group=legend[i].lgroup
 
 			if(keyitem_loc[keyitem_loc_name]==undefined){
-				console.log('new overall')
-
 				var t=snapobj.text(xtext,y,legend[i].group_value).attr({ident2:'floatkey',ident:'key',fill:this.legend_textfill,'font-size':playobj.legend_textsize,'font-weight':playobj.legend_textweight,'font-family':playobj.legend_textface,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
 				var box=t.getBBox()
 				currentx=box.x2+playobj.legend_elementpad
@@ -998,15 +996,16 @@ function draw_key_top(legend,playobj,snapobj){
 				if(box.x2>rightmost){
 					t.remove()
 					line=line+1
+					y=starty+line*(parseFloat(playobj.legend_elementsize))+line*(parseFloat(playobj.legend_elementpad))
 					currentx=startx
-					var t=snapobj.text(currentx+playobj.legend_elementsize+playobj.legend_elementpad,starty,legend[i].group_value).attr({ident2:'floatkey',ident:'key',fill:this.legend_textfill,'font-size':playobj.legend_textsize,'font-weight':playobj.legend_textweight,'font-family':playobj.legend_textface,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
+					x=currentx
+					var t=snapobj.text(currentx+playobj.legend_elementsize+playobj.legend_elementpad,starty+line*(parseFloat(playobj.legend_elementsize))+line*(parseFloat(playobj.legend_elementpad)),legend[i].group_value).attr({ident2:'floatkey',ident:'key',fill:this.legend_textfill,'font-size':playobj.legend_textsize,'font-weight':playobj.legend_textweight,'font-family':playobj.legend_textface,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
 				}
 
 				keyitem_loc[keyitem_loc_name]={}
 				keyitem_loc[keyitem_loc_name]['x']=x
 				keyitem_loc[keyitem_loc_name]['y']=y
 			} else {
-				console.log('old overall')
 				x=keyitem_loc[keyitem_loc_name]['x']
 				y=keyitem_loc[keyitem_loc_name]['y']
 			}
@@ -1109,6 +1108,8 @@ function draw_key_top(legend,playobj,snapobj){
 		}
 
 		return (line+1)*parseFloat(playobj.legend_elementsize)+(line+1)*parseFloat(playobj.legend_elementpad)
+	} else {
+		return 0
 	}
 }
 
