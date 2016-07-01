@@ -1484,8 +1484,6 @@ function draw_lines(axes,line,snapobj){
 		var groups=[[undefined,undefined]]
 	}
 
-	console.log(groups)
-
 	// loop through groups in the dataset to draw lines
 	for(var i=0;i<groups.length;i++){
 		var current=chartobject.dataset.filter(function(row){
@@ -1536,7 +1534,21 @@ function draw_lines(axes,line,snapobj){
 		}
 
 		// label
-		var label=current[0][line.color]+', '+current[0][line.type]
+		var label=''
+		var s=0
+
+		for(var key in line.grouping){
+			if(line.grouping[key]!='none'){
+				if(s==0){
+					label=label+current[0][line.grouping[key]]
+				} else {
+					if(label.indexOf(current[0][line.grouping[key]])==-1){
+						label=label+', '+current[0][line.grouping[key]]
+					}
+				}
+				s=s+1
+			}
+		}
 
 		var path=''
 		// now loop through points in the line
@@ -1808,7 +1820,21 @@ function draw_steps(axes,step,snapobj){
 		}
 
 		// label
-		var label=current[0][step.color]+', '+current[0][step.type]
+		var label=''
+		var s=0
+
+		for(var key in step.grouping){
+			if(step.grouping[key]!='none'){
+				if(s==0){
+					label=label+current[0][step.grouping[key]]
+				} else {
+					if(label.indexOf(current[0][step.grouping[key]])==-1){
+						label=label+', '+current[0][step.grouping[key]]
+					}
+				}
+				s=s+1
+			}
+		}
 
 		var path=''
 		// now loop through points in the line
