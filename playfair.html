@@ -2128,7 +2128,7 @@ $(".variable_select").change(function(){
 				created.push()
 				var temp=structure[i]
 				if(created.indexOf(temp.xvar+temp.yvar+temp.group_variable)==-1){
-					$('#PREVIEW').append("<ul id='"+temp.xvar+temp.yvar+temp.group_variable+"sortable' class='connectedSortable'>")
+					$('#PREVIEW').append("<ul id='"+temp.xvar.replace(/\s+/g, '-')+temp.yvar.replace(/\s+/g, '-')+temp.group_variable.replace(/\s+/g, '-')+"sortable' class='connectedSortable'>")
 				}
 				created.push(temp.xvar+temp.yvar+temp.group_variable)
 			}
@@ -2139,12 +2139,13 @@ $(".variable_select").change(function(){
 		for(var i=0;i<structure.length;i++){
 			if(structure[i].geom!='text'){
 				var temp=structure[i]
+				// temp.xvar=temp.xvar.replace(/\s+/g, '-')
 				if (temp.geom+temp.grouping!=current){
 					current=temp.geom+temp.grouping
 					var groupnumeric=0
 				}
 				if(combos.indexOf(temp.xvar+temp.yvar+temp.group_variable+temp.group_value)==-1){
-					$('#'+temp.xvar+temp.yvar+temp.group_variable+'sortable').append('<li class="ui-state-default" id=keyitem'+i+' data-string="'+temp.xvar+temp.yvar+temp.group_variable+temp.group_value+'" data-geom='+temp.geom+' data-grouping='+temp.grouping+' data-group_value="'+temp.group_value+'" data-group_variable="'+temp.group_variable+'" data-xvar="'+temp.xvar+'" data-yvar="'+temp.yvar+'" data-groupnumeric='+groupnumeric+' >'+temp.geom+' | '+temp.group_variable+' = '+temp.group_value+'<div class="xbox" onclick=destroy("keyitem'+i+'")></div></li>')
+					$('#'+temp.xvar.replace(/\s+/g, '-')+temp.yvar.replace(/\s+/g, '-')+temp.group_variable.replace(/\s+/g, '-')+'sortable').append('<li class="ui-state-default" id=keyitem'+i+' data-string="'+temp.xvar+temp.yvar+temp.group_variable+temp.group_value+'" data-geom='+temp.geom+' data-grouping='+temp.grouping+' data-group_value="'+temp.group_value+'" data-group_variable="'+temp.group_variable+'" data-xvar="'+temp.xvar+'" data-yvar="'+temp.yvar+'" data-groupnumeric='+groupnumeric+' >'+temp.geom+' | '+temp.group_variable+' = '+temp.group_value+'<div class="xbox" onclick=destroy("keyitem'+i+'")></div></li>')
 					keycount=keycount+1
 					combos.push(temp.xvar+temp.yvar+temp.group_variable+temp.group_value)
 				} else {

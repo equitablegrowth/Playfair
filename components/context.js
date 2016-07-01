@@ -352,8 +352,6 @@ function endpath(e) {
 	path_string='M'+(pathstart[0]-1.5)+' '+pathstart[1]+'a1.5,1.5 0 1,0 3,0a1.5,1.5 0 1,0 -3,0'+'M'+pathstart[0]+' '+(pathstart[1]+yoffset)+'L'+pathstart[0]+' '+(e.clientY-svgy)+'L'+(e.clientX-svgx)+' '+(e.clientY-svgy)
 	finalline=grapharea.path(path_string).attr({annotation:1,class:'callout','stroke-width':callwidth,'stroke':callstroke,'shape-rendering':'crispEdges',fill:'none',colorchange:'stroke',context:'callout_context_menu','stroke-dasharray':calldash})
 	circstart.remove()
-	// var temp_group=grapharea.group(finalline,circstart)
-	// temp_group.drag()
 	finalline.drag()
 }
 
