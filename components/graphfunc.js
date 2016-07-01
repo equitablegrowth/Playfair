@@ -415,7 +415,14 @@ function redraw(keep) {
 				if(keep){
 					console.log('keeping')
 					for (var i=0;i<annotations.length;i++){
-						grapharea.append(annotations[i])
+						var item=Snap(annotations[i])
+						if(item.attr('arrow')){
+							var color=item.attr('stroke')
+							var temparrow = grapharea.path('M0,0 L0,4 L6,2 L0,0').attr({fill:color})
+							var tempamarker = temparrow.marker(0,0,6,4,0,2).attr({fill:color});
+							item.attr({'marker-end':tempamarker})
+						}
+						grapharea.append(item)
 					}
 				}
 			})

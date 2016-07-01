@@ -125,6 +125,7 @@ function edit_text(ev) {
 
 		// highlight text with a box to visually indicate selection, change text color to white
 		coords=selected_text.getBBox()
+		console.log(coords)
 		high_box=grapharea.rect(coords.x-3,coords.y-3,coords.width+6,coords.height+6).attr({fill:'black',opacity:.8})
 		high_coords=high_box.getBBox()
 		select_box.append(high_box)
