@@ -1181,22 +1181,13 @@ function draw_key(legend,playobj,snapobj,prelim){
 			longest=title.getBBox().x2
 		}
 
-		// sort according to i and g
-		// edit: is there any actual reason to do this?
-		// legend.sort(function(a,b){
-		// 	return a.position-b.position
-		// })
-
-		// legend.sort(function(a,b){
-		// 	return a.lgroup-b.lgroup
-		// })
-
 		// store each item in a dict so it can be modified as necessary
 		// sample legend entry:
 		// {geom:point,group_value:1,group_variable:g1,grouping:color,xvar:x,yvar:y,position:1,lgroup:0,overall:0,group_numeric:2}
 		var keyitem_dict={}
 		var lowery=0
 		var extralines=0
+		var overalls={}
 
 		// draw items
 		// starting at 1 skips the row that is maxwidth and title
@@ -1204,6 +1195,7 @@ function draw_key(legend,playobj,snapobj,prelim){
 			var textoffset=parseFloat(playobj.legend_textsize)
 			console.log(legend[i])
 			var y=starty+(textoffset*extralines)+(legend[i].overall*parseFloat(playobj.legend_elementsize))+(legend[i].lgroup*playobj.legend_floatpad)+(legend[i].overall*parseFloat(playobj.legend_elementpad))
+			if(overalls[legend[i].overall]){y=overalls[legend[i].overall]}
 			var x=playobj.legend_floatpad
 			var xtext=playobj.legend_floatpad+playobj.legend_elementsize+playobj.legend_elementpad
 			var numeric=legend[i].groupnumeric
@@ -1214,14 +1206,16 @@ function draw_key(legend,playobj,snapobj,prelim){
 			var keyitem_name=legend[i].geom+legend[i].grouping+legend[i].group_value
 
 			if(keyitem_dict[keyitem_name]==undefined){
-				var lines=multitext(legend[i].group_value,{'font-size':playobj.legend_textsize,'font-weight':playobj.legend_textweight,'font-family':playobj.legend_textface},maxtextwidth)
-				// the +.5 here is a kluge that only applies to the values of legend_elementsize and legend_textsize you're using feels like it should be (legend_elementsize-legend_textsize)/2 but that doesn't get me what I want
-				var t=snapobj.text(xtext,y+.5,lines).attr({ident2:'floatkey',ident:'key',fill:this.legend_textfill,'font-size':playobj.legend_textsize,'font-weight':playobj.legend_textweight,'font-family':playobj.legend_textface,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
-				t.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
-				t.selectAll("tspan:not(:first-child)").attr({x:t.attr('x'),dy:1*parseFloat(t.attr('font-size'))})
-				var xend=t.getBBox().x2
-				if(xend>longest){longest=xend}
-				extralines=extralines+(lines.length-1)
+				if(overalls[legend[i].overall]==undefined){
+					var lines=multitext(legend[i].group_value,{'font-size':playobj.legend_textsize,'font-weight':playobj.legend_textweight,'font-family':playobj.legend_textface},maxtextwidth)
+					// the +.5 here is a kluge that only applies to the values of legend_elementsize and legend_textsize you're using feels like it should be (legend_elementsize-legend_textsize)/2 but that doesn't get me what I want
+					var t=snapobj.text(xtext,y+.5,lines).attr({ident2:'floatkey',ident:'key',fill:this.legend_textfill,'font-size':playobj.legend_textsize,'font-weight':playobj.legend_textweight,'font-family':playobj.legend_textface,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
+					t.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
+					t.selectAll("tspan:not(:first-child)").attr({x:t.attr('x'),dy:1*parseFloat(t.attr('font-size'))})
+					var xend=t.getBBox().x2
+					if(xend>longest){longest=xend}
+					extralines=extralines+(lines.length-1)
+				}
 			}
 
 			// points
@@ -1322,6 +1316,8 @@ function draw_key(legend,playobj,snapobj,prelim){
 
 			var lowbound=y+playobj.legend_elementsize+(lines.length-1)*textoffset
 			if(lowbound>lowery){lowery=lowbound}
+
+			overalls[legend[i].overall]=y
 		}
 
 		if(legend[0][1]!==''){longest=maxwidth}
@@ -1507,8 +1503,6 @@ function draw_lines(axes,line,snapobj){
 				return a[connect]-b[connect]
 			})
 		}
-
-		console.log(current)
 
 		// check for sizing variable and set line width
 		if(line.size!=='none'){
