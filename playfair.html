@@ -2148,9 +2148,9 @@ $(".variable_select").change(function(){
 					keycount=keycount+1
 					combos.push(temp.xvar+temp.yvar+temp.group_variable+temp.group_value)
 				} else {
-					var exist_geom=$("[data-string='"+temp.xvar+temp.yvar+temp.group_variable+temp.group_value+"']").attr('data-geom')
-					$("[data-string='"+temp.xvar+temp.yvar+temp.group_variable+temp.group_value+"']").attr('data-geom',exist_geom+','+temp.geom)
-					$("[data-string='"+temp.xvar+temp.yvar+temp.group_variable+temp.group_value+"']").html(exist_geom+','+temp.geom+' | '+temp.group_variable+' = '+temp.group_value)
+					var exist_geom=$('[data-string="'+temp.xvar+temp.yvar+temp.group_variable+temp.group_value+'"]').attr('data-geom')
+					$('[data-string="'+temp.xvar+temp.yvar+temp.group_variable+temp.group_value+'"]').attr('data-geom',exist_geom+','+temp.geom)
+					$('[data-string="'+temp.xvar+temp.yvar+temp.group_variable+temp.group_value+'"]').html(exist_geom+','+temp.geom+' | '+temp.group_variable+' = '+temp.group_value)
 				}
 				groupnumeric=groupnumeric+1
 			}
