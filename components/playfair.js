@@ -566,6 +566,7 @@ window.playfair = (function () {
 
 		var notefill=this.notetextfill
 		var sourcefill=this.sourcetextfill
+		var notetoppad=this.notetoppad
 
 		if (this.logo!=0){
 			var logo=snapobj.image(this.logo,0,0)
@@ -587,7 +588,11 @@ window.playfair = (function () {
 				if(graphobj.note.length>0){
 					note='Note: '+graphobj.note
 					lines=multitext(note,{fill:this.notetextfill,'font-family':graphobj.noteface,'font-size':graphobj.notesize,'font-weight':graphobj.noteweight,'dominant-baseline':'text-before-edge'},graphobj.width-graphobj.footer_leftpad-graphobj.footer_rightpad-logo_coords.width-20)
-					var note=snapobj.text(graphobj.x+graphobj.footer_leftpad,source_coords+this.notetoppad,lines).attr({fill:sourcefill,ident:'foot','font-family':graphobj.noteface,'font-size':graphobj.notesize,'font-weight':graphobj.noteweight,'dominant-baseline':'text-before-edge',colorchange:'fill',context:'text_context_menu'})
+					if(graphobj.source.length>0){
+						var note=snapobj.text(graphobj.x+graphobj.footer_leftpad,source_coords+notetoppad,lines).attr({fill:sourcefill,ident:'foot','font-family':graphobj.noteface,'font-size':graphobj.notesize,'font-weight':graphobj.noteweight,'dominant-baseline':'text-before-edge',colorchange:'fill',context:'text_context_menu'})
+					} else {
+						var note=snapobj.text(graphobj.x+graphobj.footer_leftpad,source_coords,lines).attr({fill:sourcefill,ident:'foot','font-family':graphobj.noteface,'font-size':graphobj.notesize,'font-weight':graphobj.noteweight,'dominant-baseline':'text-before-edge',colorchange:'fill',context:'text_context_menu'})
+					}					
 					note.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 					note.selectAll("tspan:not(:first-child)").attr({x:note.attr('x'),dy:parseInt(graphobj.notesize)})
 					note_coords=note.getBBox().y2
@@ -607,8 +612,8 @@ window.playfair = (function () {
 
 				// If the note+source is taller than the logo height, make the footer bigger and shove all three elemnts up
 				if(note_coords-(graphobj.y+graphobj.height-logo_coords.height-graphobj.footer_bottompad-graphobj.footer_toppad)>graphobj.footer_height){
-					var difference=note_coords-(graphobj.y+graphobj.height-logo_coords.height-graphobj.footer_bottompad-graphobj.footer_toppad)-graphobj.footer_height
-					graphobj.footer_height=note_coords-(graphobj.y+graphobj.height-logo_coords.height-graphobj.footer_bottompad-graphobj.footer_toppad)
+					var difference=parseFloat(graphobj.notesize)+note_coords-(graphobj.y+graphobj.height-logo_coords.height-graphobj.footer_bottompad-graphobj.footer_toppad)-graphobj.footer_height
+					graphobj.footer_height=parseFloat(graphobj.notesize)+note_coords-(graphobj.y+graphobj.height-logo_coords.height-graphobj.footer_bottompad-graphobj.footer_toppad)
 					snapobj.selectAll('rect[id="footerrect"').attr({height:graphobj.footer_height})
 					snapobj.selectAll('rect[id="footerrect"').attr({y:graphobj.height-graphobj.footer_height})
 					logo.attr({y:parseFloat(logo.attr('y'))-difference/2})
@@ -736,40 +741,40 @@ window.playfair = (function () {
 			// hed
 			'hedsize':'24px',
 			'hedsizemin':'22px',
-			'hedweight':700,
-			'hedface':'Lato',
+			'hedweight':600,
+			'hedface':'Asap',
 			'hedtextfill':'black',
 
 			// dek
 			'deksize':'18px',
 			'deksizemin':'16px',
 			'dekweight':400,
-			'dekface':'Lato',
+			'dekface':'Asap',
 			'dektextfill':'black',
 			'maxdeklines':2,
 
 			// data labels
 			'datasize':'11px',
 			'dataweight':400,
-			'dataface':'Lato',
+			'dataface':'PTSans',
 			'datatextfill':'black',
 
 			// annotations
 			'annotatesize':'14px',
 			'annotateweight':400,
-			'annotateface':'Lato',
+			'annotateface':'PTSans',
 			'annotatetextfill':'black',
 
 			// source
 			'sourcesize':'12px',
 			'sourceweight':400,
-			'sourceface':'Lato',
+			'sourceface':'PTSans',
 			'sourcetextfill':'white',
 
 			// note
 			'notesize':'12px',
 			'noteweight':400,
-			'noteface':'Lato',
+			'noteface':'PTSans',
 			'notetextfill':'white',
 			'notetoppad':4,
 
@@ -788,8 +793,8 @@ window.playfair = (function () {
 			'header_rightpad':0,
 
 			// footer formatting
-			'footerfill':'#67c2a5',
-			'footer_toppad':8,
+			'footerfill':'#55bb9a',
+			'footer_toppad':5,
 			'footer_bottompad':5,
 			'footer_leftpad':18,
 			'footer_rightpad':14,
@@ -825,7 +830,7 @@ window.playfair = (function () {
 			// x ticks
 			'xtick_textsize':'16px',
 			'xtick_textweight':400,
-			'xtick_textface':'Lato',
+			'xtick_textface':'PTSans',
 			'xtick_textfill':'#444',
 			'xtick_maxsize':.15,
 			'xtick_length':4,
@@ -837,7 +842,7 @@ window.playfair = (function () {
 			// y ticks
 			'ytick_textsize':'16px',
 			'ytick_textweight':400,
-			'ytick_textface':'Lato',
+			'ytick_textface':'PTSans',
 			'ytick_textfill':'#444',
 			'ytick_maxsize':.25,
 			'ytick_length':16,
@@ -849,14 +854,14 @@ window.playfair = (function () {
 			// x label
 			'xlabel_textsize':'14px',
 			'xlabel_textweight':400,
-			'xlabel_textface':'Lato',
+			'xlabel_textface':'PTSans',
 			'xlabel_textfill':'black',
 			'xlabel_maxlength':300,
 
 			// y label
 			'ylabel_textsize':'14px',
 			'ylabel_textweight':400,
-			'ylabel_textface':'Lato',
+			'ylabel_textface':'PTSans',
 			'ylabel_textfill':'black',
 			'ylabel_maxlength':300,
 
@@ -865,11 +870,11 @@ window.playfair = (function () {
 			'legend_maxwidth':.1,
 			'legend_textsize':'12px',
 			'legend_textweight':400,
-			'legend_textface':'Lato',
+			'legend_textface':'PTSans',
 			'legend_textfill':'black',
 			'legend_titletextsize':'12px',
 			'legend_titletextweight':600,
-			'legend_titletextface':'Lato',
+			'legend_titletextface':'PTSans',
 			'legend_titletextfill':'black',
 			'legend_toppad':4,
 			'legend_bottompad':0,
@@ -895,7 +900,7 @@ window.playfair = (function () {
 			// line/scatter specific style
 			'trend_width':1.5,
 			'trend_fill':'#c64027',
-			'trend_textface':'Lato',
+			'trend_textface':'PTSans',
 			'trend_textweight':600,
 			'trend_textsize':'12px',
 			'trend_textcolor':'#c64027',
