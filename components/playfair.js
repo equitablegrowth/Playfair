@@ -793,7 +793,7 @@ window.playfair = (function () {
 			'header_rightpad':0,
 
 			// footer formatting
-			'footerfill':'#55bb9a',
+			'footerfill':'#46b08e',
 			'footer_toppad':5,
 			'footer_bottompad':5,
 			'footer_leftpad':18,
