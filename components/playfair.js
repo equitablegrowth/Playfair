@@ -1509,6 +1509,24 @@ function draw_lines(axes,line,snapobj){
 			})
 		}
 
+		// this is a little tricky and may have unintended consequences... so that
+		// Playfair doesn't get caught up on no-data entries that are not intended to
+		// be graphed as lines at all, get a set of the connect values and delete any
+		// where the connect value occurs elsewhere but there is no data point (if
+		// the other occurrence does have a data point)
+
+		// this is a weird little data corner case and I wonder if there's a better
+		// way to handle it. Technically you shouldn't structure data like this
+		// anyways but it may seem to people like you should be able to.
+		var connect_set=new set([...current[connect]])
+		for(var j=0;j<connect_set.length;j++){
+			var dupes=current.filter(function(row){
+				return row[connect]==connect_set[j]
+			})
+			
+		}
+		
+
 		// check for sizing variable and set line width
 		if(line.size!=='none'){
 			if(current[0][line.size]!==undefined){
