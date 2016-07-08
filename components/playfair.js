@@ -109,7 +109,7 @@ window.playfair = (function () {
 				// to sum on both axes which is clearly wrong. (ok not really but it needs to distinguish
 				// between which axis it should be summing on).
 
-				if(Object.prototype.toString.call(data[geom_dict[key]['xvar']][0])==='[object Date]'){
+				if(data[geom_dict[key]['xvar']].dtype)==='date'){
 					if(isNaN(data[geom_dict[key]['xvar']][0].getTime())==false){
 						xmaxes.push(new Date(moment(Math.max(...data[geom_dict[key]['xvar']]))))
 						xmins.push(new Date(moment(Math.min(...data[geom_dict[key]['xvar']]))))
