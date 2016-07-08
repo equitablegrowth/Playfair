@@ -109,7 +109,7 @@ window.playfair = (function () {
 				// to sum on both axes which is clearly wrong. (ok not really but it needs to distinguish
 				// between which axis it should be summing on).
 
-				if(data[geom_dict[key]['xvar']].dtype)==='date'){
+				if(data[geom_dict[key]['xvar']].dtype==='date'){
 					if(isNaN(data[geom_dict[key]['xvar']][0].getTime())==false){
 						xmaxes.push(new Date(moment(Math.max(...data[geom_dict[key]['xvar']]))))
 						xmins.push(new Date(moment(Math.min(...data[geom_dict[key]['xvar']]))))
@@ -1967,10 +1967,10 @@ function draw_points(axes,point,snapobj){
 			var label=current[point.labels]
 
 			// draw point
-			if(current[0][point.grouping.color]==undefined){
+			if(current[point.grouping.color]==undefined){
 				var greplace=point.yvar
 			} else {
-				var greplace=current[0][point.grouping.color]
+				var greplace=current[point.grouping.color]
 			}
 			if(pointtype==1){
 				snapobj.circle(x_loc,y_loc,pointsize).attr({fill:color,stroke:color,'stroke-width':chartobject.point_strokewidth,'data_type':'point','data_label':label,'group':greplace,'class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu'})
