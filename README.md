@@ -33,11 +33,11 @@ Playfair is super easy to deploy for even non-technical users. Clone this reposi
 ### Collaborative Editing
 Playfair allows you to save and load graphics you have made. There isn't much organization and there aren't permissions so this could get out of hand for a large organization but should meet the basic needs of small organizations.
 
-![alt text](assets/loading.gif =200px "Loading a graph")
+![alt text](assets/loading.gif "Loading a graph")
 
 ### Easy to theme
 Playfair's current theme system is largely undocumented but parameters are clearly named and it should be relatively easy to create your own theme. Moreover, you can change layout parameters from within the web app, which gives you a lot of flexibility in creating charts with unusual layouts.
 
-![alt text](assets/themeexample.png "The default theme")
+![alt text](assets/themeexample.png "The default theme"  =200px)
 
 ## Tutorial
