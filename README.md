@@ -27,7 +27,7 @@ A lot of graphing apps will make you a barchart or a linechart. But EG's needs a
 ### Annotation and on-chart editing
 Playfair includes a number of tools for adding annotations directly to a chart to help explain the graphic. These include adding arrows, callout lines, and arbitrary text annotations. On-chart editing refers to Playfair's tools for editing text, data, and other elements directly on the chart simply by dragging or right-clicking.
 
-![alt text](assets/annotate.gif "Annotating a graph")
+![alt text](http://www.austinclemens.com/Playfair/assets/annotate.gif "Annotating a graph")
 
 ### Easy to deploy
 Playfair is super easy to deploy for even non-technical users. Clone this repository and open playfair.html. You've deployed playfair! If you want to use custom themes and save your graphs, you'll have to deploy Playfair to a server. This takes a little technical know-how but is basically as simple as uploading the Playfair folder to a server and changing the permissions for the scripts in the cgi-bin folder to 755.
@@ -35,12 +35,12 @@ Playfair is super easy to deploy for even non-technical users. Clone this reposi
 ### Collaborative Editing
 Playfair allows you to save and load graphics you have made. There isn't much organization and there aren't permissions so this could get out of hand for a large organization but should meet the basic needs of small organizations.
 
-![alt text](assets/loading.gif "Loading a graph")
+![alt text](http://www.austinclemens.com/Playfair/assets/loading.gif "Loading a graph")
 
 ### Easy to theme
 Playfair's current theme system is largely undocumented but parameters are clearly named and it should be relatively easy to create your own theme. Moreover, you can change layout parameters from within the web app, which gives you a lot of flexibility in creating charts with unusual layouts.
 
-![alt text](assets/themeexample.png "The default theme")
+![alt text](http://www.austinclemens.com/Playfair/assets/themeexample.png "The default theme")
 
 ## Tutorial
 
