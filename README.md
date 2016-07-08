@@ -44,4 +44,6 @@ Playfair's current theme system is largely undocumented but parameters are clear
 
 ## Tutorial
 
-I've created a short tutorial that should help you figure out the basics of Playfair. You can find it on my website, here: <placeholder>
+I've created a short tutorial that should help you figure out the basics of Playfair. Click here to view the tutorial.
+
+You can try out Playfair online too (loading, saving, and theming are all disabled). Take a look here.
