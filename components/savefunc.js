@@ -313,6 +313,7 @@ function load_populate(response) {
 
 	// re-associate dtypes with appropriate variables
 	for(var key in chartobject.flatdata){
+		console.log(key,chartobject.flatdata[key],chartobject.dtypes[key])
 		chartobject.flatdata[key].dtype=chartobject.dtypes[key]
 	}
 }

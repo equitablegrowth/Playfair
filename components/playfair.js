@@ -1056,11 +1056,11 @@ function draw_key_top(legend,playobj,snapobj){
 			// segments
 			if((legend[i].geom=='segment') && keyitem_dict[keyitem_name]==undefined){
 				if(legend[i].grouping=='color'){
-					keyitem_dict[keyitem_name]=snapobj.line(x,y+playobj.legend_elementsize/2,x+playobj.legend_elementsize,y+playobj.legend_elementsize/2).attr({stroke:chartobject.grayscale_color[numeric],'stroke-width':playobj.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+					keyitem_dict[keyitem_name]=snapobj.line(x,y+playobj.legend_elementsize/2,x+playobj.legend_elementsize,y+playobj.legend_elementsize/2).attr({stroke:chartobject.grayscale_color[numeric],'stroke-width':playobj.segment_width,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
 				} else if(legend[i].grouping=='type'){
-					keyitem_dict[keyitem_name]=snapobj.line(x,y+playobj.legend_elementsize/2,x+playobj.legend_elementsize,y+playobj.legend_elementsize/2).attr({stroke:chartobject.grayscale_color[0],'stroke-width':playobj.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges','stroke-dasharray':chartobject.line_types[numeric]})
+					keyitem_dict[keyitem_name]=snapobj.line(x,y+playobj.legend_elementsize/2,x+playobj.legend_elementsize,y+playobj.legend_elementsize/2).attr({stroke:chartobject.grayscale_color[0],'stroke-width':playobj.segment_width,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges','stroke-dasharray':chartobject.line_types[numeric]})
 				} else {
-					keyitem_dict[keyitem_name]=snapobj.line(x,y+playobj.legend_elementsize/2,x+playobj.legend_elementsize,y+playobj.legend_elementsize/2).attr({stroke:chartobject.grayscale_color[0],'stroke-width':playobj.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+					keyitem_dict[keyitem_name]=snapobj.line(x,y+playobj.legend_elementsize/2,x+playobj.legend_elementsize,y+playobj.legend_elementsize/2).attr({stroke:chartobject.grayscale_color[0],'stroke-width':playobj.segment_width,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
 				}
 			} else if(legend[i].geom=='segment' && keyitem_dict[keyitem_name]!==undefined){
 				if(legend[i].grouping=='color'){
@@ -1602,7 +1602,12 @@ function draw_lines(axes,line,snapobj){
 			}
 		}
 		// draw line
-		snapobj.path(path).attr({'data_label':label,class:'dataelement',stroke:color,'stroke-width':linewidth,fill:'none','group':current[0][line.grouping.color],'fill-opacity':0,'stroke-opacity':chartobject.linechart_strokeopacity,'colorchange':'stroke',context:'pathdata_context_menu','stroke-dasharray':linetype})
+		if(current[0][line.grouping.color]==undefined){
+			var greplace=line.yvar
+		} else {
+			var greplace=current[0][line.grouping.color]
+		}
+		snapobj.path(path).attr({'data_label':label,class:'dataelement',stroke:color,'stroke-width':linewidth,fill:'none','group':greplace,'fill-opacity':0,'stroke-opacity':chartobject.linechart_strokeopacity,'colorchange':'stroke',context:'pathdata_context_menu','stroke-dasharray':linetype})
 	}
 }
 
@@ -1729,7 +1734,12 @@ function draw_area(axes,line,snapobj){
 		base_path=new_base
 
 		// draw line
-		snapobj.path(path).attr({'data_label':label,class:'dataelement',stroke:color,'stroke-width':0,fill:color,'group':current[0][line.grouping.color],'colorchange':'fill',context:'pathdata_context_menu'})
+		if(current[0][line.grouping.color]==undefined){
+			var greplace=line.yvar
+		} else {
+			var greplace=current[0][line.grouping.color]
+		}
+		snapobj.path(path).attr({'data_label':label,class:'dataelement',stroke:color,'stroke-width':0,fill:color,'group':greplace,'colorchange':'fill',context:'pathdata_context_menu'})
 	}
 
 	// pull the y=0 line to the front
@@ -1891,7 +1901,12 @@ function draw_steps(axes,step,snapobj){
 		}
 		console.log(path)
 		// draw line
-		snapobj.path(path).attr({'data_label':label,class:'dataelement',stroke:color,'stroke-width':linewidth,fill:'none','group':current[0][step.grouping.color],'fill-opacity':0,'stroke-opacity':chartobject.linechart_strokeopacity,'colorchange':'stroke',context:'pathdata_context_menu','stroke-dasharray':linetype})
+		if(current[0][step.grouping.color]==undefined){
+			var greplace=step.yvar
+		} else {
+			var greplace=current[0][step.grouping.color]
+		}
+		snapobj.path(path).attr({'data_label':label,class:'dataelement',stroke:color,'stroke-width':linewidth,fill:'none','group':greplace,'fill-opacity':0,'stroke-opacity':chartobject.linechart_strokeopacity,'colorchange':'stroke',context:'pathdata_context_menu','stroke-dasharray':linetype})
 	}
 }
 
@@ -1952,8 +1967,13 @@ function draw_points(axes,point,snapobj){
 			var label=current[point.labels]
 
 			// draw point
+			if(current[0][point.grouping.color]==undefined){
+				var greplace=point.yvar
+			} else {
+				var greplace=current[0][point.grouping.color]
+			}
 			if(pointtype==1){
-				snapobj.circle(x_loc,y_loc,pointsize).attr({fill:color,stroke:color,'stroke-width':chartobject.point_strokewidth,'data_type':'point','data_label':label,'group':current[point.grouping.color],'class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu'})
+				snapobj.circle(x_loc,y_loc,pointsize).attr({fill:color,stroke:color,'stroke-width':chartobject.point_strokewidth,'data_type':'point','data_label':label,'group':greplace,'class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu'})
 			}
 
 			// label point
@@ -2028,7 +2048,12 @@ function draw_segments(axes,segment,snapobj){
 			}
 
 			// draw segment
-			snapobj.line(x_loc1,y_loc1,x_loc2,y_loc2).attr({class:'dataelement',stroke:color,'stroke-width':size,'group':current[segment.grouping.color],'stroke-opacity':chartobject.linechart_strokeopacity,'colorchange':'stroke',context:'pathdata_context_menu','stroke-dasharray':type})
+			if(current[0][segment.grouping.color]==undefined){
+				var greplace=segment.yvar
+			} else {
+				var greplace=current[0][segment.grouping.color]
+			}
+			snapobj.line(x_loc1,y_loc1,x_loc2,y_loc2).attr({class:'dataelement',stroke:color,'stroke-width':size,'group':greplace,'stroke-opacity':chartobject.linechart_strokeopacity,'colorchange':'stroke',context:'pathdata_context_menu','stroke-dasharray':type})
 		}
 	}
 }
@@ -2214,8 +2239,12 @@ function draw_bars(axes,bar,snapobj){
 			var label=current[bar.yvar]
 
 			// draw bar
-
-			snapobj.path('M'+x1+','+y2+'L'+x2+','+y2+'L'+x2+','+y1+'L'+x1+','+y1+'L'+x1+','+y2).attr({orient:orient,'data_type':'bar','data_label':label,'group':current[bar.grouping.color],'class':'dataelement','shape-rendering':'crispEdges',fill:color,colorchange:'fill',context:'data_context_menu'})
+			if(current[0][bar.grouping.color]==undefined){
+				var greplace=bar.yvar
+			} else {
+				var greplace=current[0][bar.grouping.color]
+			}
+			snapobj.path('M'+x1+','+y2+'L'+x2+','+y2+'L'+x2+','+y1+'L'+x1+','+y1+'L'+x1+','+y2).attr({orient:orient,'data_type':'bar','data_label':label,'group':greplace,'class':'dataelement','shape-rendering':'crispEdges',fill:color,colorchange:'fill',context:'data_context_menu'})
 		}
 	}
 
@@ -2302,10 +2331,12 @@ function draw_stackedbars(axes,bar,snapobj){
 						var x1=get_coord(temp[bar.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-(totalwidth/2)
 						var x2=x1+barwidth
 						var label=temp[bar.yvar]
-						console.log('M'+x1+','+y2+'L'+x2+','+y2+'L'+x2+','+y1+'L'+x1+','+y1+'L'+x1+','+y2)
-						snapobj.path('M'+x1+','+y2+'L'+x2+','+y2+'L'+x2+','+y1+'L'+x1+','+y1+'L'+x1+','+y2).attr({orient:orient,'data_type':'bar','data_label':label,'group':temp[bar.grouping.color],'class':'dataelement','shape-rendering':'crispEdges',fill:color,context:'data_context_menu'})
-
-						console.log(y_ends_positive)
+						if(current[0][bar.grouping.color]==undefined){
+							var greplace=bar.yvar
+						} else {
+							var greplace=current[0][bar.grouping.color]
+						}
+						snapobj.path('M'+x1+','+y2+'L'+x2+','+y2+'L'+x2+','+y1+'L'+x1+','+y1+'L'+x1+','+y2).attr({orient:orient,'data_type':'bar','data_label':label,'group':greplace,'class':'dataelement','shape-rendering':'crispEdges',fill:color,context:'data_context_menu'})
 						y_ends_positive[i_loc]=y2
 					} else {
 						var i_loc=x_values.indexOf(temp[bar.xvar])
@@ -2314,10 +2345,12 @@ function draw_stackedbars(axes,bar,snapobj){
 						var x1=get_coord(temp[bar.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-(totalwidth/2)
 						var x2=x1+barwidth
 						var label=temp[bar.yvar]
-						console.log('M'+x1+','+y2+'L'+x2+','+y2+'L'+x2+','+y1+'L'+x1+','+y1+'L'+x1+','+y2)
-						snapobj.path('M'+x1+','+y2+'L'+x2+','+y2+'L'+x2+','+y1+'L'+x1+','+y1+'L'+x1+','+y2).attr({orient:orient,'data_type':'bar','data_label':label,'group':temp[bar.grouping.color],'class':'dataelement','shape-rendering':'crispEdges',fill:color,context:'data_context_menu'})
-
-						console.log(y_ends_negative)
+						if(current[0][bar.grouping.color]==undefined){
+							var greplace=bar.yvar
+						} else {
+							var greplace=current[0][bar.grouping.color]
+						}						
+						snapobj.path('M'+x1+','+y2+'L'+x2+','+y2+'L'+x2+','+y1+'L'+x1+','+y1+'L'+x1+','+y2).attr({orient:orient,'data_type':'bar','data_label':label,'group':greplace,'class':'dataelement','shape-rendering':'crispEdges',fill:color,context:'data_context_menu'})
 						y_ends_negative[i_loc]=y2
 					}
 				}

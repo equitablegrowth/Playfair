@@ -2395,12 +2395,13 @@ $(".variable_select").change(function(){
 			if(l_xvar===undefined){l_xvar='none'}
 			if(l_yvar===undefined){l_yvar='none'}
 			if(l_group_variable===undefined){l_group_variable='none'}
-			string=string+'#'+l_xvar+l_yvar+l_group_variable+'sortable'+', '
+			string=string+'#'+l_xvar.replace(/\s+/g, '-')+l_yvar.replace(/\s+/g, '-')+l_group_variable.replace(/\s+/g, '-')+'sortable'+', '
 		}
 		string=string.slice(0,-2)
 		console.log(string)
 
 		$(function() {
+			console.log(string)
 			$(string).sortable({
 				connectWith:'.connectedSortable'
 			}).disableSelection()
