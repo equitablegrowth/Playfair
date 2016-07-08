@@ -43,3 +43,5 @@ Playfair's current theme system is largely undocumented but parameters are clear
 ![alt text](assets/themeexample.png "The default theme")
 
 ## Tutorial
+
+I've created a short tutorial that should help you figure out the basics of Playfair. You can find it on my website, here: <placeholder>
