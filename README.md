@@ -38,6 +38,6 @@ Playfair allows you to save and load graphics you have made. There isn't much or
 ### Easy to theme
 Playfair's current theme system is largely undocumented but parameters are clearly named and it should be relatively easy to create your own theme. Moreover, you can change layout parameters from within the web app, which gives you a lot of flexibility in creating charts with unusual layouts.
 
-![alt text](assets/themeexample.png "The default theme"  =200px)
+![alt text](assets/themeexample.png "The default theme")
 
 ## Tutorial
