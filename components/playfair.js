@@ -1601,6 +1601,7 @@ function draw_lines(axes,line,snapobj){
 				} else {}
 			}
 		}
+
 		// draw line
 		if(current[0][line.grouping.color]==undefined){
 			var greplace=line.yvar
@@ -2048,10 +2049,10 @@ function draw_segments(axes,segment,snapobj){
 			}
 
 			// draw segment
-			if(current[0][segment.grouping.color]==undefined){
+			if(current[segment.grouping.color]==undefined){
 				var greplace=segment.yvar
 			} else {
-				var greplace=current[0][segment.grouping.color]
+				var greplace=current[segment.grouping.color]
 			}
 			snapobj.line(x_loc1,y_loc1,x_loc2,y_loc2).attr({class:'dataelement',stroke:color,'stroke-width':size,'group':greplace,'stroke-opacity':chartobject.linechart_strokeopacity,'colorchange':'stroke',context:'pathdata_context_menu','stroke-dasharray':type})
 		}
@@ -2239,10 +2240,10 @@ function draw_bars(axes,bar,snapobj){
 			var label=current[bar.yvar]
 
 			// draw bar
-			if(current[0][bar.grouping.color]==undefined){
+			if(current[bar.grouping.color]==undefined){
 				var greplace=bar.yvar
 			} else {
-				var greplace=current[0][bar.grouping.color]
+				var greplace=current[bar.grouping.color]
 			}
 			snapobj.path('M'+x1+','+y2+'L'+x2+','+y2+'L'+x2+','+y1+'L'+x1+','+y1+'L'+x1+','+y2).attr({orient:orient,'data_type':'bar','data_label':label,'group':greplace,'class':'dataelement','shape-rendering':'crispEdges',fill:color,colorchange:'fill',context:'data_context_menu'})
 		}
@@ -2331,11 +2332,7 @@ function draw_stackedbars(axes,bar,snapobj){
 						var x1=get_coord(temp[bar.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-(totalwidth/2)
 						var x2=x1+barwidth
 						var label=temp[bar.yvar]
-						if(current[0][bar.grouping.color]==undefined){
-							var greplace=bar.yvar
-						} else {
-							var greplace=current[0][bar.grouping.color]
-						}
+						var greplace=temp[bar.grouping.color]					
 						snapobj.path('M'+x1+','+y2+'L'+x2+','+y2+'L'+x2+','+y1+'L'+x1+','+y1+'L'+x1+','+y2).attr({orient:orient,'data_type':'bar','data_label':label,'group':greplace,'class':'dataelement','shape-rendering':'crispEdges',fill:color,context:'data_context_menu'})
 						y_ends_positive[i_loc]=y2
 					} else {
@@ -2345,11 +2342,7 @@ function draw_stackedbars(axes,bar,snapobj){
 						var x1=get_coord(temp[bar.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-(totalwidth/2)
 						var x2=x1+barwidth
 						var label=temp[bar.yvar]
-						if(current[0][bar.grouping.color]==undefined){
-							var greplace=bar.yvar
-						} else {
-							var greplace=current[0][bar.grouping.color]
-						}						
+						var greplace=temp[bar.grouping.color]					
 						snapobj.path('M'+x1+','+y2+'L'+x2+','+y2+'L'+x2+','+y1+'L'+x1+','+y1+'L'+x1+','+y2).attr({orient:orient,'data_type':'bar','data_label':label,'group':greplace,'class':'dataelement','shape-rendering':'crispEdges',fill:color,context:'data_context_menu'})
 						y_ends_negative[i_loc]=y2
 					}
