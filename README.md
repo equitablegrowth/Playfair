@@ -22,7 +22,7 @@ Playfair isn't as easy to use as most graphing apps. In particular, Playfair req
 ### Power and flexibility (ggplot2-style graphing)
 A lot of graphing apps will make you a barchart or a linechart. But EG's needs are sometimes more technical. Sometimes we need a dot plot of coefficients from a statistical model with lines indicating confidence intervals. Charting in Playfair is modeled after the ggplot2 package for R. Playfair is not nearly so powerful, but it uses the ggplot2 concept of overlaying various chart elements on top of one another to create a complex chart. Playfair does not care what type of data you have - dates, numbers, and categories are all understood.
 
-![alt text](assets/ggplot2.gif "Annotating a graph")
+![alt text](assets/ggplot2.gif "Adding geoms to a graph")
 
 ### Annotation and on-chart editing
 Playfair includes a number of tools for adding annotations directly to a chart to help explain the graphic. These include adding arrows, callout lines, and arbitrary text annotations. On-chart editing refers to Playfair's tools for editing text, data, and other elements directly on the chart simply by dragging or right-clicking.
