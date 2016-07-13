@@ -1538,7 +1538,8 @@ function draw_lines(axes,line,snapobj){
 
 		// color
 		if(line.grouping.color!=='none'){
-			var color=chartobject.qualitative_color[color_groups.indexOf(current[0][line.grouping.color])]
+			console.log('ATTENTION',color_groups.indexOf(current[0][line.grouping.color]),color_groups.length)
+			var color=chartobject.qualitative_color[color_groups.indexOf(current[0][line.grouping.color]) % chartobject.qualitative_color.length]
 		} else {
 			var color=chartobject.qualitative_color[0]
 		}
@@ -1674,7 +1675,7 @@ function draw_area(axes,line,snapobj){
 
 		// color
 		if(line.grouping.color!=='none'){
-			var color=chartobject.qualitative_color[color_groups.indexOf(current[0][line.grouping.color])]
+			var color=chartobject.qualitative_color[color_groups.indexOf(current[0][line.grouping.color]) % chartobject.qualitative_color.length]
 		} else {
 			var color=chartobject.qualitative_color[0]
 		}
@@ -1834,7 +1835,7 @@ function draw_steps(axes,step,snapobj){
 
 		// color
 		if(step.grouping.color!=='none'){
-			var color=chartobject.qualitative_color[color_groups.indexOf(current[0][step.grouping.color])]
+			var color=chartobject.qualitative_color[color_groups.indexOf(current[0][step.grouping.color]) % chartobject.qualitative_color.length]
 		} else {
 			var color=chartobject.qualitative_color[0]
 		}
@@ -1956,7 +1957,7 @@ function draw_points(axes,point,snapobj){
 
 			// color
 			if(point.grouping.color!=='none'){
-				var color=chartobject.qualitative_color[color_groups.indexOf(current[point.grouping.color])]
+				var color=chartobject.qualitative_color[color_groups.indexOf(current[point.grouping.color]) % chartobject.qualitative_color.length]
 			} else {
 				var color=chartobject.qualitative_color[0]
 			}
@@ -2200,7 +2201,7 @@ function draw_bars(axes,bar,snapobj){
 		if(current[bar.xvar]!=undefined && current[bar.yvar]!=undefined && ((bar.grouping.color=='none') || (bar.grouping.color!=='none' && current[bar.grouping.color]!==undefined))){
 			// color + grouping
 			if(bar.grouping.color!=='none'){
-				var color=chartobject.qualitative_color[color_groups.indexOf(current[bar.grouping.color])]
+				var color=chartobject.qualitative_color[color_groups.indexOf(current[bar.grouping.color]) % chartobject.qualitative_color.length]
 				console.log(barwidth,color_groups.length)
 				var barwidth=totalwidth/color_groups.length
 				// set various values for bar locations
@@ -2321,7 +2322,7 @@ function draw_stackedbars(axes,bar,snapobj){
 		var zero=get_coord(0,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
 
 		for(var i=0;i<color_groups.length;i++){
-			var color=chartobject.qualitative_color[i]
+			var color=chartobject.qualitative_color[i % chartobject.qualitative_color.length]
 			for(var j=0;j<chartobject.dataset.length;j++){
 				var temp=chartobject.dataset[j]
 				if(temp[bar.grouping.color]==color_groups[i]){
