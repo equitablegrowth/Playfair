@@ -46,10 +46,10 @@ Playfair's current theme system is largely undocumented but parameters are clear
 
 I've created a short tutorial that should help you figure out the basics of Playfair. Click here to view the tutorial.
 
-1. Loading data (http://www.austinclemens.com/Playfair/playfair_docs/tutorial1.html)
-2. A simple graph (http://www.austinclemens.com/Playfair/playfair_docs/tutorial2.html)
-3. Annotations (http://www.austinclemens.com/Playfair/playfair_docs/tutorial3.html)
-4. More complicated (http://www.austinclemens.com/Playfair/playfair_docs/tutorial4.html)
-5. The settings tab (http://www.austinclemens.com/Playfair/playfair_docs/tutorial5.html)
+1. [Loading data] (http://www.austinclemens.com/Playfair/playfair_docs/tutorial1.html)
+2. [A simple graph] (http://www.austinclemens.com/Playfair/playfair_docs/tutorial2.html)
+3. [Annotations] (http://www.austinclemens.com/Playfair/playfair_docs/tutorial3.html)
+4. [More complicated] (http://www.austinclemens.com/Playfair/playfair_docs/tutorial4.html)
+5. [The settings tab] (http://www.austinclemens.com/Playfair/playfair_docs/tutorial5.html)
 
 [You can try out Playfair online too (loading, saving, and theming are all disabled). Click here!] (http://www.austinclemens.com/Playfair/playfair.html)
