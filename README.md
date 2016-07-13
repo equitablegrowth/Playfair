@@ -14,7 +14,7 @@ Playfair is a web app for graphing data. It was created to allow researchers at 
 4. [Collaborative editing] (#collaborative-editing)
 5. [Easy to theme] (#easy-to-theme)
 
-##### What isn't Playfair?
+#### What isn't Playfair?
 Playfair isn't as easy to use as most graphing apps. In particular, Playfair requires long data instead of wide data and people who aren't accustomed to working with data often find this confusing. Combined with the large number of options Playfair has, this makes Playfair best for users with some data analysis experience.
 
 ## Features
