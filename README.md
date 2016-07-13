@@ -22,7 +22,7 @@ Playfair isn't as easy to use as most graphing apps. In particular, Playfair req
 ## Features
 
 ### Power and flexibility (ggplot2-style graphing)
-A lot of graphing apps will make you a barchart or a linechart. But EG's needs are sometimes more technical. Sometimes we need a dot plot of coefficients from a statistical model with lines indicating confidence intervals. Charting in Playfair is modeled after the ggplot2 package for R. Playfair is not nearly so powerful, but it uses the ggplot2 concept of overlaying various chart elements on top of one another to create a complex chart. Playfair does not care what type of data you have - dates, numbers, and categories are all understood.
+A lot of graphing apps will make you a barchart or a linechart. But EG's needs are sometimes more technical. Sometimes we need a dot plot of coefficients from a statistical model with lines indicating confidence intervals. Charting in Playfair is modeled after the ggplot2 package for R. Playfair is not nearly so powerful, but it uses the ggplot2 concept of overlaying various chart elements on top of one another to create a complex chart. Playfair does not care what type of data you have - dates, numbers, and categories are all understood. As you can see in the gif below, Playfair will also make a customizable key for you.
 
 ![alt text](http://www.austinclemens.com/Playfair/assets/ggplot2.gif "Adding geoms to a graph")
 
