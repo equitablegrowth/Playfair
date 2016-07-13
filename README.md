@@ -1,10 +1,12 @@
 # Playfair
 
-1. What is Playfair?
-2. Features
-3. Tutorial
+1. [What is Playfair?] (https://github.com/equitablegrowth/Playfair#what-is-playfair)
+2. [Features] (https://github.com/equitablegrowth/Playfair#features)
+3. [Tutorial] (https://github.com/equitablegrowth/Playfair#tutorial)
 
 ## What is Playfair?
+
+[You can try out Playfair online (loading, saving, and theming are all disabled). Click here.] (http://www.austinclemens.com/Playfair/playfair.html)
 
 Playfair is a web app for graphing data. It was created to allow researchers at the Washington Center for Equitable Growth to assemble publication-ready graphs without having to rely on our (two person) design team. There are a lot of web graphing apps out there, but Equitable Growth has a fairly specific set of needs that required a unique solution. Playfair's major design priorities are:
 
