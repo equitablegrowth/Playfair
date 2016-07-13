@@ -44,7 +44,7 @@ Playfair allows you to save and load graphics you have made. There isn't much or
 ![alt text](http://www.austinclemens.com/Playfair/assets/loading.gif "Loading a graph")
 
 ### Easy to theme
-Playfair's current theme system is largely undocumented but parameters are clearly named and it should be relatively easy to create your own theme.
+Playfair's current theme system is largely undocumented but parameters are clearly named and it should be relatively easy to create your own theme. Switching between themes is as easy as choosing the theme you want from a dropdown. This is the default theme:
 
 ![alt text](http://www.austinclemens.com/Playfair/assets/themeexample.png "The default theme")
 
