@@ -26,6 +26,10 @@ A lot of graphing apps will make you a barchart or a linechart. But EG's needs a
 
 ![alt text](http://www.austinclemens.com/Playfair/assets/ggplot2.gif "Adding geoms to a graph")
 
+In addition, the layout of a Playfair graph is fairly flexible and can be edited using the settings tab. This makes it possible to create some chart types that are not specifically supported or that require significant alterations to Playfair's charting style. You might recognize the chart below, from Edward Tufte's The Visual Display of Quantitative Information. It is the canonical example of what people call slopegraphs or slope charts. The chart below was created in Playfair, admittedly with some difficult and about 30-40 minutes of work. [You can compare it to the original here] (http://charliepark.org/slopegraphs/).
+
+![alt text](http://www.austinclemens.com/Playfair/assets/slopechart.png "Slope chart")
+
 ### Annotation and on-chart editing
 Playfair includes a number of tools for adding annotations directly to a chart to help explain the graphic. These include adding arrows, callout lines, and arbitrary text annotations. On-chart editing refers to Playfair's tools for editing text, data, and other elements directly on the chart simply by dragging or right-clicking.
 
@@ -40,7 +44,7 @@ Playfair allows you to save and load graphics you have made. There isn't much or
 ![alt text](http://www.austinclemens.com/Playfair/assets/loading.gif "Loading a graph")
 
 ### Easy to theme
-Playfair's current theme system is largely undocumented but parameters are clearly named and it should be relatively easy to create your own theme. Moreover, you can change layout parameters from within the web app, which gives you a lot of flexibility in creating charts with unusual layouts.
+Playfair's current theme system is largely undocumented but parameters are clearly named and it should be relatively easy to create your own theme.
 
 ![alt text](http://www.austinclemens.com/Playfair/assets/themeexample.png "The default theme")
 
