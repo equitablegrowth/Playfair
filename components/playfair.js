@@ -1346,7 +1346,7 @@ function draw_trends(axes,trend,snapobj){
 
 		var current=trend.trends[i]
 
-		if(chartobject.xaxis_dtype=='number'){
+		if(chartobject.xaxis_dtype=='numeric'){
 			var x_loc1=get_coord(parseFloat(current[0][0]),chartobject.xlimits,[axes[0],axes[1]],'nottext',chartobject.xarray,0,chartobject.shiftx)
 			var x_loc2=get_coord(parseFloat(current[1][0]),chartobject.xlimits,[axes[0],axes[1]],'nottext',chartobject.xarray,0,chartobject.shiftx)
 		} else {
@@ -1354,7 +1354,7 @@ function draw_trends(axes,trend,snapobj){
 			var x_loc2=get_coord(new Date(current[1][0]),chartobject.xlimits,[axes[0],axes[1]],'nottext',chartobject.xarray,0,chartobject.shiftx)
 		}
 
-		if(chartobject.yaxis_dtype=='number'){
+		if(chartobject.yaxis_dtype=='numeric'){
 			var y_loc1=get_coord(parseFloat(current[0][1]),chartobject.ylimits,[axes[2],axes[3]],'nottext',chartobject.yarray,1,chartobject.shifty)
 			var y_loc2=get_coord(parseFloat(current[1][1]),chartobject.ylimits,[axes[2],axes[3]],'nottext',chartobject.yarray,1,chartobject.shifty)
 		} else {
@@ -1421,7 +1421,7 @@ function draw_trends(axes,trend,snapobj){
 		trendtext.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 		var coords=trendtext.getBBox()
 		trendtext.attr({y:coords.y-chartobject.trend_linetotext-coords.height})
-		var inclincation=-(Math.atan(parseFloat(unitslope))*360)/(2*Math.PI)
+		var inclincation=(Math.atan(parseFloat(unitslope))*360)/(2*Math.PI)
 		trendtext.transform('r'+inclincation+' '+coords.cx+' '+coords.cy)
 	}
 }
