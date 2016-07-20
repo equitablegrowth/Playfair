@@ -1019,15 +1019,15 @@ function draw_key_top(legend,playobj,snapobj){
 			// points
 			if(legend[i].geom=='point' && keyitem_dict[keyitem_name]==undefined){
 				if(legend[i].grouping=='color'){
-					keyitem_dict[keyitem_name]=snapobj.circle(x+playobj.legend_elementsize/2,y+playobj.legend_elementsize/2,playobj.point_size).attr({fill:chartobject.qualitative_color[numeric],stroke:chartobject.qualitative_color[numeric],'stroke-width':playobj.point_strokewidth,'data_type':'point','group':legend[i].group_value,'class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu',ident2:'floatkey',ident:'key'})
+					keyitem_dict[keyitem_name]=snapobj.circle(x+playobj.legend_elementsize/2,y+playobj.legend_elementsize/2,playobj.point_size).attr({fill:chartobject.qualitative_color[numeric % chartobject.qualitative_color.length],stroke:chartobject.qualitative_color[numeric % chartobject.qualitative_color.length],'stroke-width':playobj.point_strokewidth,'data_type':'point','group':legend[i].group_value,'class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu',ident2:'floatkey',ident:'key'})
 				} else if(legend[i].grouping=='type'){
-					keyitem_dict[keyitem_name]=snapobj.circle(x+playobj.legend_elementsize/2,y+playobj.legend_elementsize/2,playobj.point_size).attr({fill:chartobject.qualitative_color[numeric],stroke:chartobject.qualitative_color[numeric],'stroke-width':playobj.point_strokewidth,'data_type':'point','group':legend[i].group_value,'class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu',ident2:'floatkey',ident:'key'})
+					keyitem_dict[keyitem_name]=snapobj.circle(x+playobj.legend_elementsize/2,y+playobj.legend_elementsize/2,playobj.point_size).attr({fill:chartobject.qualitative_color[numeric % chartobject.qualitative_color.length],stroke:chartobject.qualitative_color[numeric % chartobject.qualitative_color.length],'stroke-width':playobj.point_strokewidth,'data_type':'point','group':legend[i].group_value,'class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu',ident2:'floatkey',ident:'key'})
 				} else {
-					keyitem_dict[keyitem_name]=snapobj.circle(x+playobj.legend_elementsize/2,y+playobj.legend_elementsize/2,playobj.point_size).attr({fill:chartobject.qualitative_color[numeric],stroke:chartobject.qualitative_color[numeric],'stroke-width':playobj.point_strokewidth,'data_type':'point','group':legend[i].group_value,'class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu',ident2:'floatkey',ident:'key'})
+					keyitem_dict[keyitem_name]=snapobj.circle(x+playobj.legend_elementsize/2,y+playobj.legend_elementsize/2,playobj.point_size).attr({fill:chartobject.qualitative_color[numeric % chartobject.qualitative_color.length],stroke:chartobject.qualitative_color[numeric % chartobject.qualitative_color.length],'stroke-width':playobj.point_strokewidth,'data_type':'point','group':legend[i].group_value,'class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu',ident2:'floatkey',ident:'key'})
 				}
 			} else if(legend[i].geom=='point' && keyitem_dict[keyitem_name]!==undefined){
 				if(legend[i].grouping=='color'){
-					keyitem_dict[keyitem_name].attr({fill:chartobject.qualitative_color[numeric],'stroke':chartobject.qualitative_color[numeric]})
+					keyitem_dict[keyitem_name].attr({fill:chartobject.qualitative_color[numeric % chartobject.qualitative_color.length],'stroke':chartobject.qualitative_color[numeric % chartobject.qualitative_color.length]})
 				}
 				if(legend[i].grouping=='type'){
 					// keyitem_dict[keyitem_name].attr({'stroke-width':chartobject.qualitative_color[legend[i].position],})
@@ -1037,9 +1037,9 @@ function draw_key_top(legend,playobj,snapobj){
 			// lines
 			if((legend[i].geom=='line') && keyitem_dict[keyitem_name]==undefined){
 				if(legend[i].grouping=='color'){
-					keyitem_dict[keyitem_name]=snapobj.line(x,y+playobj.legend_elementsize/2,x+playobj.legend_elementsize,y+playobj.legend_elementsize/2).attr({stroke:chartobject.qualitative_color[numeric],'stroke-width':playobj.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+					keyitem_dict[keyitem_name]=snapobj.line(x,y+playobj.legend_elementsize/2,x+playobj.legend_elementsize,y+playobj.legend_elementsize/2).attr({stroke:chartobject.qualitative_color[numeric % chartobject.qualitative_color.length],'stroke-width':playobj.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
 				} else if(legend[i].grouping=='type'){
-					keyitem_dict[keyitem_name]=snapobj.line(x,y+playobj.legend_elementsize/2,x+playobj.legend_elementsize,y+playobj.legend_elementsize/2).attr({stroke:chartobject.qualitative_color[0],'stroke-width':playobj.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges','stroke-dasharray':chartobject.line_types[numeric]})
+					keyitem_dict[keyitem_name]=snapobj.line(x,y+playobj.legend_elementsize/2,x+playobj.legend_elementsize,y+playobj.legend_elementsize/2).attr({stroke:chartobject.qualitative_color[0],'stroke-width':playobj.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges','stroke-dasharray':chartobject.line_types[numeric % chartobject.line_types.length]})
 				} else {
 					keyitem_dict[keyitem_name]=snapobj.line(x,y+playobj.legend_elementsize/2,x+playobj.legend_elementsize,y+playobj.legend_elementsize/2).attr({stroke:chartobject.qualitative_color[0],'stroke-width':playobj.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
 				}
@@ -1049,16 +1049,16 @@ function draw_key_top(legend,playobj,snapobj){
 					// keyitem_dict[keyitem_name].attr({'stroke':chartobject.qualitative_color[numeric]})
 				} else if(legend[i].grouping=='type'){
 					console.log('type')
-					keyitem_dict[keyitem_name].attr({'stroke-dasharray':chartobject.line_types[numeric]})
+					keyitem_dict[keyitem_name].attr({'stroke-dasharray':chartobject.line_types[numeric % chartobject.line_types.length]})
 				}
 			}
 
 			// segments
 			if((legend[i].geom=='segment') && keyitem_dict[keyitem_name]==undefined){
 				if(legend[i].grouping=='color'){
-					keyitem_dict[keyitem_name]=snapobj.line(x,y+playobj.legend_elementsize/2,x+playobj.legend_elementsize,y+playobj.legend_elementsize/2).attr({stroke:chartobject.grayscale_color[numeric],'stroke-width':playobj.segment_width,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+					keyitem_dict[keyitem_name]=snapobj.line(x,y+playobj.legend_elementsize/2,x+playobj.legend_elementsize,y+playobj.legend_elementsize/2).attr({stroke:chartobject.grayscale_color[numeric % chartobject.qualitative_color.length],'stroke-width':playobj.segment_width,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
 				} else if(legend[i].grouping=='type'){
-					keyitem_dict[keyitem_name]=snapobj.line(x,y+playobj.legend_elementsize/2,x+playobj.legend_elementsize,y+playobj.legend_elementsize/2).attr({stroke:chartobject.grayscale_color[0],'stroke-width':playobj.segment_width,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges','stroke-dasharray':chartobject.line_types[numeric]})
+					keyitem_dict[keyitem_name]=snapobj.line(x,y+playobj.legend_elementsize/2,x+playobj.legend_elementsize,y+playobj.legend_elementsize/2).attr({stroke:chartobject.grayscale_color[0],'stroke-width':playobj.segment_width,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges','stroke-dasharray':chartobject.line_types[numeric % chartobject.line_types.length]})
 				} else {
 					keyitem_dict[keyitem_name]=snapobj.line(x,y+playobj.legend_elementsize/2,x+playobj.legend_elementsize,y+playobj.legend_elementsize/2).attr({stroke:chartobject.grayscale_color[0],'stroke-width':playobj.segment_width,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
 				}
@@ -1068,39 +1068,39 @@ function draw_key_top(legend,playobj,snapobj){
 					// keyitem_dict[keyitem_name].attr({'stroke':chartobject.qualitative_color[numeric]})
 				} else if(legend[i].grouping=='type'){
 					console.log('type')
-					keyitem_dict[keyitem_name].attr({'stroke-dasharray':chartobject.line_types[numeric]})
+					keyitem_dict[keyitem_name].attr({'stroke-dasharray':chartobject.line_types[numeric % chartobject.line_types.length]})
 				}
 			}
 
 			// steps
 			if((legend[i].geom=='step') && keyitem_dict[keyitem_name]==undefined){
 				if(legend[i].grouping=='color'){
-					keyitem_dict[keyitem_name]=snapobj.path('M'+x+','+(y+chartobject.legend_elementsize*(2/3))+'L'+(x+chartobject.legend_elementsize/2)+','+(y+chartobject.legend_elementsize*(2/3))+'L'+(x+chartobject.legend_elementsize/2)+','+(y+chartobject.legend_elementsize*(1/3))+'L'+(x+chartobject.legend_elementsize)+','+(y+chartobject.legend_elementsize*(1/3))).attr({fill:'none',stroke:chartobject.qualitative_color[numeric],'stroke-width':playobj.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+					keyitem_dict[keyitem_name]=snapobj.path('M'+x+','+(y+chartobject.legend_elementsize*(2/3))+'L'+(x+chartobject.legend_elementsize/2)+','+(y+chartobject.legend_elementsize*(2/3))+'L'+(x+chartobject.legend_elementsize/2)+','+(y+chartobject.legend_elementsize*(1/3))+'L'+(x+chartobject.legend_elementsize)+','+(y+chartobject.legend_elementsize*(1/3))).attr({fill:'none',stroke:chartobject.qualitative_color[numeric % chartobject.qualitative_color.length],'stroke-width':playobj.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
 				} else if(legend[i].grouping=='type'){
-					keyitem_dict[keyitem_name]=snapobj.path('M'+x+','+(y+chartobject.legend_elementsize*(2/3))+'L'+(x+chartobject.legend_elementsize/2)+','+(y+chartobject.legend_elementsize*(2/3))+'L'+(x+chartobject.legend_elementsize/2)+','+(y+chartobject.legend_elementsize*(1/3))+'L'+(x+chartobject.legend_elementsize)+','+(y+chartobject.legend_elementsize*(1/3))).attr({fill:'none',stroke:chartobject.qualitative_color[0],'stroke-width':playobj.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges','stroke-dasharray':chartobject.line_types[numeric]})
+					keyitem_dict[keyitem_name]=snapobj.path('M'+x+','+(y+chartobject.legend_elementsize*(2/3))+'L'+(x+chartobject.legend_elementsize/2)+','+(y+chartobject.legend_elementsize*(2/3))+'L'+(x+chartobject.legend_elementsize/2)+','+(y+chartobject.legend_elementsize*(1/3))+'L'+(x+chartobject.legend_elementsize)+','+(y+chartobject.legend_elementsize*(1/3))).attr({fill:'none',stroke:chartobject.qualitative_color[0],'stroke-width':playobj.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges','stroke-dasharray':chartobject.line_types[numeric % chartobject.line_types.length]})
 				} else {
 					keyitem_dict[keyitem_name]=snapobj.path('M'+x+','+(y+chartobject.legend_elementsize*(2/3))+'L'+(x+chartobject.legend_elementsize/2)+','+(y+chartobject.legend_elementsize*(2/3))+'L'+(x+chartobject.legend_elementsize/2)+','+(y+chartobject.legend_elementsize*(1/3))+'L'+(x+chartobject.legend_elementsize)+','+(y+chartobject.legend_elementsize*(1/3))).attr({fill:'none',stroke:chartobject.qualitative_color[0],'stroke-width':playobj.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
 				}
 			} else if(legend[i].geom=='step' && keyitem_dict[keyitem_name]!==undefined){
 				if(legend[i].grouping=='color'){
-					keyitem_dict[keyitem_name].attr({'stroke':chartobject.qualitative_color[numeric]})
+					keyitem_dict[keyitem_name].attr({'stroke':chartobject.qualitative_color[numeric % chartobject.qualitative_color.length]})
 				} else if(legend[i].grouping=='type'){
-					keyitem_dict[keyitem_name].attr({'stroke-dasharray':chartobject.line_types[numeric]})
+					keyitem_dict[keyitem_name].attr({'stroke-dasharray':chartobject.line_types[numeric % chartobject.line_types.length]})
 				}
 			}
 
 			// bars or stacked bars or area 
 			if((legend[i].geom=='bar' || legend[i].geom=='stackedbar' || legend[i].geom=='area') && keyitem_dict[keyitem_name]==undefined){
 				if(legend[i].grouping=='color'){
-					keyitem_dict[keyitem_name]=snapobj.rect(x,y,playobj.legend_elementsize,playobj.legend_elementsize).attr({fill:chartobject.qualitative_color[numeric],'group':legend[i].group_value,'class':'dataelement',colorchange:'fill',context:'data_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+					keyitem_dict[keyitem_name]=snapobj.rect(x,y,playobj.legend_elementsize,playobj.legend_elementsize).attr({fill:chartobject.qualitative_color[numeric % chartobject.qualitative_color.length],'group':legend[i].group_value,'class':'dataelement',colorchange:'fill',context:'data_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
 				} else if(legend[i].grouping=='type'){
-					keyitem_dict[keyitem_name]=snapobj.rect(x,y,playobj.legend_elementsize,playobj.legend_elementsize).attr({fill:chartobject.qualitative_color[numeric],'group':legend[i].group_value,'class':'dataelement',colorchange:'fill',context:'data_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+					keyitem_dict[keyitem_name]=snapobj.rect(x,y,playobj.legend_elementsize,playobj.legend_elementsize).attr({fill:chartobject.qualitative_color[numeric % chartobject.qualitative_color.length],'group':legend[i].group_value,'class':'dataelement',colorchange:'fill',context:'data_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
 				} else {
-					keyitem_dict[keyitem_name]=snapobj.rect(x,y,playobj.legend_elementsize,playobj.legend_elementsize).attr({fill:chartobject.qualitative_color[numeric],'group':legend[i].group_value,'class':'dataelement',colorchange:'fill',context:'data_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+					keyitem_dict[keyitem_name]=snapobj.rect(x,y,playobj.legend_elementsize,playobj.legend_elementsize).attr({fill:chartobject.qualitative_color[numeric % chartobject.qualitative_color.length],'group':legend[i].group_value,'class':'dataelement',colorchange:'fill',context:'data_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
 				}
 			} else if((legend[i].geom=='bar' || legend[i].geom=='stackedbar' || legend[i].geom=='area') && keyitem_dict[keyitem_name]!==undefined){
 				if(legend[i].grouping=='color'){
-					keyitem_dict[keyitem_name].attr({'fill':chartobject.qualitative_color[numeric]})
+					keyitem_dict[keyitem_name].attr({'fill':chartobject.qualitative_color[numeric % chartobject.qualitative_color.length]})
 				} else if(legend[i].grouping=='type'){
 					// keyitem_dict[keyitem_name].attr({'stroke-dasharray':chartobject.line_types[numeric]})
 				}
@@ -1226,15 +1226,15 @@ function draw_key(legend,playobj,snapobj,prelim){
 			// points
 			if(legend[i].geom=='point' && keyitem_dict[keyitem_name]==undefined){
 				if(legend[i].grouping=='color'){
-					keyitem_dict[keyitem_name]=snapobj.circle(x+playobj.legend_elementsize/2,y+playobj.legend_elementsize/2,playobj.point_size).attr({fill:chartobject.qualitative_color[numeric],stroke:chartobject.qualitative_color[numeric],'stroke-width':playobj.point_strokewidth,'data_type':'point','group':legend[i].group_value,'class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu',ident2:'floatkey',ident:'key'})
+					keyitem_dict[keyitem_name]=snapobj.circle(x+playobj.legend_elementsize/2,y+playobj.legend_elementsize/2,playobj.point_size).attr({fill:chartobject.qualitative_color[numeric % chartobject.qualitative_color.length],stroke:chartobject.qualitative_color[numeric % chartobject.qualitative_color.length],'stroke-width':playobj.point_strokewidth,'data_type':'point','group':legend[i].group_value,'class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu',ident2:'floatkey',ident:'key'})
 				} else if(legend[i].grouping=='type'){
-					keyitem_dict[keyitem_name]=snapobj.circle(x+playobj.legend_elementsize/2,y+playobj.legend_elementsize/2,playobj.point_size).attr({fill:chartobject.qualitative_color[numeric],stroke:chartobject.qualitative_color[numeric],'stroke-width':playobj.point_strokewidth,'data_type':'point','group':legend[i].group_value,'class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu',ident2:'floatkey',ident:'key'})
+					keyitem_dict[keyitem_name]=snapobj.circle(x+playobj.legend_elementsize/2,y+playobj.legend_elementsize/2,playobj.point_size).attr({fill:chartobject.qualitative_color[numeric % chartobject.qualitative_color.length],stroke:chartobject.qualitative_color[numeric % chartobject.qualitative_color.length],'stroke-width':playobj.point_strokewidth,'data_type':'point','group':legend[i].group_value,'class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu',ident2:'floatkey',ident:'key'})
 				} else {
-					keyitem_dict[keyitem_name]=snapobj.circle(x+playobj.legend_elementsize/2,y+playobj.legend_elementsize/2,playobj.point_size).attr({fill:chartobject.qualitative_color[numeric],stroke:chartobject.qualitative_color[numeric],'stroke-width':playobj.point_strokewidth,'data_type':'point','group':legend[i].group_value,'class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu',ident2:'floatkey',ident:'key'})
+					keyitem_dict[keyitem_name]=snapobj.circle(x+playobj.legend_elementsize/2,y+playobj.legend_elementsize/2,playobj.point_size).attr({fill:chartobject.qualitative_color[numeric % chartobject.qualitative_color.length],stroke:chartobject.qualitative_color[numeric % chartobject.qualitative_color.length],'stroke-width':playobj.point_strokewidth,'data_type':'point','group':legend[i].group_value,'class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu',ident2:'floatkey',ident:'key'})
 				}
 			} else if(legend[i].geom=='point' && keyitem_dict[keyitem_name]!==undefined){
 				if(legend[i].grouping=='color'){
-					keyitem_dict[keyitem_name].attr({fill:chartobject.qualitative_color[numeric],'stroke':chartobject.qualitative_color[numeric]})
+					keyitem_dict[keyitem_name].attr({fill:chartobject.qualitative_color[numeric % chartobject.qualitative_color.length],'stroke':chartobject.qualitative_color[numeric]})
 				}
 				if(legend[i].grouping=='type'){
 					// keyitem_dict[keyitem_name].attr({'stroke-width':chartobject.qualitative_color[legend[i].position],})
@@ -1244,7 +1244,7 @@ function draw_key(legend,playobj,snapobj,prelim){
 			// lines
 			if((legend[i].geom=='line') && keyitem_dict[keyitem_name]==undefined){
 				if(legend[i].grouping=='color'){
-					keyitem_dict[keyitem_name]=snapobj.line(x,y+playobj.legend_elementsize/2,x+playobj.legend_elementsize,y+playobj.legend_elementsize/2).attr({stroke:chartobject.qualitative_color[numeric],'stroke-width':playobj.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+					keyitem_dict[keyitem_name]=snapobj.line(x,y+playobj.legend_elementsize/2,x+playobj.legend_elementsize,y+playobj.legend_elementsize/2).attr({stroke:chartobject.qualitative_color[numeric % chartobject.qualitative_color.length],'stroke-width':playobj.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
 				} else if(legend[i].grouping=='type'){
 					keyitem_dict[keyitem_name]=snapobj.line(x,y+playobj.legend_elementsize/2,x+playobj.legend_elementsize,y+playobj.legend_elementsize/2).attr({stroke:chartobject.qualitative_color[0],'stroke-width':playobj.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges','stroke-dasharray':chartobject.line_types[numeric]})
 				} else {
@@ -1256,16 +1256,16 @@ function draw_key(legend,playobj,snapobj,prelim){
 					// keyitem_dict[keyitem_name].attr({'stroke':chartobject.qualitative_color[numeric]})
 				} else if(legend[i].grouping=='type'){
 					console.log('type')
-					keyitem_dict[keyitem_name].attr({'stroke-dasharray':chartobject.line_types[numeric]})
+					keyitem_dict[keyitem_name].attr({'stroke-dasharray':chartobject.line_types[numeric % chartobject.qualitative_color.length]})
 				}
 			}
 
 			// segments
 			if((legend[i].geom=='segment') && keyitem_dict[keyitem_name]==undefined){
 				if(legend[i].grouping=='color'){
-					keyitem_dict[keyitem_name]=snapobj.line(x,y+playobj.legend_elementsize/2,x+playobj.legend_elementsize,y+playobj.legend_elementsize/2).attr({stroke:chartobject.grayscale_color[numeric],'stroke-width':playobj.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+					keyitem_dict[keyitem_name]=snapobj.line(x,y+playobj.legend_elementsize/2,x+playobj.legend_elementsize,y+playobj.legend_elementsize/2).attr({stroke:chartobject.grayscale_color[numeric % chartobject.grayscale_color.length],'stroke-width':playobj.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
 				} else if(legend[i].grouping=='type'){
-					keyitem_dict[keyitem_name]=snapobj.line(x,y+playobj.legend_elementsize/2,x+playobj.legend_elementsize,y+playobj.legend_elementsize/2).attr({stroke:chartobject.grayscale_color[0],'stroke-width':playobj.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges','stroke-dasharray':chartobject.line_types[numeric]})
+					keyitem_dict[keyitem_name]=snapobj.line(x,y+playobj.legend_elementsize/2,x+playobj.legend_elementsize,y+playobj.legend_elementsize/2).attr({stroke:chartobject.grayscale_color[0],'stroke-width':playobj.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges','stroke-dasharray':chartobject.line_types[numeric % chartobject.line_types.length]})
 				} else {
 					keyitem_dict[keyitem_name]=snapobj.line(x,y+playobj.legend_elementsize/2,x+playobj.legend_elementsize,y+playobj.legend_elementsize/2).attr({stroke:chartobject.grayscale_color[0],'stroke-width':playobj.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
 				}
@@ -1275,39 +1275,39 @@ function draw_key(legend,playobj,snapobj,prelim){
 					// keyitem_dict[keyitem_name].attr({'stroke':chartobject.qualitative_color[numeric]})
 				} else if(legend[i].grouping=='type'){
 					console.log('type')
-					keyitem_dict[keyitem_name].attr({'stroke-dasharray':chartobject.line_types[numeric]})
+					keyitem_dict[keyitem_name].attr({'stroke-dasharray':chartobject.line_types[numeric % chartobject.line_types.length]})
 				}
 			}
 
 			// steps
 			if((legend[i].geom=='step') && keyitem_dict[keyitem_name]==undefined){
 				if(legend[i].grouping=='color'){
-					keyitem_dict[keyitem_name]=snapobj.path('M'+x+','+(y+chartobject.legend_elementsize*(2/3))+'L'+(x+chartobject.legend_elementsize/2)+','+(y+chartobject.legend_elementsize*(2/3))+'L'+(x+chartobject.legend_elementsize/2)+','+(y+chartobject.legend_elementsize*(1/3))+'L'+(x+chartobject.legend_elementsize)+','+(y+chartobject.legend_elementsize*(1/3))).attr({fill:'none',stroke:chartobject.qualitative_color[numeric],'stroke-width':playobj.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+					keyitem_dict[keyitem_name]=snapobj.path('M'+x+','+(y+chartobject.legend_elementsize*(2/3))+'L'+(x+chartobject.legend_elementsize/2)+','+(y+chartobject.legend_elementsize*(2/3))+'L'+(x+chartobject.legend_elementsize/2)+','+(y+chartobject.legend_elementsize*(1/3))+'L'+(x+chartobject.legend_elementsize)+','+(y+chartobject.legend_elementsize*(1/3))).attr({fill:'none',stroke:chartobject.qualitative_color[numeric % chartobject.qualitative_color.length],'stroke-width':playobj.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
 				} else if(legend[i].grouping=='type'){
-					keyitem_dict[keyitem_name]=snapobj.path('M'+x+','+(y+chartobject.legend_elementsize*(2/3))+'L'+(x+chartobject.legend_elementsize/2)+','+(y+chartobject.legend_elementsize*(2/3))+'L'+(x+chartobject.legend_elementsize/2)+','+(y+chartobject.legend_elementsize*(1/3))+'L'+(x+chartobject.legend_elementsize)+','+(y+chartobject.legend_elementsize*(1/3))).attr({fill:'none',stroke:chartobject.qualitative_color[0],'stroke-width':playobj.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges','stroke-dasharray':chartobject.line_types[numeric]})
+					keyitem_dict[keyitem_name]=snapobj.path('M'+x+','+(y+chartobject.legend_elementsize*(2/3))+'L'+(x+chartobject.legend_elementsize/2)+','+(y+chartobject.legend_elementsize*(2/3))+'L'+(x+chartobject.legend_elementsize/2)+','+(y+chartobject.legend_elementsize*(1/3))+'L'+(x+chartobject.legend_elementsize)+','+(y+chartobject.legend_elementsize*(1/3))).attr({fill:'none',stroke:chartobject.qualitative_color[0],'stroke-width':playobj.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges','stroke-dasharray':chartobject.line_types[numeric % chartobject.line_types.length]})
 				} else {
 					keyitem_dict[keyitem_name]=snapobj.path('M'+x+','+(y+chartobject.legend_elementsize*(2/3))+'L'+(x+chartobject.legend_elementsize/2)+','+(y+chartobject.legend_elementsize*(2/3))+'L'+(x+chartobject.legend_elementsize/2)+','+(y+chartobject.legend_elementsize*(1/3))+'L'+(x+chartobject.legend_elementsize)+','+(y+chartobject.legend_elementsize*(1/3))).attr({fill:'none',stroke:chartobject.qualitative_color[0],'stroke-width':playobj.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
 				}
 			} else if(legend[i].geom=='step' && keyitem_dict[keyitem_name]!==undefined){
 				if(legend[i].grouping=='color'){
-					keyitem_dict[keyitem_name].attr({'stroke':chartobject.qualitative_color[numeric]})
+					keyitem_dict[keyitem_name].attr({'stroke':chartobject.qualitative_color[numeric % chartobject.qualitative_color.length]})
 				} else if(legend[i].grouping=='type'){
-					keyitem_dict[keyitem_name].attr({'stroke-dasharray':chartobject.line_types[numeric]})
+					keyitem_dict[keyitem_name].attr({'stroke-dasharray':chartobject.line_types[numeric % chartobject.line_types.length]})
 				}
 			}
 
 			// bars or stacked bars or area 
 			if((legend[i].geom=='bar' || legend[i].geom=='stackedbar' || legend[i].geom=='area') && keyitem_dict[keyitem_name]==undefined){
 				if(legend[i].grouping=='color'){
-					keyitem_dict[keyitem_name]=snapobj.rect(x,y,playobj.legend_elementsize,playobj.legend_elementsize).attr({fill:chartobject.qualitative_color[numeric],'group':legend[i].group_value,'class':'dataelement',colorchange:'fill',context:'data_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+					keyitem_dict[keyitem_name]=snapobj.rect(x,y,playobj.legend_elementsize,playobj.legend_elementsize).attr({fill:chartobject.qualitative_color[numeric % chartobject.qualitative_color.length],'group':legend[i].group_value,'class':'dataelement',colorchange:'fill',context:'data_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
 				} else if(legend[i].grouping=='type'){
-					keyitem_dict[keyitem_name]=snapobj.rect(x,y,playobj.legend_elementsize,playobj.legend_elementsize).attr({fill:chartobject.qualitative_color[numeric],'group':legend[i].group_value,'class':'dataelement',colorchange:'fill',context:'data_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+					keyitem_dict[keyitem_name]=snapobj.rect(x,y,playobj.legend_elementsize,playobj.legend_elementsize).attr({fill:chartobject.qualitative_color[numeric % chartobject.qualitative_color.length],'group':legend[i].group_value,'class':'dataelement',colorchange:'fill',context:'data_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
 				} else {
-					keyitem_dict[keyitem_name]=snapobj.rect(x,y,playobj.legend_elementsize,playobj.legend_elementsize).attr({fill:chartobject.qualitative_color[numeric],'group':legend[i].group_value,'class':'dataelement',colorchange:'fill',context:'data_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+					keyitem_dict[keyitem_name]=snapobj.rect(x,y,playobj.legend_elementsize,playobj.legend_elementsize).attr({fill:chartobject.qualitative_color[numeric % chartobject.qualitative_color.length],'group':legend[i].group_value,'class':'dataelement',colorchange:'fill',context:'data_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
 				}
 			} else if((legend[i].geom=='bar' || legend[i].geom=='stackedbar' || legend[i].geom=='area') && keyitem_dict[keyitem_name]!==undefined){
 				if(legend[i].grouping=='color'){
-					keyitem_dict[keyitem_name].attr({'fill':chartobject.qualitative_color[numeric]})
+					keyitem_dict[keyitem_name].attr({'fill':chartobject.qualitative_color[numeric % chartobject.qualitative_color.length]})
 				} else if(legend[i].grouping=='type'){
 					// keyitem_dict[keyitem_name].attr({'stroke-dasharray':chartobject.line_types[numeric]})
 				}
