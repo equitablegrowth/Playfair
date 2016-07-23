@@ -935,6 +935,10 @@ window.playfair = (function () {
 			'segment_minsize':1,
 			'segment_linetypes':[[0,0],[5,5],[8,4,2,4],[8,8],[2,5]],
 
+			// shade geom
+			'shadefill':'white',
+			'shadeopacity':.6,
+
 			// logo
 			'logo':"data:image/png;base64,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",
 			'logoscale':3,
@@ -1109,7 +1113,7 @@ function draw_key_top(legend,playobj,snapobj){
 			// shade
 			if(legend[i].geom=='shade' && keyitem_dict[keyitem_name]===undefined){
 				keyitem_dict[keyitem_name]=snapobj.rect(x,y,playobj.legend_elementsize,playobj.legend_elementsize).attr({fill:chartobject.chartfill,'shape-rendering':'crispEdges',ident2:'floatkey',ident:'key'})
-				keyitem_dict[keyitem_name]=snapobj.rect(x,y,playobj.legend_elementsize,playobj.legend_elementsize).attr({fill:'#fff','fill-opacity':.6,'shape-rendering':'crispEdges',ident2:'floatkey',ident:'key'})
+				keyitem_dict[keyitem_name]=snapobj.rect(x,y,playobj.legend_elementsize,playobj.legend_elementsize).attr({fill:chartobject.shadefill,'fill-opacity':chartobject.shadeopacity,'shape-rendering':'crispEdges',ident2:'floatkey',ident:'key'})
 			}
 		}
 
@@ -1316,7 +1320,7 @@ function draw_key(legend,playobj,snapobj,prelim){
 			// shade
 			if(legend[i].geom=='shade' && keyitem_dict[keyitem_name]===undefined){
 				keyitem_dict[keyitem_name]=snapobj.rect(x,y,playobj.legend_elementsize,playobj.legend_elementsize).attr({fill:chartobject.chartfill,'shape-rendering':'crispEdges',ident2:'floatkey',ident:'key'})
-				keyitem_dict[keyitem_name]=snapobj.rect(x,y,playobj.legend_elementsize,playobj.legend_elementsize).attr({'stroke':'#aaa','stroke-width':1,fill:'#fff','fill-opacity':.6,'shape-rendering':'crispEdges',ident2:'floatkey',ident:'key'})
+				keyitem_dict[keyitem_name]=snapobj.rect(x,y,playobj.legend_elementsize,playobj.legend_elementsize).attr({'stroke':'#aaa','stroke-width':1,fill:chartobject.shadefill,'fill-opacity':chartobject.shadeopacity,'shape-rendering':'crispEdges',ident2:'floatkey',ident:'key'})
 			}
 
 			var lowbound=y+playobj.legend_elementsize+(lines.length-1)*textoffset
@@ -2111,7 +2115,7 @@ function draw_shade(axes,shade,snapobj){
 			if((x_left>=axes[0] & x_left<=axes[1]) | (x_right<=axes[1] & x_right>=axes[0])){
 				if(x_left<axes[0]){x_left=axes[0]}
 				if(x_right>axes[1]){x_right=axes[1]}
-				snapobj.path('M'+x_left+','+y_top+'L'+x_right+','+y_top+'L'+x_right+','+y_bottom+'L'+x_left+','+y_bottom+'L'+x_left+','+y_top).attr({fill:'#fff','fill-opacity':.6,'shape-rendering':'crispEdges'})
+				snapobj.path('M'+x_left+','+y_top+'L'+x_right+','+y_top+'L'+x_right+','+y_bottom+'L'+x_left+','+y_bottom+'L'+x_left+','+y_top).attr({fill:chartobject.shadefill,'fill-opacity':chartobject.shadeopacity,'shape-rendering':'crispEdges'})
 			}
 		}
 	}
@@ -2127,7 +2131,7 @@ function draw_shade(axes,shade,snapobj){
 			if((y_top>=axes[3] & y_top<=axes[2]) | (y_bottom<=axes[2] & y_bottom>=axes[3])){
 				if(y_top<axes[3]){y_top=axes[3]}
 				if(y_bottom>axes[2]){y_bottom=axes[2]}
-				snapobj.path('M'+x_left+','+y_top+'L'+x_right+','+y_top+'L'+x_right+','+y_bottom+'L'+x_left+','+y_bottom+'L'+x_left+','+y_top).attr({fill:'#fff','fill-opacity':.6,'shape-rendering':'crispEdges'})
+				snapobj.path('M'+x_left+','+y_top+'L'+x_right+','+y_top+'L'+x_right+','+y_bottom+'L'+x_left+','+y_bottom+'L'+x_left+','+y_top).attr({fill:chartobject.shadefill,'fill-opacity':chartobject.shadeopacity,'shape-rendering':'crispEdges'})
 			}
 		}
 	}
