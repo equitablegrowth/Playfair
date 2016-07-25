@@ -462,7 +462,9 @@ window.playfair = (function () {
 				var xaxis=create_numerical_axis([graph_obj.xmin,graph_obj.xmax],[graph_obj.xmin,graph_obj.xmax])
 				xaxis.dtype='numeric'
 			} else if(Object.prototype.toString.call(graph_obj.xmax)==='[object Date]'){
+				console.log(graph_obj.xmin)
 				var xaxis=create_date_axis([graph_obj.xmin,graph_obj.xmax],[options['xlimit_min'],options['xlimit_max']],0)
+				console.log(xaxis)
 				xaxis.dtype='date'
 			}
 			graph_obj.xarray=xaxis
@@ -1112,7 +1114,7 @@ function draw_key_top(legend,playobj,snapobj){
 
 			// shade
 			if(legend[i].geom=='shade' && keyitem_dict[keyitem_name]===undefined){
-				keyitem_dict[keyitem_name]=snapobj.rect(x,y,playobj.legend_elementsize,playobj.legend_elementsize).attr({fill:chartobject.chartfill,'shape-rendering':'crispEdges',ident2:'floatkey',ident:'key'})
+				keyitem_dict[keyitem_name]=snapobj.rect(x,y,playobj.legend_elementsize,playobj.legend_elementsize).attr({fill:chartobject.chartfill,'shape-rendering':'crispEdges',ident2:'floatkey',ident:'key',context:'color_context_menu',colorchange:'fill'})
 				keyitem_dict[keyitem_name]=snapobj.rect(x,y,playobj.legend_elementsize,playobj.legend_elementsize).attr({fill:chartobject.shadefill,'fill-opacity':chartobject.shadeopacity,'shape-rendering':'crispEdges',ident2:'floatkey',ident:'key'})
 			}
 		}
@@ -1319,7 +1321,7 @@ function draw_key(legend,playobj,snapobj,prelim){
 
 			// shade
 			if(legend[i].geom=='shade' && keyitem_dict[keyitem_name]===undefined){
-				keyitem_dict[keyitem_name]=snapobj.rect(x,y,playobj.legend_elementsize,playobj.legend_elementsize).attr({fill:chartobject.chartfill,'shape-rendering':'crispEdges',ident2:'floatkey',ident:'key'})
+				keyitem_dict[keyitem_name]=snapobj.rect(x,y,playobj.legend_elementsize,playobj.legend_elementsize).attr({fill:chartobject.chartfill,'shape-rendering':'crispEdges',ident2:'floatkey',ident:'key',context:'color_context_menu',colorchange:'fill'})
 				keyitem_dict[keyitem_name]=snapobj.rect(x,y,playobj.legend_elementsize,playobj.legend_elementsize).attr({'stroke':'#aaa','stroke-width':1,fill:chartobject.shadefill,'fill-opacity':chartobject.shadeopacity,'shape-rendering':'crispEdges',ident2:'floatkey',ident:'key'})
 			}
 
@@ -1542,7 +1544,7 @@ function draw_lines(axes,line,snapobj){
 
 		// color
 		if(line.grouping.color!=='none'){
-			console.log('ATTENTION',color_groups.indexOf(current[0][line.grouping.color]),color_groups.length)
+			// console.log('ATTENTION',color_groups.indexOf(current[0][line.grouping.color]),color_groups.length)
 			var color=chartobject.qualitative_color[color_groups.indexOf(current[0][line.grouping.color]) % chartobject.qualitative_color.length]
 		} else {
 			var color=chartobject.qualitative_color[0]
@@ -2115,7 +2117,7 @@ function draw_shade(axes,shade,snapobj){
 			if((x_left>=axes[0] & x_left<=axes[1]) | (x_right<=axes[1] & x_right>=axes[0])){
 				if(x_left<axes[0]){x_left=axes[0]}
 				if(x_right>axes[1]){x_right=axes[1]}
-				snapobj.path('M'+x_left+','+y_top+'L'+x_right+','+y_top+'L'+x_right+','+y_bottom+'L'+x_left+','+y_bottom+'L'+x_left+','+y_top).attr({fill:chartobject.shadefill,'fill-opacity':chartobject.shadeopacity,'shape-rendering':'crispEdges'})
+				snapobj.path('M'+x_left+','+y_top+'L'+x_right+','+y_top+'L'+x_right+','+y_bottom+'L'+x_left+','+y_bottom+'L'+x_left+','+y_top).attr({fill:chartobject.shadefill,'fill-opacity':chartobject.shadeopacity,'shape-rendering':'crispEdges',context:'color_context_menu',colorchange:'fill'})
 			}
 		}
 	}
@@ -2131,7 +2133,7 @@ function draw_shade(axes,shade,snapobj){
 			if((y_top>=axes[3] & y_top<=axes[2]) | (y_bottom<=axes[2] & y_bottom>=axes[3])){
 				if(y_top<axes[3]){y_top=axes[3]}
 				if(y_bottom>axes[2]){y_bottom=axes[2]}
-				snapobj.path('M'+x_left+','+y_top+'L'+x_right+','+y_top+'L'+x_right+','+y_bottom+'L'+x_left+','+y_bottom+'L'+x_left+','+y_top).attr({fill:chartobject.shadefill,'fill-opacity':chartobject.shadeopacity,'shape-rendering':'crispEdges'})
+				snapobj.path('M'+x_left+','+y_top+'L'+x_right+','+y_top+'L'+x_right+','+y_bottom+'L'+x_left+','+y_bottom+'L'+x_left+','+y_top).attr({fill:chartobject.shadefill,'fill-opacity':chartobject.shadeopacity,'shape-rendering':'crispEdges',context:'color_context_menu',colorchange:'fill'})
 			}
 		}
 	}
@@ -2457,7 +2459,7 @@ function create_numerical_axis(data,limit) {
 	// them by some arbitrary amount (another setting). Some of the candidate step
 	// numbers are gonna be garbage but hey, computation is cheap.
 
-	console.log('range: ',range,'maxdata: ',datamin,'mindata: ',datamax,'minlimit: ',limitmin,'maxlimit: ',limitmax)
+	console.log('range: ',range,'mindata: ',datamin,'maxdata: ',datamax,'minlimit: ',limitmin,'maxlimit: ',limitmax)
 	var steps=range/4
 
 	if(steps>=1){
@@ -2565,7 +2567,7 @@ function create_date_axis(data,limit,y){
 	var limitmax=limit[1]
 	var range=datamax-datamin
 
-	console.log('range: ',range,'maxdata: ',datamin,'mindata: ',datamax,'minlimit: ',limitmin,'maxlimit: ',limitmax)
+	console.log('range: ',range,'mindata: ',datamin,'maxdata: ',datamax,'minlimit: ',limitmin,'maxlimit: ',limitmax)
 
 	// figure out what magnitude the range is - should we measure in years, months, or days?
 	var daylength=86400000
@@ -2635,7 +2637,7 @@ function create_date_axis(data,limit,y){
 		// starts right away.
 		for (var i=0;i<candidate_steps.length;i++){
 	    	steps=parseInt(candidate_steps[i])
-	    	var temp=new Date()
+	    	var temp=new Date('01/01/2016')
 	    	temp.setFullYear(datamin.getUTCFullYear())
 	    	temp.setMonth(datamin.getUTCMonth())
 	    	temp.setDate(datamin.getUTCDate())
@@ -2643,7 +2645,7 @@ function create_date_axis(data,limit,y){
 
 	    	var stepnum=1
 		    while (step_array[step_array.length-1]<datamax){
-		    	var temp=new Date
+		    	var temp=new Date('01/01/2016')
 		    	temp.setFullYear(datamin.getUTCFullYear())
 		    	temp.setMonth(datamin.getUTCMonth()+stepnum*steps)
 		    	temp.setDate(datamin.getUTCDate())
@@ -2659,10 +2661,48 @@ function create_date_axis(data,limit,y){
 	// really shouldn't be a date at all - seconds or hours can just be counted. There is the edge
 	// case of tracking hours over more than one day and this may be a worthwhile future feature.
 	else {
+		chartobject.datedenom[y]=daylength
+		drange=Math.round((datamax-datamin)/(1000*60*60*24))
+		digits=drange.toString().length
+		candidate_arrays=[]
+		candidate_steps=[]
+		nice_ticks=[.1,.2,.3,.4,.5,.6,.7,.8,.9,1]
 
+	    for (var i=0;i<nice_ticks.length;i++){
+			if(nice_ticks[i]*Math.pow(10,digits)>=1){candidate_steps.push(nice_ticks[i]*Math.pow(10,digits))}
+			if(nice_ticks[i]*Math.pow(10,digits-1)>=1){candidate_steps.push(nice_ticks[i]*Math.pow(10,digits-1))}
+			if(nice_ticks[i]*Math.pow(10,digits+1)>=1){candidate_steps.push(nice_ticks[i]*Math.pow(10,digits+1))}
+	    }
+
+		console.log('drange: ',drange,'digits: ',digits,'candidates: ',candidate_steps)
+
+		// create step arrays. For dates, the lowest value should always be the first date so the line
+		// starts right away.
+		for (var i=0;i<candidate_steps.length;i++){
+	    	steps=parseInt(candidate_steps[i])
+	    	var temp=new Date('01/01/2016')
+	    	temp.setFullYear(datamin.getUTCFullYear())
+	    	temp.setMonth(datamin.getUTCMonth())
+	    	temp.setDate(datamin.getUTCDate())
+			step_array=[temp]
+
+	    	var stepnum=1
+		    while (step_array[step_array.length-1]<datamax){
+		    	var temp=new Date('01/01/2016')
+		    	temp.setFullYear(datamin.getUTCFullYear())
+		    	temp.setMonth(datamin.getUTCMonth())
+		    	temp.setDate(datamin.getUTCDate()+stepnum*steps)
+		        step_array.push(temp)
+		        stepnum++
+		    }
+
+		    // this arbitrarily enforces step_arrays of length between 4 and 10
+		    if (step_array.length<15 && step_array.length>3){candidate_arrays.push(step_array)}
+	    }
 	}
 
 	// sort candidate_arrays by length (smallest first)
+	console.log(candidate_arrays)
 	candidate_arrays.sort(function(a,b) {
 		return a.length-b.length
 	})
@@ -2880,6 +2920,7 @@ function draw_axes(playobj,xvar,yvar,shiftx,shifty,legend_height) {
 			if (Object.prototype.toString.call(xvar[i])!='[object Date]' && ((parseInt(lines[j])>=1000 || parseInt(lines[j])<=-1000))){linesj=commas(lines[j])} else{linesj=lines[j]}
 			// var temp=snapobj.text(xstart_xcoord+xshift*shiftx+x_step*i,playobj.y+playobj.height-playobj.bottom_margin-playobj.footer_height-xlab_height-playobj.xtick_to_xlabel-total_yoffset+playobj.xtick_to_xaxis+j*parseInt(playobj.xtick_textsize),linesj).attr({fill:this.xtick_textfill,ident:'xaxis','font-size':playobj.xtick_textsize,'font-weight':playobj.xtick_textweight,'font-family':playobj.xtick_textface,'dominant-baseline':'text-before-edge','text-anchor':'middle',colorchange:'fill',context:'text_context_menu'})
 			var tempx=get_coord(xvar[i],playobj.xlimits,[xstart_xcoord,xfinal_xcoord],xvar.dtype,xvar,0,playobj.shiftx)
+			console.log(xvar[i],playobj.xlimits,[xstart_xcoord,xfinal_xcoord],xvar.dtype,xvar,0,playobj.shiftx)
 			var temp=snapobj.text(tempx,playobj.y+playobj.height-playobj.bottom_margin-playobj.footer_height-xlab_height-playobj.xtick_to_xlabel-total_yoffset+playobj.xtick_to_xaxis+j*parseInt(playobj.xtick_textsize),linesj).attr({fill:playobj.xtick_textfill,ident:'xaxis','font-size':playobj.xtick_textsize,'font-weight':playobj.xtick_textweight,'font-family':playobj.xtick_textface,'dominant-baseline':'text-before-edge','text-anchor':'middle',colorchange:'fill',context:'text_context_menu'})
 			temp.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 			var coords=temp.getBBox()
@@ -3007,12 +3048,15 @@ function formatDate(date,range){
 	var monthlookup={0:'January',1:'February',2:'March',3:'April',4:'May',5:'June',6:'July',7:'August',8:'September',9:'October',10:'November',11:'December'}
 
 	if (range>=4*yearlength){
+		console.log('year formatting')
 		return(date.getUTCFullYear().toString())
 	}
 	if (range>=4*monthlength){
+		console.log('month formatting')
 		return(monthlookup[date.getUTCMonth()]+' '+date.getUTCFullYear())
 	}
-	return(monthlookup[date.getUTCMonth()]+' '+date.getUTCDate()+', '+date.getUTCFullYear())
+	console.log('day formatting')
+	return(monthlookup[date.getUTCMonth()]+' '+date.getUTCDate())
 }
 
 

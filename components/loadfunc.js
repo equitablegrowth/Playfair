@@ -245,13 +245,13 @@ function loadData(coerce_array) {
 				if(d[j][i]==''){
 					final_data[d[0][i]].push(d[j][i])
 				} else {
-					final_data[d[0][i]].push(new Date(moment(d[j][i], ["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY","YYYYqQ"],false)))
+					final_data[d[0][i]].push(new Date(d[j][i]))
 				}
 			} else if (column_types[i]=='date') {
 				if(d[j][i]==''){
 					final_data[d[0][i]].push(d[j][i])
 				} else {
-					final_data[d[0][i]].push(new Date(moment(d[j][i], ["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY","YYYYqQ"],true)))
+					final_data[d[0][i]].push(new Date(d[j][i]))
 				}
 			}
 		}
