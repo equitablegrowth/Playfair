@@ -134,7 +134,7 @@
 "point_fillopacity":0.2,
 "point_maxsize":25,
 "point_minsize":3,
-"line_size":2,
+"line_size":1,
 "shadefill":"black",
 "shadeopacity":0.2,
 "linechart_strokeopacity":1,
