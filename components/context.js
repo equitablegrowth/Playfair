@@ -121,6 +121,7 @@ function leftalign(target) {
 	item.attr({'text-anchor':'start'});
 	try{coords=selected_text.getBBox()
 	high_box.attr({y:coords.y-3,x:coords.x-3,width:coords.width+6,height:coords.height+6})}catch(err){}
+	position_cursor(selected_text)
 }
 
 function rightalign(target) {
@@ -132,6 +133,7 @@ function rightalign(target) {
 	item.attr({'text-anchor':'end'});
 	try{coords=selected_text.getBBox()
 	high_box.attr({y:coords.y-3,x:coords.x-3,width:coords.width+6,height:coords.height+6})}catch(err){}
+	position_cursor(selected_text)
 }
 
 function center(target) {
@@ -143,6 +145,7 @@ function center(target) {
 	item.attr({'text-anchor':'middle'});
 	try{coords=selected_text.getBBox()
 	high_box.attr({y:coords.y-3,x:coords.x-3,width:coords.width+6,height:coords.height+6})}catch(err){}
+	position_cursor(selected_text)
 }
 
 function fadein(target) {

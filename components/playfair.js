@@ -444,7 +444,7 @@ window.playfair = (function () {
 
 	// general method for making charts that are not of a special type .data has already initialized the chart with geoms.
 	// options:
-	// xi_min - a limit that is not a tick (or at least, doesn't have to be a tick)
+	// xlimit_min - a limit that is not a tick (or at least, doesn't have to be a tick)
 	// xlimit_max - upper limit for x
 	// ylimit_min
 	// ylimit_max
@@ -459,7 +459,7 @@ window.playfair = (function () {
 				var xaxis=graph_obj.xstrings
 				xaxis.dtype='text'
 			} else if(typeof(graph_obj.xmax)=='number'){
-				var xaxis=create_numerical_axis([parseFloat(graph_obj.xlimits[0]),parseFloat(graph_obj.xlimits[1])])
+				var xaxis=create_numerical_axis([graph_obj.xmin,graph_obj.xmax])
 				xaxis.dtype='numeric'
 			} else if(Object.prototype.toString.call(graph_obj.xmax)==='[object Date]'){
 				console.log(graph_obj.xmin)

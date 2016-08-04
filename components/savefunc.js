@@ -30,6 +30,7 @@ function savepng() {
 function savesvg() {
 	// this is kinda dumb but... illustrator doesn't recognize dominant_baseline or something
 	// so before saving it out as a svg, all text has to be converted to the auto baseline.
+	// Given that you can do this... I guess that means you can fix the Safari bug with dominant?
 	var alltext=grapharea.selectAll('text')
 	for (var i=0;i<alltext.length;i++){
 		trans=alltext[i].attr('transform')
@@ -323,6 +324,9 @@ function load_populate(response) {
 
 	// run loaddata
 	gen_coerce_array()
+
+	// set theme elements
+	change_theme()
 }
 
 $(document).on('click', '.list-group a', function(e){
