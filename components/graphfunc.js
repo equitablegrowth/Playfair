@@ -267,16 +267,20 @@ function redraw(keep) {
 			// Why not just use.clear()? Because it will destroy all the embedded font declarations
 			// this is apparently a known bug in Snap
 			if(keep){
-				console.log('keep')
-				annotations=grapharea.selectAll("[annotation]")
-			} 
-
-			grapharea.selectAll('rect').remove()
-			grapharea.selectAll('text').remove()
-			grapharea.selectAll('line').remove()
-			grapharea.selectAll('circle').remove()
-			grapharea.selectAll('path').remove()
-			grapharea.selectAll('image').remove()
+				grapharea.selectAll('rect:not([annotation])').remove()
+				grapharea.selectAll('text:not([annotation])').remove()
+				grapharea.selectAll('line:not([annotation])').remove()
+				grapharea.selectAll('circle:not([annotation])').remove()
+				grapharea.selectAll('path:not([annotation])').remove()
+				grapharea.selectAll('image:not([annotation])').remove()
+			} else {
+				grapharea.selectAll('rect').remove()
+				grapharea.selectAll('text').remove()
+				grapharea.selectAll('line').remove()
+				grapharea.selectAll('circle').remove()
+				grapharea.selectAll('path').remove()
+				grapharea.selectAll('image').remove()
+			}
 
 			chartobject=playfair.init_graph(grapharea,0,0,width,height)
 			console.log(geom_dict)
@@ -413,16 +417,16 @@ function redraw(keep) {
 				}
 
 				if(keep){
-					console.log('keeping')
-					for (var i=0;i<annotations.length;i++){
-						var item=Snap(annotations[i])
-						if(item.attr('arrow')){
-							var color=item.attr('stroke')
+					// bring annotations to front
+					var ann=grapharea.selectAll('[annotation]')
+					for(var i=0;i<ann.length;i++){
+						if(ann[i].attr('arrow')){
+							var color=ann[i].attr('stroke')
 							var temparrow = grapharea.path('M0,0 L0,4 L6,2 L0,0').attr({fill:color})
 							var tempamarker = temparrow.marker(0,0,6,4,0,2).attr({fill:color});
-							item.attr({'marker-end':tempamarker})
+							ann[i].attr({'marker-end':tempamarker})
 						}
-						grapharea.append(item)
+						grapharea.append(ann[i])
 					}
 				}
 			})

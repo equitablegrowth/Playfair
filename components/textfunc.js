@@ -289,19 +289,28 @@ var down_listener=function(ev) {
 	// left and right movement - more complicated because you have to check the text-anchor for movement. shift+ control opacity
 	if(keycode==39 || keycode==37){
 		if(ev.shiftKey==true){
-			if((selected_text.node.attributes.style.value).indexOf('middle')!=-1){x=coords.cx}
-			else if((selected_text.node.attributes.style.value).indexOf('start')!=-1){x=coords.x}
-			else if((selected_text.node.attributes.style.value).indexOf('end')!=-1){x=coords.x2}
-			else{x=coords.x}
+			// if((selected_text.node.attributes.style.value).indexOf('middle')!=-1){x=coords.cx}
+			// else if((selected_text.node.attributes.style.value).indexOf('start')!=-1){x=coords.x}
+			// else if((selected_text.node.attributes.style.value).indexOf('end')!=-1){x=coords.x2}
+			// if((selected_text.node.attributes.style.value).indexOf('middle')!=-1){x=selected_text.attr('x')}
+			// else if((selected_text.node.attributes.style.value).indexOf('start')!=-1){x=selected_text.attr('x')}
+			// else if((selected_text.node.attributes.style.value).indexOf('end')!=-1){x=selected_text.attr('x')}
+			// else{x=selected_text.attr('x')}
+			// console.log('start:',x)
+
+			// monitor this - for some reason I did this a weird way to account for text-anchor but I don't see the problem now?
+			x=parseFloat(selected_text.attr('x'))
 			
 			if(keycode==39){
 				selected_text.attr({x:x+1});
 				selected_text.selectAll("tspan:not(:first-child)").attr({x:x+1})
+				console.log('end:',x)
 				high_box.attr({x:high_coords.x+1})
 			}
 			if(keycode==37){
 				selected_text.attr({x:x-1});
 				selected_text.selectAll("tspan:not(:first-child)").attr({x:x-1})
+				console.log('end:',x)
 				high_box.attr({x:high_coords.x-1})
 			}
 		}
