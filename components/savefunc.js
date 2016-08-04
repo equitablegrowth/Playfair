@@ -120,6 +120,10 @@ function savetoserver() {
 	try{
 		// build the dictionary to pass to ajax
 		var filename=$('#savename').val()
+		if(filename.indexOf('/')!==-1){
+			alert("Filenames can't have / in them.")
+			return
+		}
 		var svg = document.getElementById("grapharea").innerHTML
 
 		var dictionary={}
@@ -316,6 +320,9 @@ function load_populate(response) {
 		console.log(key,chartobject.flatdata[key],chartobject.dtypes[key])
 		chartobject.flatdata[key].dtype=chartobject.dtypes[key]
 	}
+
+	// run loaddata
+	gen_coerce_array()
 }
 
 $(document).on('click', '.list-group a', function(e){

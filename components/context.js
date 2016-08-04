@@ -112,6 +112,39 @@ function sizedown(target) {
 	high_box.attr({y:coords.y-3,x:coords.x-3,width:coords.width+6,height:coords.height+6})}catch(err){}
 }
 
+function leftalign(target) {
+	try{high_coords=high_box.getBBox()}catch(err){}
+	var item=Snap(target)
+	try{if(target.nodeName=='tspan'){
+		item=item.parent()
+	}}catch(err){}
+	item.attr({'text-anchor':'start'});
+	try{coords=selected_text.getBBox()
+	high_box.attr({y:coords.y-3,x:coords.x-3,width:coords.width+6,height:coords.height+6})}catch(err){}
+}
+
+function rightalign(target) {
+	try{high_coords=high_box.getBBox()}catch(err){}
+	var item=Snap(target)
+	try{if(target.nodeName=='tspan'){
+		item=item.parent()
+	}}catch(err){}
+	item.attr({'text-anchor':'end'});
+	try{coords=selected_text.getBBox()
+	high_box.attr({y:coords.y-3,x:coords.x-3,width:coords.width+6,height:coords.height+6})}catch(err){}
+}
+
+function center(target) {
+	try{high_coords=high_box.getBBox()}catch(err){}
+	var item=Snap(target)
+	try{if(target.nodeName=='tspan'){
+		item=item.parent()
+	}}catch(err){}
+	item.attr({'text-anchor':'middle'});
+	try{coords=selected_text.getBBox()
+	high_box.attr({y:coords.y-3,x:coords.x-3,width:coords.width+6,height:coords.height+6})}catch(err){}
+}
+
 function fadein(target) {
 	var item=Snap(target)
 	try{if(target.nodeName=='tspan'){

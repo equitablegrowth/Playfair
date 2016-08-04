@@ -384,15 +384,17 @@ function redraw(keep) {
 
 					if ($('#xlimits').val()!='' && $("#xlimitscheck").prop('checked')==true){
 						chartobject.xlimits=$('#xlimits').val().split(',')
+					} else {
+						chartobject.xlimits=[chartobject.xmin,chartobject.xmax]
 					}
 					if ($('#ylimits').val()!='' && $("#ylimitscheck").prop('checked')==true){
 						chartobject.ylimits=$('#ylimits').val().split(',')
+					} else {
+						chartobject.ylimits=[chartobject.ymin,chartobject.ymax]
 					}
 
-					var options={}
-
 					console.log(chartobject)
-					chartobject.chart(options,legend)
+					chartobject.chart(legend)
 
 					// push the calculated yaxis and xaxis to the front-end interface boxes
 					if(Object.prototype.toString.call(chartobject.xarray[0])==='[object Date]'){

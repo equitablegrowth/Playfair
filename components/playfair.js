@@ -444,11 +444,11 @@ window.playfair = (function () {
 
 	// general method for making charts that are not of a special type .data has already initialized the chart with geoms.
 	// options:
-	// xlimit_min - a limit that is not a tick (or at least, doesn't have to be a tick)
+	// xi_min - a limit that is not a tick (or at least, doesn't have to be a tick)
 	// xlimit_max - upper limit for x
 	// ylimit_min
 	// ylimit_max
-	Playfair.prototype.chart=function(options,legend) {
+	Playfair.prototype.chart=function(legend) {
 		var snapobj=this.svg
 		var graph_obj=this
 
@@ -459,11 +459,11 @@ window.playfair = (function () {
 				var xaxis=graph_obj.xstrings
 				xaxis.dtype='text'
 			} else if(typeof(graph_obj.xmax)=='number'){
-				var xaxis=create_numerical_axis([graph_obj.xmin,graph_obj.xmax],[graph_obj.xmin,graph_obj.xmax])
+				var xaxis=create_numerical_axis([parseFloat(graph_obj.xlimits[0]),parseFloat(graph_obj.xlimits[1])])
 				xaxis.dtype='numeric'
 			} else if(Object.prototype.toString.call(graph_obj.xmax)==='[object Date]'){
 				console.log(graph_obj.xmin)
-				var xaxis=create_date_axis([graph_obj.xmin,graph_obj.xmax],[options['xlimit_min'],options['xlimit_max']],0)
+				var xaxis=create_date_axis([graph_obj.xmin,graph_obj.xmax],0)
 				console.log(xaxis)
 				xaxis.dtype='date'
 			}
@@ -485,10 +485,10 @@ window.playfair = (function () {
 				var yaxis=graph_obj.ystrings
 				yaxis.dtype='text'
 			} else if(typeof(graph_obj.ymax)=='number'){
-				var yaxis=create_numerical_axis([graph_obj.ymin,graph_obj.ymax],[graph_obj.ymin,graph_obj.ymax])
+				var yaxis=create_numerical_axis([graph_obj.ymin,graph_obj.ymax])
 				yaxis.dtype='numeric'
 			} else if(Object.prototype.toString.call(graph_obj.ymax)==='[object Date]'){
-				var yaxis=create_date_axis([graph_obj.ymin,graph_obj.ymax],[options['ylimit_min'],options['ylimit_max']],1)
+				var yaxis=create_date_axis([graph_obj.ymin,graph_obj.ymax],1)
 				yaxis.dtype='date'
 			}
 			graph_obj.yarray=yaxis
@@ -2440,11 +2440,9 @@ function get_coord(value,[limit_start,limit_end],[pixel_start,pixel_end],type,ar
 // Things passed to this function (#=required):
 //   # dataseries: array of numbers to be plotted (either x or y, not both)
 
-function create_numerical_axis(data,limit) {
+function create_numerical_axis(data) {
 	var datamin=data[0]
 	var datamax=data[1]
-	var limitmin=limit[0]
-	var limitmax=limit[1]
 	var range=datamax-datamin
 	var nice_ticks=[.1,.2,.5,1,.15,.25,.75]
 
@@ -2459,7 +2457,7 @@ function create_numerical_axis(data,limit) {
 	// them by some arbitrary amount (another setting). Some of the candidate step
 	// numbers are gonna be garbage but hey, computation is cheap.
 
-	console.log('range: ',range,'mindata: ',datamin,'maxdata: ',datamax,'minlimit: ',limitmin,'maxlimit: ',limitmax)
+	console.log('range: ',range,'mindata: ',datamin,'maxdata: ',datamax)
 	var steps=range/4
 
 	if(steps>=1){
@@ -2560,14 +2558,12 @@ function create_numerical_axis(data,limit) {
 }
 
 
-function create_date_axis(data,limit,y){
+function create_date_axis(data,y){
 	var datamin=data[0]
 	var datamax=data[1]
-	var limitmin=limit[0]
-	var limitmax=limit[1]
 	var range=datamax-datamin
 
-	console.log('range: ',range,'mindata: ',datamin,'maxdata: ',datamax,'minlimit: ',limitmin,'maxlimit: ',limitmax)
+	console.log('range: ',range,'mindata: ',datamin,'maxdata: ',datamax)
 
 	// figure out what magnitude the range is - should we measure in years, months, or days?
 	var daylength=86400000

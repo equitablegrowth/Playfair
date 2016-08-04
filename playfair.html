@@ -104,17 +104,14 @@
 
 <div class="contextMenuContainer" id='text_context_menu'>
 	<ul class="contextMenu">
-		<li onclick=movetofront(clickedevent.target)>Move to Front</li>
-		<li onclick=deleteelement(clickedevent.target)>Delete Text</li>
+		<li onclick=movetofront(clickedevent.target) class='highlight'>Move to Front</li>
+		<li onclick=deleteelement(clickedevent.target) class='highlight'>Delete Text</li>
 		<hr>
-		<li onclick=boldtext(clickedevent.target)>Bold</li>
-		<li onclick=italictext(clickedevent.target)>Italic</li>
+		<li><span class='contextbuttons' onclick=boldtext(clickedevent.target)><i class="fa fa-bold"></i></span><span class='contextbuttons' onclick=italictext(clickedevent.target)><i class="fa fa-italic"></i></span><span class='contextbuttons' onclick=sizeup(clickedevent.target)><i class="fa fa-font"></i> <i class="fa fa-angle-up"></i></span><span class='contextbuttons' onclick=sizedown(clickedevent.target)><i class="fa fa-font"></i> <i class="fa fa-angle-down"></i></span></li>
+		<li><span class='contextbuttons' onclick=leftalign(clickedevent.target)><i class="fa fa-align-left"></i></span><span class='contextbuttons' onclick=center(clickedevent.target)><i class="fa fa-align-center"></i></span><span class='contextbuttons' onclick=rightalign(clickedevent.target)><i class="fa fa-align-right"></i></span></li>
 		<hr>
-		<li onclick=sizeup(clickedevent.target)>Bigger</li>
-		<li onclick=sizedown(clickedevent.target)>Smaller</li>
-		<hr>
-		<li onclick=fadein(clickedevent.target)>Fade In</li>
-		<li onclick=fadeout(clickedevent.target)>Fade Out</li>
+		<li onclick=fadein(clickedevent.target) class='highlight'>Fade In</li>
+		<li onclick=fadeout(clickedevent.target) class='highlight'>Fade Out</li>
 		<hr>
 	</ul>
 	<ul id='colormenu'>
@@ -127,21 +124,21 @@
 
 <div class="contextMenuContainer" id='other_context_menu'>
 	<ul class="contextMenu">
-		<li onclick=startpath(clickedevent)>Start Path</li>
-		<li onclick=startarrow(clickedevent)>Start Arrow</li>
+		<li onclick=startpath(clickedevent) class='highlight'>Start Path</li>
+		<li onclick=startarrow(clickedevent) class='highlight'>Start Arrow</li>
 		<hr>
-		<li onclick=addtext(clickedevent)>Add Text</li>
+		<li onclick=addtext(clickedevent) class='highlight'>Add Text</li>
 	</ul>
 </div>
 
 <div class="contextMenuContainer" id='path_context_menu'>
 	<ul class="contextMenu">
-		<li onclick=movetofront(clickedevent.target)>Move to Front</li>
-		<li onclick=thickpath(clickedevent.target)>Thicker</li>
-		<li onclick=thinpath(clickedevent.target)>Thinner</li>
+		<li onclick=movetofront(clickedevent.target) class='highlight'>Move to Front</li>
+		<li onclick=thickpath(clickedevent.target) class='highlight'>Thicker</li>
+		<li onclick=thinpath(clickedevent.target) class='highlight'>Thinner</li>
 		<hr>
-		<li onclick=dash_line(clickedevent.target,0)><span class='solid' onclick=dash_line(clickedevent.target,0)></span></li>
-		<li onclick=dash_line(clickedevent.target,1)><span class='dashed' onclick=dash_line(clickedevent.target,1)></span></li>
+		<li onclick=dash_line(clickedevent.target,0) class='highlight'><span class='solid' onclick=dash_line(clickedevent.target,0)></span></li>
+		<li onclick=dash_line(clickedevent.target,1) class='highlight'><span class='dashed' onclick=dash_line(clickedevent.target,1)></span></li>
 		<hr>
 	</ul>
 	<ul id='colormenu'>
@@ -154,14 +151,14 @@
 
 <div class="contextMenuContainer" id='pathdata_context_menu'>
 	<ul class="contextMenu">
-		<li onclick=movetofront(clickedevent.target)>Move to Front</li>
-		<li onclick=labeldata(clickedevent.target)>Label Data</li>
+		<li onclick=movetofront(clickedevent.target) class='highlight'>Move to Front</li>
+		<li onclick=labeldata(clickedevent.target) class='highlight'>Label Data</li>
 		<hr>
-		<li onclick=thickpath(clickedevent.target)>Thicker</li>
-		<li onclick=thinpath(clickedevent.target)>Thinner</li>
+		<li onclick=thickpath(clickedevent.target) class='highlight'>Thicker</li>
+		<li onclick=thinpath(clickedevent.target) class='highlight'>Thinner</li>
 		<hr>
-		<li onclick=dash_line(clickedevent.target,0)><span class='solid' onclick=dash_line(clickedevent.target,0)></span></li>
-		<li onclick=dash_line(clickedevent.target,1)><span class='dashed' onclick=dash_line(clickedevent.target,1)></span></li>
+		<li onclick=dash_line(clickedevent.target,0) class='highlight'><span class='solid' onclick=dash_line(clickedevent.target,0)></span></li>
+		<li onclick=dash_line(clickedevent.target,1) class='highlight'><span class='dashed' onclick=dash_line(clickedevent.target,1)></span></li>
 		<hr>
 	</ul>
 	<ul id='colormenu'>
@@ -174,12 +171,12 @@
 
 <div class="contextMenuContainer" id='data_context_menu'>
 	<ul class="contextMenu">
-		<li onclick=movetofront(clickedevent.target)>Move to Front</li>
-		<li onclick=labeldata(clickedevent.target)>Label Data</li>
-		<li onclick=addtext(clickedevent)>Add Text</li>
+		<li onclick=movetofront(clickedevent.target) class='highlight'>Move to Front</li>
+		<li onclick=labeldata(clickedevent.target) class='highlight'>Label Data</li>
+		<li onclick=addtext(clickedevent) class='highlight'>Add Text</li>
 		<hr>
-		<li onclick=startpath(clickedevent)>Start Path</li>
-		<li onclick=startarrow(clickedevent)>Start Arrow</li>
+		<li onclick=startpath(clickedevent) class='highlight'>Start Path</li>
+		<li onclick=startarrow(clickedevent) class='highlight'>Start Arrow</li>
 		<hr>
 	</ul>
 	<ul id='colormenu'>
@@ -192,12 +189,12 @@
 
 <div class="contextMenuContainer" id='point_context_menu'>
 	<ul class="contextMenu">
-		<li onclick=movetofront(clickedevent.target)>Move to Front</li>
-		<li onclick=labeldata(clickedevent.target)>Label Data</li>
-		<li onclick=addtext(clickedevent)>Add Text</li>
+		<li onclick=movetofront(clickedevent.target) class='highlight'>Move to Front</li>
+		<li onclick=labeldata(clickedevent.target) class='highlight'>Label Data</li>
+		<li onclick=addtext(clickedevent) class='highlight'>Add Text</li>
 		<hr>
-		<li onclick=startpath(clickedevent)>Start Path</li>
-		<li onclick=startarrow(clickedevent)>Start Arrow</li>
+		<li onclick=startpath(clickedevent) class='highlight'>Start Path</li>
+		<li onclick=startarrow(clickedevent) class='highlight'>Start Arrow</li>
 		<hr>
 		<li><span class='pointcirclecontext' onclick=pointtype(clickedevent.target,'pointcircle')></span><span class='pointpointcontext' onclick=pointtype(clickedevent.target,'pointpoint')></span><span class='pointcircleopencontext' onclick=pointtype(clickedevent.target,'pointcircleopen')></span></li>
 		<hr>
@@ -215,14 +212,14 @@
 
 <div class="contextMenuContainer" id='callout_context_menu'>
 	<ul class="contextMenu">
-		<li onclick=movetofront(clickedevent.target)>Move to Front</li>
-		<li onclick=deleteelement(clickedevent.target)>Delete Line</li>
+		<li onclick=movetofront(clickedevent.target) class='highlight'>Move to Front</li>
+		<li onclick=deleteelement(clickedevent.target) class='highlight'>Delete Line</li>
 		<hr>
-		<li onclick=thickpath(clickedevent.target)>Thicker</li>
-		<li onclick=thinpath(clickedevent.target)>Thinner</li>
+		<li onclick=thickpath(clickedevent.target) class='highlight'>Thicker</li>
+		<li onclick=thinpath(clickedevent.target) class='highlight'>Thinner</li>
 		<hr>
-		<li onclick=dash_line(clickedevent.target,0)><span class='solid' onclick=dash_line(clickedevent.target,0)></span></li>
-		<li onclick=dash_line(clickedevent.target,1)><span class='dashed' onclick=dash_line(clickedevent.target,1)></span></li>
+		<li onclick=dash_line(clickedevent.target,0) class='highlight'><span class='solid' onclick=dash_line(clickedevent.target,0)></span></li>
+		<li onclick=dash_line(clickedevent.target,1) class='highlight'><span class='dashed' onclick=dash_line(clickedevent.target,1)></span></li>
 		<hr>
 	</ul>
 	<ul id='colormenu'>
@@ -235,11 +232,11 @@
 
 <div class="contextMenuContainer" id='color_context_menu'>
 	<ul class="contextMenu">
-		<li onclick=movetofront(clickedevent.target)>Move to Front</li>
-		<li onclick=addtext(clickedevent)>Add Text</li>
+		<li onclick=movetofront(clickedevent.target) class='highlight'>Move to Front</li>
+		<li onclick=addtext(clickedevent) class='highlight'>Add Text</li>
 		<hr>
-		<li onclick=startpath(clickedevent)>Start Path</li>
-		<li onclick=startarrow(clickedevent)>Start Arrow</li>
+		<li onclick=startpath(clickedevent) class='highlight'>Start Path</li>
+		<li onclick=startarrow(clickedevent) class='highlight'>Start Arrow</li>
 		<hr>
 	</ul>
 	<ul id='colormenu'>
