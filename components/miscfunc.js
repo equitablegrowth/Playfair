@@ -138,6 +138,7 @@ function change_theme(){
 				var response = JSON.parse(response);
 				theme=response
 				change_colormenu(theme)
+				populate_settings(theme)
 			},
 			error: function(){
 				alert("Something is wrong with this theme. Use a JSON validator to make sure it is a valid object.")
@@ -161,6 +162,16 @@ function change_colormenu(theme){
 		}
 		$('#colormenu').empty()
 		$('#colormenu').append(colormenu)
+	}
+}
+
+function populate_settings(theme){
+	// change settings fields placeholders to current theme values
+	var theme=default_style(theme)
+	var settings=$('#settings input')
+	for(var i=0;i<settings.length;i++){
+		var param=settings[i].id
+		settings[i].placeholder=theme[param]
 	}
 }
 

@@ -727,234 +727,11 @@ window.playfair = (function () {
 		// obj.style({'top_margin':20,'deksize':'10px'}) etc.
 		// generally playfair.html will pass an entire theme to this function and so everything will have a default,
 		// but just in case that doesn't happen, this standard default is written in too.
-		if (typeof parameters=='undefined'){parameters={}}
 
-		default_parameters={
-			// margins
-			'top_margin':25,
-			'bottom_margin':20,
-			'left_margin':20,
-			'right_margin':40,
+		var full_params=default_style(parameters)
 
-			// head/foot heights
-			'head_height':0,
-			'footer_height':0,
-
-			// hed
-			'hedsize':'24px',
-			'hedsizemin':'22px',
-			'hedweight':600,
-			'hedface':'Asap',
-			'hedtextfill':'black',
-
-			// dek
-			'deksize':'18px',
-			'deksizemin':'16px',
-			'dekweight':400,
-			'dekface':'Asap',
-			'dektextfill':'black',
-			'maxdeklines':2,
-
-			// data labels
-			'datasize':'11px',
-			'dataweight':400,
-			'dataface':'PTSans',
-			'datatextfill':'black',
-
-			// annotations
-			'annotatesize':'14px',
-			'annotateweight':400,
-			'annotateface':'PTSans',
-			'annotatetextfill':'black',
-
-			// source
-			'sourcesize':'12px',
-			'sourceweight':400,
-			'sourceface':'PTSans',
-			'sourcetextfill':'white',
-
-			// note
-			'notesize':'12px',
-			'noteweight':400,
-			'noteface':'PTSans',
-			'notetextfill':'white',
-			'notetoppad':4,
-
-			// chart formatting
-			'chartfill':'#eee',
-			'chart_toppad':0,
-			'chart_bottompad':0,
-			'chart_leftpad':0,
-			'chart_rightpad':0,
-
-			// header formatting
-			'headerfill':'#eee',
-			'header_toppad':11,
-			'header_bottompad':4,
-			'header_leftpad':18,
-			'header_rightpad':0,
-
-			// footer formatting
-			'footerfill':'#46b08e',
-			'footer_toppad':5,
-			'footer_bottompad':5,
-			'footer_leftpad':18,
-			'footer_rightpad':14,
-
-			// x grids
-			'xgrid_fill':'#bbb',
-			'xgrid_zerofill':'#bbb',
-			'xgrid_minorfill':'#bbb',
-			'xgrid_thickness':1,
-			'xgrid_zerothickness':2,
-			'xgrid_minorthickness':1,
-			'xgrid_dasharray':[],
-			'xgrid_zerodasharray':[],
-			'xgrid_minordasharray':[3,3],
-			'xgrid_opacity':0,
-			'xgrid_zeroopacity':0,
-			'xgrid_minoropacity':0,
-
-			// y grids
-			'ygrid_fill':'#bbb',
-			'ygrid_zerofill':'#bbb',
-			'ygrid_minorfill':'#bbb',
-			'ygrid_thickness':1,
-			'ygrid_zerothickness':2,
-			'ygrid_minorthickness':1,
-			'ygrid_dasharray':[],
-			'ygrid_zerodasharray':[],
-			'ygrid_minordasharray':[3,3],
-			'ygrid_opacity':1,
-			'ygrid_zeroopacity':1,
-			'ygrid_minoropacity':0,
-
-			// x ticks
-			'xtick_textsize':'16px',
-			'xtick_textweight':400,
-			'xtick_textface':'PTSans',
-			'xtick_textfill':'#444',
-			'xtick_maxsize':.15,
-			'xtick_length':4,
-			'xtick_thickness':1,
-			'xtick_fill':'#bbb',
-			'xtick_to_xlabel':5,
-			'xtick_to_xaxis':5,
-
-			// y ticks
-			'ytick_textsize':'16px',
-			'ytick_textweight':400,
-			'ytick_textface':'PTSans',
-			'ytick_textfill':'#444',
-			'ytick_maxsize':.25,
-			'ytick_length':16,
-			'ytick_thickness':1,
-			'ytick_fill':'#bbb',
-			'ytick_to_ylabel':6,
-			'ytick_to_yaxis':20,
-
-			// x label
-			'xlabel_textsize':'14px',
-			'xlabel_textweight':400,
-			'xlabel_textface':'PTSans',
-			'xlabel_textfill':'black',
-			'xlabel_maxlength':300,
-
-			// y label
-			'ylabel_textsize':'14px',
-			'ylabel_textweight':400,
-			'ylabel_textface':'PTSans',
-			'ylabel_textfill':'black',
-			'ylabel_maxlength':300,
-
-			// legend
-			'legend_location':'float',
-			'legend_maxwidth':.1,
-			'legend_textsize':'12px',
-			'legend_textweight':400,
-			'legend_textface':'PTSans',
-			'legend_textfill':'black',
-			'legend_titletextsize':'12px',
-			'legend_titletextweight':600,
-			'legend_titletextface':'PTSans',
-			'legend_titletextfill':'black',
-			'legend_toppad':4,
-			'legend_bottompad':0,
-			'legend_rightpad':0,
-			'legend_leftpad':0,
-			'legend_elementsize':15,
-			'legend_elementpad':5,
-			'legend_floatbackground':'white',
-			'legend_floatthickness':1,
-			'legend_floatstroke':'#b5b5b5',
-			'legend_floatpad':8,
-			'legend_entrypadding':8,
-
-			// color scales
-			'diverging_color':["#523211","#8b5322","#dec17c","#80ccc0","#35968e"],
-			'sequential_color':["#205946","#33836A","#67c2a5","#b7dfd1","#e2f2ed"],
-			'qualitative_color':["#67c2a5","#fc8d62","#8da0cb","#e78ac3","#a6d854","#ffd92f","#e5c494","#b3b3b3"],
-			'grayscale_color':['#999999','#666666','#333333','#000000'],
-
-			// barchart specific style
-			'barchart_width':.8,
-
-			// line/scatter specific style
-			'trend_width':1.5,
-			'trend_fill':'#c64027',
-			'trend_textface':'PTSans',
-			'trend_textweight':600,
-			'trend_textsize':'12px',
-			'trend_textcolor':'#c64027',
-			'trend_linetotext':3,
-			'point_size':4,
-			'point_strokewidth':1.7,
-			'point_fillopacity':.2,
-			'point_maxsize':25,
-			'point_minsize':3,
-			'linechart_strokeopacity':1,
-			'line_types':[[0,0],[5,5],[8,4,2,4],[8,8],[2,5]],
-			'line_minsize':2,
-			'line_maxsize':20,
-			'line_size':3,
-
-			// text geom specific
-			'text_minsize':8,
-			'text_maxsize':24,
-
-			// callout style
-			'callout_color':'#ababab',
-			'callout_thickness':1,
-			'callout_dasharray':[],
-
-			'arrow_color':'black',
-			'arrow_thickness':2,
-			'arrow_dasharray':[],
-
-			// segment style
-			'segment_width':1,
-			'segment_maxsize':20,
-			'segment_minsize':1,
-			'segment_linetypes':[[0,0],[5,5],[8,4,2,4],[8,8],[2,5]],
-
-			// shade geom
-			'shadefill':'white',
-			'shadeopacity':.6,
-
-			// logo
-			'logo':"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAAA7CAYAAAD8boGtAAAGe0lEQVR4nO2d7XXqOBCG3+zZBtgSvCWwJXBLICWQEkwJuSWQEkgJUEIoISkhlDD7Q57rYSzLY2NJBPSc45OESLY+Xo8seUY8AQARISM1gArAF4DfOQuSkQ2AZfNT8gbg1Py8S56A5AJcAljBNXYlPt/i8QRYAdjDtUmIM4BnAMfoJUrMX4mvtwLwAeAVl+J7RCq4tljCCWwLZxCeAPyCGxGYBYBD8/OuSC3Ar+EkD8MOTlBnAP/h0vofm890e8UU4BLuhiC0N0Z0cgiQ7/JHG24lq+YA3POd78Y8w1nC40C6uajRim4JN0pF5+8UF+lhC/cceHfDioG1+D30XPcFJ8IU6H5I0i+pLaDmnPn6uZACPGUrxSVbtGU5AXhJcdGcFvBRqXBpXW7lJjzBPXcmJbcFfEQeffZ/QRFgeooABUWAhawUARayUgRYyEoRYCErRYCFrBQBFrLSJ8C6OaSf1rr57Lv5nI/v5vMV0rPpKdNn8/kQZDh2gfx1IB8fFdr2PHjO15dviGvr3ofs56n5D+guN23gXM+4nIc//yGiujm+qcuaiD49n/s4EFFFRDAe8ry1Mc+CiF6N5fkYKI+FXSB/bchfkb39JLHrLs9ZE9HeWIZQW0j98LWXTVl8LKUAfeJjPps0C89F9cm/iWhlLPRYAS495Tyo6+kKHwznPHjqfPDUt+9Yq7wfzXl9aTcqrbWDY9Rd94FmKG9F/TdERd120fwRoDy0oCzC8BWirwOuEaC+S1970lV02VlDZVlQtyM2hvLI/Mw3hYU7VYCx6n6NAEN5h0aHVyLyPgO+D/ztY9sckr0h31ik69Kb55rMl0q77knHnNH1Txzzykye/x1xHAxi1f1f+L2wLYTSvzb/f0brAyqPLeCfhExtvN+4FGuFbpDNtbyhrcCQu5B0c7KISTt8DnWcRKaNFUAUs+6AE+3Ysv9qyvMPum5l7F0TNGBzL8O84FLAcwtwKtZOkB1QwSbCCu0KwBG349/HpHB+OKMrtC0MxmxuAZ5x2YlL3IbHs7UM2gJYBKiH31sjR/ufYYzgi7EQrS1AjvXBqegbaI3hDmQr77MCj4r5MS6FAG/BAo5Biyj0GLFCO8TFmnzcNTEEqDvhpwnwiMvJSEiAKSYfd40lJmTsXZ3TCvArqCXGzWI1b2jDEnmSoZ9pFmjFeUL+ycdcdU9KDAHOnT/ECnFiWKUAAdehWoDSMuawfrHqnpQYUXF6yI0RTM0v4vUSwztaS3TNOiRPRjj/Bt1lhVyTj9h1T0oMAeqGmXNoWsC9YZEz63c4sWgLdY1HCJ9XduIG7duSHJOPlHVPRoxJiGygI+btnIM6/wv6d426dvKjJyPyuSrH8Juy7smIIUDZOXMOTbyHHrNFf+fLCcI16EV1tnwsxlRvPnLUPQlzC1Du+Tfl3WIIvaAdWmnnnaeuxfdmJMfSS466J2FOAcoZ2Rnj9xYZemepG7VvaK/hRCK9RaZ2iJ5gsLcw4IbnKRZel8XyrjZH3YHp75HN17QI0FKIGm5POb7wM2yz30XP7z70UOfbv66GuwmOcBMG7qiFSr+D/RWhtHILUc6p1k9f17IPX666jxGgvMYCY9YilZOhdphk58G1Sseu3NIp8ZNsjqggv7dsKO9KpZUu5xW1Dpsf1DqESidOdq3fNX9PDR1grN7S8th5zmNpsxR1X1DXGdni1r8kvzs/kcHJ2CpAC30euj6P3ZC3bE39HTIUD7GnbuP4sIYM8KHLG4oTmVJuLnuow2LVfSgcg/GVzZKvL69ZgKGAJW40qzUYI+4+kaypG8OxH0jPZQ/FaoQO6XJPE84xJigpZHFi1N2KL77kmrwgIu8u+Rtchg4+jXgOuFcquHBHwD1jpdq19O4pgek2cr/3vVuKAG2wAKcuvRR6KAIcRm6kXqzfzBQBDsPrWdpdvzADRYBhZMTbG4rL/ewUAYYpk4/IFAH2I71K3lG+ZiwKRYD9lMlHAooA+2Hrd8Qdfk3qrVAE6Ee73BciUQToR/r8leE3IkWAXfTSSyEiFgH+GPfumWDrVxaeE1AEeMkS7eRDehUXIuEToBZckq9uT0CF9ivpP9F1Gee4W8C5wD/yN7onwydAHdL3Y4KcB+CtLAAnxj1av8cK7VcL8LayhQRIh1SOqPJZPN5D+RZ3ALXCFjD0SHGCPaCqMAMswE/YIqC+4Da1/qnw6zUZvwy0i81l2C0UHon/ARkzCDw40WUEAAAAAElFTkSuQmCC",
-			'logoscale':3,
-
-			// colormenu
-			'colormenu':'#205946,#33836A,#67c2a5,#b7dfd1,#e2f2ed,#ffffff,#8e2a1d,#c63f26,#f58c63,#fbcdbb,#fef1eb,#000000,#24385B,#3F578C,#8c9fca,#ccdaf0,#f1f3f9,#a3a3a3,#e78ac3,#a6d854,#ffd92f,#e5c494,#ece9e8,#c3c3c3',
-		}
-
-		for (var property in default_parameters){
-			if (parameters[property]===undefined){
-				this[property]=default_parameters[property]
-			} else {
-				this[property]=parameters[property]
-			}
+		for (var property in full_params){
+			this[property]=full_params[property]
 		}
 	}
 
@@ -3058,7 +2835,241 @@ function formatDate(date,range){
 	return(monthlookup[date.getUTCMonth()]+' '+date.getUTCDate())
 }
 
+function default_style(parameters) {
+	// Parameters should be an object with the parameters you want to change like:
+	// obj.style({'top_margin':20,'deksize':'10px'}) etc.
+	if (typeof parameters=='undefined'){parameters={}}
 
+	default_parameters={
+		// margins
+		'top_margin':25,
+		'bottom_margin':20,
+		'left_margin':20,
+		'right_margin':40,
+
+		// head/foot heights
+		'head_height':0,
+		'footer_height':0,
+
+		// hed
+		'hedsize':'24px',
+		'hedsizemin':'22px',
+		'hedweight':600,
+		'hedface':'Asap',
+		'hedtextfill':'black',
+
+		// dek
+		'deksize':'18px',
+		'deksizemin':'16px',
+		'dekweight':400,
+		'dekface':'Asap',
+		'dektextfill':'black',
+		'maxdeklines':2,
+
+		// data labels
+		'datasize':'11px',
+		'dataweight':400,
+		'dataface':'PTSans',
+		'datatextfill':'black',
+
+		// annotations
+		'annotatesize':'14px',
+		'annotateweight':400,
+		'annotateface':'PTSans',
+		'annotatetextfill':'black',
+
+		// source
+		'sourcesize':'12px',
+		'sourceweight':400,
+		'sourceface':'PTSans',
+		'sourcetextfill':'white',
+
+		// note
+		'notesize':'12px',
+		'noteweight':400,
+		'noteface':'PTSans',
+		'notetextfill':'white',
+		'notetoppad':4,
+
+		// chart formatting
+		'chartfill':'#eee',
+		'chart_toppad':0,
+		'chart_bottompad':0,
+		'chart_leftpad':0,
+		'chart_rightpad':0,
+
+		// header formatting
+		'headerfill':'#eee',
+		'header_toppad':11,
+		'header_bottompad':4,
+		'header_leftpad':18,
+		'header_rightpad':0,
+
+		// footer formatting
+		'footerfill':'#46b08e',
+		'footer_toppad':5,
+		'footer_bottompad':5,
+		'footer_leftpad':18,
+		'footer_rightpad':14,
+
+		// x grids
+		'xgrid_fill':'#bbb',
+		'xgrid_zerofill':'#bbb',
+		'xgrid_minorfill':'#bbb',
+		'xgrid_thickness':1,
+		'xgrid_zerothickness':2,
+		'xgrid_minorthickness':1,
+		'xgrid_dasharray':[],
+		'xgrid_zerodasharray':[],
+		'xgrid_minordasharray':[3,3],
+		'xgrid_opacity':0,
+		'xgrid_zeroopacity':0,
+		'xgrid_minoropacity':0,
+
+		// y grids
+		'ygrid_fill':'#bbb',
+		'ygrid_zerofill':'#bbb',
+		'ygrid_minorfill':'#bbb',
+		'ygrid_thickness':1,
+		'ygrid_zerothickness':2,
+		'ygrid_minorthickness':1,
+		'ygrid_dasharray':[],
+		'ygrid_zerodasharray':[],
+		'ygrid_minordasharray':[3,3],
+		'ygrid_opacity':1,
+		'ygrid_zeroopacity':1,
+		'ygrid_minoropacity':0,
+
+		// x ticks
+		'xtick_textsize':'16px',
+		'xtick_textweight':400,
+		'xtick_textface':'PTSans',
+		'xtick_textfill':'#444',
+		'xtick_maxsize':.15,
+		'xtick_length':4,
+		'xtick_thickness':1,
+		'xtick_fill':'#bbb',
+		'xtick_to_xlabel':5,
+		'xtick_to_xaxis':5,
+
+		// y ticks
+		'ytick_textsize':'16px',
+		'ytick_textweight':400,
+		'ytick_textface':'PTSans',
+		'ytick_textfill':'#444',
+		'ytick_maxsize':.25,
+		'ytick_length':16,
+		'ytick_thickness':1,
+		'ytick_fill':'#bbb',
+		'ytick_to_ylabel':6,
+		'ytick_to_yaxis':20,
+
+		// x label
+		'xlabel_textsize':'14px',
+		'xlabel_textweight':400,
+		'xlabel_textface':'PTSans',
+		'xlabel_textfill':'black',
+		'xlabel_maxlength':300,
+
+		// y label
+		'ylabel_textsize':'14px',
+		'ylabel_textweight':400,
+		'ylabel_textface':'PTSans',
+		'ylabel_textfill':'black',
+		'ylabel_maxlength':300,
+
+		// legend
+		'legend_location':'float',
+		'legend_maxwidth':.1,
+		'legend_textsize':'12px',
+		'legend_textweight':400,
+		'legend_textface':'PTSans',
+		'legend_textfill':'black',
+		'legend_titletextsize':'12px',
+		'legend_titletextweight':600,
+		'legend_titletextface':'PTSans',
+		'legend_titletextfill':'black',
+		'legend_toppad':4,
+		'legend_bottompad':0,
+		'legend_rightpad':0,
+		'legend_leftpad':0,
+		'legend_elementsize':15,
+		'legend_elementpad':5,
+		'legend_floatbackground':'white',
+		'legend_floatthickness':1,
+		'legend_floatstroke':'#b5b5b5',
+		'legend_floatpad':8,
+		'legend_entrypadding':8,
+
+		// color scales
+		'diverging_color':["#523211","#8b5322","#dec17c","#80ccc0","#35968e"],
+		'sequential_color':["#205946","#33836A","#67c2a5","#b7dfd1","#e2f2ed"],
+		'qualitative_color':["#67c2a5","#fc8d62","#8da0cb","#e78ac3","#a6d854","#ffd92f","#e5c494","#b3b3b3"],
+		'grayscale_color':['#999999','#666666','#333333','#000000'],
+
+		// barchart specific style
+		'barchart_width':.8,
+
+		// line/scatter specific style
+		'trend_width':1.5,
+		'trend_fill':'#c64027',
+		'trend_textface':'PTSans',
+		'trend_textweight':600,
+		'trend_textsize':'12px',
+		'trend_textcolor':'#c64027',
+		'trend_linetotext':3,
+		'point_size':4,
+		'point_strokewidth':1.7,
+		'point_fillopacity':.2,
+		'point_maxsize':25,
+		'point_minsize':3,
+		'linechart_strokeopacity':1,
+		'line_types':[[0,0],[5,5],[8,4,2,4],[8,8],[2,5]],
+		'line_minsize':2,
+		'line_maxsize':20,
+		'line_size':3,
+
+		// text geom specific
+		'text_minsize':8,
+		'text_maxsize':24,
+
+		// callout style
+		'callout_color':'#ababab',
+		'callout_thickness':1,
+		'callout_dasharray':[],
+
+		'arrow_color':'black',
+		'arrow_thickness':2,
+		'arrow_dasharray':[],
+
+		// segment style
+		'segment_width':1,
+		'segment_maxsize':20,
+		'segment_minsize':1,
+		'segment_linetypes':[[0,0],[5,5],[8,4,2,4],[8,8],[2,5]],
+
+		// shade geom
+		'shadefill':'white',
+		'shadeopacity':.6,
+
+		// logo
+		'logo':"data:image/png;base64,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",
+		'logoscale':3,
+
+		// colormenu
+		'colormenu':'#205946,#33836A,#67c2a5,#b7dfd1,#e2f2ed,#ffffff,#8e2a1d,#c63f26,#f58c63,#fbcdbb,#fef1eb,#000000,#24385B,#3F578C,#8c9fca,#ccdaf0,#f1f3f9,#a3a3a3,#e78ac3,#a6d854,#ffd92f,#e5c494,#ece9e8,#c3c3c3',
+	}
+
+	for (var property in default_parameters){
+		if (parameters[property]===undefined){
+			parameters[property]=default_parameters[property]
+		} else {
+			parameters[property]=parameters[property]
+		}
+	}
+
+	return parameters
+}
 
 
 
