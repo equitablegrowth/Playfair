@@ -33,6 +33,7 @@ window.playfair = (function () {
 	//			}
 	// data comes in as the final_data object - this is an object where each
 	// key is a row-heading that corresponds to a list of values
+	// is any of this documentation even accurate anymore? Who can say?
 	Playfair.prototype.data = function(data,geom_dict) {
 
 		var datadict=[]
@@ -108,6 +109,7 @@ window.playfair = (function () {
 				// stacked on the y-axis so no transformation of x is necessary. Also it is currently going
 				// to sum on both axes which is clearly wrong. (ok not really but it needs to distinguish
 				// between which axis it should be summing on).
+				var orient=geom_dict[key]['orientation']
 
 				if(data[geom_dict[key]['xvar']].dtype==='date'){
 					if(isNaN(data[geom_dict[key]['xvar']][0].getTime())==false){
