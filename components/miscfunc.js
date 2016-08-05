@@ -99,6 +99,8 @@ $('.panel-custom').on('hide.bs.collapse', function () {
 
 ///////////////////////////// THEMES ///////////////////////////////////
 // Initialize the theme dropdown and handle changes
+var colormenu="<li><span class='colorbox' style='background-color:#205946' onclick=change_color(clickedevent.target,'#205946')></span><span class='colorbox' style='background-color:#33836A' onclick=change_color(clickedevent.target,'#33836A')></span><span class='colorbox' style='background-color:#67c2a5' onclick=change_color(clickedevent.target,'#67c2a5')></span><span class='colorbox' style='background-color:#b7dfd1' onclick=change_color(clickedevent.target,'#b7dfd1')></span><span class='colorbox' style='background-color:#e2f2ed' onclick=change_color(clickedevent.target,'#e2f2ed')></span></span><span class='colorbox' style='background-color:#ffffff' onclick=change_color(clickedevent.target,'#ffffff')></span></li><li><span class='colorbox' style='background-color:#8e2a1d' onclick=change_color(clickedevent.target,'#8e2a1d')></span><span class='colorbox' style='background-color:#c63f26' onclick=change_color(clickedevent.target,'#c63f26')></span><span class='colorbox' style='background-color:#f58c63' onclick=change_color(clickedevent.target,'#f58c63')></span><span class='colorbox' style='background-color:#fbcdbb' onclick=change_color(clickedevent.target,'#fbcdbb')></span><span class='colorbox' style='background-color:#fef1eb' onclick=change_color(clickedevent.target,'#fef1eb')></span></span><span class='colorbox' style='background-color:#000000' onclick=change_color(clickedevent.target,'#000000')></span></li><li><span class='colorbox' style='background-color:#24385B' onclick=change_color(clickedevent.target,'#24385B')></span><span class='colorbox' style='background-color:#3F578C' onclick=change_color(clickedevent.target,'#3F578C')></span><span class='colorbox' style='background-color:#8c9fca' onclick=change_color(clickedevent.target,'#8c9fca')></span><span class='colorbox' style='background-color:#ccdaf0' onclick=change_color(clickedevent.target,'#ccdaf0')></span><span class='colorbox' style='background-color:#f1f3f9' onclick=change_color(clickedevent.target,'#f1f3f9')></span></span><span class='colorbox' style='background-color:#a3a3a3' onclick=change_color(clickedevent.target,'#a3a3a3')></span></li><li><span class='colorbox' style='background-color:#e78ac3' onclick=change_color(clickedevent.target,'#e78ac3')></span><span class='colorbox' style='background-color:#a6d854' onclick=change_color(clickedevent.target,'#a6d854')></span><span class='colorbox' style='background-color:#ffd92f' onclick=change_color(clickedevent.target,'#ffd92f')></span><span class='colorbox' style='background-color:#e5c494' onclick=change_color(clickedevent.target,'#e5c494')></span><span class='colorbox' style='background-color:#ece9e8' onclick=change_color(clickedevent.target,'#ece9e8')></span></span><span class='colorbox' style='background-color:#c3c3c3' onclick=change_color(clickedevent.target,'#c3c3c3')></span></li>"
+
 
 
 $(document).ready(function(){
@@ -135,10 +137,30 @@ function change_theme(){
 			success: function(response){
 				var response = JSON.parse(response);
 				theme=response
+				change_colormenu(theme)
+			},
+			error: function(){
+				alert("Something is wrong with this theme. Use a JSON validator to make sure it is a valid object.")
 			}
 		})
 	} else {
 		theme={}
+	}
+}
+
+function change_colormenu(theme){
+	// change colormenu if the theme has a new colormenu
+	if(theme['colormenu']){
+		colormenu=''
+		for(var i=0;i<theme.colormenu.length;i++){
+			if(i%6==0){
+				colormenu=colormenu+"<li><span class='colorbox' style='background-color:"+theme['colormenu'][i]+"' onclick=change_color(clickedevent.target,'"+theme['colormenu'][i]+"')></span>"
+			} else {
+				colormenu=colormenu+"<span class='colorbox' style='background-color:"+theme['colormenu'][i]+"' onclick=change_color(clickedevent.target,'"+theme['colormenu'][i]+"')></span>"
+			}
+		}
+		$('#colormenu').empty()
+		$('#colormenu').append(colormenu)
 	}
 }
 
