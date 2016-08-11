@@ -254,13 +254,29 @@ window.playfair = (function () {
 						if(data[geom_dict[key]['yvar']].dtype!='text'){
 							var temp=data[geom_dict[key]['yvar']].slice(0)
 							temp.sort(function(a,b){
-								return a>b
+								return a-b
 							})
-							var difs=[]
-							for(var i=1;i<data[geom_dict[key]['yvar']].length;i++){
-								difs.push(Math.abs(data[geom_dict[key]['yvar']][i]-data[geom_dict[key]['yvar']][i-1]))
+
+							if(data[geom_dict[key]['yvar']].dtype=='date'){
+								temp.forEach(function(date,i){
+									temp[i]=date.getTime()
+								})
+								var temp2=Array(...new Set(temp))
+								temp2.forEach(function(date,i){
+									temp2[i]=new Date(date)
+								})
+								temp.forEach(function(date,i){
+									temp[i]=new Date(date)
+								})
+							} else{
+								var temp2=Array(...new Set(temp))
 							}
-							this.mindiff=Math.min(difs)
+
+							var difs=[]
+							for(var i=1;i<temp2.length;i++){
+								difs.push(Math.abs(temp2[i]-temp2[i-1]))
+							}
+							this.mindiff=Math.min(...difs)
 						}
 					}
 				}
