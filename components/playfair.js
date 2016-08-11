@@ -105,10 +105,9 @@ window.playfair = (function () {
 			console.log(data,key,data[geom_dict[key]],data[geom_dict[key]['yvar']],geom_dict[key])
 
 			if(key=='area' | key=='stackedbar'){
-				// this needs to eventually be changed. Right now the assumption is that stacked bars are
-				// stacked on the y-axis so no transformation of x is necessary. Also it is currently going
-				// to sum on both axes which is clearly wrong. (ok not really but it needs to distinguish
-				// between which axis it should be summing on).
+				// these two chart types are special cases because values have to be added across
+				// groups to get the max of the graph. This depends on whether the orientation is
+				// vertical ('on') or not ('undefined') for bars. For area always sum the y axis.
 				var orient=geom_dict[key]['orientation']
 
 				if(data[geom_dict[key]['xvar']].dtype==='date'){
@@ -2034,6 +2033,7 @@ function draw_bars(axes,bar,snapobj){
 			} else {
 				var greplace=current[bar.grouping.color]
 			}
+			console.log(x1,x2,y1,y2)
 			snapobj.path('M'+x1+','+y2+'L'+x2+','+y2+'L'+x2+','+y1+'L'+x1+','+y1+'L'+x1+','+y2).attr({orient:orient,'data_type':'bar','data_label':label,'group':greplace,'class':'dataelement','shape-rendering':'crispEdges',fill:color,colorchange:'fill',context:'data_context_menu'})
 		}
 	}
