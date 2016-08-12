@@ -203,13 +203,29 @@ window.playfair = (function () {
 						if(data[geom_dict[key]['yvar']].dtype!='text'){
 							var temp=data[geom_dict[key]['yvar']].slice(0)
 							temp.sort(function(a,b){
-								return a>b
+								return a-b
 							})
-							var difs=[]
-							for(var i=1;i<data[geom_dict[key]['yvar']].length;i++){
-								difs.push(Math.abs(data[geom_dict[key]['yvar']][i]-data[geom_dict[key]['yvar']][i-1]))
+
+							if(data[geom_dict[key]['yvar']].dtype=='date'){
+								temp.forEach(function(date,i){
+									temp[i]=date.getTime()
+								})
+								var temp2=Array(...new Set(temp))
+								temp2.forEach(function(date,i){
+									temp2[i]=new Date(date)
+								})
+								temp.forEach(function(date,i){
+									temp[i]=new Date(date)
+								})
+							} else{
+								var temp2=Array(...new Set(temp))
 							}
-							this.mindiff=Math.min(difs)
+
+							var difs=[]
+							for(var i=1;i<temp2.length;i++){
+								difs.push(Math.abs(temp2[i]-temp2[i-1]))
+							}
+							this.mindiff=Math.min(...difs)
 						}
 					}
 				}
@@ -2180,7 +2196,7 @@ function get_coord(value,[limit_start,limit_end],[pixel_start,pixel_end],type,ar
 	// at the value. Shift doesn't affect categorical axes, where shifting is always performed.
 	// if(shiftx==1){x_step=domain/(xvar.length)}
 	var range=Math.abs(pixel_end-pixel_start)
-	// console.log(value,[limit_start,limit_end],[pixel_start,pixel_end],type,array,y,shift)
+	console.log(value,[limit_start,limit_end],[pixel_start,pixel_end],type,array,y,shift)
 
 	if(type!='text'){
 		if(chartobject.datedenom[y]>0){
@@ -2192,18 +2208,20 @@ function get_coord(value,[limit_start,limit_end],[pixel_start,pixel_end],type,ar
 			}
 		} else {
 			var step=(range/((limit_end-limit_start+1)*2))
+			console.log('step is: ',step)
 			if(shift==1){
-				pixel_end=pixel_end-step
-				pixel_start=pixel_start+step
+				if(y==1){
+					pixel_end=pixel_end+step
+					pixel_start=pixel_start-step
+				} else {
+					pixel_end=pixel_end-step
+					pixel_start=pixel_start+step
+				}
 			}
 		}
 
 		if(y==1){
-			if(ybar==1){
-				return pixel_start-(value-limit_start)/Math.abs(limit_end-limit_start)*Math.abs(pixel_end-pixel_start)
-			} else {
-				return pixel_start-(value-limit_start)/Math.abs(limit_end-limit_start)*Math.abs(pixel_end-pixel_start)
-			}
+			return pixel_start-(value-limit_start)/Math.abs(limit_end-limit_start)*Math.abs(pixel_end-pixel_start)
 		} else {
 			return pixel_start+(value-limit_start)/Math.abs(limit_end-limit_start)*Math.abs(pixel_end-pixel_start)
 		}
