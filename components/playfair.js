@@ -1998,11 +1998,11 @@ function draw_bars(axes,bar,snapobj){
 			console.log(barwidth)
 			// cap barwidth based on overrunning the left or right side of the graph - ie bars should never break out of the axis box
 			// Y VALUES ARE CURRENTLY NOT CLIPPING CORRECTLY FIX THIS
-			if(totalwidth/2>get_coord(chartobject.ymin,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)-axes[2] || totalwidth/2>axes[3]-get_coord(chartobject.ymax,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)){
+			if(totalwidth/2>Math.abs(get_coord(chartobject.ymin,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)-axes[2]) || totalwidth/2>Math.abs(axes[3]-get_coord(chartobject.ymax,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1))){
 				console.log('clipping')
 				var totalwidth=Math.abs(chartobject.barchart_width*2*(get_coord(chartobject.ymin,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)-axes[2]))
 				var barwidth=totalwidth
-				console.log(barwidth)
+				console.log(barwidth,get_coord(chartobject.ymin,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1),axes)
 			}
 		} else {
 			// if the axis is categorical, get width based on that instead.
@@ -2096,8 +2096,8 @@ function draw_stackedbars(axes,bar,snapobj){
 	// the bar width should be just large enough that those two bars have a little space between them
 	// this is already stored in mindiff
 	if(bar.orientation=='on'){
-		var x_values=[...new Set(chartobject.flatdata[bar.xvar])]
 		var orient='vertical'
+		var x_values=[...new Set(chartobject.flatdata[bar.xvar])]
 		if(chartobject.flatdata[bar.xvar].dtype!='text'){
 			var totalwidth=Math.abs(chartobject.barchart_width*(get_coord(chartobject.mindiff,chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-get_coord(0,chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)))
 			var barwidth=totalwidth
@@ -2155,7 +2155,7 @@ function draw_stackedbars(axes,bar,snapobj){
 						var x2=x1+barwidth
 						var label=temp[bar.yvar]
 						var greplace=temp[bar.grouping.color]					
-						snapobj.path('M'+x1+','+y2+'L'+x2+','+y2+'L'+x2+','+y1+'L'+x1+','+y1+'L'+x1+','+y2).attr({orient:orient,'data_type':'bar','data_label':label,'group':greplace,'class':'dataelement','shape-rendering':'crispEdges',fill:color,context:'data_context_menu'})
+						snapobj.path('M'+x1+','+y2+'L'+x2+','+y2+'L'+x2+','+y1+'L'+x1+','+y1+'L'+x1+','+y2).attr({orient:orient,'data_type':'bar','data_label':label,'group':greplace,'class':'dataelement','shape-rendering':'crispEdges',fill:color,context:'data_context_menu',colorchange:'fill'})
 						y_ends_positive[i_loc]=y2
 					} else {
 						var i_loc=x_values.indexOf(temp[bar.xvar])
@@ -2165,7 +2165,7 @@ function draw_stackedbars(axes,bar,snapobj){
 						var x2=x1+barwidth
 						var label=temp[bar.yvar]
 						var greplace=temp[bar.grouping.color]					
-						snapobj.path('M'+x1+','+y2+'L'+x2+','+y2+'L'+x2+','+y1+'L'+x1+','+y1+'L'+x1+','+y2).attr({orient:orient,'data_type':'bar','data_label':label,'group':greplace,'class':'dataelement','shape-rendering':'crispEdges',fill:color,context:'data_context_menu'})
+						snapobj.path('M'+x1+','+y2+'L'+x2+','+y2+'L'+x2+','+y1+'L'+x1+','+y1+'L'+x1+','+y2).attr({orient:orient,'data_type':'bar','data_label':label,'group':greplace,'class':'dataelement','shape-rendering':'crispEdges',fill:color,context:'data_context_menu',colorchange:'fill'})
 						y_ends_negative[i_loc]=y2
 					}
 				}
