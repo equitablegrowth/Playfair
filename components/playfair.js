@@ -2032,15 +2032,15 @@ function draw_bars(axes,bar,snapobj){
 					var y1=get_coord(current[bar.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
 					var y2=get_coord(0,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
 				} else {
+					console.log('grouped horizontal axes: ',axes[2],axes[3])
 					var orient='horizontal'
-					var y1=get_coord(current[bar.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shiftx,1)-(totalwidth/2)+barwidth*(color_groups.indexOf(current[bar.grouping.color]))
+					var y1=get_coord(current[bar.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)-(totalwidth/2)+barwidth*(color_groups.indexOf(current[bar.grouping.color]))
 					var y2=y1+barwidth
 					var x1=get_coord(current[bar.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
 					var x2=get_coord(0,chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
 				}
 			} else {
 				var color=chartobject.qualitative_color[0]
-
 				// set various values for bar locations
 				if(chartobject.bar.orientation=='on'){
 					var orient='vertical'
