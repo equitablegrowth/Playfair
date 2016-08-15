@@ -2092,12 +2092,36 @@ function draw_stackedbars(axes,bar,snapobj){
 		var color_groups=['placeholder'] 
 	}
 
+	// create y_values and x_values, used later to figure out where everything stacks
+	if(chartobject.flatdata[bar.xvar].dtype=='date'){
+		var x_values=[...new Set(chartobject.flatdata[bar.xvar])]
+		var temp=[]
+		for(var i=0;i<x_values.length;i++){
+			temp.push(x_values[i].getTime())
+		}
+		var x_values2=[...new Set(temp)]
+	} else {
+		var x_values=[...new Set(chartobject.flatdata[bar.xvar])]
+		var x_values2=x_values
+	}
+
+	if(chartobject.flatdata[bar.yvar].dtype=='date'){
+		var y_values=[...new Set(chartobject.flatdata[bar.yvar])]
+		var temp=[]
+		for(var i=0;i<y_values.length;i++){
+			temp.push(y_values[i].getTime())
+		}
+		var y_values2=[...new Set(temp)]
+	} else {
+		var y_values=[...new Set(chartobject.flatdata[bar.yvar])]
+		var y_values2=y_values
+	}
+
 	// to figure out the width of a bar, need to find the two values that are *closest* on the x-axis.
 	// the bar width should be just large enough that those two bars have a little space between them
 	// this is already stored in mindiff
 	if(bar.orientation=='on'){
 		var orient='vertical'
-		var x_values=[...new Set(chartobject.flatdata[bar.xvar])]
 		if(chartobject.flatdata[bar.xvar].dtype!='text'){
 			var totalwidth=Math.abs(chartobject.barchart_width*(get_coord(chartobject.mindiff,chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-get_coord(0,chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)))
 			var barwidth=totalwidth
@@ -2114,7 +2138,6 @@ function draw_stackedbars(axes,bar,snapobj){
 		}
 	} else {
 		var orient='horizontal'
-		var y_values=[...new Set(chartobject.flatdata[bar.yvar])]
 		if(chartobject.flatdata[bar.yvar].dtype!='text'){
 			var totalwidth=Math.abs(chartobject.barchart_width*(get_coord(chartobject.mindiff,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)-get_coord(0,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)))
 			var barwidth=totalwidth
@@ -2133,7 +2156,6 @@ function draw_stackedbars(axes,bar,snapobj){
 
 	if(bar.orientation=='on'){
 		// draw vertical bars, get all necessary coords etc.
-		var x_values=[...new Set(chartobject.flatdata[bar.xvar])]
 		var y_ends_positive=new Array(x_values.length)
 		var y_ends_negative=new Array(x_values.length)
 		for(var i=0;i<y_ends_positive.length;i++){
@@ -2148,7 +2170,12 @@ function draw_stackedbars(axes,bar,snapobj){
 				var temp=chartobject.dataset[j]
 				if(temp[bar.grouping.color]==color_groups[i]){
 					if(temp[bar.yvar]>0){
-						var i_loc=x_values.indexOf(temp[bar.xvar])
+						if(chartobject.flatdata[bar.xvar].dtype=='date'){
+							var i_loc=x_values2.indexOf(temp[bar.xvar].getTime())
+						} else {
+							var i_loc=x_values2.indexOf(temp[bar.xvar])
+						}
+						console.log("ILOC",i_loc,temp[bar.xvar],x_values)
 						var y1=y_ends_positive[i_loc]
 						var y2=y1-(zero-get_coord(temp[bar.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty))
 						var x1=get_coord(temp[bar.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-(totalwidth/2)
@@ -2158,7 +2185,11 @@ function draw_stackedbars(axes,bar,snapobj){
 						snapobj.path('M'+x1+','+y2+'L'+x2+','+y2+'L'+x2+','+y1+'L'+x1+','+y1+'L'+x1+','+y2).attr({orient:orient,'data_type':'bar','data_label':label,'group':greplace,'class':'dataelement','shape-rendering':'crispEdges',fill:color,context:'data_context_menu',colorchange:'fill'})
 						y_ends_positive[i_loc]=y2
 					} else {
-						var i_loc=x_values.indexOf(temp[bar.xvar])
+						if(chartobject.flatdata[bar.xvar].dtype=='date'){
+							var i_loc=x_values2.indexOf(temp[bar.xvar].getTime())
+						} else {
+							var i_loc=x_values2.indexOf(temp[bar.xvar])
+						}
 						var y1=y_ends_negative[i_loc]
 						var y2=y1-(zero-get_coord(temp[bar.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty))
 						var x1=get_coord(temp[bar.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-(totalwidth/2)
