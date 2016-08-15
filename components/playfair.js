@@ -339,7 +339,7 @@ window.playfair = (function () {
 
 				if(geom_dict[key].yvar!==undefined){
 					if(data[geom_dict[key]['yvar']].dtype==='date'){
-						if(Object.prototype.toString.call(data[geom_dict[key]['xvar']][i])==='[object Date]'){
+						if(Object.prototype.toString.call(data[geom_dict[key]['yvar']][i])==='[object Date]'){
 							if(isNaN(data[geom_dict[key]['yvar']][i].getTime())==false){
 								ymaxes.push(new Date(moment(Math.max(...remove_missing(data[geom_dict[key]['yvar']])))))
 								ymins.push(new Date(moment(Math.min(...remove_missing(data[geom_dict[key]['yvar']])))))
