@@ -2201,11 +2201,17 @@ function get_coord(value,[limit_start,limit_end],[pixel_start,pixel_end],type,ar
 
 	if(type!='text'){
 		if(chartobject.datedenom[y]>0){
+			console.log("now we're cooking with date types")
 			var value=new Date(moment(value))
 			var step=(range/((limit_end-limit_start+1)/chartobject.datedenom[y]*2))
 			if(shift==1){
-				pixel_end=pixel_end-step
-				pixel_start=pixel_start+step
+				if(y==1){
+					pixel_end=pixel_end+step
+					pixel_start=pixel_start-step
+				} else {
+					pixel_end=pixel_end-step
+					pixel_start=pixel_start+step
+				}
 			}
 		} else {
 			var step=(range/((limit_end-limit_start+1)*2))
