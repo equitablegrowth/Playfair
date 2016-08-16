@@ -77,7 +77,7 @@ window.playfair = (function () {
 		this.shiftx=0
 		this.datedenom=[0,0]
 
-		if(geom_dict.bar && geom_dict.bar.orientation!='on'){
+		if((geom_dict.bar && geom_dict.bar.orientation!='on') || (geom_dict.stackedbar && geom_dict.stackedbar.orientation!='on')){
 			this.ybar=1
 		}
 		var xmaxes=[]
@@ -679,6 +679,7 @@ window.playfair = (function () {
 			var axes=draw_axes(this,xaxis,yaxis,graph_obj.shiftx,graph_obj.shifty,key_height)
 			console.log(key_height)
 		} else {
+			console.log('drawing axes with parameters: ',xaxis,yaxis,graph_obj.shiftx,graph_obj.shifty)
 			var axes=draw_axes(this,xaxis,yaxis,graph_obj.shiftx,graph_obj.shifty,0)
 		}
 
@@ -2264,7 +2265,7 @@ function draw_stackedbars(axes,bar,snapobj){
 		} else {
 			// if the axis is categorical, get width based on that instead.
 			console.log(get_coord(chartobject.flatdata[bar.yvar][0],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1))
-			var totalwidth=Math.abs(chartobject.barchart_width*(get_coord(x_values[0],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)-get_coord(x_values[1],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)))
+			var totalwidth=Math.abs(chartobject.barchart_width*(get_coord(y_values[0],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)-get_coord(y_values[1],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)))
 			var barwidth=totalwidth
 		}
 	}
