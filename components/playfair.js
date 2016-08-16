@@ -2113,7 +2113,6 @@ function draw_bars(axes,bar,snapobj){
 			var barwidth=totalwidth
 			console.log(barwidth)
 			// cap barwidth based on overrunning the left or right side of the graph - ie bars should never break out of the axis box
-			// Y VALUES ARE CURRENTLY NOT CLIPPING CORRECTLY FIX THIS
 			if(totalwidth/2>Math.abs(get_coord(chartobject.ymin,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)-axes[2]) || totalwidth/2>Math.abs(axes[3]-get_coord(chartobject.ymax,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1))){
 				console.log('clipping')
 				var totalwidth=Math.abs(chartobject.barchart_width*2*(get_coord(chartobject.ymin,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)-axes[2]))
@@ -2258,7 +2257,7 @@ function draw_stackedbars(axes,bar,snapobj){
 			var totalwidth=Math.abs(chartobject.barchart_width*(get_coord(chartobject.mindiff,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)-get_coord(0,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)))
 			var barwidth=totalwidth
 			// cap barwidth based on overrunning the left or right side of the graph - ie bars should never break out of the axis box
-			if(totalwidth/2>get_coord(chartobject.ymin,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)-axes[0] || totalwidth/2>axes[1]-get_coord(chartobject.ymax,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)){
+			if(totalwidth/2>Math.abs(get_coord(chartobject.ymin,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)-axes[2]) || totalwidth/2>Math.abs(axes[3]-get_coord(chartobject.ymax,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1))){
 				var totalwidth=Math.abs(chartobject.barchart_width*2*(get_coord(chartobject.ymin,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)-axes[2]))
 				var barwidth=totalwidth
 			}
@@ -2269,6 +2268,8 @@ function draw_stackedbars(axes,bar,snapobj){
 			var barwidth=totalwidth
 		}
 	}
+
+	console.log('barwidth: ',barwidth)
 
 	if(bar.orientation=='on'){
 		// draw vertical bars, get all necessary coords etc.
@@ -2340,7 +2341,7 @@ function draw_stackedbars(axes,bar,snapobj){
 						}
 						var x1=x_ends_positive[i_loc]
 						var x2=x1+(get_coord(temp[bar.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-zero)
-						var y1=get_coord(temp[bar.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty)-(totalwidth/2)
+						var y1=get_coord(temp[bar.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)-(totalwidth/2)
 						var y2=y1+barwidth
 						var label=temp[bar.yvar]
 						var greplace=temp[bar.grouping.color]					
@@ -2354,7 +2355,7 @@ function draw_stackedbars(axes,bar,snapobj){
 						}
 						var x1=x_ends_negative[i_loc]
 						var x2=x1+(get_coord(temp[bar.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-zero)
-						var y1=get_coord(temp[bar.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty)-(totalwidth/2)
+						var y1=get_coord(temp[bar.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)-(totalwidth/2)
 						var y2=y1+barwidth
 						var label=temp[bar.xvar]
 						var greplace=temp[bar.grouping.color]					
@@ -2392,7 +2393,6 @@ function get_coord(value,[limit_start,limit_end],[pixel_start,pixel_end],type,ar
 
 	if(type!='text'){
 		if(chartobject.datedenom[y]>0){
-			console.log("now we're cooking with date types")
 			var value=new Date(moment(value))
 			var step=(range/((limit_end-limit_start+1)/chartobject.datedenom[y]*2))
 			if(shift==1){
