@@ -110,61 +110,177 @@ window.playfair = (function () {
 				// vertical ('on') or not ('undefined') for bars. For area always sum the y axis.
 				var orient=geom_dict[key]['orientation']
 
-				if(data[geom_dict[key]['xvar']].dtype==='date'){
-					if(isNaN(data[geom_dict[key]['xvar']][0].getTime())==false){
-						xmaxes.push(new Date(moment(Math.max(...data[geom_dict[key]['xvar']]))))
-						xmins.push(new Date(moment(Math.min(...data[geom_dict[key]['xvar']]))))
+				if(key=='stackedbar'){
+					if(orient=='on'){
+						if(data[geom_dict[key]['xvar']].dtype==='date'){
+							if(isNaN(data[geom_dict[key]['xvar']][0].getTime())==false){
+								xmaxes.push(new Date(moment(Math.max(...data[geom_dict[key]['xvar']]))))
+								xmins.push(new Date(moment(Math.min(...data[geom_dict[key]['xvar']]))))
+							}
+						} else if(data[geom_dict[key]['xvar']].dtype=='text'){
+							xstrings.push(...data[geom_dict[key]['xvar']])
+							xmaxes.push('placeholder')
+							xmins.push('placeholder')
+						} else {
+							xmaxes.push(Math.max(...remove_missing(data[geom_dict[key]['xvar']])))
+							xmins.push(Math.min(...remove_missing(data[geom_dict[key]['xvar']])))
+						}
+
+						// this on the other hand should work, summing on each possible value of x
+						var yvar=geom_dict[key]['yvar']
+						var xvar=geom_dict[key]['xvar']
+						var xvals=new Set(data[xvar])
+
+						xvals.forEach(function(value){
+							var positives=0
+							var negatives=0
+							var yvalues=[]
+							// get all rows where x=value
+							if(chartobject.flatdata[xvar].dtype=='date'){
+								for(var i=0;i<datadict.length;i++){
+									try{
+										if(datadict[i][xvar].getTime()==value.getTime()){
+											yvalues.push(datadict[i][yvar])
+										}
+									} catch(err){}
+								}
+							} else {
+								for(var i=0;i<datadict.length;i++){
+									if(datadict[i][xvar]==value){
+										yvalues.push(datadict[i][yvar])
+									}
+								} 
+							}
+
+							// sum the yvalues of all such rows, separating positive from negative
+							for(var i=0;i<yvalues.length;i++){
+								if(yvalues[i]>0){
+									positives=positives+yvalues[i]
+								} else {
+									negatives=negatives+yvalues[i]
+								}
+							}
+
+							// this may seem odd but yes, it is supposed to push a bunch of 0s
+							// to ymins if there are no negative values. This is a restriction
+							// that ensures that bar graphs/area charts always include y=0.
+							ymaxes.push(positives)
+							ymins.push(negatives)
+						})
+					} else {
+						if(data[geom_dict[key]['yvar']].dtype==='date'){
+							if(isNaN(data[geom_dict[key]['yvar']][0].getTime())==false){
+								ymaxes.push(new Date(moment(Math.max(...data[geom_dict[key]['yvar']]))))
+								ymins.push(new Date(moment(Math.min(...data[geom_dict[key]['yvar']]))))
+							}
+						} else if(data[geom_dict[key]['yvar']].dtype=='text'){
+							ystrings.push(...data[geom_dict[key]['yvar']])
+							ymaxes.push('placeholder')
+							ymins.push('placeholder')
+						} else {
+							ymaxes.push(Math.max(...remove_missing(data[geom_dict[key]['yvar']])))
+							ymins.push(Math.min(...remove_missing(data[geom_dict[key]['yvar']])))
+						}
+
+						// this on the other hand should work, summing on each possible value of x
+						var yvar=geom_dict[key]['yvar']
+						var xvar=geom_dict[key]['xvar']
+						var yvals=new Set(data[yvar])
+
+						yvals.forEach(function(value){
+							var positives=0
+							var negatives=0
+							var xvalues=[]
+							// get all rows where x=value
+							if(chartobject.flatdata[yvar].dtype=='date'){
+								for(var i=0;i<datadict.length;i++){
+									try{
+										if(datadict[i][yvar].getTime()==value.getTime()){
+											xvalues.push(datadict[i][xvar])
+										}
+									} catch(err){}
+								}
+							} else {
+								for(var i=0;i<datadict.length;i++){
+									if(datadict[i][yvar]==value){
+										xvalues.push(datadict[i][xvar])
+									}
+								} 
+							}
+
+							// sum the yvalues of all such rows, separating positive from negative
+							for(var i=0;i<xvalues.length;i++){
+								if(xvalues[i]>0){
+									positives=positives+xvalues[i]
+								} else {
+									negatives=negatives+xvalues[i]
+								}
+							}
+
+							// this may seem odd but yes, it is supposed to push a bunch of 0s
+							// to ymins if there are no negative values. This is a restriction
+							// that ensures that bar graphs/area charts always include y=0.
+							xmaxes.push(positives)
+							xmins.push(negatives)
+						})
 					}
-				} else if(data[geom_dict[key]['xvar']].dtype=='text'){
-					xstrings.push(...data[geom_dict[key]['xvar']])
-					xmaxes.push('placeholder')
-					xmins.push('placeholder')
 				} else {
-					xmaxes.push(Math.max(...remove_missing(data[geom_dict[key]['xvar']])))
-					xmins.push(Math.min(...remove_missing(data[geom_dict[key]['xvar']])))
-				}
+					if(data[geom_dict[key]['xvar']].dtype==='date'){
+						if(isNaN(data[geom_dict[key]['xvar']][0].getTime())==false){
+							xmaxes.push(new Date(moment(Math.max(...data[geom_dict[key]['xvar']]))))
+							xmins.push(new Date(moment(Math.min(...data[geom_dict[key]['xvar']]))))
+						}
+					} else if(data[geom_dict[key]['xvar']].dtype=='text'){
+						xstrings.push(...data[geom_dict[key]['xvar']])
+						xmaxes.push('placeholder')
+						xmins.push('placeholder')
+					} else {
+						xmaxes.push(Math.max(...remove_missing(data[geom_dict[key]['xvar']])))
+						xmins.push(Math.min(...remove_missing(data[geom_dict[key]['xvar']])))
+					}
 
-				// this on the other hand should work, summing on each possible value of x
-				var yvar=geom_dict[key]['yvar']
-				var xvar=geom_dict[key]['xvar']
-				var xvals=new Set(data[xvar])
+					// this on the other hand should work, summing on each possible value of x
+					var yvar=geom_dict[key]['yvar']
+					var xvar=geom_dict[key]['xvar']
+					var xvals=new Set(data[xvar])
 
-				xvals.forEach(function(value){
-					var positives=0
-					var negatives=0
-					var yvalues=[]
-					// get all rows where x=value
-					if(chartobject.flatdata[xvar].dtype=='date'){
-						for(var i=0;i<datadict.length;i++){
-							try{
-								if(datadict[i][xvar].getTime()==value.getTime()){
+					xvals.forEach(function(value){
+						var positives=0
+						var negatives=0
+						var yvalues=[]
+						// get all rows where x=value
+						if(chartobject.flatdata[xvar].dtype=='date'){
+							for(var i=0;i<datadict.length;i++){
+								try{
+									if(datadict[i][xvar].getTime()==value.getTime()){
+										yvalues.push(datadict[i][yvar])
+									}
+								} catch(err){}
+							}
+						} else {
+							for(var i=0;i<datadict.length;i++){
+								if(datadict[i][xvar]==value){
 									yvalues.push(datadict[i][yvar])
 								}
-							} catch(err){}
+							} 
 						}
-					} else {
-						for(var i=0;i<datadict.length;i++){
-							if(datadict[i][xvar]==value){
-								yvalues.push(datadict[i][yvar])
+
+						// sum the yvalues of all such rows, separating positive from negative
+						for(var i=0;i<yvalues.length;i++){
+							if(yvalues[i]>0){
+								positives=positives+yvalues[i]
+							} else {
+								negatives=negatives+yvalues[i]
 							}
-						} 
-					}
-
-					// sum the yvalues of all such rows, separating positive from negative
-					for(var i=0;i<yvalues.length;i++){
-						if(yvalues[i]>0){
-							positives=positives+yvalues[i]
-						} else {
-							negatives=negatives+yvalues[i]
 						}
-					}
 
-					// this may seem odd but yes, it is supposed to push a bunch of 0s
-					// to ymins if there are no negative values. This is a restriction
-					// that ensures that bar graphs/area charts always include y=0.
-					ymaxes.push(positives)
-					ymins.push(negatives)
-				})
+						// this may seem odd but yes, it is supposed to push a bunch of 0s
+						// to ymins if there are no negative values. This is a restriction
+						// that ensures that bar graphs/area charts always include y=0.
+						ymaxes.push(positives)
+						ymins.push(negatives)
+					})
+				}
 
 				if(key=='stackedbar'){
 					if(geom_dict[key].orientation=='on'){
@@ -2149,7 +2265,7 @@ function draw_stackedbars(axes,bar,snapobj){
 		} else {
 			// if the axis is categorical, get width based on that instead.
 			console.log(get_coord(chartobject.flatdata[bar.yvar][0],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1))
-			var totalwidth=Math.abs(chartobject.barchart_width*(get_values[0],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)-get_coord(get_values[1],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1))
+			var totalwidth=Math.abs(chartobject.barchart_width*(get_coord(x_values[0],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)-get_coord(x_values[1],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)))
 			var barwidth=totalwidth
 		}
 	}
@@ -2175,7 +2291,6 @@ function draw_stackedbars(axes,bar,snapobj){
 						} else {
 							var i_loc=x_values2.indexOf(temp[bar.xvar])
 						}
-						console.log("ILOC",i_loc,temp[bar.xvar],x_values)
 						var y1=y_ends_positive[i_loc]
 						var y2=y1-(zero-get_coord(temp[bar.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty))
 						var x1=get_coord(temp[bar.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-(totalwidth/2)
@@ -2203,7 +2318,52 @@ function draw_stackedbars(axes,bar,snapobj){
 			}
 		}
 	} else {
-		// draw horizontal bars
+		// draw horizontal bars, get all necessary coords etc.
+		var x_ends_positive=new Array(y_values.length)
+		var x_ends_negative=new Array(y_values.length)
+		for(var i=0;i<x_ends_positive.length;i++){
+			x_ends_positive[i]=get_coord(0,chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
+			x_ends_negative[i]=get_coord(0,chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
+		}
+		var zero=get_coord(0,chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
+
+		for(var i=0;i<color_groups.length;i++){
+			var color=chartobject.qualitative_color[i % chartobject.qualitative_color.length]
+			for(var j=0;j<chartobject.dataset.length;j++){
+				var temp=chartobject.dataset[j]
+				if(temp[bar.grouping.color]==color_groups[i]){
+					if(temp[bar.xvar]>0){
+						if(chartobject.flatdata[bar.yvar].dtype=='date'){
+							var i_loc=y_values2.indexOf(temp[bar.yvar].getTime())
+						} else {
+							var i_loc=y_values2.indexOf(temp[bar.yvar])
+						}
+						var x1=x_ends_positive[i_loc]
+						var x2=x1+(get_coord(temp[bar.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-zero)
+						var y1=get_coord(temp[bar.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty)-(totalwidth/2)
+						var y2=y1+barwidth
+						var label=temp[bar.yvar]
+						var greplace=temp[bar.grouping.color]					
+						snapobj.path('M'+x1+','+y2+'L'+x2+','+y2+'L'+x2+','+y1+'L'+x1+','+y1+'L'+x1+','+y2).attr({orient:orient,'data_type':'bar','data_label':label,'group':greplace,'class':'dataelement','shape-rendering':'crispEdges',fill:color,context:'data_context_menu',colorchange:'fill'})
+						x_ends_positive[i_loc]=x2
+					} else {
+						if(chartobject.flatdata[bar.yvar].dtype=='date'){
+							var i_loc=y_values2.indexOf(temp[bar.yvar].getTime())
+						} else {
+							var i_loc=y_values2.indexOf(temp[bar.yvar])
+						}
+						var x1=x_ends_negative[i_loc]
+						var x2=x1+(get_coord(temp[bar.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[bar.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-zero)
+						var y1=get_coord(temp[bar.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[bar.yvar].dtype,chartobject.yarray,1,chartobject.shifty)-(totalwidth/2)
+						var y2=y1+barwidth
+						var label=temp[bar.xvar]
+						var greplace=temp[bar.grouping.color]					
+						snapobj.path('M'+x1+','+y2+'L'+x2+','+y2+'L'+x2+','+y1+'L'+x1+','+y1+'L'+x1+','+y2).attr({orient:orient,'data_type':'bar','data_label':label,'group':greplace,'class':'dataelement','shape-rendering':'crispEdges',fill:color,context:'data_context_menu',colorchange:'fill'})
+						x_ends_negative[i_loc]=x2
+					}
+				}
+			}
+		}	
 	}
 
 	// always gotta pull the y=0 line to the front after creating a barchart
