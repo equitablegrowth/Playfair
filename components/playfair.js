@@ -710,6 +710,7 @@ window.playfair = (function () {
 		this.note=note
 		this.logo=this.logo
 		logoscale=this.logoscale
+		var logoopacity=this.logoopacity
 
 		var snapobj=this.svg
 		var width=this.width
@@ -723,7 +724,7 @@ window.playfair = (function () {
 		if (this.logo!=0){
 			var logo=snapobj.image(this.logo,0,0)
 			logo.node.addEventListener('load',function(){
-				logo.attr({width:logo.attr('width')/logoscale,height:logo.attr('height')/logoscale})
+				logo.attr({width:logo.attr('width')/logoscale,height:logo.attr('height')/logoscale,opacity:logoopacity})
 				logo_coords=logo.getBBox()
 				logo.attr({x:graphobj.x+graphobj.width-logo_coords.width-graphobj.footer_rightpad,y:graphobj.y+graphobj.height-logo_coords.height-graphobj.footer_bottompad})
 
@@ -1299,7 +1300,7 @@ function draw_trends(axes,trend,snapobj){
 		}
 
 		var path='M'+x_loc1+','+y_loc1+'L'+x_loc2+','+y_loc2
-		var temp=snapobj.path(path).attr({stroke:chartobject.trend_fill,'stroke-width':chartobject.trend_width,'colorchange':'stroke',context:'path_context_menu'})
+		var temp=snapobj.path(path).attr({stroke:chartobject.trend_fill,opacity:chartobject.trend_opacity,'stroke-width':chartobject.trend_width,'colorchange':'stroke',context:'path_context_menu'})
 		var pathcoords=temp.getBBox()
 
 		var tempwidth=pathcoords.width
@@ -1325,7 +1326,7 @@ function draw_trends(axes,trend,snapobj){
 
 			var path='M'+x_loc1+','+y_loc1+'L'+x_loc2+','+y_loc2
 			temp.remove()
-			var temp=snapobj.path(path).attr({stroke:chartobject.trend_fill,'stroke-width':chartobject.trend_width,'colorchange':'stroke',context:'path_context_menu'})
+			var temp=snapobj.path(path).attr({stroke:chartobject.trend_fill,opacity:chartobject.trend_opacity,'stroke-width':chartobject.trend_width,'colorchange':'stroke',context:'path_context_menu'})
 		} else if(Snap.path.isPointInsideBBox(areabox,x_loc1,y_loc1)==false & Snap.path.isPointInsideBBox(areabox,x_loc2,y_loc2)==true){
 			// both points are outside the box, path has to redrawn based on two intersection points
 			var intersects=Snap.path.intersection(temp,tempbox)
@@ -1335,7 +1336,7 @@ function draw_trends(axes,trend,snapobj){
 
 			var path='M'+x_loc1+','+y_loc1+'L'+x_loc2+','+y_loc2
 			temp.remove()
-			var temp=snapobj.path(path).attr({stroke:chartobject.trend_fill,'stroke-width':chartobject.trend_width,'colorchange':'stroke',context:'path_context_menu'})
+			var temp=snapobj.path(path).attr({stroke:chartobject.trend_fill,opacity:chartobject.trend_opacity,'stroke-width':chartobject.trend_width,'colorchange':'stroke',context:'path_context_menu'})
 		} else if(Snap.path.isPointInsideBBox(areabox,x_loc1,y_loc1)==true & Snap.path.isPointInsideBBox(areabox,x_loc2,y_loc2)==false){
 			// both points are outside the box, path has to redrawn based on two intersection points
 			var intersects=Snap.path.intersection(temp,tempbox)
@@ -1345,7 +1346,7 @@ function draw_trends(axes,trend,snapobj){
 
 			var path='M'+x_loc1+','+y_loc1+'L'+x_loc2+','+y_loc2
 			temp.remove()
-			var temp=snapobj.path(path).attr({stroke:chartobject.trend_fill,'stroke-width':chartobject.trend_width,'colorchange':'stroke',context:'path_context_menu'})
+			var temp=snapobj.path(path).attr({stroke:chartobject.trend_fill,opacity:chartobject.trend_opacity,'stroke-width':chartobject.trend_width,'colorchange':'stroke',context:'path_context_menu'})
 		}
 
 		tempbox.remove()
@@ -1545,7 +1546,7 @@ function draw_lines(axes,line,snapobj){
 		} else {
 			var greplace=current[0][line.grouping.color]
 		}
-		snapobj.path(path).attr({'data_label':label,class:'dataelement',stroke:color,'stroke-width':linewidth,fill:'none','group':greplace,'fill-opacity':0,'stroke-opacity':chartobject.linechart_strokeopacity,'colorchange':'stroke',context:'pathdata_context_menu','stroke-dasharray':linetype})
+		snapobj.path(path).attr({'data_label':label,class:'dataelement',opacity:chartobject.line_opacity,stroke:color,'stroke-width':linewidth,fill:'none','group':greplace,'fill-opacity':0,'stroke-opacity':chartobject.linechart_strokeopacity,'colorchange':'stroke',context:'pathdata_context_menu','stroke-dasharray':linetype})
 	}
 }
 
@@ -1677,7 +1678,7 @@ function draw_area(axes,line,snapobj){
 		} else {
 			var greplace=current[0][line.grouping.color]
 		}
-		snapobj.path(path).attr({'data_label':label,class:'dataelement',stroke:color,'stroke-width':0,fill:color,'group':greplace,'colorchange':'fill',context:'pathdata_context_menu'})
+		snapobj.path(path).attr({'data_label':label,class:'dataelement',opacity:chartobject.area_opacity,stroke:color,'stroke-width':0,fill:color,'group':greplace,'colorchange':'fill',context:'pathdata_context_menu'})
 	}
 
 	// pull the y=0 line to the front
@@ -1844,7 +1845,7 @@ function draw_steps(axes,step,snapobj){
 		} else {
 			var greplace=current[0][step.grouping.color]
 		}
-		snapobj.path(path).attr({'data_label':label,class:'dataelement',stroke:color,'stroke-width':linewidth,fill:'none','group':greplace,'fill-opacity':0,'stroke-opacity':chartobject.linechart_strokeopacity,'colorchange':'stroke',context:'pathdata_context_menu','stroke-dasharray':linetype})
+		snapobj.path(path).attr({'data_label':label,class:'dataelement',opacity:chartobject.line_opacity,stroke:color,'stroke-width':linewidth,fill:'none','group':greplace,'fill-opacity':0,'stroke-opacity':chartobject.linechart_strokeopacity,'colorchange':'stroke',context:'pathdata_context_menu','stroke-dasharray':linetype})
 	}
 }
 
@@ -1911,7 +1912,7 @@ function draw_points(axes,point,snapobj){
 				var greplace=current[point.grouping.color]
 			}
 			if(pointtype==1){
-				snapobj.circle(x_loc,y_loc,pointsize).attr({fill:color,stroke:color,'stroke-width':chartobject.point_strokewidth,'data_type':'point','data_label':label,'group':greplace,'class':'dataelement','fill-opacity':chartobject.point_fillopacity,colorchange:'both',context:'point_context_menu'})
+				snapobj.circle(x_loc,y_loc,pointsize).attr({fill:color,stroke:color,'stroke-width':chartobject.point_strokewidth,'data_type':'point','data_label':label,'group':greplace,'class':'dataelement','fill-opacity':chartobject.point_fillopacity,'stroke-opacity':chartobject.point_strokeopacity,colorchange:'both',context:'point_context_menu'})
 			}
 
 			// label point
@@ -1991,7 +1992,7 @@ function draw_segments(axes,segment,snapobj){
 			} else {
 				var greplace=current[segment.grouping.color]
 			}
-			snapobj.line(x_loc1,y_loc1,x_loc2,y_loc2).attr({class:'dataelement',stroke:color,'stroke-width':size,'group':greplace,'stroke-opacity':chartobject.linechart_strokeopacity,'colorchange':'stroke',context:'pathdata_context_menu','stroke-dasharray':type})
+			snapobj.line(x_loc1,y_loc1,x_loc2,y_loc2).attr({class:'dataelement',opacity:chartobject.segment_opacity,stroke:color,'stroke-width':size,'group':greplace,'stroke-opacity':chartobject.linechart_strokeopacity,'colorchange':'stroke',context:'pathdata_context_menu','stroke-dasharray':type})
 		}
 	}
 }
@@ -2023,7 +2024,7 @@ function draw_text(axes,text,snapobj){
 			var y_loc=get_coord(current[text.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[text.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
 
 			// draw text
-			var t=snapobj.text(x_loc,y_loc,current[text.text]).attr({fill:chartobject.annotatetextfill,'data_type':'text','class':'dataelement',colorchange:'fill',context:'text_context_menu','text-anchor':'middle','dominant-baseline':'text-before-edge','font-size':size,'font-family':chartobject.annotateface,'font-weight':chartobject.annotateweight})
+			var t=snapobj.text(x_loc,y_loc,current[text.text]).attr({fill:chartobject.annotatetextfill,opacity:chartobject.text_opacity,'data_type':'text','class':'dataelement',colorchange:'fill',context:'text_context_menu','text-anchor':'middle','dominant-baseline':'text-before-edge','font-size':size,'font-family':chartobject.annotateface,'font-weight':chartobject.annotateweight})
 			t.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 			center_baseline(t)
 		}
@@ -2183,7 +2184,7 @@ function draw_bars(axes,bar,snapobj){
 				var greplace=current[bar.grouping.color]
 			}
 			console.log(x1,x2,y1,y2)
-			snapobj.path('M'+x1+','+y2+'L'+x2+','+y2+'L'+x2+','+y1+'L'+x1+','+y1+'L'+x1+','+y2).attr({orient:orient,'data_type':'bar','data_label':label,'group':greplace,'class':'dataelement','shape-rendering':'crispEdges',fill:color,colorchange:'fill',context:'data_context_menu'})
+			snapobj.path('M'+x1+','+y2+'L'+x2+','+y2+'L'+x2+','+y1+'L'+x1+','+y1+'L'+x1+','+y2).attr({orient:orient,'data_type':'bar',opacity:chartobject.barchart_opacity,'data_label':label,'group':greplace,'class':'dataelement','shape-rendering':'crispEdges',fill:color,colorchange:'fill',context:'data_context_menu'})
 		}
 	}
 
@@ -2299,7 +2300,7 @@ function draw_stackedbars(axes,bar,snapobj){
 						var x2=x1+barwidth
 						var label=temp[bar.yvar]
 						var greplace=temp[bar.grouping.color]					
-						snapobj.path('M'+x1+','+y2+'L'+x2+','+y2+'L'+x2+','+y1+'L'+x1+','+y1+'L'+x1+','+y2).attr({orient:orient,'data_type':'bar','data_label':label,'group':greplace,'class':'dataelement','shape-rendering':'crispEdges',fill:color,context:'data_context_menu',colorchange:'fill'})
+						snapobj.path('M'+x1+','+y2+'L'+x2+','+y2+'L'+x2+','+y1+'L'+x1+','+y1+'L'+x1+','+y2).attr({orient:orient,opacity:chartobject.barchart_opacity,'data_type':'bar','data_label':label,'group':greplace,'class':'dataelement','shape-rendering':'crispEdges',fill:color,context:'data_context_menu',colorchange:'fill'})
 						y_ends_positive[i_loc]=y2
 					} else {
 						if(chartobject.flatdata[bar.xvar].dtype=='date'){
@@ -2313,7 +2314,7 @@ function draw_stackedbars(axes,bar,snapobj){
 						var x2=x1+barwidth
 						var label=temp[bar.yvar]
 						var greplace=temp[bar.grouping.color]					
-						snapobj.path('M'+x1+','+y2+'L'+x2+','+y2+'L'+x2+','+y1+'L'+x1+','+y1+'L'+x1+','+y2).attr({orient:orient,'data_type':'bar','data_label':label,'group':greplace,'class':'dataelement','shape-rendering':'crispEdges',fill:color,context:'data_context_menu',colorchange:'fill'})
+						snapobj.path('M'+x1+','+y2+'L'+x2+','+y2+'L'+x2+','+y1+'L'+x1+','+y1+'L'+x1+','+y2).attr({orient:orient,opacity:chartobject.barchart_opacity,'data_type':'bar','data_label':label,'group':greplace,'class':'dataelement','shape-rendering':'crispEdges',fill:color,context:'data_context_menu',colorchange:'fill'})
 						y_ends_negative[i_loc]=y2
 					}
 				}
@@ -2346,7 +2347,7 @@ function draw_stackedbars(axes,bar,snapobj){
 						var y2=y1+barwidth
 						var label=temp[bar.yvar]
 						var greplace=temp[bar.grouping.color]					
-						snapobj.path('M'+x1+','+y2+'L'+x2+','+y2+'L'+x2+','+y1+'L'+x1+','+y1+'L'+x1+','+y2).attr({orient:orient,'data_type':'bar','data_label':label,'group':greplace,'class':'dataelement','shape-rendering':'crispEdges',fill:color,context:'data_context_menu',colorchange:'fill'})
+						snapobj.path('M'+x1+','+y2+'L'+x2+','+y2+'L'+x2+','+y1+'L'+x1+','+y1+'L'+x1+','+y2).attr({orient:orient,opacity:chartobject.barchart_opacity,'data_type':'bar','data_label':label,'group':greplace,'class':'dataelement','shape-rendering':'crispEdges',fill:color,context:'data_context_menu',colorchange:'fill'})
 						x_ends_positive[i_loc]=x2
 					} else {
 						if(chartobject.flatdata[bar.yvar].dtype=='date'){
@@ -2360,7 +2361,7 @@ function draw_stackedbars(axes,bar,snapobj){
 						var y2=y1+barwidth
 						var label=temp[bar.xvar]
 						var greplace=temp[bar.grouping.color]					
-						snapobj.path('M'+x1+','+y2+'L'+x2+','+y2+'L'+x2+','+y1+'L'+x1+','+y1+'L'+x1+','+y2).attr({orient:orient,'data_type':'bar','data_label':label,'group':greplace,'class':'dataelement','shape-rendering':'crispEdges',fill:color,context:'data_context_menu',colorchange:'fill'})
+						snapobj.path('M'+x1+','+y2+'L'+x2+','+y2+'L'+x2+','+y1+'L'+x1+','+y1+'L'+x1+','+y2).attr({orient:orient,opacity:chartobject.barchart_opacity,'data_type':'bar','data_label':label,'group':greplace,'class':'dataelement','shape-rendering':'crispEdges',fill:color,context:'data_context_menu',colorchange:'fill'})
 						x_ends_negative[i_loc]=x2
 					}
 				}
@@ -3244,8 +3245,25 @@ function default_style(parameters) {
 
 		// barchart specific style
 		'barchart_width':.8,
+		'barchart_opacity':1,
 
-		// line/scatter specific style
+		// line specific style
+		'linechart_strokeopacity':1,
+		'line_types':[[0,0],[5,5],[8,4,2,4],[8,8],[2,5]],
+		'line_minsize':2,
+		'line_maxsize':20,
+		'line_size':3,
+		'line_opacity':1,
+
+		// scatter specific style
+		'point_size':4,
+		'point_strokewidth':1.7,
+		'point_maxsize':25,
+		'point_minsize':3,
+		'point_fillopacity':.2,
+		'point_strokeopacity':1,
+
+		// trend specific style
 		'trend_width':1.5,
 		'trend_fill':'#c64027',
 		'trend_textface':'PTSans',
@@ -3253,20 +3271,15 @@ function default_style(parameters) {
 		'trend_textsize':'12px',
 		'trend_textcolor':'#c64027',
 		'trend_linetotext':3,
-		'point_size':4,
-		'point_strokewidth':1.7,
-		'point_fillopacity':.2,
-		'point_maxsize':25,
-		'point_minsize':3,
-		'linechart_strokeopacity':1,
-		'line_types':[[0,0],[5,5],[8,4,2,4],[8,8],[2,5]],
-		'line_minsize':2,
-		'line_maxsize':20,
-		'line_size':3,
+		'trend_opacity':1,
 
 		// text geom specific
 		'text_minsize':8,
 		'text_maxsize':24,
+		'text_opacity':1,
+
+		// area geom specific
+		'area_opacity':1,
 
 		// callout style
 		'callout_color':'#ababab',
@@ -3282,6 +3295,7 @@ function default_style(parameters) {
 		'segment_maxsize':20,
 		'segment_minsize':1,
 		'segment_linetypes':[[0,0],[5,5],[8,4,2,4],[8,8],[2,5]],
+		'segment_opacity':1,
 
 		// shade geom
 		'shadefill':'white',
@@ -3290,6 +3304,7 @@ function default_style(parameters) {
 		// logo
 		'logo':"data:image/png;base64,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",
 		'logoscale':3,
+		'logoopacity':1,
 
 		// colormenu
 		'colormenu':'#205946,#33836A,#67c2a5,#b7dfd1,#e2f2ed,#ffffff,#8e2a1d,#c63f26,#f58c63,#fbcdbb,#fef1eb,#000000,#24385B,#3F578C,#8c9fca,#ccdaf0,#f1f3f9,#a3a3a3,#e78ac3,#a6d854,#ffd92f,#e5c494,#ece9e8,#c3c3c3',
