@@ -1546,7 +1546,7 @@ function draw_lines(axes,line,snapobj){
 		} else {
 			var greplace=current[0][line.grouping.color]
 		}
-		snapobj.path(path).attr({'data_label':label,class:'dataelement',opacity:chartobject.line_opacity,stroke:color,'stroke-width':linewidth,fill:'none','group':greplace,'fill-opacity':0,'stroke-opacity':chartobject.linechart_strokeopacity,'colorchange':'stroke',context:'pathdata_context_menu','stroke-dasharray':linetype})
+		snapobj.path(path).attr({'data_label':label,class:'dataelement',opacity:chartobject.line_opacity,stroke:color,'stroke-width':linewidth,fill:'none','group':greplace,'fill-opacity':0,'colorchange':'stroke',context:'pathdata_context_menu','stroke-dasharray':linetype})
 	}
 }
 
@@ -1845,7 +1845,7 @@ function draw_steps(axes,step,snapobj){
 		} else {
 			var greplace=current[0][step.grouping.color]
 		}
-		snapobj.path(path).attr({'data_label':label,class:'dataelement',opacity:chartobject.line_opacity,stroke:color,'stroke-width':linewidth,fill:'none','group':greplace,'fill-opacity':0,'stroke-opacity':chartobject.linechart_strokeopacity,'colorchange':'stroke',context:'pathdata_context_menu','stroke-dasharray':linetype})
+		snapobj.path(path).attr({'data_label':label,class:'dataelement',opacity:chartobject.line_opacity,stroke:color,'stroke-width':linewidth,fill:'none','group':greplace,'fill-opacity':0,'colorchange':'stroke',context:'pathdata_context_menu','stroke-dasharray':linetype})
 	}
 }
 
@@ -1992,7 +1992,7 @@ function draw_segments(axes,segment,snapobj){
 			} else {
 				var greplace=current[segment.grouping.color]
 			}
-			snapobj.line(x_loc1,y_loc1,x_loc2,y_loc2).attr({class:'dataelement',opacity:chartobject.segment_opacity,stroke:color,'stroke-width':size,'group':greplace,'stroke-opacity':chartobject.linechart_strokeopacity,'colorchange':'stroke',context:'pathdata_context_menu','stroke-dasharray':type})
+			snapobj.line(x_loc1,y_loc1,x_loc2,y_loc2).attr({class:'dataelement',opacity:chartobject.segment_opacity,stroke:color,'stroke-width':size,'group':greplace,'colorchange':'stroke',context:'pathdata_context_menu','stroke-dasharray':type})
 		}
 	}
 }
@@ -3248,7 +3248,6 @@ function default_style(parameters) {
 		'barchart_opacity':1,
 
 		// line specific style
-		'linechart_strokeopacity':1,
 		'line_types':[[0,0],[5,5],[8,4,2,4],[8,8],[2,5]],
 		'line_minsize':2,
 		'line_maxsize':20,

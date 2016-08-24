@@ -345,26 +345,31 @@ function redraw(keep) {
 			}
 
 			// get style settings from the settings tab. These will override settings elsewhere in the document if they have been filled in
-			settings=['linechart_strokeopacity','top_margin','bottom_margin','left_margin','right_margin','head_height','footer_height','hedsize','hedweight','hedface','deksize','dekweight','dekface','datasize','dataweight','dataface','annotatesize','annotateweight','annotateface','sourcesize','sourceweight','sourceface','notesize','noteweight','noteface','chartfill','chart_toppad','chart_bottompad','chart_leftpad','chart_rightpad','headerfill','header_toppad','header_bottompad','header_leftpad','header_rightpad','footerfill','footer_toppad','footer_bottompad','footer_leftpad','notetoppad','footer_rightpad','xgrid_fill','xgrid_zerofill','xgrid_minorfill','xgrid_thickness','xgrid_zerothickness','xgrid_minorthickness','xgrid_dasharray','xgrid_zerodasharray','xgrid_minordasharray','xgrid_opacity','xgrid_zeroopacity','xgrid_minoropacity','ygrid_fill','ygrid_zerofill','ygrid_minorfill','ygrid_thickness','ygrid_zerothickness','ygrid_minorthickness','ygrid_dasharray','ygrid_zerodasharray','ygrid_minordasharray','ygrid_opacity','ygrid_zeroopacity','ygrid_minoropacity','xtick_textsize','xtick_textweight','xtick_textface','xtick_maxsize','xtick_length','xtick_thickness','xtick_fill','xtick_to_xlabel','xtick_to_xaxis','ytick_textsize','ytick_textweight','ytick_textface','ytick_maxsize','ytick_length','ytick_thickness','ytick_fill','ytick_to_ylabel','ytick_to_yaxis','xlabel_textsize','xlabel_textweight','xlabel_textface','ylabel_textsize','ylabel_textweight','ylabel_textface','legend_location','legend_maxwidth','legend_textsize','legend_textweight','legend_textface','legend_toppad','legend_bottompad','legend_rightpad','legend_leftpad','legend_elementsize','legend_elementpad','legend_floatbackground','legend_floatthickness','legend_floatstroke','legend_floatpad','diverging_color','sequential_color','qualitative_color','barchart_width','trend_width','trend_fill','trend_textface','trend_textweight','trend_textsize','trend_textcolor','trend_linetotext','point_size','point_strokewidth','point_fillopacity','point_maxsize','point_minsize','grayscale_color','hedsizemin','maxdeklines','deksizemin','text_minsize','text_maxsize','segment_width','segment_maxsize','segment_minsize','segment_linetypes','logo','logoscale','callout_color','callout_thickness','callout_dasharray','arrow_color','arrow_thickness','arrow_dasharray','hedtextfill','dektextfill','datatextfill','annotatetextfill','sourcetextfill','notetextfill','xtick_textfill','ytick_textfill','legend_textfill','xlabel_textfill','ylabel_textfill','legend_titletextfill','trend_textcolor']
-			numerical=['notetoppad','hedsizemin','maxdeklines','segment_width','segment_maxsize','segment_minsize','logoscale','callout_thickness','arrow_thickness','linechart_strokeopacity','top_margin','bottom_margin','left_margin','right_margin','head_height','footer_height','chart_toppad','chart_bottompad','chart_leftpad','chart_rightpad','header_toppad','header_bottompad','header_leftpad','header_rightpad','footer_toppad','footer_bottompad','footer_leftpad','footer_rightpad','xgrid_thickness','xgrid_zerothickness','xgrid_minorthickness','xgrid_opacity','xgrid_zeroopacity','xgrid_minoropacity','ygrid_thickness','ygrid_zerothickness','ygrid_minorthickness','ygrid_opacity','ygrid_zeroopacity','ygrid_minoropacity','xtick_maxsize','xtick_length','xtick_thickness','xtick_to_xlabel','xtick_to_xaxis','ytick_maxsize','ytick_length','ytick_thickness','ytick_to_ylabel','ytick_to_yaxis','legend_maxwidth','legend_toppad','legend_bottompad','legend_rightpad','legend_leftpad','legend_elementsize','legend_elementpad','legend_floatthickness','legend_floatstroke','legend_floatpad','barchart_width','trend_width','trend_linetotext','point_size','point_strokewidth','point_fillopacity','point_maxsize','point_minsize']
-			json=['segment_linetypes','callout_dasharray','arrow_dasharray','xgrid_dasharray','xgrid_zerodasharray','xgrid_minordasharray','ygrid_dasharray','ygrid_zerodasharray','ygrid_minordasharray','diverging_clor','sequential_color','qualitative_color']
-			for(var i=0;i<settings.length;i++){
-				set=$("#"+settings[i]).val()
-				if (set!=''){
-					if ($.inArray(settings[i],numerical)>-1){
-						style[settings[i]]=parseFloat(set)
-					} else if ($.inArray(settings[i],json)>-1){
-						set.replace("'",'"')
-						style[settings[i]]=JSON.parse(set)
-					} else {
-						console.log(settings[i],set)
-						style[settings[i]]=set
+			var settings=[]
+			for(var run=0;run<2;run++){
+				for(var i=0;i<settings.length;i++){
+					set=$("#"+settings[i]).val()
+					if (set!='' & set!==undefined){
+						console.log('style change from settings: ',settings[i],set)
+						if (isNaN(parseFloat(set))===false){
+							style[settings[i]]=parseFloat(set)
+						} else {
+							try {
+								JSON.parse(set)
+								set.replace("'",'"')
+								style[settings[i]]=JSON.parse(set)
+							} catch (err) {
+								style[settings[i]]=set
+							}
+						}
 					}
+				}
+				chartobject.style(style)
+				for(var key in style){
+					settings.push(key)
 				}
 			}
 
-			// now apply the style object
-			chartobject.style(style)
 			console.log(style)
 
 			// initialize axes
