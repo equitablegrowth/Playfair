@@ -708,9 +708,9 @@ window.playfair = (function () {
 		// draw the footer and return the height of the footer
 		this.source=source
 		this.note=note
-		this.logo.logo=this.logo.logo
-		logoscale=this.logo.logo.logoscale
-		var logoopacity=this.logo.logo.logoopacity
+		// this.logo.logo=this.logo.logo
+		logoscale=this.logo.logoscale
+		var logoopacity=this.logo.logoopacity
 
 		var snapobj=this.svg
 		var width=this.width
@@ -1151,7 +1151,7 @@ function draw_key(legend,playobj,snapobj,prelim){
 				if(overalls[legend[i].overall]==undefined){
 					var lines=multitext(legend[i].group_value,{'font-size':playobj.legends.legend_textsize,'font-weight':playobj.legends.legend_textweight,'font-family':playobj.legends.legend_textface},maxtextwidth)
 					// the +.5 here is a kluge that only applies to the values of legend_elementsize and legend_textsize you're using feels like it should be (legend_elementsize-legend_textsize)/2 but that doesn't get me what I want
-					var t=snapobj.text(xtext,y+.5,lines).attr({ident2:'floatkey',ident:'key',fill:this.legends.legend_textfill,'font-size':playobj.legends.legend_textsize,'font-weight':playobj.legends.legend_textweight,'font-family':playobj.legends.legend_textface,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
+					var t=snapobj.text(xtext,y+.5,lines).attr({ident2:'floatkey',ident:'key',fill:playobj.legends.legend_textfill,'font-size':playobj.legends.legend_textsize,'font-weight':playobj.legends.legend_textweight,'font-family':playobj.legends.legend_textface,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
 					t.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 					t.selectAll("tspan:not(:first-child)").attr({x:t.attr('x'),dy:1*parseFloat(t.attr('font-size'))})
 					var xend=t.getBBox().x2
