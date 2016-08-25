@@ -704,7 +704,7 @@ window.playfair = (function () {
 		snapobj.append(snapobj.selectAll('[ident2="keytop"]'))
 	}
 
-	Playfair.prototype.footer = function(source,note,callback) {
+	Playfair.prototype.prepfooter = function(source,note,callback) {
 		// draw the footer and return the height of the footer
 		this.source=source
 		this.note=note
@@ -809,7 +809,7 @@ window.playfair = (function () {
 		}
 	}
 
-	Playfair.prototype.header = function(hed,dek) {
+	Playfair.prototype.prepheader = function(hed,dek) {
 		snapobj=this.svg
 
 		this.hed=hed
@@ -823,7 +823,7 @@ window.playfair = (function () {
 			hedfontsize=hedfontsize-1
 		}
 
-		if (hedfontsize<parseInt(this.title_text.title_text.hedsizemin)){
+		if (hedfontsize<parseInt(this.title_text.hedsizemin)){
 			hedfontsize=this.title_text.title_text.hedsizemin
 			alert('Your headline is too long.')
 		}
@@ -838,7 +838,7 @@ window.playfair = (function () {
 			dekfontsize=dekfontsize-1
 		}
 
-		if (dekfontsize<parseInt(this.title_text.title_text.deksizemin)){
+		if (dekfontsize<parseInt(this.title_text.deksizemin)){
 			dekfontsize=this.title_text.title_text.deksizemin
 			alert('Your subhead is too long.')
 		}
@@ -2806,7 +2806,7 @@ function draw_axes(playobj,xvar,yvar,shiftx,shifty,legend_height) {
 			lines=lines.splice(0,2)
 		}
 
-		var ylab=snapobj.text(playobj.x+playobj.grapharea.left_margin,((playobj.y+playobj.height-playobj.logo.logo_height-playobj.footer.footer_toppad)+(playobj.y+playobj.header.head_height+playobj.grapharea.top_margin+legend_height+playobj.legends.legend_toppad+playobj.legends.legend_bottompad))/2,lines).attr({fill:this.y_label.ylabel_textfill,ident:'yaxis','font-size':playobj.y_label.ylabel_textsize,'font-weight':playobj.y_label.ylabel_textweight,'font-family':playobj.y_label.ylabel_textface,'dominant-baseline':'central','text-anchor':'middle',colorchange:'fill',context:'text_context_menu'})
+		var ylab=snapobj.text(playobj.x+playobj.grapharea.left_margin,((playobj.y+playobj.height-playobj.logo.logo_height-playobj.footer.footer_toppad)+(playobj.y+playobj.header.head_height+playobj.grapharea.top_margin+legend_height+playobj.legends.legend_toppad+playobj.legends.legend_bottompad))/2,lines).attr({fill:playobj.y_label.ylabel_textfill,ident:'yaxis','font-size':playobj.y_label.ylabel_textsize,'font-weight':playobj.y_label.ylabel_textweight,'font-family':playobj.y_label.ylabel_textface,'dominant-baseline':'central','text-anchor':'middle',colorchange:'fill',context:'text_context_menu'})
 		ylab.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 		ylab_coords=ylab.getBBox()
 		ylab.attr({y:ylab_coords.y-(ylab_coords.height/2),x:parseFloat(ylab.attr('x'))+(lines.length-1)*parseInt(playobj.y_label.ylabel_textsize)/2})
@@ -2851,7 +2851,7 @@ function draw_axes(playobj,xvar,yvar,shiftx,shifty,legend_height) {
 			lines=lines.splice(0,2)
 		}
 
-		var xlab=snapobj.text((total_xoffset+2*playobj.x+playobj.width-playobj.grapharea.right_margin)/2,playobj.y+playobj.height-playobj.grapharea.bottom_margin-playobj.footer.footer_height,lines).attr({fill:this.x_label.xlabel_textfill,ident:'xaxis','font-size':playobj.x_label.xlabel_textsize,'font-weight':playobj.x_label.xlabel_textweight,'font-family':playobj.x_label.xlabel_textface,'dominant-baseline':'text-before-edge','text-anchor':'middle',colorchange:'fill',context:'text_context_menu'})
+		var xlab=snapobj.text((total_xoffset+2*playobj.x+playobj.width-playobj.grapharea.right_margin)/2,playobj.y+playobj.height-playobj.grapharea.bottom_margin-playobj.footer.footer_height,lines).attr({fill:playobj.x_label.xlabel_textfill,ident:'xaxis','font-size':playobj.x_label.xlabel_textsize,'font-weight':playobj.x_label.xlabel_textweight,'font-family':playobj.x_label.xlabel_textface,'dominant-baseline':'text-before-edge','text-anchor':'middle',colorchange:'fill',context:'text_context_menu'})
 		xlab.selectAll("tspan:not(:first-child)").attr({x:xlab.attr('x'),dy:parseInt(playobj.x_label.xlabel_textsize)})
 		xlab.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 		coords=xlab.getBBox()

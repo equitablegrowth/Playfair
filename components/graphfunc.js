@@ -376,8 +376,8 @@ function redraw(keep) {
 			chartobject.xaxis({'label':xlabel,'number_of_ticks':5,'decimal':undefined,'format':undefined})
 			chartobject.yaxis({'label':ylabel,'number_of_ticks':5,'decimal':undefined,'format':undefined})
 
-			chartobject.header(hed,dek)
-			chartobject.footer(source,note,function(){
+			chartobject.prepheader(hed,dek)
+			chartobject.prepfooter(source,note,function(){
 				// draw the initial graph, dependent on current value of graph_type
 				if (graph_type=='Chart') {
 					if ($('#customx').val()!='' && $("#customxcheck").prop('checked')==true){
