@@ -113,7 +113,8 @@
 		"xtick_thickness":1,
 		"xtick_fill":"#bbb",
 		"xtick_to_xlabel":5,
-		"xtick_to_xaxis":5
+		"xtick_to_xaxis":5,
+		"xtick_zerothickness":2,
 	},
 	"y_ticks":{
 		"ytick_textsize":"16px",
@@ -125,7 +126,8 @@
 		"ytick_thickness":1,
 		"ytick_fill":"#bbb",
 		"ytick_to_ylabel":6,
-		"ytick_to_yaxis":20
+		"ytick_to_yaxis":20,
+		"xtick_zerothickness":2,
 	},
 	"x_label":{
 		"xlabel_textsize":"14px",

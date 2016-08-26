@@ -138,8 +138,8 @@ function change_theme(){
 			data: dictionary,
 			success: function(response){
 				var response = JSON.parse(response);
-				theme=response
-				theme=default_style(theme)
+				var theme=response
+				var theme=default_style(theme)
 				change_colormenu(theme)
 				populate_settings(theme)
 			},
@@ -148,8 +148,8 @@ function change_theme(){
 			}
 		})
 	} else {
-		theme={}
-		theme=default_style(theme)
+		var theme={}
+		var theme=default_style(theme)
 		change_colormenu(theme)
 		populate_settings(theme)
 	}
@@ -207,7 +207,7 @@ function populate_settings(theme){
 	for(var i=0;i<settings.length;i++){
 		var param=settings[i].id
 		var key=$('#'+param).attr('data-key')
-		settings[i].placeholder=theme[key][param]
+		settings[i].placeholder=JSON.stringify(theme[key][param])
 	}
 	vtabs()
 }

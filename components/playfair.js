@@ -2952,7 +2952,7 @@ function draw_axes(playobj,xvar,yvar,shiftx,shifty,legend_height) {
 				if(parseFloat(xvar[i].replace(/[^0-9\.\-]+/g,''))=='0'){
 					temp_line.attr({stroke:playobj.y_grids.ygrid_zerofill,'stroke-width':playobj.x_grids.xgrid_zerothickness,'stroke-dasharray':playobj.x_grids.xgrid_zerodasharray,zeroline:'1'})
 					if(parseFloat(temp_tick.attr('stroke-width'))!=0){
-						temp_tick.attr({'stroke-width':playobj.x_grids.xgrid_zerothickness})
+						temp_tick.attr({'stroke-width':playobj.x_ticks.xtick_zerothickness})
 					}
 				}
 			} catch(err){}
@@ -3013,7 +3013,7 @@ function draw_axes(playobj,xvar,yvar,shiftx,shifty,legend_height) {
 				if(parseFloat(yvar[i].replace(/[^0-9\.\-]+/g,''))=='0'){
 					temp_line.attr({stroke:playobj.y_grids.ygrid_zerofill,'stroke-width':playobj.y_grids.ygrid_zerothickness,'stroke-dasharray':playobj.y_grids.ygrid_zerodasharray,zeroline:'1'})
 					if(parseFloat(temp_tick.attr('stroke-width'))!=0){
-						temp_tick.attr({'stroke-width':playobj.y_grids.ygrid_zerothickness})
+						temp_tick.attr({'stroke-width':playobj.y_ticks.ytick_zerothickness})
 					}
 				}
 			} catch(err){}
@@ -3207,6 +3207,8 @@ function default_style(parameters) {
 			'xtick_fill':'#bbb',
 			'xtick_to_xlabel':5,
 			'xtick_to_xaxis':5,
+			'xtick_zerothickness':2,
+			'xtick_zerofill':'#bbb',
 		},
 		'y_ticks':{
 			// y ticks
@@ -3220,6 +3222,8 @@ function default_style(parameters) {
 			'ytick_fill':'#bbb',
 			'ytick_to_ylabel':6,
 			'ytick_to_yaxis':20,
+			'ytick_zerothickness':2,
+			'ytick_zerofill':'#bbb',
 		},
 		'x_label':{
 			// x label
