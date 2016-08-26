@@ -3074,7 +3074,7 @@ function formatDate(date,range){
 function default_style(parameters) {
 	// Parameters should be an object with the parameters you want to change like:
 	// obj.style({'top_margin':20,'deksize':'10px'}) etc.
-	if (typeof parameters=='undefined'){parameters={}}
+	if (parameters===undefined){parameters={}}
 
 	default_parameters=
 	{
@@ -3336,10 +3336,15 @@ function default_style(parameters) {
 	}
 
 	for (var property in default_parameters){
-		if (parameters[property]===undefined){
-			parameters[property]=default_parameters[property]
-		} else {
-			parameters[property]=parameters[property]
+		if(parameters[property]===undefined){
+			parameters[property]={}
+		}
+		for (var subprop in default_parameters[property]){
+			if (parameters[property][subprop]===undefined){
+				parameters[property][subprop]=default_parameters[property][subprop]
+			} else {
+				parameters[property][subprop]=parameters[property][subprop]
+			}
 		}
 	}
 

@@ -139,7 +139,7 @@ function change_theme(){
 			success: function(response){
 				var response = JSON.parse(response);
 				theme=response
-				var theme=default_style(theme)
+				theme=default_style(theme)
 				change_colormenu(theme)
 				populate_settings(theme)
 			},
@@ -149,7 +149,7 @@ function change_theme(){
 		})
 	} else {
 		theme={}
-		var theme=default_style(theme)
+		theme=default_style(theme)
 		change_colormenu(theme)
 		populate_settings(theme)
 	}

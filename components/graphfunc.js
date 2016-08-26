@@ -288,7 +288,7 @@ function redraw(keep) {
 
 			// initialize styling, the header, and the footer. The footer loads an image (the logo)
 			// and so callouts after it need to be written as callbacks to the footer function.
-			chartobject.style()
+			// chartobject.style()
 
 			// get state of all UI style toggles and apply to style of graph axes
 			var xgrid=document.getElementById('xgrid').checked
@@ -307,70 +307,70 @@ function redraw(keep) {
 
 			// create the style object
 			if(typeof theme !== 'undefined'){
-				style=jQuery.extend(true, {}, theme)
+				style=default_style(theme)
 			} else {
-				style={}
+				style=default_style()
 			}
 
 			// logo
 			var logoloc=$('input[name=logo]:checked').val()
-			if(logoloc=='nologo'){
-				style['logo']=0
+			if(logoloc==='nologo'){
+				style.logo.logo=0
 			}
 
 			// which grids should be drawn
-			var grids=[xgrid,ygrid,xminorgrid,yminorgrid]
-			var attributes=['xgrid_opacity','ygrid_opacity','xgrid_minoropacity','ygrid_minoropacity']
-			for(var i=0;i<grids.length;i++){
-				if(grids[i]==true){style[attributes[i]]=1}
-				if(grids[i]==false){style[attributes[i]]=0}	
+			if (xgrid===true){
+				style.x_grids.xgrid_opacity=1
+			}
+			if (ygrid===true){
+				style.y_grids.ygrid_opacity=1
+			}
+			if (xminorgrid===true){
+				style.x_grids.xgrid_minoropacity=1
+			}
+			if (yminorgrid===true){
+				style.y_grids.ygrid_minoropacity=1
 			}
 
 			// point style
-			if(barspace==false){style['barchart_width']=1}
-			style['legend_location']=legendloc
+			if(barspace===false){style.bar_geom['barchart_width']=1}
+			style.legends['legend_location']=legendloc
 
 			if (point_type=='pointpoint'){
-				style['point_size']=2
-				style['point_strokewidth']=0
-				style['point_fillopacity']=1
+				style.point_geom['point_size']=2
+				style.point_geom['point_strokewidth']=0
+				style.point_geom['point_fillopacity']=1
 			} else if (point_type=='pointcircle'){
-				style['point_size']=4
-				style['point_strokewidth']=2
-				style['point_fillopacity']=.2
+				style.point_geom['point_size']=4
+				style.point_geom['point_strokewidth']=2
+				style.point_geom['point_fillopacity']=.2
 			} else if (point_type=='pointcircleopen'){
-				style['point_size']=3
-				style['point_strokewidth']=1
-				style['point_fillopacity']=0
+				style.point_geom['point_size']=3
+				style.point_geom['point_strokewidth']=1
+				style.point_geom['point_fillopacity']=0
 			}
 
 			// get style settings from the settings tab. These will override settings elsewhere in the document if they have been filled in
-			var settings=[]
-			for(var run=0;run<2;run++){
-				for(var i=0;i<settings.length;i++){
-					set=$("#"+settings[i]).val()
+			for(var group in style){
+				for(var sub in style[group]){
+					var set=$("#"+sub).val()
 					if (set!='' & set!==undefined){
-						console.log('style change from settings: ',settings[i],set)
 						if (isNaN(parseFloat(set))===false){
-							style[settings[i]]=parseFloat(set)
+							style[group][sub]=parseFloat(set)
 						} else {
 							try {
 								JSON.parse(set)
 								set.replace("'",'"')
-								style[settings[i]]=JSON.parse(set)
-							} catch (err) {
-								style[settings[i]]=set
+								style[group][sub]=JSON.parse(set)
+							} catch(err){
+								style[group][sub]=set
 							}
 						}
 					}
 				}
-				chartobject.style(style)
-				for(var key in style){
-					settings.push(key)
-				}
 			}
 
-			console.log(style)
+			chartobject.style(style)
 
 			// initialize axes
 			chartobject.xaxis({'label':xlabel,'number_of_ticks':5,'decimal':undefined,'format':undefined})
