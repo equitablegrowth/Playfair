@@ -138,8 +138,11 @@ function change_theme(){
 			data: dictionary,
 			success: function(response){
 				var response = JSON.parse(response);
-				var theme=response
-				var theme=default_style(theme)
+				theme=response
+				theme=default_style(theme)
+				// for(var key in theme){
+				// 	chartobject[key]=theme[key]
+				// }
 				change_colormenu(theme)
 				populate_settings(theme)
 			},
@@ -148,8 +151,8 @@ function change_theme(){
 			}
 		})
 	} else {
-		var theme={}
-		var theme=default_style(theme)
+		theme={}
+		theme=default_style(theme)
 		change_colormenu(theme)
 		populate_settings(theme)
 	}
@@ -209,7 +212,7 @@ function populate_settings(theme){
 		var key=$('#'+param).attr('data-key')
 		settings[i].placeholder=JSON.stringify(theme[key][param])
 	}
-	vtabs()
+	vtabs(1)
 }
 
 ///////////////////////// VERTICAL TABS ////////////////////////////////
@@ -217,7 +220,7 @@ function populate_settings(theme){
 // http://jsfiddle.net/frabiacca/7pm7h/5/
 // Thanks frabiacca!
 
-function vtabs() {
+function vtabs(opt) {
 	var items=$('.v-nav>ul>li').each(function() {
 		$(this).click(function(){
 			items.removeClass('current');
@@ -226,7 +229,9 @@ function vtabs() {
 		})
 	})
 
-	$('#data_first').click()
+	if(opt!==1){
+		$('#data_first').click()
+	}
 }
 
 
