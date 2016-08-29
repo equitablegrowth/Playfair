@@ -73,6 +73,8 @@ window.playfair = (function () {
 		this.shade=geom_dict.shade
 		this.segment=geom_dict.segment
 		this.trend=geom_dict.trend
+		this.rect=geom_dict.rect
+		this.bounds=geom_dict.bounds
 		this.shifty=0
 		this.shiftx=0
 		this.datedenom=[0,0]
@@ -686,7 +688,9 @@ window.playfair = (function () {
 		// draw geoms
 		if(typeof(chartobject.shade)!=='undefined'){draw_shade(axes,graph_obj.shade,snapobj)}
 		if(typeof(chartobject.bar)!=='undefined'){draw_bars(axes,graph_obj.bar,snapobj)}
+		if(typeof(chartobject.rect)!=='undefined'){draw_rects(axes,graph_obj.trend,snapobj)}
 		if(typeof(chartobject.area)!=='undefined'){draw_area(axes,graph_obj.area,snapobj)}
+		if(typeof(chartobject.bounds)!=='undefined'){draw_bounds(axes,graph_obj.trend,snapobj)}
 		if(typeof(chartobject.stackedbar)!=='undefined'){draw_stackedbars(axes,graph_obj.stackedbar,snapobj)}
 		if(typeof(chartobject.step)!=='undefined'){draw_steps(axes,graph_obj.step,snapobj)}
 		if(typeof(chartobject.line)!=='undefined'){draw_lines(axes,graph_obj.line,snapobj)}

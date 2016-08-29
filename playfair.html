@@ -539,6 +539,7 @@
 				<li tab='chart_text'>Segments/Trend Lines</li>
 				<li tab='chart_text'>Shading</li>
 				<li tab='chart_text'>Steps</li>
+				<li tab='chart_text'>Rectangles</li>
 				<!-- <li tab='chart_text'>Density</li> -->
 			</ul>
 
@@ -861,40 +862,95 @@
 
 <!-- AREA -->
 			<div class='tab-content'>
-				<div class='row'>
-					<div class='col-md-6'>
-						<div class="labeled_ele">
-							<label>X Variable</label>
-							<span class='styled-select'>
-								<span class='select_carat'>
-									<select class="variable_select x_select" id='area_select_x' disabled>
-										<option value='none'>Nothing selected</option>
-									</select>
+				<div class='uibox_text'>Stacked Areas</div>
+				<div class='uibox'>
+					<div class='row'>
+						<div class='col-md-6'>
+							<div class="labeled_ele">
+								<label>X Variable</label>
+								<span class='styled-select'>
+									<span class='select_carat'>
+										<select class="variable_select x_select" id='area_select_x' disabled>
+											<option value='none'>Nothing selected</option>
+										</select>
+									</span>
 								</span>
-							</span>
-						</div>
+							</div>
 
-						<div class="labeled_ele">
-							<label>Color</label>
-							<span class='styled-select'>
-								<span class='select_carat'>
-									<select class="variable_select group_select" id='area_select_color' disabled>
-										<option value='none'>Nothing selected</option>
-									</select>
+							<div class="labeled_ele">
+								<label>Color</label>
+								<span class='styled-select'>
+									<span class='select_carat'>
+										<select class="variable_select group_select" id='area_select_color' disabled>
+											<option value='none'>Nothing selected</option>
+										</select>
+									</span>
 								</span>
-							</span>
+							</div>
+						</div>
+						<div class='col-md-6'>
+							<div class="labeled_ele">
+								<label>Y Variable</label>
+								<span class='styled-select'>
+									<span class='select_carat'>
+										<select class="variable_select y_select" id='area_select_y' disabled>
+											<option value='none'>Nothing selected</option>
+										</select>
+									</span>
+								</span>
+							</div>
 						</div>
 					</div>
-					<div class='col-md-6'>
-						<div class="labeled_ele">
-							<label>Y Variable</label>
-							<span class='styled-select'>
-								<span class='select_carat'>
-									<select class="variable_select y_select" id='area_select_y' disabled>
-										<option value='none'>Nothing selected</option>
-									</select>
+				</div>
+
+				<div class='uibox_text'>Top/bottom bounded areas</div>
+				<div class='uibox'>
+					<div class='row'>
+						<div class='col-md-6'>
+							<div class="labeled_ele">
+								<label>Y Maximum</label>
+								<span class='styled-select'>
+									<span class='select_carat'>
+										<select class="variable_select y_select" id='bounded_select_max' disabled>
+											<option value='none'>Nothing selected</option>
+										</select>
+									</span>
 								</span>
-							</span>
+							</div>
+
+							<div class="labeled_ele">
+								<label>X Variable</label>
+								<span class='styled-select'>
+									<span class='select_carat'>
+										<select class="variable_select x_select" id='bounded_select_x' disabled>
+											<option value='none'>Nothing selected</option>
+										</select>
+									</span>
+								</span>
+							</div>
+						</div>
+						<div class='col-md-6'>
+							<div class="labeled_ele">
+								<label>Y Minimum</label>
+								<span class='styled-select'>
+									<span class='select_carat'>
+										<select class="variable_select y_select" id='bounded_select_min' disabled>
+											<option value='none'>Nothing selected</option>
+										</select>
+									</span>
+								</span>
+							</div>
+
+							<div class="labeled_ele">
+								<label>Color</label>
+								<span class='styled-select'>
+									<span class='select_carat'>
+										<select class="variable_select group_select" id='bounded_select_color' disabled>
+											<option value='none'>Nothing selected</option>
+										</select>
+									</span>
+								</span>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -1157,6 +1213,71 @@
 					</div>
 				</div>
 			</div>
+
+
+<!-- RECTANGLES -->
+			<div class='tab-content'>
+				<div class='row'>
+					<div class='col-md-6'>
+						<div class="labeled_ele">
+							<label>X Start</label>
+							<span class='styled-select'>
+								<span class='select_carat'>
+									<select class="variable_select x_select" id='rect_xstart' disabled>
+										<option value='none'>Nothing selected</option>
+									</select>
+								</span>
+							</span>
+						</div>
+
+						<div class="labeled_ele">
+							<label>Y Start</label>
+							<span class='styled-select'>
+								<span class='select_carat'>
+									<select class="variable_select y_select" id='rect_ystart' disabled>
+										<option value='none'>Nothing selected</option>
+									</select>
+								</span>
+							</span>
+						</div>
+
+						<div class="labeled_ele">
+							<label>Color</label>
+							<span class='styled-select'>
+								<span class='select_carat'>
+									<select class="variable_select group_select" id='rect_color' disabled>
+										<option value='none'>Nothing selected</option>
+									</select>
+								</span>
+							</span>
+						</div>
+					</div>
+					<div class='col-md-6'>
+						<div class="labeled_ele">
+							<label>X End</label>
+							<span class='styled-select'>
+								<span class='select_carat'>
+									<select class="variable_select x_select" id='rect_xend' disabled>
+										<option value='none'>Nothing selected</option>
+									</select>
+								</span>
+							</span>
+						</div>
+
+						<div class="labeled_ele">
+							<label>Y End</label>
+							<span class='styled-select'>
+								<span class='select_carat'>
+									<select class="variable_select y_select" id='rect_yend' disabled>
+										<option value='none'>Nothing selected</option>
+									</select>
+								</span>
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+
 		</div>
 	</div>
 
