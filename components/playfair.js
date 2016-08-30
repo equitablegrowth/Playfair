@@ -418,7 +418,6 @@ window.playfair = (function () {
 				console.log(data)
 
 				if(geom_dict[key].xvar!==undefined){
-					console.log(geom_dict,key)
 					if(data[geom_dict[key]['xvar']].dtype==='date'){
 						for (var i=0;i<data[geom_dict[key]['xvar']].length;i++){
 							if(Object.prototype.toString.call(data[geom_dict[key]['xvar']][i])==='[object Date]'){
@@ -458,15 +457,17 @@ window.playfair = (function () {
 
 				if(geom_dict[key].yvar!==undefined){
 					if(data[geom_dict[key]['yvar']].dtype==='date'){
-						if(Object.prototype.toString.call(data[geom_dict[key]['yvar']][i])==='[object Date]'){
-							if(isNaN(data[geom_dict[key]['yvar']][i].getTime())==false){
-								ymaxes.push(new Date(moment(Math.max(...remove_missing(data[geom_dict[key]['yvar']])))))
-								ymins.push(new Date(moment(Math.min(...remove_missing(data[geom_dict[key]['yvar']])))))
+						for (var i=0;i<data[geom_dict[key]['xvar']].length;i++){
+							if(Object.prototype.toString.call(data[geom_dict[key]['yvar']][i])==='[object Date]'){
+								if(isNaN(data[geom_dict[key]['yvar']][i].getTime())==false){
+									ymaxes.push(new Date(moment(Math.max(...remove_missing(data[geom_dict[key]['yvar']])))))
+									ymins.push(new Date(moment(Math.min(...remove_missing(data[geom_dict[key]['yvar']])))))
 
-								try{
-									ymaxes.push(new Date(moment(Math.max(...remove_missing(data[geom_dict[key]['yvar2']])))))
-									ymins.push(new Date(moment(Math.min(...remove_missing(data[geom_dict[key]['yvar2']])))))
-								} catch(err){}
+									try{
+										ymaxes.push(new Date(moment(Math.max(...remove_missing(data[geom_dict[key]['yvar2']])))))
+										ymins.push(new Date(moment(Math.min(...remove_missing(data[geom_dict[key]['yvar2']])))))
+									} catch(err){}
+								}
 							}
 						}
 					} else if(data[geom_dict[key]['yvar']].dtype=='text') {
@@ -490,9 +491,9 @@ window.playfair = (function () {
 							ymins.push(Math.min(...remove_missing(data[geom_dict[key]['yvar2']])))
 						} catch(err){}
 					}
+				} if(key=='rect'){
+					// there needs to be a shifty set here for if the y axis is categorical. I don't think an x-shift is needed? I'm confused about why frankly.
 				}
-			} else if(key=='rect'){
-				// there needs to be a shifty set here for if the y axis is categorical. I don't think an x-shift is needed? I'm confused about why frankly.
 			}
 		}
 
@@ -548,9 +549,11 @@ window.playfair = (function () {
 		}
 
 		if(Object.prototype.toString.call(ymaxes[0])==='[object Date]'){
+			console.log('hi, setting ymax as a date')
 			this.ymax=new Date(moment(Math.max(...ymaxes)))
 			this.ymin=new Date(moment(Math.min(...ymins)))
 		} else {
+			console.log(ymaxes)
 			this.ymax=Math.max(...remove_missing(ymaxes))
 			this.ymin=Math.min(...remove_missing(ymins))
 		}
@@ -616,9 +619,7 @@ window.playfair = (function () {
 				var xaxis=create_numerical_axis([graph_obj.xmin,graph_obj.xmax])
 				xaxis.dtype='numeric'
 			} else if(Object.prototype.toString.call(graph_obj.xmax)==='[object Date]'){
-				console.log(graph_obj.xmin)
 				var xaxis=create_date_axis([graph_obj.xmin,graph_obj.xmax],0)
-				console.log(xaxis)
 				xaxis.dtype='date'
 			}
 			graph_obj.xarray=xaxis
