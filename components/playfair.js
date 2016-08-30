@@ -1606,7 +1606,146 @@ function draw_area(axes,line,snapobj){
 		return row[line.grouping.color]===groups[0][0]
 	})
 
+	current.sort(function(a,b){
+		return a[line.xvar]-b[line.xvar]
+	})
+	// var current=Object.keys(current).sort(function(a,b){return current[line.xvar][a]-current[line.xvar][b]})
+
 	var zero=get_coord(0,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[line.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
+	var x_left=get_coord(current[0][line.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[line.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
+	var x_right=get_coord(current[current.length-1][line.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[line.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
+
+	var base_path='L'+x_right+','+zero+'L'+x_left+','+zero
+	var add_values=[]
+
+	// loop through groups in the dataset to draw lines
+	for(var i=0;i<groups.length;i++){
+		var current=chartobject.dataset.filter(function(row){
+			return row[line.grouping.color]===groups[i][0]
+		})
+
+		console.log(current)
+
+		// order according to the x variable
+		var connect=line.xvar
+		current.sort(function(a,b){
+			return a[line.xvar]-b[line.xvar]
+		})
+
+		// color
+		if(line.grouping.color!=='none'){
+			var color=chartobject.color_scales.qualitative_color[color_groups.indexOf(current[0][line.grouping.color]) % chartobject.color_scales.qualitative_color.length]
+		} else {
+			var color=chartobject.color_scales.qualitative_color[0]
+		}
+
+		// label
+		var label=current[0][line.color]
+
+		// create empty path
+		var path=''
+		var new_base=''
+
+		// now loop through points in the line
+		for(var j=0;j<current.length;j++){
+			var sub_current=current[j]
+
+			try{
+				var sub_next=current[j+1]
+			} catch(err){}
+
+			try{
+				var sub_prev=prev_current[j]
+			} catch(err){}
+
+			if(isNaN(sub_current[connect])==false){
+				if((sub_current[line.xvar]==undefined && connect==line.yvar) || (sub_current[line.yvar]==undefined && connect==line.xvar)){
+					alert("Can't graph areas when there are discontinuities in one or more lines - remove missing data and try again.")
+				} else if(sub_current[line.xvar]!=undefined && sub_current[line.yvar]!=undefined){
+					// if this isn't the first pass, check the previous group and add the y-values up so the areas stack appropriately
+					if(i!==0){
+						var y_add=sub_current[line.yvar]+add_values[j]
+						add_values[j]=y_add
+					} else {
+						var y_add=sub_current[line.yvar]
+						add_values.push(y_add)
+					}
+
+					if(j==0){
+						var start_x_loc=get_coord(sub_current[line.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[line.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
+						var start_y_loc=get_coord(y_add,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[line.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
+					}
+
+					// set various values for points. locations
+					var x_loc=get_coord(sub_current[line.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[line.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
+					var y_loc=get_coord(y_add,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[line.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
+					// add to path or start path
+					if(j==0){
+						path=path+'M'+x_loc+','+y_loc
+						new_base='L'+x_loc+','+y_loc+new_base
+					} else {
+						path=path+'L'+x_loc+','+y_loc
+						new_base='L'+x_loc+','+y_loc+new_base
+					}
+				} else {}
+			}
+		}
+
+		path=path+base_path+'L'+start_x_loc+','+start_y_loc
+		base_path=new_base
+
+		// draw line
+		if(current[0][line.grouping.color]==undefined){
+			var greplace=line.yvar
+		} else {
+			var greplace=current[0][line.grouping.color]
+		}
+		snapobj.path(path).attr({'data_label':label,class:'dataelement',opacity:chartobject.area_geom.area_opacity,stroke:color,'stroke-width':0,fill:color,'group':greplace,'colorchange':'fill',context:'pathdata_context_menu'})
+	}
+
+	// pull the y=0 line to the front
+	snapobj.append(snapobj.selectAll('[zeroline="1"]'))
+}
+
+function draw_bounds(axes,line,snapobj){
+	// axes are [xleft,xright,ybottom,ytop]
+	// area is {'xvar':x,'yvar':y_max,'ymin':y_min,'grouping':{'color':color}}
+
+	if(line.grouping.color!=='none'){
+		var color_groups=get_color_groups(line)
+	} 
+
+	// create full group list - this is not necessary when there's only one group but in case you add to it in the future, just edit line 5 under here
+	if(line.grouping.color!=='none'){
+		var temp=[]
+		var temp2=[]
+		for(var i=0;i<chartobject.dataset.length;i++){
+			if(chartobject.dataset[i][line.xvar]!==undefined & chartobject.dataset[i][line.yvar]!==undefined & chartobject.dataset[i][line.grouping.color]!==undefined){
+				temp.push([chartobject.dataset[i][line.grouping.color]])
+			}
+		}
+
+		for(var i=0;i<temp.length;i++){
+			var dupe=0
+			for (var j=0;j<temp2.length;j++){
+				if(temp[i][0]==temp2[j][0] && temp[i][1]==temp2[j][1]){
+					var dupe=1
+				}
+			}
+			if(dupe==0){
+				temp2.push(temp[i])
+			}
+		}
+		groups=temp2
+	} else {
+		var groups=[[undefined]]
+	}
+
+	// create initial base path
+	var current=chartobject.dataset.filter(function(row){
+		return row[line.grouping.color]===groups[0][0]
+	})
+
 	var x_left=get_coord(current[0][line.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[line.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
 	var x_right=get_coord(current[current.length-1][line.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[line.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
 
