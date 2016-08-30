@@ -79,9 +79,6 @@ window.playfair = (function () {
 		this.shiftx=0
 		this.datedenom=[0,0]
 
-		if((geom_dict.bar && geom_dict.bar.orientation!='on') || (geom_dict.stackedbar && geom_dict.stackedbar.orientation!='on')){
-			this.ybar=1
-		}
 		var xmaxes=[]
 		var xmins=[]
 
@@ -105,6 +102,10 @@ window.playfair = (function () {
 				} catch(err){}
 			} catch(err){}
 			console.log(data,key,data[geom_dict[key]],data[geom_dict[key]['yvar']],geom_dict[key])
+
+			if((geom_dict.bar && geom_dict.bar.orientation!='on') || (geom_dict.stackedbar && geom_dict.stackedbar.orientation!='on') || (geom_dict.rect && data[geom_dict[key]['yvar']].dtype=='text')){
+				this.ybar=1
+			}
 
 			if(key=='area' | key=='stackedbar'){
 				// these two chart types are special cases because values have to be added across
@@ -491,9 +492,7 @@ window.playfair = (function () {
 							ymins.push(Math.min(...remove_missing(data[geom_dict[key]['yvar2']])))
 						} catch(err){}
 					}
-				} if(key=='rect'){
-					// there needs to be a shifty set here for if the y axis is categorical. I don't think an x-shift is needed? I'm confused about why frankly.
-				}
+				} 
 			}
 		}
 
@@ -1034,7 +1033,7 @@ function draw_key_top(legend,playobj,snapobj){
 				}
 			}
 
-			// bars or stacked bars or area 
+			// bars or stacked bars or area
 			if((legend[i].geom=='bar' || legend[i].geom=='stackedbar' || legend[i].geom=='area') && keyitem_dict[keyitem_name]==undefined){
 				if(legend[i].grouping=='color'){
 					keyitem_dict[keyitem_name]=snapobj.rect(x,y,playobj.legends.legend_elementsize,playobj.legends.legend_elementsize).attr({fill:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'group':legend[i].group_value,'class':'dataelement',colorchange:'fill',context:'data_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
@@ -1049,6 +1048,11 @@ function draw_key_top(legend,playobj,snapobj){
 				} else if(legend[i].grouping=='type'){
 					// keyitem_dict[keyitem_name].attr({'stroke-dasharray':chartobject.line_geom.line_types[numeric]})
 				}
+			}
+
+			// rect
+			if(legend[i].geom=='rect' && keyitem_dict[keyitem_name]===undefined){
+				keyitem_dict[keyitem_name]=snapobj.rect(x,y,playobj.legends.legend_elementsize,playobj.legends.legend_elementsize).attr({fill:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'fill-opacity':chartobject.rect_geom.rect_opacity,'shape-rendering':'crispEdges',ident2:'floatkey',ident:'key'})
 			}
 
 			// shade
@@ -1256,6 +1260,11 @@ function draw_key(legend,playobj,snapobj,prelim){
 				} else if(legend[i].grouping=='type'){
 					// keyitem_dict[keyitem_name].attr({'stroke-dasharray':chartobject.line_geom.line_types[numeric]})
 				}
+			}
+
+			// rect
+			if(legend[i].geom=='rect' && keyitem_dict[keyitem_name]===undefined){
+				keyitem_dict[keyitem_name]=snapobj.rect(x,y,playobj.legends.legend_elementsize,playobj.legends.legend_elementsize).attr({'stroke':'#aaa','stroke-width':1,fill:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'fill-opacity':chartobject.rect_geom.rect_opacity,'shape-rendering':'crispEdges',ident2:'floatkey',ident:'key'})
 			}
 
 			// shade
