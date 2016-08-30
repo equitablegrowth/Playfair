@@ -207,7 +207,7 @@ function preview() {
 		ready=1
 	}
 
-	if($("#rect_ystart").val()!=='' & $("#rect_xstart").val()!=='' & $("#rect_yend").val()!=='' & $("#rect_xend").val()!==''){
+	if($("#rect_ystart").val()!=='none' & $("#rect_xstart").val()!=='none' & $("#rect_yend").val()!=='none' & $("#rect_xend").val()!=='none'){
 		var x_start=$("#rect_xstart").val()
 		var y_start=$("#rect_ystart").val()
 		var x_end=$("#rect_xend").val()
@@ -219,14 +219,14 @@ function preview() {
 		ready=1
 	}
 
-	if($("#bounded_select_max").val()!=='' & $("#bounded_select_min").val()!=='' & $("#bounded_select_x").val()!==''){
+	if($("#bounded_select_max").val()!=='none' & $("#bounded_select_min").val()!=='none' & $("#bounded_select_x").val()!=='none'){
 		var y_max=$("#bounded_select_max").val()
 		var y_min=$("#bounded_select_min").val()
 		var x=$("#bounded_select_x").val()
 
 		var color=$("#bounded_select_color").val()
 
-		geom_dict['bounds']={'xvar':x,'ymax':y_max,'ymin':y_min,'grouping':{'color':color}}
+		geom_dict['bounds']={'xvar':x,'yvar':y_max,'ymin':y_min,'grouping':{'color':color}}
 		ready=1
 	}
 

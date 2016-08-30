@@ -418,6 +418,7 @@ window.playfair = (function () {
 				console.log(data)
 
 				if(geom_dict[key].xvar!==undefined){
+					console.log(geom_dict,key)
 					if(data[geom_dict[key]['xvar']].dtype==='date'){
 						for (var i=0;i<data[geom_dict[key]['xvar']].length;i++){
 							if(Object.prototype.toString.call(data[geom_dict[key]['xvar']][i])==='[object Date]'){
@@ -490,6 +491,8 @@ window.playfair = (function () {
 						} catch(err){}
 					}
 				}
+			} else if(key=='rect'){
+				// there needs to be a shifty set here for if the y axis is categorical. I don't think an x-shift is needed? I'm confused about why frankly.
 			}
 		}
 
@@ -688,9 +691,9 @@ window.playfair = (function () {
 		// draw geoms
 		if(typeof(chartobject.shade)!=='undefined'){draw_shade(axes,graph_obj.shade,snapobj)}
 		if(typeof(chartobject.bar)!=='undefined'){draw_bars(axes,graph_obj.bar,snapobj)}
-		if(typeof(chartobject.rect)!=='undefined'){draw_rects(axes,graph_obj.trend,snapobj)}
+		if(typeof(chartobject.rect)!=='undefined'){draw_rects(axes,graph_obj.rect,snapobj)}
 		if(typeof(chartobject.area)!=='undefined'){draw_area(axes,graph_obj.area,snapobj)}
-		if(typeof(chartobject.bounds)!=='undefined'){draw_bounds(axes,graph_obj.trend,snapobj)}
+		if(typeof(chartobject.bounds)!=='undefined'){draw_bounds(axes,graph_obj.bounds,snapobj)}
 		if(typeof(chartobject.stackedbar)!=='undefined'){draw_stackedbars(axes,graph_obj.stackedbar,snapobj)}
 		if(typeof(chartobject.step)!=='undefined'){draw_steps(axes,graph_obj.step,snapobj)}
 		if(typeof(chartobject.line)!=='undefined'){draw_lines(axes,graph_obj.line,snapobj)}
@@ -2377,6 +2380,101 @@ function draw_stackedbars(axes,bar,snapobj){
 	snapobj.append(snapobj.selectAll('[zeroline="1"]'))
 }
 
+function draw_rects(axes,rect,snapobj){
+	// axes are [xleft,xright,ybottom,ytop]
+	// rect is geom_dict['rect']={'xvar':x_start,'yvar':y_start,'xvar2':x_end,'yvar2':y_end,'grouping':{'color':color}}
+	// create sets of options for each grouping variable
+	if(rect.grouping.color!=='none'){
+		var color_groups=get_color_groups(rect)	
+	} else { 
+		var color_groups=['placeholder'] 
+	}
+
+	// create y_values and x_values, used later to figure out where everything stacks
+	if(chartobject.flatdata[rect.xvar].dtype=='date'){
+		var x_values=[...new Set(chartobject.flatdata[rect.xvar])]
+		var temp=[]
+		for(var i=0;i<x_values.length;i++){
+			temp.push(x_values[i].getTime())
+		}
+		var x_values2=[...new Set(temp)]
+	} else {
+		var x_values=[...new Set(chartobject.flatdata[rect.xvar])]
+		var x_values2=x_values
+	}
+
+	if(chartobject.flatdata[rect.yvar].dtype=='date'){
+		var y_values=[...new Set(chartobject.flatdata[rect.yvar])]
+		var temp=[]
+		for(var i=0;i<y_values.length;i++){
+			temp.push(y_values[i].getTime())
+		}
+		var y_values2=[...new Set(temp)]
+	} else {
+		var y_values=[...new Set(chartobject.flatdata[rect.yvar])]
+		var y_values2=y_values
+	}
+
+	// The width of a rect will usually be based on the variables given but in some cases one or even both axes might
+	// be categorical. If this is the case, the width should instead be some reasonable width similar to how bars work.
+	// I've added a parameter for this.
+	if(chartobject.flatdata[rect.xvar].dtype=='text'){
+		var totalwidth=Math.abs(chartobject.rect_geom.categorical_rect_width*(get_coord(x_values[0],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[rect.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-get_coord(x_values[1],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[rect.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)))
+		var xwidth=totalwidth
+	}
+	if(chartobject.flatdata[rect.yvar].dtype=='text'){
+		var totalwidth=Math.abs(chartobject.rect_geom.categorical_rect_width*(get_coord(y_values[0],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[rect.yvar].dtype,chartobject.yarray,1,chartobject.shifty)-get_coord(y_values[1],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[rect.yvar].dtype,chartobject.yarray,1,chartobject.shifty)))
+		var ywidth=totalwidth
+	}
+
+	// loop through observations in the dataset to draw rects
+	for(var i=0;i<chartobject.dataset.length;i++){
+		var current=chartobject.dataset[i]
+
+		if(current[rect.xvar]!=undefined && current[rect.yvar]!=undefined && current[rect.xvar2]!=undefined && current[rect.yvar2]!=undefined && ((rect.grouping.color=='none') || (rect.grouping.color!=='none' && current[rect.grouping.color]!==undefined))){
+			// color + grouping
+			if(rect.grouping.color!=='none'){
+				var color=chartobject.color_scales.qualitative_color[color_groups.indexOf(current[rect.grouping.color]) % chartobject.color_scales.qualitative_color.length]
+			} else {
+				var color=chartobject.color_scales.qualitative_color[0]
+			}
+
+			if(xwidth & current.xvar===current.xvar2){
+				x1=get_coord(current[rect.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[rect.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-xwidth/2
+				x2=get_coord(current[rect.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[rect.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)+xwidth/2
+			} else {
+				x1=get_coord(current[rect.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[rect.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
+				x2=get_coord(current[rect.xvar2],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[rect.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
+			}
+
+			if(ywidth & current.y_start===current.y_end){
+				y1=get_coord(current[rect.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[rect.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)-ywidth/2
+				y2=get_coord(current[rect.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[rect.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)+ywidth/2
+			} else {
+				y1=get_coord(current[rect.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[rect.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)
+				y2=get_coord(current[rect.yvar2],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[rect.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)
+			}
+
+			// draw bar
+			if(current[rect.grouping.color]==undefined){
+				var greplace=rect.yvar
+			} else {
+				var greplace=current[rect.grouping.color]
+			}
+			console.log('Rect coords: ',x1,x2,y1,y2)
+			snapobj.path('M'+x1+','+y2+'L'+x2+','+y2+'L'+x2+','+y1+'L'+x1+','+y1+'L'+x1+','+y2).attr({'data_type':'rect',opacity:chartobject.rect_geom.rect_opacity,'group':greplace,'class':'dataelement','shape-rendering':'crispEdges',fill:color,colorchange:'fill',context:'data_context_menu'})
+		}
+	}
+}
+
+
+
+/////////////////////////////////////////////////////////////
+/////////////////////// END GEOMS ///////////////////////////
+/////////////////////////////////////////////////////////////
+
+
+
 function get_color_groups(geom){
 	var temp=chartobject.dataset.filter(function(row){
 		return row[geom.xvar]!==undefined & row[geom.yvar]!==undefined & row[geom.grouping.color]!==undefined
@@ -3340,6 +3438,11 @@ function default_style(parameters) {
 			// shade geom
 			'shadefill':'white',
 			'shadeopacity':.6,
+		},
+		'rect_geom':{
+			// rect geom
+			'categorical_rect_width':.5,
+			'rect_opacity':.8,
 		}
 	}
 
