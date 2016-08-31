@@ -15,22 +15,11 @@ function savepng() {
 			img.click()
 		}
 	})
-	// var svg = document.getElementById('grapharea')
-	// var img = document.getElementById('png_save')
-	// svg.toDataURL("image/png", {
-	// 	callback: function(data) {
-	// 		img.href=data
-	// 		img.click()
-	// 		svg.height=height
-	// 		svg.width=width
-	// 	}
-	// })
 }
 
 function savesvg() {
 	// this is kinda dumb but... illustrator doesn't recognize dominant_baseline or something
 	// so before saving it out as a svg, all text has to be converted to the auto baseline.
-	// Given that you can do this... I guess that means you can fix the Safari bug with dominant?
 	var alltext=grapharea.selectAll('text')
 	for (var i=0;i<alltext.length;i++){
 		trans=alltext[i].attr('transform')
@@ -217,116 +206,118 @@ function load_populate(response) {
 	document.getElementById('trend_text').value=inputs['trend_text'][1]
 	loadData()
 
-	for(var input in inputs){
-		if(inputs[input][0]=='text'){
-			$('#'+input).val(inputs[input][1])
-		}
-		if(inputs[input][0]=='radio'){
-			$('#'+input).prop('checked',inputs[input][1])
-		}
-		if(inputs[input][0]=='checkbox'){
-			$('#'+input).prop('checked',inputs[input][1])
-		}
-		if(inputs[input][0]=='dropdown'){
-			$('#'+input).val(inputs[input][1])
-		}
-		if(inputs[input][0]=='graphtype'){
-			graph_type=inputs[input][1]
-		}
-	}
-
-	if (inputs['gwidth'][1]!=''){
-		width=parseFloat(inputs['gwidth'][1])
-	} else {width=745}
-	if (inputs['gheight'][1]!=''){
-		height=parseFloat(inputs['gheight'][1])
-	} else {height=520}
-
-	$('#grapharea').attr('height',height)
-	$('#grapharea').attr('width',width)
-
-	// insert the returned svg into the svg slot
-	document.getElementById("grapharea").innerHTML=svg
-
-	var moveFuncfloat=function(dx,dy,posx,posy){
-		key_elements=grapharea.selectAll('[ident="key"]')
-		for(var i=0;i<key_elements.length;i++){
-			coords=key_elements[i].getBBox()
-			if(key_elements[i].type=='circle'){
-				key_elements[i].attr({
-					cx:coords.cx-prevx+dx,
-					cy:coords.cy-prevy+dy
-				}) 
-			} else if (key_elements[i].type=='line'){
-				key_elements[i].attr({
-					x1:coords.x-prevx+dx,
-					y1:coords.y-prevy+dy,
-					x2:coords.x2-prevx+dx,
-					y2:coords.y2-prevy+dy,
-			})
-			} else if (key_elements[i].type=='text'){
-				key_elements[i].selectAll("tspan:not(:first-child)").attr({x:coords.x-prevx+dx})
-				key_elements[i].attr({
-					x:coords.x-prevx+dx,
-					y:coords.y-prevy+dy
-				})
-			} else if (key_elements[i].type=='path'){
-				var currentx=key_elements[i].matrix.e-prevx
-				var currenty=key_elements[i].matrix.f-prevy
-				var x=currentx+dx
-				var y=currenty+dy
-				key_elements[i].transform('t'+x+','+y)
-			} else {
-				key_elements[i].attr({
-					x:coords.x-prevx+dx,
-					y:coords.y-prevy+dy
-				})
+	// because settings needs to be destroyed/recreated, set theme first, run change_theme,
+	// and then populate other fields. Have to use a change_theme() callback for this.
+	$('#themes').val(inputs['themes'][1])
+	change_theme(function(){
+		for(var input in inputs){
+			if(inputs[input][0]=='text'){
+				$('#'+input).val(inputs[input][1])
 			}
-			grapharea.append(key_elements[i])
+			if(inputs[input][0]=='radio'){
+				$('#'+input).prop('checked',inputs[input][1])
+			}
+			if(inputs[input][0]=='checkbox'){
+				$('#'+input).prop('checked',inputs[input][1])
+			}
+			if(inputs[input][0]=='dropdown'){
+				$('#'+input).val(inputs[input][1])
+			}
+			if(inputs[input][0]=='graphtype'){
+				graph_type=inputs[input][1]
+			}
 		}
-		prevx=dx
-		prevy=dy
-	}
 
-	// stick drag method on the things that need it.
-	drag_eles=grapharea.selectAll('rect[ident2="floatkey"]')
-	for(var i=0;i<drag_eles.length;i++){
-		drag_eles[i].drag(moveFuncfloat,function(){x=this.attr('x');y=this.attr('y');prevx=0;prevy=0})
-	}
+		if (inputs['gwidth'][1]!=''){
+			width=parseFloat(inputs['gwidth'][1])
+		} else {width=745}
+		if (inputs['gheight'][1]!=''){
+			height=parseFloat(inputs['gheight'][1])
+		} else {height=520}
 
-	drag_eles=grapharea.selectAll('line[class="callout"]')
-	for(var i=0;i<drag_eles.length;i++){
-		drag_eles[i].drag()
-	}
+		$('#grapharea').attr('height',height)
+		$('#grapharea').attr('width',width)
 
-	drag_eles=grapharea.selectAll('g')
-	for(var i=0;i<drag_eles.length;i++){
-		drag_eles[i].drag()
-	}
+		// insert the returned svg into the svg slot
+		document.getElementById("grapharea").innerHTML=svg
 
-	// recreate shadowfilter
-	try{
-		grapharea.select('filter').remove()
-	} catch(err){}
-	grapharea=Snap('#grapharea')
-	shadowfilter=grapharea.filter(Snap.filter.shadow(0, 2, 3))
-	grapharea.append(shadowfilter)
+		var moveFuncfloat=function(dx,dy,posx,posy){
+			key_elements=grapharea.selectAll('[ident="key"]')
+			for(var i=0;i<key_elements.length;i++){
+				coords=key_elements[i].getBBox()
+				if(key_elements[i].type=='circle'){
+					key_elements[i].attr({
+						cx:coords.cx-prevx+dx,
+						cy:coords.cy-prevy+dy
+					}) 
+				} else if (key_elements[i].type=='line'){
+					key_elements[i].attr({
+						x1:coords.x-prevx+dx,
+						y1:coords.y-prevy+dy,
+						x2:coords.x2-prevx+dx,
+						y2:coords.y2-prevy+dy,
+				})
+				} else if (key_elements[i].type=='text'){
+					key_elements[i].selectAll("tspan:not(:first-child)").attr({x:coords.x-prevx+dx})
+					key_elements[i].attr({
+						x:coords.x-prevx+dx,
+						y:coords.y-prevy+dy
+					})
+				} else if (key_elements[i].type=='path'){
+					var currentx=key_elements[i].matrix.e-prevx
+					var currenty=key_elements[i].matrix.f-prevy
+					var x=currentx+dx
+					var y=currenty+dy
+					key_elements[i].transform('t'+x+','+y)
+				} else {
+					key_elements[i].attr({
+						x:coords.x-prevx+dx,
+						y:coords.y-prevy+dy
+					})
+				}
+				grapharea.append(key_elements[i])
+			}
+			prevx=dx
+			prevy=dy
+		}
 
-	// re-populate key - this won't get you the same key options as the saved graph
-	// - just a totally new fresh key.
-	$(".variable_select").change()
+		// stick drag method on the things that need it.
+		drag_eles=grapharea.selectAll('rect[ident2="floatkey"]')
+		for(var i=0;i<drag_eles.length;i++){
+			drag_eles[i].drag(moveFuncfloat,function(){x=this.attr('x');y=this.attr('y');prevx=0;prevy=0})
+		}
 
-	// re-associate dtypes with appropriate variables
-	for(var key in chartobject.flatdata){
-		console.log(key,chartobject.flatdata[key],chartobject.dtypes[key])
-		chartobject.flatdata[key].dtype=chartobject.dtypes[key]
-	}
+		drag_eles=grapharea.selectAll('line[class="callout"]')
+		for(var i=0;i<drag_eles.length;i++){
+			drag_eles[i].drag()
+		}
 
-	// run loaddata
-	gen_coerce_array()
+		drag_eles=grapharea.selectAll('g')
+		for(var i=0;i<drag_eles.length;i++){
+			drag_eles[i].drag()
+		}
 
-	// set theme elements
-	change_theme()
+		// recreate shadowfilter
+		try{
+			grapharea.select('filter').remove()
+		} catch(err){}
+		grapharea=Snap('#grapharea')
+		shadowfilter=grapharea.filter(Snap.filter.shadow(0, 2, 3))
+		grapharea.append(shadowfilter)
+
+		// re-populate key - this won't get you the same key options as the saved graph
+		// - just a totally new fresh key.
+		$(".variable_select").change()
+
+		// re-associate dtypes with appropriate variables
+		for(var key in chartobject.flatdata){
+			console.log(key,chartobject.flatdata[key],chartobject.dtypes[key])
+			chartobject.flatdata[key].dtype=chartobject.dtypes[key]
+		}
+
+		// run loaddata
+		gen_coerce_array()
+	})
 }
 
 $(document).on('click', '.list-group a', function(e){

@@ -124,6 +124,8 @@
 	.solid {height:8px;border-width:2px;margin-left:2;border-bottom: thin black solid;width:120px;display:inline-block;margin-top:3px;margin-bottom:3px;padding:0;}
 	.contextbuttons {font-size:.9em;border:1px solid #888;border-radius:2px;padding:2 4 2 4;margin:2;}
 	.contextbuttons:hover {border:1px solid black;border-radius:2px;background-color:#0063cd;color:white;}
+	.contextbuttonsWide {font-size:.9em;border:1px solid #888;border-radius:2px;padding:2 4 2 4;margin:2;}
+	.contextbuttonsWide:hover {border:1px solid black;border-radius:2px;background-color:#0063cd;color:white;}
 
 	/* main menus */
 	.nav>li>a {padding:4px;padding-left:8px;padding-right:8px;border-bottom:0px;}
