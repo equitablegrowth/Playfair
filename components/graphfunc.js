@@ -342,17 +342,17 @@ function redraw(keep) {
 			}
 
 			// which grids should be drawn
-			if (xgrid===true){
-				style.x_grids.xgrid_opacity=1
+			if (xgrid===false){
+				style.x_grids.xgrid_opacity=0
 			}
-			if (ygrid===true){
-				style.y_grids.ygrid_opacity=1
+			if (ygrid===false){
+				style.y_grids.ygrid_opacity=0
 			}
-			if (xminorgrid===true){
-				style.x_grids.xgrid_minoropacity=1
+			if (xminorgrid===false){
+				style.x_grids.xgrid_minoropacity=0
 			}
-			if (yminorgrid===true){
-				style.y_grids.ygrid_minoropacity=1
+			if (yminorgrid===false){
+				style.y_grids.ygrid_minoropacity=0
 			}
 
 			// point style
@@ -394,6 +394,7 @@ function redraw(keep) {
 			}
 
 			chartobject.style(style)
+			change_colormenu(style)
 
 			// initialize axes
 			chartobject.xaxis({'label':xlabel,'number_of_ticks':5,'decimal':undefined,'format':undefined})

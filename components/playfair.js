@@ -2180,7 +2180,7 @@ function draw_text(axes,text,snapobj){
 			var y_loc=get_coord(current[text.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[text.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
 
 			// draw text
-			var t=snapobj.text(x_loc,y_loc,current[text.text]).attr({fill:chartobject.annotations.annotatetextfill,opacity:chartobject.text_geom.text_opacity,'data_type':'text','class':'dataelement',colorchange:'fill',context:'text_context_menu','text-anchor':'middle','dominant-baseline':'text-before-edge','font-size':size,'font-family':chartobject.annotations.annotateface,'font-weight':chartobject.annotations.annotateweight})
+			var t=snapobj.text(x_loc,y_loc,current[text.text]).attr({fill:chartobject.text_geom.text_fill,opacity:chartobject.text_geom.text_opacity,'data_type':'text','class':'dataelement',colorchange:'fill',context:'text_context_menu','text-anchor':'middle','dominant-baseline':'text-before-edge','font-size':size,'font-family':chartobject.text_geom.text_face,'font-weight':chartobject.text_geom.text_weight})
 			t.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 			center_baseline(t)
 		}
@@ -2616,6 +2616,7 @@ function draw_rects(axes,rect,snapobj){
 			snapobj.path('M'+x1+','+y2+'L'+x2+','+y2+'L'+x2+','+y1+'L'+x1+','+y1+'L'+x1+','+y2).attr({'data_type':'rect',opacity:chartobject.rect_geom.rect_opacity,'group':greplace,'class':'dataelement','shape-rendering':'crispEdges',fill:color,colorchange:'fill',context:'data_context_menu'})
 		}
 	}
+	snapobj.append(snapobj.selectAll('[zeroline="1"]'))
 }
 
 
@@ -3172,7 +3173,7 @@ function draw_axes(playobj,xvar,yvar,shiftx,shifty,legend_height) {
 		// x-axis labels
 		var mid=Math.abs((get_coord(xvar[0],playobj.xlimits,[xstart_xcoord,xfinal_xcoord],xvar.dtype,xvar,0,playobj.shiftx)-get_coord(xvar[1],playobj.xlimits,[xstart_xcoord,xfinal_xcoord],xvar.dtype,xvar,0,playobj.shiftx))/2)
 		var tempxmid=parseFloat(mid)+get_coord(xvar[i],playobj.xlimits,[xstart_xcoord,xfinal_xcoord],xvar.dtype,xvar,0,playobj.shiftx)
-		console.log(tempxmid,xvar[i],mid)
+		// console.log(tempxmid,xvar[i],mid)
 
 		if(Object.prototype.toString.call(xvar[i])==='[object Date]'){
 			string=formatDate(xvar[i],Math.max(...xvar)-Math.min(...xvar))
@@ -3185,7 +3186,7 @@ function draw_axes(playobj,xvar,yvar,shiftx,shifty,legend_height) {
 			if (Object.prototype.toString.call(xvar[i])!='[object Date]' && ((parseInt(lines[j])>=1000 || parseInt(lines[j])<=-1000))){linesj=commas(lines[j])} else{linesj=lines[j]}
 			// var temp=snapobj.text(xstart_xcoord+xshift*shiftx+x_step*i,playobj.y+playobj.height-playobj.grapharea.bottom_margin-playobj.footer.footer_height-xlab_height-playobj.x_ticks.xtick_to_xlabel-total_yoffset+playobj.x_ticks.xtick_to_xaxis+j*parseInt(playobj.x_ticks.xtick_textsize),linesj).attr({fill:this.x_ticks.xtick_textfill,ident:'xaxis','font-size':playobj.x_ticks.xtick_textsize,'font-weight':playobj.x_ticks.xtick_textweight,'font-family':playobj.x_ticks.xtick_textface,'dominant-baseline':'text-before-edge','text-anchor':'middle',colorchange:'fill',context:'text_context_menu'})
 			var tempx=get_coord(xvar[i],playobj.xlimits,[xstart_xcoord,xfinal_xcoord],xvar.dtype,xvar,0,playobj.shiftx)
-			console.log(xvar[i],playobj.xlimits,[xstart_xcoord,xfinal_xcoord],xvar.dtype,xvar,0,playobj.shiftx)
+			// console.log(xvar[i],playobj.xlimits,[xstart_xcoord,xfinal_xcoord],xvar.dtype,xvar,0,playobj.shiftx)
 			var temp=snapobj.text(tempx,playobj.y+playobj.height-playobj.grapharea.bottom_margin-playobj.footer.footer_height-xlab_height-playobj.x_ticks.xtick_to_xlabel-total_yoffset+playobj.x_ticks.xtick_to_xaxis+j*parseInt(playobj.x_ticks.xtick_textsize),linesj).attr({fill:playobj.x_ticks.xtick_textfill,ident:'xaxis','font-size':playobj.x_ticks.xtick_textsize,'font-weight':playobj.x_ticks.xtick_textweight,'font-family':playobj.x_ticks.xtick_textface,'dominant-baseline':'text-before-edge','text-anchor':'middle',colorchange:'fill',context:'text_context_menu'})
 			temp.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 			var coords=temp.getBBox()
@@ -3226,8 +3227,10 @@ function draw_axes(playobj,xvar,yvar,shiftx,shifty,legend_height) {
 	maxwidth=(playobj.y_ticks.ytick_maxsize*playobj.width)-playobj.grapharea.left_margin
 	// console.log(maxwidth)
 	for(var i=0;i<yvar.length;i++){
-		// y-axis labels
-		var mid2=Math.abs((parseFloat(yvar[1])-parseFloat(yvar[0]))/2)
+		// y-axis labels		
+		var mid2=Math.abs((get_coord(yvar[0],playobj.ylimits,[ystart_ycoord,yfinal_ycoord],yvar.dtype,yvar,1,playobj.shifty)-get_coord(yvar[1],playobj.ylimits,[ystart_ycoord,yfinal_ycoord],yvar.dtype,yvar,1,playobj.shifty))/2)
+		var tempymid=get_coord(yvar[i],playobj.ylimits,[ystart_ycoord,yfinal_ycoord],yvar.dtype,yvar,1,playobj.shifty,chartobject.ybar)-parseFloat(mid2)
+		console.log(tempymid,yvar[i],mid2)
 
 		if(Object.prototype.toString.call(yvar[i])==='[object Date]'){
 			string=formatDate(yvar[i],Math.max(...yvar)-Math.min(...yvar))
@@ -3237,7 +3240,7 @@ function draw_axes(playobj,xvar,yvar,shiftx,shifty,legend_height) {
 
 		if (parseInt(string)>=1000 || parseInt(string)<=-1000){linesj=commas(string)}
 		var tempy=get_coord(string,playobj.ylimits,[ystart_ycoord,yfinal_ycoord],yvar.dtype,yvar,1,playobj.shifty,chartobject.ybar)
-		var tempymid=get_coord(parseFloat(string)+mid2,playobj.ylimits,[ystart_ycoord,yfinal_ycoord],yvar.dtype,yvar,1,playobj.shifty,chartobject.ybar)
+
 		lines=multitext(string,{ident:'yaxis','font-size':playobj.y_ticks.ytick_textsize,'font-weight':playobj.y_ticks.ytick_textweight,'font-family':playobj.y_ticks.ytick_textface,'dominant-baseline':'text-before-edge','text-anchor':'end'},maxwidth)
 		var temp=snapobj.text(playobj.x+total_xoffset-playobj.y_ticks.ytick_to_yaxis,tempy,lines).attr({fill:playobj.y_ticks.ytick_textfill,ident:'yaxis','font-size':playobj.y_ticks.ytick_textsize,'font-weight':playobj.y_ticks.ytick_textweight,'font-family':playobj.y_ticks.ytick_textface,'dominant-baseline':'text-before-edge','text-anchor':'end',colorchange:'fill',context:'text_context_menu'})
 		temp.selectAll("tspan:not(:first-child)").attr({x:temp.attr('x'),dy:parseInt(playobj.y_ticks.ytick_textsize)})
@@ -3429,9 +3432,9 @@ function default_style(parameters) {
 			'xgrid_dasharray':[],
 			'xgrid_zerodasharray':[],
 			'xgrid_minordasharray':[3,3],
-			'xgrid_opacity':0,
-			'xgrid_zeroopacity':0,
-			'xgrid_minoropacity':0,	
+			'xgrid_opacity':1,
+			'xgrid_zeroopacity':1,
+			'xgrid_minoropacity':0.5,	
 		},
 		'y_grids':{
 			// y grids
@@ -3446,7 +3449,7 @@ function default_style(parameters) {
 			'ygrid_minordasharray':[3,3],
 			'ygrid_opacity':1,
 			'ygrid_zeroopacity':1,
-			'ygrid_minoropacity':0,
+			'ygrid_minoropacity':0.5,
 		},
 		'x_ticks':{
 			// x ticks
@@ -3496,7 +3499,7 @@ function default_style(parameters) {
 		},
 		'colormenu':{
 			// contextual color menu options
-			'colormenu':'#205946,#33836A,#67c2a5,#b7dfd1,#e2f2ed,#ffffff,#8e2a1d,#c63f26,#f58c63,#fbcdbb,#fef1eb,#000000,#24385B,#3F578C,#8c9fca,#ccdaf0,#f1f3f9,#a3a3a3,#e78ac3,#a6d854,#ffd92f,#e5c494,#ece9e8,#c3c3c3',
+			'colormenu':["#205946","#33836A","#67c2a5","#b7dfd1","#e2f2ed","#ffffff","#8e2a1d","#c63f26","#f58c63","#fbcdbb","#fef1eb","#000000","#24385B","#3F578C","#8c9fca","#ccdaf0","#f1f3f9","#a3a3a3","#e78ac3","#a6d854","#ffd92f","#e5c494","#ece9e8","#c3c3c3"],
 		},
 		'color_scales':{
 			// color scales. Really only sequential and grayscale get used. Toss the others?
@@ -3572,6 +3575,9 @@ function default_style(parameters) {
 			'text_minsize':8,
 			'text_maxsize':24,
 			'text_opacity':1,
+			'text_fill':'black',
+			'text_face':'Lato',
+			'text_weight':400,
 		},
 		'area_geom':{
 			// area geom specific

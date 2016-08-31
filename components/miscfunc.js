@@ -140,9 +140,6 @@ function change_theme(){
 				var response = JSON.parse(response);
 				theme=response
 				theme=default_style(theme)
-				// for(var key in theme){
-				// 	chartobject[key]=theme[key]
-				// }
 				change_colormenu(theme)
 				populate_settings(theme)
 			},
@@ -164,13 +161,13 @@ function change_colormenu(theme){
 		colormenu=''
 		for(var i=0;i<theme.colormenu.colormenu.length;i++){
 			if(i%6==0){
-				colormenu=colormenu+"<li><span class='colorbox' style='background-color:"+theme['colormenu'][i]+"' onclick=change_color(clickedevent.target,'"+theme['colormenu'][i]+"')></span>"
+				colormenu=colormenu+"<li><span class='colorbox' style='background-color:"+theme.colormenu.colormenu[i]+"' onclick=change_color(clickedevent.target,'"+theme.colormenu.colormenu[i]+"')></span>"
 			} else {
-				colormenu=colormenu+"<span class='colorbox' style='background-color:"+theme['colormenu'][i]+"' onclick=change_color(clickedevent.target,'"+theme['colormenu'][i]+"')></span>"
+				colormenu=colormenu+"<span class='colorbox' style='background-color:"+theme.colormenu.colormenu[i]+"' onclick=change_color(clickedevent.target,'"+theme.colormenu.colormenu[i]+"')></span>"
 			}
 		}
-		$('#colormenu').empty()
-		$('#colormenu').append(colormenu)
+		$('.colormenu').empty()
+		$('.colormenu').append(colormenu)
 	}
 }
 
