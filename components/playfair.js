@@ -416,6 +416,11 @@ window.playfair = (function () {
 					}
 				}
 
+				if (key=='bounds'){
+					ymins.push(Math.min(...remove_missing(data[geom_dict[key]['ymin']])))
+					ymaxes.push(Math.min(...remove_missing(data[geom_dict[key]['ymin']])))
+				}
+
 				console.log(data)
 
 				if(geom_dict[key].xvar!==undefined){
@@ -548,7 +553,6 @@ window.playfair = (function () {
 		}
 
 		if(Object.prototype.toString.call(ymaxes[0])==='[object Date]'){
-			console.log('hi, setting ymax as a date')
 			this.ymax=new Date(moment(Math.max(...ymaxes)))
 			this.ymin=new Date(moment(Math.min(...ymins)))
 		} else {
@@ -1034,7 +1038,7 @@ function draw_key_top(legend,playobj,snapobj){
 			}
 
 			// bars or stacked bars or area
-			if((legend[i].geom=='bar' || legend[i].geom=='stackedbar' || legend[i].geom=='area') && keyitem_dict[keyitem_name]==undefined){
+			if((legend[i].geom=='bar' || legend[i].geom=='stackedbar' || legend[i].geom=='area' || legend[i].geom=='bounds') && keyitem_dict[keyitem_name]==undefined){
 				if(legend[i].grouping=='color'){
 					keyitem_dict[keyitem_name]=snapobj.rect(x,y,playobj.legends.legend_elementsize,playobj.legends.legend_elementsize).attr({fill:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'group':legend[i].group_value,'class':'dataelement',colorchange:'fill',context:'data_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
 				} else if(legend[i].grouping=='type'){
@@ -1042,7 +1046,7 @@ function draw_key_top(legend,playobj,snapobj){
 				} else {
 					keyitem_dict[keyitem_name]=snapobj.rect(x,y,playobj.legends.legend_elementsize,playobj.legends.legend_elementsize).attr({fill:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'group':legend[i].group_value,'class':'dataelement',colorchange:'fill',context:'data_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
 				}
-			} else if((legend[i].geom=='bar' || legend[i].geom=='stackedbar' || legend[i].geom=='area') && keyitem_dict[keyitem_name]!==undefined){
+			} else if((legend[i].geom=='bar' || legend[i].geom=='stackedbar' || legend[i].geom=='area' || legend[i].geom=='bounds') && keyitem_dict[keyitem_name]!==undefined){
 				if(legend[i].grouping=='color'){
 					keyitem_dict[keyitem_name].attr({'fill':chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length]})
 				} else if(legend[i].grouping=='type'){
@@ -1246,7 +1250,7 @@ function draw_key(legend,playobj,snapobj,prelim){
 			}
 
 			// bars or stacked bars or area 
-			if((legend[i].geom=='bar' || legend[i].geom=='stackedbar' || legend[i].geom=='area') && keyitem_dict[keyitem_name]==undefined){
+			if((legend[i].geom=='bar' || legend[i].geom=='stackedbar' || legend[i].geom=='area' || legend[i].geom=='bounds') && keyitem_dict[keyitem_name]==undefined){
 				if(legend[i].grouping=='color'){
 					keyitem_dict[keyitem_name]=snapobj.rect(x,y,playobj.legends.legend_elementsize,playobj.legends.legend_elementsize).attr({fill:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'group':legend[i].group_value,'class':'dataelement',colorchange:'fill',context:'data_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
 				} else if(legend[i].grouping=='type'){
@@ -1254,7 +1258,7 @@ function draw_key(legend,playobj,snapobj,prelim){
 				} else {
 					keyitem_dict[keyitem_name]=snapobj.rect(x,y,playobj.legends.legend_elementsize,playobj.legends.legend_elementsize).attr({fill:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'group':legend[i].group_value,'class':'dataelement',colorchange:'fill',context:'data_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
 				}
-			} else if((legend[i].geom=='bar' || legend[i].geom=='stackedbar' || legend[i].geom=='area') && keyitem_dict[keyitem_name]!==undefined){
+			} else if((legend[i].geom=='bar' || legend[i].geom=='stackedbar' || legend[i].geom=='area' || legend[i].geom=='bounds') && keyitem_dict[keyitem_name]!==undefined){
 				if(legend[i].grouping=='color'){
 					keyitem_dict[keyitem_name].attr({'fill':chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length]})
 				} else if(legend[i].grouping=='type'){
@@ -1609,7 +1613,6 @@ function draw_area(axes,line,snapobj){
 	current.sort(function(a,b){
 		return a[line.xvar]-b[line.xvar]
 	})
-	// var current=Object.keys(current).sort(function(a,b){return current[line.xvar][a]-current[line.xvar][b]})
 
 	var zero=get_coord(0,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[line.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
 	var x_left=get_coord(current[0][line.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[line.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
@@ -1741,17 +1744,6 @@ function draw_bounds(axes,line,snapobj){
 		var groups=[[undefined]]
 	}
 
-	// create initial base path
-	var current=chartobject.dataset.filter(function(row){
-		return row[line.grouping.color]===groups[0][0]
-	})
-
-	var x_left=get_coord(current[0][line.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[line.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
-	var x_right=get_coord(current[current.length-1][line.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[line.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
-
-	var base_path='L'+x_right+','+zero+'L'+x_left+','+zero
-	var add_values=[]
-
 	// loop through groups in the dataset to draw lines
 	for(var i=0;i<groups.length;i++){
 		var current=chartobject.dataset.filter(function(row){
@@ -1761,10 +1753,13 @@ function draw_bounds(axes,line,snapobj){
 		console.log(current)
 
 		// order according to the x variable
-		var connect=line.xvar
 		current.sort(function(a,b){
 			return a[line.xvar]-b[line.xvar]
 		})
+
+		// determine start and end points
+		var x_left=get_coord(current[0][line.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[line.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
+		var x_right=get_coord(current[current.length-1][line.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[line.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
 
 		// color
 		if(line.grouping.color!=='none'){
@@ -1777,56 +1772,27 @@ function draw_bounds(axes,line,snapobj){
 		var label=current[0][line.color]
 
 		// create empty path
-		var path=''
-		var new_base=''
+		var path='M'+x_left+','+get_coord(current[0][line.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[line.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
 
-		// now loop through points in the line
-		for(var j=0;j<current.length;j++){
+		// now loop through points in the line and build up the top/bottom
+		for(var j=1;j<current.length;j++){
 			var sub_current=current[j]
-
-			try{
-				var sub_next=current[j+1]
-			} catch(err){}
-
-			try{
-				var sub_prev=prev_current[j]
-			} catch(err){}
-
-			if(isNaN(sub_current[connect])==false){
-				if((sub_current[line.xvar]==undefined && connect==line.yvar) || (sub_current[line.yvar]==undefined && connect==line.xvar)){
-					alert("Can't graph areas when there are discontinuities in one or more lines - remove missing data and try again.")
-				} else if(sub_current[line.xvar]!=undefined && sub_current[line.yvar]!=undefined){
-					// if this isn't the first pass, check the previous group and add the y-values up so the areas stack appropriately
-					if(i!==0){
-						var y_add=sub_current[line.yvar]+add_values[j]
-						add_values[j]=y_add
-					} else {
-						var y_add=sub_current[line.yvar]
-						add_values.push(y_add)
-					}
-
-					if(j==0){
-						var start_x_loc=get_coord(sub_current[line.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[line.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
-						var start_y_loc=get_coord(y_add,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[line.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
-					}
-
-					// set various values for points. locations
-					var x_loc=get_coord(sub_current[line.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[line.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
-					var y_loc=get_coord(y_add,chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[line.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
-					// add to path or start path
-					if(j==0){
-						path=path+'M'+x_loc+','+y_loc
-						new_base='L'+x_loc+','+y_loc+new_base
-					} else {
-						path=path+'L'+x_loc+','+y_loc
-						new_base='L'+x_loc+','+y_loc+new_base
-					}
-				} else {}
-			}
+			var y=get_coord(sub_current[line.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[line.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
+			var x=get_coord(sub_current[line.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[line.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
+			var path=path+'L'+x+','+y
 		}
 
-		path=path+base_path+'L'+start_x_loc+','+start_y_loc
-		base_path=new_base
+		path=path+'L'+x_right+','+get_coord(current[current.length-1][line.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[line.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
+
+		// go through on the reverse and build up the opposite side
+		for(var j=current.length-1;j>-1;j--){
+			var sub_current=current[j]
+			var y=get_coord(sub_current[line.ymin],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[line.ymin].dtype,chartobject.yarray,1,chartobject.shifty)
+			var x=get_coord(sub_current[line.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[line.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
+			var path=path+'L'+x+','+y
+		}
+
+		path=path+'L'+x_left+','+get_coord(current[0][line.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[line.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
 
 		// draw line
 		if(current[0][line.grouping.color]==undefined){
