@@ -103,7 +103,7 @@ window.playfair = (function () {
 			} catch(err){}
 			console.log(data,key,data[geom_dict[key]],data[geom_dict[key]['yvar']],geom_dict[key])
 
-			if((geom_dict.bar && geom_dict.bar.orientation!='on') || (geom_dict.stackedbar && geom_dict.stackedbar.orientation!='on') || (geom_dict.rect && data[geom_dict[key]['yvar']].dtype=='text')){
+			if((geom_dict.bar && geom_dict.bar.orientation!='on') || (geom_dict.stackedbar && geom_dict.stackedbar.orientation!='on')){
 				this.ybar=1
 			}
 
@@ -2570,10 +2570,12 @@ function draw_rects(axes,rect,snapobj){
 	if(chartobject.flatdata[rect.xvar].dtype=='text'){
 		var totalwidth=Math.abs(chartobject.rect_geom.categorical_rect_width*(get_coord(x_values[0],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[rect.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-get_coord(x_values[1],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[rect.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)))
 		var xwidth=totalwidth
+		console.log('rects width: ',xwidth)
 	}
 	if(chartobject.flatdata[rect.yvar].dtype=='text'){
 		var totalwidth=Math.abs(chartobject.rect_geom.categorical_rect_width*(get_coord(y_values[0],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[rect.yvar].dtype,chartobject.yarray,1,chartobject.shifty)-get_coord(y_values[1],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[rect.yvar].dtype,chartobject.yarray,1,chartobject.shifty)))
 		var ywidth=totalwidth
+		console.log('rects width: ',ywidth)
 	}
 
 	// loop through observations in the dataset to draw rects
@@ -2588,7 +2590,7 @@ function draw_rects(axes,rect,snapobj){
 				var color=chartobject.color_scales.qualitative_color[0]
 			}
 
-			if(xwidth & current.xvar===current.xvar2){
+			if(xwidth!=null & current[rect.xvar]===current[rect.xvar2]){
 				x1=get_coord(current[rect.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[rect.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)-xwidth/2
 				x2=get_coord(current[rect.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[rect.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)+xwidth/2
 			} else {
@@ -2596,12 +2598,12 @@ function draw_rects(axes,rect,snapobj){
 				x2=get_coord(current[rect.xvar2],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[rect.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
 			}
 
-			if(ywidth & current.y_start===current.y_end){
-				y1=get_coord(current[rect.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[rect.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)-ywidth/2
-				y2=get_coord(current[rect.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[rect.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)+ywidth/2
+			if(ywidth!=null & current[rect.yvar]===current[rect.yvar2]){
+				y1=get_coord(current[rect.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[rect.yvar].dtype,chartobject.yarray,1,chartobject.shifty,chartobject.ybar)-ywidth/2
+				y2=get_coord(current[rect.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[rect.yvar].dtype,chartobject.yarray,1,chartobject.shifty,chartobject.ybar)+ywidth/2
 			} else {
-				y1=get_coord(current[rect.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[rect.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)
-				y2=get_coord(current[rect.yvar2],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[rect.yvar].dtype,chartobject.yarray,1,chartobject.shifty,1)
+				y1=get_coord(current[rect.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[rect.yvar].dtype,chartobject.yarray,1,chartobject.shifty,chartobject.ybar)
+				y2=get_coord(current[rect.yvar2],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[rect.yvar].dtype,chartobject.yarray,1,chartobject.shifty,chartobject.ybar)
 			}
 
 			// draw bar
@@ -2610,7 +2612,7 @@ function draw_rects(axes,rect,snapobj){
 			} else {
 				var greplace=current[rect.grouping.color]
 			}
-			console.log('Rect coords: ',x1,x2,y1,y2)
+			// console.log('Rect coords: ',x1,x2,y1,y2)
 			snapobj.path('M'+x1+','+y2+'L'+x2+','+y2+'L'+x2+','+y1+'L'+x1+','+y1+'L'+x1+','+y2).attr({'data_type':'rect',opacity:chartobject.rect_geom.rect_opacity,'group':greplace,'class':'dataelement','shape-rendering':'crispEdges',fill:color,colorchange:'fill',context:'data_context_menu'})
 		}
 	}
@@ -2642,7 +2644,7 @@ function get_coord(value,[limit_start,limit_end],[pixel_start,pixel_end],type,ar
 	// at the value. Shift doesn't affect categorical axes, where shifting is always performed.
 	// if(shiftx==1){x_step=domain/(xvar.length)}
 	var range=Math.abs(pixel_end-pixel_start)
-	console.log(value,[limit_start,limit_end],[pixel_start,pixel_end],type,array,y,shift)
+	// console.log(value,[limit_start,limit_end],[pixel_start,pixel_end],type,array,y,shift)
 
 	if(type!='text'){
 		if(chartobject.datedenom[y]>0){
