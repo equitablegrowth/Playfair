@@ -228,21 +228,12 @@ function change_color(target,color) {
 	}
 }
 
-function dash_line(target,attribute) {
+function change_linetype(target,attribute){
 	var item=Snap(target)
-	if (attribute==0){
-		item.attr({'stroke-dasharray':[]})
-		if(item.attr('ident')=='key'){
-			group=item.attr('group')
-			snapobj.selectAll("[group='"+group+"']").attr({'stroke-dasharray':[]})
-		}
-	}
-	if (attribute==1){
-		item.attr({'stroke-dasharray':[3,3]})
-		if(item.attr('ident')=='key'){
-			group=item.attr('group')
-			snapobj.selectAll("[group='"+group+"']").attr({'stroke-dasharray':[3,3]})
-		}
+	item.attr({'stroke-dasharray':attribute})
+	if(item.attr('ident')=='key'){
+		group=item.attr('group')
+		snapobj.selectAll("[group='"+group+"']").attr({'stroke-dasharray':attribute})
 	}
 }
 

@@ -3510,7 +3510,7 @@ function default_style(parameters) {
 		},
 		'line_geom':{
 			// line specific style
-			'line_types':[[0,0],[5,5],[8,4,2,4],[8,8],[2,5]],
+			'line_types':[[0,0],[5,5],[8,4,2,4],[8,8],[2,5],[8,4,2,3,2,4]],
 			'line_minsize':2,
 			'line_maxsize':20,
 			'line_size':3,

@@ -395,6 +395,7 @@ function redraw(keep) {
 
 			chartobject.style(style)
 			change_colormenu(style)
+			change_linetypemenu(style)
 
 			// initialize axes
 			chartobject.xaxis({'label':xlabel,'number_of_ticks':5,'decimal':undefined,'format':undefined})
