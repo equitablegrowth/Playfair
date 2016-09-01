@@ -24,8 +24,8 @@ $(function() {
 
 			clickedevent=e
 			e.preventDefault();
-			$(menu).css("left", e.clientX+3);
-			$(menu).css("top", e.clientY);
+			$(menu).css("left", e.clientX-1);
+			$(menu).css("top", e.clientY-2);
 			$(menu).fadeIn(50, FocusContextOut());
 			if(e.clientY+$(menu).height()>height2){
 				$(menu).css("top", height2-$(menu).height()-5);

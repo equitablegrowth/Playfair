@@ -5,16 +5,18 @@
 function savepng() {
 
 	// saveSvgAsPng(document.getElementById('grapharea'),'playfair.png', {scale:2.0})
+	// var scale=window.devicePixelRatio
+	saveSvgAsPng(document.getElementById("grapharea"), "playfair.png", {scale:2}, function(){});
 
-	var svg = document.getElementById('grapharea')
-	var img = document.getElementById('png_save')
+	// var svg = document.getElementById('grapharea')
+	// var img = document.getElementById('png_save')
 
-	svg.toDataURL("image/png", {
-		callback: function(data) {
-			img.href=data
-			img.click()
-		}
-	})
+	// svg.toDataURL("image/png", {
+	// 	callback: function(data) {
+	// 		img.href=data
+	// 		img.click()
+	// 	}
+	// })
 }
 
 function savesvg() {
