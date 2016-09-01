@@ -732,6 +732,8 @@ window.playfair = (function () {
 		var sourcefill=this.source_text.sourcetextfill
 		var notetoppad=this.note_text.notetoppad
 
+		var is_safari = !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/)
+
 		if (this.logo.logo!=0){
 			var logo=snapobj.image(this.logo.logo,0,0)
 			logo.node.addEventListener('load',function(){

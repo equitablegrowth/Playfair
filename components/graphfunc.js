@@ -393,9 +393,7 @@ function redraw(keep) {
 				}
 			}
 
-			console.log(style.x_grids.xgrid_minoropacity)
 			chartobject.style(style)
-			console.log(chartobject.x_grids.xgrid_minoropacity)
 			change_colormenu(style)
 			change_linetypemenu(style)
 

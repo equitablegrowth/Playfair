@@ -110,16 +110,19 @@ $(document).ready(function(){
 		datatype: 'html',
 		data: 1,
 		success: function(response){
-			var response = JSON.parse(response);
-			console.log(response)
-			$.each(response,function(key,value){
-				value=value.split('.')[0]
-				$('#themes').append($('<option>',{value:value}).text(value))
-			})
+			try{
+				var response = JSON.parse(response);
+				$.each(response,function(key,value){
+					value=value.split('.')[0]
+					$('#themes').append($('<option>',{value:value}).text(value))
+				})
 
-			$("#themes").val('Equitable Growth')
-			$('#themes').prop('disabled', false);
-			change_theme()
+				$("#themes").val('Equitable Growth')
+				$('#themes').prop('disabled', false);
+				change_theme()
+			} catch(err){
+				change_theme()
+			}
 		},
 		error: function() {
 			change_theme()
