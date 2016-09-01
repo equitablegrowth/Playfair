@@ -180,7 +180,6 @@ function change_linetypemenu(theme){
 	if(theme['line_geom']['line_types']){
 		linetypemenu=''
 		for(var i=0;i<theme.line_geom.line_types.length;i++){
-			console.log(theme.line_geom.line_types[i])
 			if(i%2==0){
 				linetypemenu=linetypemenu+'<li>'
 			}

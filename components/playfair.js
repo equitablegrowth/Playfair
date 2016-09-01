@@ -3296,7 +3296,11 @@ function formatDate(date,range){
 function default_style(parameters) {
 	// Parameters should be an object with the parameters you want to change like:
 	// obj.style({'top_margin':20,'deksize':'10px'}) etc.
-	if (parameters===undefined){parameters={}}
+	if (parameters===undefined){
+		new_s={}
+	} else {
+		new_s=jQuery.extend(true,{},parameters)
+	}
 
 	default_parameters=
 	{
@@ -3570,19 +3574,19 @@ function default_style(parameters) {
 	}
 
 	for (var property in default_parameters){
-		if(parameters[property]===undefined){
-			parameters[property]={}
+		if(new_s[property]===undefined){
+			new_s[property]={}
 		}
 		for (var subprop in default_parameters[property]){
-			if (parameters[property][subprop]===undefined){
-				parameters[property][subprop]=default_parameters[property][subprop]
+			if (new_s[property][subprop]===undefined){
+				new_s[property][subprop]=default_parameters[property][subprop]
 			} else {
-				parameters[property][subprop]=parameters[property][subprop]
+				new_s[property][subprop]=new_s[property][subprop]
 			}
 		}
 	}
 
-	return parameters
+	return new_s
 }
 
 
