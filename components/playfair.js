@@ -717,27 +717,27 @@ window.playfair = (function () {
 
 	Playfair.prototype.prepfooter = function(source,note,callback) {
 		// draw the footer and return the height of the footer
-		this.source=source
-		this.note=note
+		chartobject.source=source
+		chartobject.note=note
 		// this.logo.logo=this.logo.logo
-		logoscale=this.logo.logoscale
-		var logoopacity=this.logo.logoopacity
+		logoscale=chartobject.logo.logoscale
+		var logoopacity=chartobject.logo.logoopacity
 
-		var snapobj=this.svg
-		var width=this.width
-		var height=this.height
-		var graphobj=this
+		var snapobj=chartobject.svg
+		var width=chartobject.width
+		var height=chartobject.height
+		var graphobj=chartobject
 
-		var notefill=this.note_text.notetextfill
-		var sourcefill=this.source_text.sourcetextfill
-		var notetoppad=this.note_text.notetoppad
+		var notefill=chartobject.note_text.notetextfill
+		var sourcefill=chartobject.source_text.sourcetextfill
+		var notetoppad=chartobject.note_text.notetoppad
 
 		var is_safari = !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/)
 
-		if (this.logo.logo!=0){
-			var logo=snapobj.image(this.logo.logo,0,0)
+		if (graphobj.logo.logo!=0){
+			var logo=snapobj.image(graphobj.logo.logo,0,0)
 			logo.node.addEventListener('load',function(){
-				logo.attr({width:logo.attr('width')/logoscale,height:logo.attr('height')/logoscale,opacity:logoopacity})
+				logo.attr({logo:1,width:logo.attr('width')/logoscale,height:logo.attr('height')/logoscale,opacity:logoopacity})
 				logo_coords=logo.getBBox()
 				logo.attr({x:graphobj.x+graphobj.width-logo_coords.width-graphobj.footer.footer_rightpad,y:graphobj.y+graphobj.height-logo_coords.height-graphobj.footer.footer_bottompad})
 
@@ -825,45 +825,45 @@ window.playfair = (function () {
 	Playfair.prototype.prepheader = function(hed,dek) {
 		snapobj=this.svg
 
-		this.hed=hed
-		this.dek=dek
+		chartobject.hed=hed
+		chartobject.dek=dek
 
-		headerwidth=this.width-this.header.header_leftpad-this.header.header_rightpad
+		headerwidth=chartobject.width-chartobject.header.header_leftpad-chartobject.header.header_rightpad
 
 		// draw main title
-		var hedfontsize=parseInt(this.title_text.hedsize)
-		while(multitext(hed,{'font-family':this.title_text.hedface,'font-size':hedfontsize+'px','font-weight':this.title_text.hedweight,'dominant-baseline':'text-before-edge',fill:this.title_text.hedtextfill},headerwidth).length>1){
+		var hedfontsize=parseInt(chartobject.title_text.hedsize)
+		while(multitext(hed,{'font-family':chartobject.title_text.hedface,'font-size':hedfontsize+'px','font-weight':chartobject.title_text.hedweight,'dominant-baseline':'text-before-edge',fill:chartobject.title_text.hedtextfill},headerwidth).length>1){
 			hedfontsize=hedfontsize-1
 		}
 
-		if (hedfontsize<parseInt(this.title_text.hedsizemin)){
-			hedfontsize=this.title_text.title_text.hedsizemin
+		if (hedfontsize<parseInt(chartobject.title_text.hedsizemin)){
+			hedfontsize=chartobject.title_text.hedsizemin
 			alert('Your headline is too long.')
 		}
 
-		var hed=snapobj.text(this.x+this.header.header_leftpad,this.y+this.header.header_toppad,hed).attr({'font-family':this.title_text.hedface,'font-size':hedfontsize,'font-weight':this.title_text.hedweight,'dominant-baseline':'text-before-edge',fill:this.title_text.hedtextfill,colorchange:'fill',context:'text_context_menu'})
+		var hed=snapobj.text(chartobject.x+chartobject.header.header_leftpad,chartobject.y+chartobject.header.header_toppad,hed).attr({'font-family':chartobject.title_text.hedface,'font-size':hedfontsize,'font-weight':chartobject.title_text.hedweight,'dominant-baseline':'text-before-edge',fill:chartobject.title_text.hedtextfill,colorchange:'fill',context:'text_context_menu'})
 		hed.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 		var hed_coords=hed.getBBox()
 
 		// draw subtitle
-		var dekfontsize=parseInt(this.title_text.deksize)
-		while(multitext(dek,{'font-family':this.title_text.dekface,'font-size':dekfontsize,'font-weight':this.title_text.dekweight,'dominant-baseline':'text-before-edge',fill:this.title_text.dektextfill},headerwidth).length>2){
+		var dekfontsize=parseInt(chartobject.title_text.deksize)
+		while(multitext(dek,{'font-family':chartobject.title_text.dekface,'font-size':dekfontsize,'font-weight':chartobject.title_text.dekweight,'dominant-baseline':'text-before-edge',fill:chartobject.title_text.dektextfill},headerwidth).length>2){
 			dekfontsize=dekfontsize-1
 		}
 
-		if (dekfontsize<parseInt(this.title_text.deksizemin)){
-			dekfontsize=this.title_text.title_text.deksizemin
+		if (dekfontsize<parseInt(chartobject.title_text.deksizemin)){
+			dekfontsize=chartobject.title_text.deksizemin
 			alert('Your subhead is too long.')
 		}
 
-		lines=multitext(dek,{'font-family':this.title_text.dekface,'font-size':dekfontsize,'font-weight':this.title_text.dekweight,'dominant-baseline':'text-before-edge',fill:this.title_text.dektextfill},headerwidth)
+		lines=multitext(dek,{'font-family':chartobject.title_text.dekface,'font-size':dekfontsize,'font-weight':chartobject.title_text.dekweight,'dominant-baseline':'text-before-edge',fill:chartobject.title_text.dektextfill},headerwidth)
 	
-		if (lines.length>this.title_text.maxdeklines){
-			var stop=this.title_text.maxdeklines
+		if (lines.length>chartobject.title_text.maxdeklines){
+			var stop=chartobject.title_text.maxdeklines
 		} else {var stop=lines.length}
 
 		for(var i=0;i<stop;i++){
-			var dek=snapobj.text(this.x+this.header.header_leftpad,this.y+hed_coords.y2+i*parseInt(dekfontsize)*1.1,lines[i]).attr({'font-family':this.title_text.dekface,'font-size':dekfontsize,'font-weight':this.title_text.dekweight,'dominant-baseline':'text-before-edge',ident:'dek',fill:this.title_text.dektextfill,colorchange:'fill',context:'text_context_menu'})
+			var dek=snapobj.text(chartobject.x+chartobject.header.header_leftpad,chartobject.y+hed_coords.y2+i*parseInt(dekfontsize)*1.1,lines[i]).attr({'font-family':chartobject.title_text.dekface,'font-size':dekfontsize,'font-weight':chartobject.title_text.dekweight,'dominant-baseline':'text-before-edge',ident:'dek',fill:chartobject.title_text.dektextfill,colorchange:'fill',context:'text_context_menu'})
 			dek.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 		}
 		
@@ -871,14 +871,14 @@ window.playfair = (function () {
 		var lower_dek=dek.getBBox().y2
 
 		// set head_height to the y2 coord for dek or hed, whichever is lower.
-		if(lower_hed>lower_dek){this.header.head_height=lower_hed+this.header.header_bottompad}
-		else{this.header.head_height=lower_dek+this.header.header_bottompad}
+		if(lower_hed>lower_dek){chartobject.header.head_height=lower_hed+chartobject.header.header_bottompad}
+		else{chartobject.header.head_height=lower_dek+chartobject.header.header_bottompad}
 
 		// and if there is no hed and no dek, set head_height to 0
-		if(this.hed=='' && this.dek==''){this.header.head_height=0}
+		if(chartobject.hed=='' && chartobject.dek==''){chartobject.header.head_height=0}
 
 		// draw in background and move it to the back
-		var head_fill=snapobj.rect(0,0,this.width,this.header.head_height).attr({fill:this.header.headerfill})
+		var head_fill=snapobj.rect(0,0,chartobject.width,chartobject.header.head_height).attr({fill:chartobject.header.headerfill})
 		snapobj.append(hed)
 		deks=snapobj.selectAll("text[ident='dek']")
 		for(var i=0;i<deks.length;i++){

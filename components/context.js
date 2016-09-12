@@ -154,7 +154,13 @@ function fadein(target) {
 		item=item.parent()
 	}}catch(err){}
 	opacity=parseFloat(item.attr('opacity'))
-	item.attr({opacity:opacity+.1})
+
+	if(item.attr('ident')=='key'){
+		group=item.attr('group')
+		snapobj.selectAll("[group='"+group+"']").attr({opacity:opacity+.1})
+	} else {
+		item.attr({opacity:opacity+.1})
+	}
 }
 
 function fadeout(target) {
@@ -163,7 +169,13 @@ function fadeout(target) {
 		item=item.parent()
 	}}catch(err){}
 	opacity=parseFloat(item.attr('opacity'))
-	item.attr({opacity:opacity-.1})
+
+	if(item.attr('ident')=='key'){
+		group=item.attr('group')
+		snapobj.selectAll("[group='"+group+"']").attr({opacity:opacity-.1})
+	} else {
+		item.attr({opacity:opacity-.1})
+	}
 }
 
 function addtext(target) {
