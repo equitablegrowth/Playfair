@@ -2649,7 +2649,7 @@ function get_coord(value,[limit_start,limit_end],[pixel_start,pixel_end],type,ar
 		}
 	} else if(type=='text'){
 		if(y==1){
-			var position=array.indexOf(value)+1
+			var position=array.length-array.indexOf(value)
 			// console.log('TEST',pixel_start,pixel_end,array,position)
 			if(ybar==1){
 				return pixel_start-((2*position-1)/(2*array.length))*Math.abs(pixel_end-pixel_start)
