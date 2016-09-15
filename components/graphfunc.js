@@ -460,6 +460,7 @@ function redraw(keep) {
 			})
 		} 
 		else {
+			alert("Nothing to graph. Check your chart tabs to make sure all necessary variables are specified.")
 			throw 'Nothing to graph!'
 		}
 	// } catch(err){
