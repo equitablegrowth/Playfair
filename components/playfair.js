@@ -694,8 +694,8 @@ window.playfair = (function () {
 
 		// draw geoms
 		if(typeof(chartobject.shade)!=='undefined'){draw_shade(axes,graph_obj.shade,snapobj)}
-		if(typeof(chartobject.bar)!=='undefined'){draw_bars(axes,graph_obj.bar,snapobj)}
 		if(typeof(chartobject.rect)!=='undefined'){draw_rects(axes,graph_obj.rect,snapobj)}
+		if(typeof(chartobject.bar)!=='undefined'){draw_bars(axes,graph_obj.bar,snapobj)}
 		if(typeof(chartobject.area)!=='undefined'){draw_area(axes,graph_obj.area,snapobj)}
 		if(typeof(chartobject.bounds)!=='undefined'){draw_bounds(axes,graph_obj.bounds,snapobj)}
 		if(typeof(chartobject.stackedbar)!=='undefined'){draw_stackedbars(axes,graph_obj.stackedbar,snapobj)}
@@ -1262,7 +1262,7 @@ function draw_key(legend,playobj,snapobj,prelim){
 				}
 			} else if((legend[i].geom=='bar' || legend[i].geom=='stackedbar' || legend[i].geom=='area' || legend[i].geom=='bounds') && keyitem_dict[keyitem_name]!==undefined){
 				if(legend[i].grouping=='color'){
-					keyitem_dict[keyitem_name].attr({'fill':chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length]})
+					keyitem_dict[keyitem_name].attr({'fill':chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],context:'data_context_menu'})
 				} else if(legend[i].grouping=='type'){
 					// keyitem_dict[keyitem_name].attr({'stroke-dasharray':chartobject.line_geom.line_types[numeric]})
 				}
@@ -1270,7 +1270,7 @@ function draw_key(legend,playobj,snapobj,prelim){
 
 			// rect
 			if(legend[i].geom=='rect' && keyitem_dict[keyitem_name]===undefined){
-				keyitem_dict[keyitem_name]=snapobj.rect(x,y,playobj.legends.legend_elementsize,playobj.legends.legend_elementsize).attr({'stroke':'#aaa','stroke-width':1,fill:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'fill-opacity':chartobject.rect_geom.rect_opacity,'shape-rendering':'crispEdges',ident2:'floatkey',ident:'key'})
+				keyitem_dict[keyitem_name]=snapobj.rect(x,y,playobj.legends.legend_elementsize,playobj.legends.legend_elementsize).attr({'stroke':'#aaa','stroke-width':1,fill:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'fill-opacity':chartobject.rect_geom.rect_opacity,'shape-rendering':'crispEdges',ident2:'floatkey',ident:'key',context:'data_context_menu'})
 			}
 
 			// shade
@@ -2116,7 +2116,7 @@ function draw_segments(axes,segment,snapobj){
 			} else {
 				var greplace=current[segment.grouping.color]
 			}
-			snapobj.line(x_loc1,y_loc1,x_loc2,y_loc2).attr({class:'dataelement',opacity:chartobject.segment_geom.segment_opacity,stroke:color,'stroke-width':size,'group':greplace,'colorchange':'stroke',context:'pathdata_context_menu','stroke-dasharray':type})
+			snapobj.line(x_loc1,y_loc1,x_loc2,y_loc2).attr({class:'dataelement',opacity:chartobject.segment_geom.segment_opacity,stroke:color,'stroke-width':size,'group':greplace,'colorchange':'stroke',context:'pathdata_context_menu','stroke-dasharray':type,'shape-rendering':'crispEdges'})
 		}
 	}
 }
@@ -2145,7 +2145,7 @@ function draw_text(axes,text,snapobj){
 		// set values for text locations
 		if(current[text.xvar]!=undefined && current[text.yvar]!=undefined && current[text.text]!=undefined){
 			var x_loc=get_coord(current[text.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[text.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
-			var y_loc=get_coord(current[text.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[text.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
+			var y_loc=get_coord(current[text.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[text.yvar].dtype,chartobject.yarray,1,chartobject.shifty,chartobject.ybar)
 
 			// draw text
 			var t=snapobj.text(x_loc,y_loc,current[text.text]).attr({fill:chartobject.text_geom.text_fill,opacity:chartobject.text_geom.text_opacity,'data_type':'text','class':'dataelement',colorchange:'fill',context:'text_context_menu','text-anchor':'middle','dominant-baseline':'text-before-edge','font-size':size,'font-family':chartobject.text_geom.text_face,'font-weight':chartobject.text_geom.text_weight})
@@ -2630,7 +2630,7 @@ function get_coord(value,[limit_start,limit_end],[pixel_start,pixel_end],type,ar
 			}
 		} else {
 			var step=(range/((limit_end-limit_start+1)*2))
-			console.log('step is: ',step)
+			// console.log('step is: ',step)
 			if(shift==1){
 				if(y==1){
 					pixel_end=pixel_end+step
