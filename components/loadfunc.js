@@ -298,7 +298,7 @@ function populate_variables(final_data) {
 		}
 
 		try{
-			if($(' option[value='+temp+']',this).length>0){
+			if($(' option[value="'+temp+'"]',this).length>0){
 				$(this).val(temp)
 			} else {
 				$(this).val('none')

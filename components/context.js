@@ -353,6 +353,17 @@ function startarrow(e) {
 	grapharea.mousemove(tracker)
 }
 
+function startline(e) {
+	// coordinates of the SVG graphing area
+	var svgx=document.getElementById("grapharea").getBoundingClientRect()['left']
+	var svgy=document.getElementById("grapharea").getBoundingClientRect()['top']
+
+	drawpath=1
+	pathstart=[e.clientX-svgx,e.clientY-svgy]
+	grapharea.click(endline)
+	grapharea.mousemove(tracker)
+}
+
 function tracker(e) {
 	// coordinates of the SVG graphing area
 	var svgx=document.getElementById("grapharea").getBoundingClientRect()['left']
@@ -416,6 +427,29 @@ function endarrow(e) {
 	grapharea.unclick(endarrow)
 	try{trackline.remove()}catch(err){}
 	finalline=grapharea.line(pathstart[0],pathstart[1],e.clientX-svgx,e.clientY-svgy).attr({annotation:1,arrow:1,ident:'none',class:'callout','stroke-width':callwidth,'stroke':callstroke,'shape-rendering':'auto','marker-end':amarker,colorchange:'stroke',context:'callout_context_menu','stroke-dasharray':calldash})
+	finalline.drag()
+}
+
+function endline(e) {
+	// coordinates of the SVG graphing area
+	var svgx=document.getElementById("grapharea").getBoundingClientRect()['left']
+	var svgy=document.getElementById("grapharea").getBoundingClientRect()['top']
+
+	if(typeof(chartobject)!=='undefined'){
+		var callwidth=chartobject.callout_style.arrow_thickness
+		var callstroke=chartobject.callout_style.arrow_color
+		var calldash=chartobject.callout_style.arrow_dasharray
+	} else {
+		var callwidth=2
+		var callstroke='black'
+		var calldash=[]
+	}
+
+	drawpath=0
+	grapharea.unmousemove(tracker)
+	grapharea.unclick(endline)
+	try{trackline.remove()}catch(err){}
+	finalline=grapharea.line(pathstart[0],pathstart[1],e.clientX-svgx,e.clientY-svgy).attr({annotation:1,ident:'none',class:'callout','stroke-width':callwidth,'stroke':callstroke,'shape-rendering':'auto',colorchange:'stroke',context:'callout_context_menu','stroke-dasharray':calldash})
 	finalline.drag()
 }
 
