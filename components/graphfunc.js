@@ -344,15 +344,27 @@ function redraw(keep) {
 			// which grids should be drawn
 			if (xgrid===false){
 				style.x_grids.xgrid_opacity=0
+				style.x_grids.xgrid_zeroopacity=0
+			} else {
+				style.x_grids.xgrid_opacity=theme.x_grids.xgrid_opacity
+				style.x_grids.xgrid_zeroopacity=theme.x_grids.xgrid_zeroopacity
 			}
 			if (ygrid===false){
 				style.y_grids.ygrid_opacity=0
+				style.y_grids.ygrid_zeroopacity=0
+			} else {
+				style.y_grids.ygrid_opacity=theme.y_grids.ygrid_opacity
+				style.y_grids.ygrid_zeroopacity=theme.y_grids.ygrid_zeroopacity
 			}
 			if (xminorgrid===false){
 				style.x_grids.xgrid_minoropacity=0
+			} else {
+				style.x_grids.xgrid_minoropacity=theme.x_grids.xgrid_minoropacity
 			}
 			if (yminorgrid===false){
 				style.y_grids.ygrid_minoropacity=0
+			} else {
+				style.y_grids.ygrid_minoropacity=theme.y_grids.ygrid_minoropacity
 			}
 
 			// point style
