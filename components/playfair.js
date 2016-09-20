@@ -732,6 +732,7 @@ window.playfair = (function () {
 		var sourcefill=chartobject.source_text.sourcetextfill
 		var notetoppad=chartobject.note_text.notetoppad
 
+		// catch safari so you can... do something about this logo loading thing
 		var is_safari = !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/)
 
 		if (graphobj.logo.logo!=0){
@@ -776,10 +777,10 @@ window.playfair = (function () {
 				}
 				snapobj.append(logo)
 
-				// If the note+source is taller than the logo height, make the footer bigger and shove all three elemnts up
-				if(note_coords-(graphobj.y+graphobj.height-logo_coords.height-graphobj.footer.footer_bottompad-graphobj.footer.footer_toppad)>graphobj.footer.footer_height){
-					var difference=parseFloat(graphobj.note_text.notesize)+note_coords-(graphobj.y+graphobj.height-logo_coords.height-graphobj.footer.footer_bottompad-graphobj.footer.footer_toppad)-graphobj.footer.footer_height
-					graphobj.footer.footer_height=parseFloat(graphobj.note_text.notesize)+note_coords-(graphobj.y+graphobj.height-logo_coords.height-graphobj.footer.footer_bottompad-graphobj.footer.footer_toppad)
+				// If the note+source is taller than the logo height, make the footer bigger and shove all three elements up
+				if(note_coords+chartobject.footer.footer_bottompad-(graphobj.y+graphobj.height-logo_coords.height-graphobj.footer.footer_bottompad-graphobj.footer.footer_toppad)>graphobj.footer.footer_height){
+					var difference=note_coords+chartobject.footer.footer_bottompad-(graphobj.y+graphobj.height)
+					graphobj.footer.footer_height=graphobj.footer.footer_height+difference
 					snapobj.selectAll('rect[id="footerrect"').attr({height:graphobj.footer.footer_height})
 					snapobj.selectAll('rect[id="footerrect"').attr({y:graphobj.height-graphobj.footer.footer_height})
 					logo.attr({y:parseFloat(logo.attr('y'))-difference/2})
@@ -792,16 +793,16 @@ window.playfair = (function () {
 			if(graphobj.source.length>0){
 				source='Source: '+graphobj.source
 				lines=multitext(source,{'font-family':graphobj.source_text.sourceface,'font-size':graphobj.source_text.sourcesize,'font-weight':graphobj.source_text.sourceweight,'dominant-baseline':'text-before-edge',fill:graphobj.source_text.sourcetextfill},graphobj.width-graphobj.footer.footer_leftpad-graphobj.footer.footer_rightpad)
-				var source=snapobj.text(graphobj.x+graphobj.footer.footer_leftpad,graphobj.y+graphobj.height-graphobj.footer.footer_bottompad,lines).attr({ident:'foot','font-family':graphobj.source_text.sourceface,fill:sourcefill,'font-size':graphobj.source_text.sourcesize,'font-weight':graphobj.source_text.sourceweight,'dominant-baseline':'text-before-edge',colorchange:'fill',context:'text_context_menu'})
+				var source=snapobj.text(graphobj.x+graphobj.footer.footer_leftpad,graphobj.y+graphobj.height+graphobj.footer.footer_toppad,lines).attr({ident:'foot','font-family':graphobj.source_text.sourceface,fill:sourcefill,'font-size':graphobj.source_text.sourcesize,'font-weight':graphobj.source_text.sourceweight,'dominant-baseline':'text-before-edge',colorchange:'fill',context:'text_context_menu'})
 				source.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 				source.selectAll("tspan:not(:first-child)").attr({x:source.attr('x'),dy:parseInt(graphobj.source_text.sourcesize)})
 				source_coords=source.getBBox().y2
-			} else {source_coords=graphobj.y+graphobj.height-graphobj.footer.footer_bottompad}
+			} else {source_coords=graphobj.y+graphobj.height+graphobj.footer.footer_toppad}
 
 			if(graphobj.note.length>0){
 				note='Note: '+graphobj.note
 				lines=multitext(note,{fill:graphobj.note_text.notetextfill,'font-family':graphobj.note_text.noteface,'font-size':graphobj.note_text.notesize,'font-weight':graphobj.note_text.noteweight,'dominant-baseline':'text-before-edge'},graphobj.width-graphobj.footer.footer_leftpad-graphobj.footer.footer_rightpad)
-				var note=snapobj.text(graphobj.x+graphobj.footer.footer_leftpad,source_coords,lines).attr({fill:notefill,ident:'foot','font-family':graphobj.note_text.noteface,'font-size':graphobj.note_text.notesize,'font-weight':graphobj.note_text.noteweight,'dominant-baseline':'text-before-edge',colorchange:'fill',context:'text_context_menu'})
+				var note=snapobj.text(graphobj.x+graphobj.footer.footer_leftpad,source_coords+graphobj.note_text.notetoppad,lines).attr({fill:notefill,ident:'foot','font-family':graphobj.note_text.noteface,'font-size':graphobj.note_text.notesize,'font-weight':graphobj.note_text.noteweight,'dominant-baseline':'text-before-edge',colorchange:'fill',context:'text_context_menu'})
 				note.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 				note.selectAll("tspan:not(:first-child)").attr({x:note.attr('x'),dy:parseInt(graphobj.note_text.notesize)})
 				note_coords=note.getBBox().y2
@@ -812,11 +813,15 @@ window.playfair = (function () {
 			graphobj.footer.footer_height=0
 
 			if(note_coords>graphobj.y+graphobj.height){
-				graphobj.footer.footer_height=note_coords-(graphobj.y+graphobj.height-graphobj.footer.footer_bottompad-graphobj.footer.footer_toppad)
+				graphobj.footer.footer_height=note_coords+graphobj.footer.footer_bottompad-(graphobj.y+graphobj.height)
 				try{source.attr({y:graphobj.y+graphobj.height-graphobj.footer.footer_height+graphobj.footer.footer_toppad})}catch(err){}
 				var source_coords=source.getBBox().y2
 				try{note.attr({y:source_coords})}catch(err){}
 			}
+
+			var foot_fill=snapobj.rect(0,graphobj.height-graphobj.footer.footer_height,graphobj.width,graphobj.footer.footer_height).attr({id:'footerrect',fill:graphobj.footer.footerfill})
+			snapobj.append(note)
+			snapobj.append(source)
 
 			callback(1)
 		}
@@ -2148,7 +2153,7 @@ function draw_text(axes,text,snapobj){
 			var y_loc=get_coord(current[text.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[text.yvar].dtype,chartobject.yarray,1,chartobject.shifty,chartobject.ybar)
 
 			// draw text
-			var t=snapobj.text(x_loc,y_loc,current[text.text]).attr({fill:chartobject.text_geom.text_fill,opacity:chartobject.text_geom.text_opacity,'data_type':'text','class':'dataelement',colorchange:'fill',context:'text_context_menu','text-anchor':'middle','dominant-baseline':'text-before-edge','font-size':size,'font-family':chartobject.text_geom.text_face,'font-weight':chartobject.text_geom.text_weight})
+			var t=snapobj.text(x_loc,y_loc,current[text.text]).attr({'text-anchor':chartobject.text_geom.text_align,fill:chartobject.text_geom.text_fill,opacity:chartobject.text_geom.text_opacity,'data_type':'text','class':'dataelement',colorchange:'fill',context:'text_context_menu','dominant-baseline':'text-before-edge','font-size':size,'font-family':chartobject.text_geom.text_face,'font-weight':chartobject.text_geom.text_weight})
 			t.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 			center_baseline(t)
 		}
@@ -3367,7 +3372,7 @@ function default_style(parameters) {
 			'noteweight':400,
 			'noteface':'PTSans',
 			'notetextfill':'white',
-			'notetoppad':4,	
+			'notetoppad':2,	
 		},
 		'legends':{
 			// legend
@@ -3550,6 +3555,7 @@ function default_style(parameters) {
 			'text_fill':'black',
 			'text_face':'Lato',
 			'text_weight':400,
+			'text_align':'middle',
 		},
 		'area_geom':{
 			// area geom specific
