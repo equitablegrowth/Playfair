@@ -1337,7 +1337,7 @@ function draw_trends(axes,trend,snapobj){
 
 		// truncate trendlines that leave the graph
 		// fake box that covers the plotting region
-		var tempbox=snapobj.path('M'+axes[0]+','+axes[3]+'L'+axes[1]+','+axes[3]+'L'+axes[1]+','+axes[2]+'L'+axes[0]+','+axes[2]+'L'+axes[0]+','+axes[3]).attr({})
+		var tempbox=snapobj.path('M'+(axes[0]-1)+','+(axes[3]-1)+'L'+(axes[1]+1)+','+(axes[3]-1)+'L'+(axes[1]+1)+','+(axes[2]+1)+'L'+(axes[0]-1)+','+(axes[2]+1)+'L'+(axes[0]-1)+','+(axes[3]-1)).attr({})
 		var areabox=tempbox.getBBox()
 		console.log(areabox)
 
@@ -1347,16 +1347,18 @@ function draw_trends(axes,trend,snapobj){
 			// both points are outside the box, path has to redrawn based on two intersection points
 			var intersects=Snap.path.intersection(temp,tempbox)
 
-			var x_loc1=intersects[0]['x']
-			var x_loc2=intersects[1]['x']
-			var y_loc1=intersects[0]['y']
-			var y_loc2=intersects[1]['y']
+			if (intersects.length>0){
+				var x_loc1=intersects[0]['x']
+				var x_loc2=intersects[1]['x']
+				var y_loc1=intersects[0]['y']
+				var y_loc2=intersects[1]['y']
 
-			var path='M'+x_loc1+','+y_loc1+'L'+x_loc2+','+y_loc2
-			temp.remove()
-			var temp=snapobj.path(path).attr({stroke:chartobject.trend_geom.trend_fill,opacity:chartobject.trend_geom.trend_opacity,'stroke-width':chartobject.trend_geom.trend_width,'colorchange':'stroke',context:'path_context_menu'})
+				var path='M'+x_loc1+','+y_loc1+'L'+x_loc2+','+y_loc2
+				temp.remove()
+				var temp=snapobj.path(path).attr({stroke:chartobject.trend_geom.trend_fill,opacity:chartobject.trend_geom.trend_opacity,'stroke-width':chartobject.trend_geom.trend_width,'colorchange':'stroke',context:'path_context_menu'})
+			}
 		} else if(Snap.path.isPointInsideBBox(areabox,x_loc1,y_loc1)==false & Snap.path.isPointInsideBBox(areabox,x_loc2,y_loc2)==true){
-			// both points are outside the box, path has to redrawn based on two intersection points
+			// 2nd point inside box, path has to redrawn based on two intersection points
 			var intersects=Snap.path.intersection(temp,tempbox)
 
 			var x_loc1=intersects[0]['x']
@@ -1366,11 +1368,11 @@ function draw_trends(axes,trend,snapobj){
 			temp.remove()
 			var temp=snapobj.path(path).attr({stroke:chartobject.trend_geom.trend_fill,opacity:chartobject.trend_geom.trend_opacity,'stroke-width':chartobject.trend_geom.trend_width,'colorchange':'stroke',context:'path_context_menu'})
 		} else if(Snap.path.isPointInsideBBox(areabox,x_loc1,y_loc1)==true & Snap.path.isPointInsideBBox(areabox,x_loc2,y_loc2)==false){
-			// both points are outside the box, path has to redrawn based on two intersection points
+			// first point inside box, path has to redrawn based on two intersection points
 			var intersects=Snap.path.intersection(temp,tempbox)
 
-			var x_loc2=intersects[1]['x']
-			var y_loc2=intersects[1]['y']
+			var x_loc2=intersects[0]['x']
+			var y_loc2=intersects[0]['y']
 
 			var path='M'+x_loc1+','+y_loc1+'L'+x_loc2+','+y_loc2
 			temp.remove()
@@ -1386,7 +1388,7 @@ function draw_trends(axes,trend,snapobj){
 		trendtext.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 		var coords=trendtext.getBBox()
 		trendtext.attr({y:coords.y-chartobject.trend_geom.trend_linetotext-coords.height})
-		var inclincation=(Math.atan(parseFloat(unitslope))*360)/(2*Math.PI)
+		var inclincation=-(Math.atan(parseFloat(unitslope))*360)/(2*Math.PI)
 		trendtext.transform('r'+inclincation+' '+coords.cx+' '+coords.cy)
 	}
 }
