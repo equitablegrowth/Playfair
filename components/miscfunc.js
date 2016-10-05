@@ -187,7 +187,7 @@ function change_linetypemenu(theme){
 				linetypemenu=linetypemenu+'<li>'
 			}
 			if(theme.line_geom.line_types[i].length===1 || theme.line_geom.line_types[i][0]===0){
-				linetypemenu=linetypemenu+"<span class='contextbuttons' onclick=change_linetype(clickedevent.target,'[0,0]')><span class='solid' style='width:50px'></span></span>"
+				linetypemenu=linetypemenu+"<span class='contextbuttons' onclick=change_linetype(clickedevent.target,'0,0')><span class='solid' style='width:50px'></span></span>"
 			} else {
 				linetypemenu=linetypemenu+"<span class='contextbuttons' onclick=change_linetype(clickedevent.target,'"+theme.line_geom.line_types[i]+"')>"
 				var length=0

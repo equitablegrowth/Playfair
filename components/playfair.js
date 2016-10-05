@@ -812,7 +812,7 @@ window.playfair = (function () {
 			graphobj.logo.logo_width=0
 			graphobj.footer.footer_height=0
 
-			if(note_coords>graphobj.y+graphobj.height+graphobj.footer.footer_toppad){
+			if(graphobj.note.length>0 || graphobj.source.length>0){
 				graphobj.footer.footer_height=note_coords+graphobj.footer.footer_bottompad-(graphobj.y+graphobj.height)
 				try{source.attr({y:graphobj.y+graphobj.height-graphobj.footer.footer_height+graphobj.footer.footer_toppad})}catch(err){}
 				try{var source_coords=source.getBBox().y2}catch(err){}
