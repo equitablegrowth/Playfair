@@ -812,10 +812,10 @@ window.playfair = (function () {
 			graphobj.logo.logo_width=0
 			graphobj.footer.footer_height=0
 
-			if(note_coords>graphobj.y+graphobj.height){
+			if(note_coords>graphobj.y+graphobj.height+graphobj.footer.footer_toppad){
 				graphobj.footer.footer_height=note_coords+graphobj.footer.footer_bottompad-(graphobj.y+graphobj.height)
 				try{source.attr({y:graphobj.y+graphobj.height-graphobj.footer.footer_height+graphobj.footer.footer_toppad})}catch(err){}
-				var source_coords=source.getBBox().y2
+				try{var source_coords=source.getBBox().y2}catch(err){}
 				try{note.attr({y:source_coords})}catch(err){}
 			}
 
@@ -3205,7 +3205,7 @@ function draw_axes(playobj,xvar,yvar,shiftx,shifty,legend_height) {
 		// y-axis labels		
 		var mid2=Math.abs((get_coord(yvar[0],playobj.ylimits,[ystart_ycoord,yfinal_ycoord],yvar.dtype,yvar,1,playobj.shifty)-get_coord(yvar[1],playobj.ylimits,[ystart_ycoord,yfinal_ycoord],yvar.dtype,yvar,1,playobj.shifty))/2)
 		var tempymid=get_coord(yvar[i],playobj.ylimits,[ystart_ycoord,yfinal_ycoord],yvar.dtype,yvar,1,playobj.shifty,chartobject.ybar)-parseFloat(mid2)
-		console.log(tempymid,yvar[i],mid2)
+		// console.log(tempymid,yvar[i],mid2)
 
 		if(Object.prototype.toString.call(yvar[i])==='[object Date]'){
 			string=formatDate(yvar[i],Math.max(...yvar)-Math.min(...yvar))
@@ -3218,11 +3218,12 @@ function draw_axes(playobj,xvar,yvar,shiftx,shifty,legend_height) {
 
 		lines=multitext(string,{ident:'yaxis','font-size':playobj.y_ticks.ytick_textsize,'font-weight':playobj.y_ticks.ytick_textweight,'font-family':playobj.y_ticks.ytick_textface,'dominant-baseline':'text-before-edge','text-anchor':'end'},maxwidth)
 		var temp=snapobj.text(playobj.x+total_xoffset-playobj.y_ticks.ytick_to_yaxis,tempy,lines).attr({fill:playobj.y_ticks.ytick_textfill,ident:'yaxis','font-size':playobj.y_ticks.ytick_textsize,'font-weight':playobj.y_ticks.ytick_textweight,'font-family':playobj.y_ticks.ytick_textface,'dominant-baseline':'text-before-edge','text-anchor':'end',colorchange:'fill',context:'text_context_menu'})
+		console.log(temp.getBBox())
 		temp.selectAll("tspan:not(:first-child)").attr({x:temp.attr('x'),dy:parseInt(playobj.y_ticks.ytick_textsize)})
 		temp.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 		coords=temp.getBBox()
+		console.log("TICK COORDS",tempy,coords.y,coords.height,temp.getBBox())
 		temp.attr({y:coords.y-coords.height/2})
-
 
 		// for(var j=0;j<lines.length;j++){
 		// 	if (parseInt(lines[j])>=1000 || parseInt(lines[j])<=-1000){linesj=commas(lines[j])} else{linesj=lines[j]}

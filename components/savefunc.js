@@ -237,6 +237,14 @@ function load_populate(response) {
 			height=parseFloat(inputs['gheight'][1])
 		} else {height=520}
 
+		if (parseFloat(width)>745){	
+			$('#help_general')[0].style.display='none'
+			$('#help_text')[0].style.display='none'
+		} else {
+			$('#help_general')[0].style.display='block'
+			$('#help_text')[0].style.display='none'	
+		}
+
 		$('#grapharea').attr('height',height)
 		$('#grapharea').attr('width',width)
 

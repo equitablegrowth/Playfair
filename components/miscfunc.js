@@ -248,6 +248,8 @@ function populate_settings(theme,cb){
 			var row=$('#sett_'+key+' .row:last-of-type')
 			row.append("<div class='col-md-4'><div class='labeled_elewide'><label>"+sub+"</label><span class='styled-inputwide'><input type='text styled-input' id='"+sub+"' data-key='"+key+"'></span></div></div>")
 		}
+
+		tab.append("<br><div class='row'><div class='text-center col-md-12'><button type='button' class='btn btn-default' id='saveset' onclick='export_settings()'><i class='fa fa-download'></i> Save settings as theme</button></div></div>")
 	}
 
 	// change settings fields placeholders to current theme values
@@ -262,6 +264,40 @@ function populate_settings(theme,cb){
 		cb()
 	}
 }
+
+function export_settings(){
+	var set=$('#settings .v-nav .tab-content')
+	var savetheme={}
+
+	for(var i=0;i<set.length;i++){
+		var id=set[i].id
+		var params=[]
+		savetheme[id.slice(5)]={}
+
+		// from SO: http://stackoverflow.com/a/827312
+		$('#'+id).find('input').each(function(){params.push(this.id)})
+
+		for (var j=0;j<params.length;j++){
+			if($('#'+params[j]).val()==""){
+				savetheme[id.slice(5)][params[j]]=$('#'+params[j]).attr('placeholder')
+			} else {
+				savetheme[id.slice(5)][params[j]]=$('#'+params[j]).val()
+			}
+		}
+	}
+
+	var data=encodeURIComponent(JSON.stringify(savetheme))
+	data=data.replace(/%5C/g,'')
+	data=data.replace(/%22%22/g,'%22')
+	data=data.replace(/%22%5B/g,'%5B')
+	data=data.replace(/%5D%22/g,'%5D')
+	data=data.replace(/%22(^[0-9.,]+$)%22/g,'$1')
+	
+	// console.log(data)
+	var neww=window.open("data:text/text,"+data,"_blank")
+	neww.focus()
+}
+
 
 ///////////////////////// VERTICAL TABS ////////////////////////////////
 // Completely ripped these vertical tabs off from this jsfiddle:
