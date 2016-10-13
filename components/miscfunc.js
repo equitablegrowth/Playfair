@@ -298,7 +298,6 @@ function export_settings(){
 	neww.focus()
 }
 
-
 ///////////////////////// VERTICAL TABS ////////////////////////////////
 // Completely ripped these vertical tabs off from this jsfiddle:
 // http://jsfiddle.net/frabiacca/7pm7h/5/

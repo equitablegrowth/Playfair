@@ -75,6 +75,9 @@ function cloudsave() {
 			for (var i=0;i<response.length;i++){
 				$('#save_filebox').append('<li class="filerow">'+response[i]+'</li>')
 			}
+		},
+		error: function(){
+			savetohd()
 		}
 	})
 }
@@ -92,6 +95,9 @@ function cloudload() {
 			for (var i=0;i<response.length;i++){
 				$('#load_filebox').append('<a href="#" class="list-group-item filerow">'+response[i]+'</a')
 			}
+		},
+		error: function(){
+			loadfromhd()
 		}
 	})
 }
@@ -179,6 +185,70 @@ function savetoserver() {
 	}
 }
 
+function savetohd(){
+	try{
+		// build the dictionary to pass to ajax
+		var filename=$('#savename').val()
+		if(filename.indexOf('/')!==-1){
+			alert("Filenames can't have / in them.")
+			return
+		}
+		var svg = document.getElementById("grapharea").innerHTML
+
+		var dictionary={}
+		dictionary['svg']=encodeURIComponent(svg)
+		var temp=chartobject
+		delete temp['svg']
+		delete temp['logo']
+
+		// store dtypes so they can be retrieved after load (stringify obliterates them)
+		temp['dtypes']={}
+		for (var key in temp.flatdata){
+			temp.dtypes[key]=temp.flatdata[key].dtype
+		}
+
+		dictionary['chartobject']=JSON.stringify(temp)
+		dictionary['filename']=filename
+
+		input_dict={}
+
+		var databox_value=$('#data_text').val();
+		input_dict['data_text']=['textarea',databox_value]
+
+		var segment_value=$('#trend_text').val();
+		input_dict['trend_text']=['textarea',segment_value]
+
+		// modified from StackOverflow, T.J. Crowder
+		// http://stackoverflow.com/a/2214077/3001940
+		// get value of all inputs onscreen so they can be restored by a load
+		var inputs, index;
+
+		inputs = document.getElementsByTagName('input');
+		for (index = 0; index < inputs.length; ++index) {
+		    if(inputs[index].type=='radio' || inputs[index].type=='checkbox'){
+		    	input_dict[inputs[index].id]=[inputs[index].type,inputs[index].checked]
+		    } else if (inputs[index].type=='text'){
+		    	input_dict[inputs[index].id]=[inputs[index].type,inputs[index].value]
+		    }
+		}
+
+		selects=document.getElementsByTagName('select');
+		for (index=0; index < selects.length; ++index){
+			input_dict[selects[index].id]=['dropdown',selects[index].value]
+		}
+
+		input_dict['graphtype']=['graphtype',graph_type]
+		dictionary['inputs']=JSON.stringify(input_dict)
+
+		var blob=new Blob([JSON.stringify(dictionary.svg),JSON.stringify(dictionary.chartobject),JSON.stringify(dictionary.inputs)],{type: "text/plain;charset=utf-8"})
+		saveAs(blob,"playfair graph",true)
+
+	} catch(err){
+		alert('Failed to save: '+'\n'+err)
+		cancelsave()
+	}
+}
+
 function loadfromserver() {
 	dictionary={'loadfile':loadfile}
 	$.ajax({
@@ -191,6 +261,21 @@ function loadfromserver() {
 			load_populate(response)
 		}
 	})
+}
+
+function loadfromhd() {
+	var control=document.getElementById('filename')
+	control.addEventListener('change',function(evt){
+		var reader=new FileReader()
+		reader.onload=function(event){
+			var response=event.target.results
+			console.log(response)
+			load_populate(response)
+		}
+		console.log(evt)
+		reader.readAsText(evt)
+	})
+	$('#filename').trigger('click')
 }
 
 function load_populate(response) {
