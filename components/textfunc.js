@@ -205,13 +205,13 @@ function position_cursor(selected_text){
 			coords3=temp3.getBBox()
 
 			coords=temp.getBBox()
-			cursor.attr({x:coords.x2-(coords2.x2-coords3.x2),y:coords.y})
+			cursor.attr({x:coords.x2-(coords2.x2-coords3.x2),y:(coords.cy-parseFloat(selected_text.attr('font-size'))/2)})
 		} catch(err){}
 
 		if(tlocation[0]==0){
-			cursor.attr({x:coords.x2-coords2.x2,y:coords.y})
+			cursor.attr({x:coords.x2-coords2.x2,y:(coords.cy-parseFloat(selected_text.attr('font-size'))/2)})
 		} else {
-			cursor.attr({x:coords.x2-(coords2.x2-coords3.x2),y:coords.y})
+			cursor.attr({x:coords.x2-(coords2.x2-coords3.x2),y:(coords.cy-parseFloat(selected_text.attr('font-size'))/2)})
 		}
 
 		if(typeof lt=='undefined'){
@@ -221,14 +221,14 @@ function position_cursor(selected_text){
 			if(selected_text.attr('text-anchor')=='middle'){x=master_coords.cx}
 			if(selected_text.attr('text-anchor')=='start'){x=master_coords.x}
 			if(selected_text.attr('text-anchor')=='end'){x=master_coords.x2}
-			cursor.attr({x:x,y:master_coords.y+tlocation[1]*1.1*parseFloat(selected_text.attr('font-size'))})
+			cursor.attr({x:x,y:(master_coords.cy-parseFloat(selected_text.attr('font-size'))/2)+tlocation[1]*1.1*parseFloat(selected_text.attr('font-size'))})
 		}
 
 		if(lt==''){
 			if(selected_text.attr('text-anchor')=='middle'){x=master_coords.cx}
 			if(selected_text.attr('text-anchor')=='start'){x=master_coords.x}
 			if(selected_text.attr('text-anchor')=='end'){x=master_coords.x2}
-			cursor.attr({x:x,y:master_coords.y+tlocation[1]*1.1*parseFloat(selected_text.attr('font-size'))})
+			cursor.attr({x:x,y:(master_coords.cy-parseFloat(selected_text.attr('font-size'))/2)+tlocation[1]*1.1*parseFloat(selected_text.attr('font-size'))})
 		}
 
 		temp.remove()
@@ -250,7 +250,8 @@ function position_cursor(selected_text){
 		coords3=temp3.getBBox()
 
 		coords=temp.getBBox()
-		cursor.attr({x:coords.x2-(coords2.x2-coords3.x2),y:coords.y})
+		console.log(coords,selected_text.attr('font-size'))
+		cursor.attr({x:coords.x2-(coords2.x2-coords3.x2),y:(coords.cy-parseFloat(selected_text.attr('font-size'))/2)})
 
 		if(tlocation[0]==0){cursor.attr({x:master_coords.x})}
 
