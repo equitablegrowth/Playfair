@@ -355,8 +355,8 @@ function load_populate(response) {
 				} else if (key_elements[i].type=='text'){
 					key_elements[i].selectAll("tspan:not(:first-child)").attr({x:coords.x-prevx+dx})
 					key_elements[i].attr({
-						x:coords.x-prevx+dx,
-						y:coords.y-prevy+dy
+						x:key_elements[i].attr('x')-prevx+dx,
+						y:key_elements[i].attr('y')-prevy+dy
 					})
 				} else if (key_elements[i].type=='path'){
 					var currentx=key_elements[i].matrix.e-prevx
