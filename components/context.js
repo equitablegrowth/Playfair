@@ -238,6 +238,10 @@ function change_color(target,color) {
 			snapobj.selectAll("[group='"+group+"']").attr({fill:color,stroke:color})
 		}
 	}
+
+	if(item===active_element){
+		text_element_fill=color
+	}
 }
 
 function change_linetype(target,attribute){

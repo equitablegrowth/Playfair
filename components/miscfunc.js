@@ -291,7 +291,7 @@ function export_settings(){
 	data=data.replace(/%22%22/g,'%22')
 	data=data.replace(/%22%5B/g,'%5B')
 	data=data.replace(/%5D%22/g,'%5D')
-	data=data.replace(/%22(^[0-9.,]+$)%22/g,'$1')
+	data=data.replace(/%22([0-9.,]+)%22/g,'$1')
 	
 	// console.log(data)
 	var neww=window.open("data:text/text,"+data,"_blank")

@@ -254,7 +254,6 @@ function redraw(keep) {
 		var geom_dict=prev[0]
 
 		// grab all text elements from the design tab
-		// replace the apostrophe character from word if applicable: Source’s
 		var hed=$("#hed").val()
 		var dek=$("#dek").val()
 		var source=$("#source").val()

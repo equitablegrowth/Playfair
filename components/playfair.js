@@ -787,6 +787,15 @@ window.playfair = (function () {
 					try{source.attr({y:parseFloat(source.attr('y')-difference)})}catch(err){}
 					try{note.attr({y:parseFloat(note.attr('y')-difference)})}catch(err){}
 				}
+
+				// if the logo is taller than the note+source, vertically center them around the logo's centerline - should there be a vertical-center flag for this in theme?
+				if(note_coords+chartobject.footer.footer_bottompad-(graphobj.y+graphobj.height-logo_coords.height-graphobj.footer.footer_bottompad-graphobj.footer.footer_toppad)<graphobj.footer.footer_height){
+					var difference=note_coords+chartobject.footer.footer_bottompad-(graphobj.y+graphobj.height)
+					console.log('centering note/source',difference)
+					try{source.attr({y:parseFloat(source.attr('y')-difference/2)})}catch(err){console.log('err')}
+					try{note.attr({y:parseFloat(note.attr('y')-difference/2)})}catch(err){console.log('err')}
+				}
+
 				callback(logo_coords.height)
 			})
 		} else {
@@ -2199,6 +2208,8 @@ function draw_shade(axes,shade,snapobj){
 			}
 		}
 	}
+
+	snapobj.append(snapobj.selectAll('[obj_type="gridline"]'))
 }
 
 function draw_bars(axes,bar,snapobj){
@@ -3169,7 +3180,7 @@ function draw_axes(playobj,xvar,yvar,shiftx,shifty,legend_height) {
 		}
 		// x-axis ticks, grid lines, and minor grid lines
 		y_start=playobj.y+playobj.height-total_yoffset-playobj.footer.footer_height-playobj.grapharea.bottom_margin-xlab_height-playobj.x_ticks.xtick_to_xlabel-coords.height
-		var temp_line=snapobj.line(tempx,y_start,tempx,y_end).attr({stroke:playobj.x_grids.xgrid_fill,'stroke-width':playobj.x_grids.xgrid_thickness,'stroke-dasharray':playobj.x_grids.xgrid_dasharray,opacity:playobj.x_grids.xgrid_opacity,'shape-rendering':'crispEdges'})
+		var temp_line=snapobj.line(tempx,y_start,tempx,y_end).attr({stroke:playobj.x_grids.xgrid_fill,'stroke-width':playobj.x_grids.xgrid_thickness,'stroke-dasharray':playobj.x_grids.xgrid_dasharray,opacity:playobj.x_grids.xgrid_opacity,'shape-rendering':'crispEdges','obj_type':'gridline'})
 		if (i!=xvar.length-1){
 			var temp_minorline=snapobj.line(tempxmid,y_start,tempxmid,y_end).attr({stroke:playobj.x_grids.xgrid_minorfill,'stroke-width':playobj.x_grids.xgrid_minorthickness,opacity:playobj.x_grids.xgrid_minoropacity,'stroke-dasharray':playobj.x_grids.xgrid_minordasharray,'shape-rendering':'crispEdges'})
 		}
@@ -3235,7 +3246,7 @@ function draw_axes(playobj,xvar,yvar,shiftx,shifty,legend_height) {
 		// }
 
 		// y-axis ticks, grid lines, and minor grid lines
-		var temp_line=snapobj.line(playobj.x+total_xoffset,tempy,playobj.x+playobj.width-playobj.grapharea.right_margin,tempy).attr({stroke:playobj.y_grids.ygrid_fill,'stroke-width':playobj.y_grids.ygrid_thickness,'stroke-dasharray':playobj.y_grids.ygrid_dasharray,opacity:playobj.y_grids.ygrid_opacity,'shape-rendering':'crispEdges'})
+		var temp_line=snapobj.line(playobj.x+total_xoffset,tempy,playobj.x+playobj.width-playobj.grapharea.right_margin,tempy).attr({stroke:playobj.y_grids.ygrid_fill,'stroke-width':playobj.y_grids.ygrid_thickness,'stroke-dasharray':playobj.y_grids.ygrid_dasharray,opacity:playobj.y_grids.ygrid_opacity,'shape-rendering':'crispEdges','obj_type':'gridline'})
 		if(i!=yvar.length-1){var temp_minorline=snapobj.line(playobj.x+total_xoffset,tempymid,playobj.x+playobj.width-playobj.grapharea.right_margin,tempymid).attr({stroke:playobj.y_grids.ygrid_minorfill,'stroke-width':playobj.y_grids.ygrid_minorthickness,opacity:playobj.y_grids.ygrid_minoropacity,'stroke-dasharray':playobj.y_grids.ygrid_minordasharray,'shape-rendering':'crispEdges'})}
 		var temp_tick=snapobj.line(playobj.x+total_xoffset,tempy,playobj.x+total_xoffset-playobj.y_ticks.ytick_length,tempy).attr({stroke:playobj.y_ticks.ytick_fill,'stroke-width':playobj.y_ticks.ytick_thickness,'shape-rendering':'crispEdges'})
 
