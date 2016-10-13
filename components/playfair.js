@@ -1146,7 +1146,7 @@ function draw_key(legend,playobj,snapobj,prelim){
 
 		if(ltitle!==''){
 			var lines=multitext(ltitle,{'font-size':playobj.legends.legend_titletextsize,'font-weight':playobj.legends.legend_titletextweight,'font-family':playobj.legends.legend_titletextface},maxwidth-2*playobj.legends.legend_floatpad)
-			var title=snapobj.text(playobj.legends.legend_floatpad,playobj.legends.legend_floatpad,lines).attr({unique:'keytitle',ident2:'floatkey',ident:'key',fill:playobj.legends.legend_titletextfill,'font-size':playobj.legends.legend_titletextsize,'font-weight':playobj.legends.legend_titletextweight,'font-family':playobj.legends.legend_titletextface,'dominant-baseline':'text-before-edge',colorchange:'fill',context:'text_context_menu'})
+			var title=snapobj.text(playobj.legends.legend_floatpad,playobj.legends.legend_floatpad,lines).attr({unique:'keytitle',ident2:'floatkey',ident:'key',fill:playobj.legends.legend_titletextfill,'font-size':playobj.legends.legend_titletextsize,'font-weight':playobj.legends.legend_titletextweight,'font-family':playobj.legends.legend_titletextface,'dominant-baseline':'text-before-edge',colorchange:'fill',context:'text_context_menu','text-anchor':'middle'})
 			title.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 			title.selectAll("tspan:not(:first-child)").attr({x:title.attr('x'),dy:1*parseFloat(title.attr('font-size'))})
 			if(maxitemwidth<title.getBBox().x2){maxitemwidth=title.getBBox().x2}
@@ -1299,14 +1299,18 @@ function draw_key(legend,playobj,snapobj,prelim){
 			overalls[legend[i].overall]=y
 		}
 
+		// center title and expand floatkey box
 		if(legend[0][1]!==''){longest=maxwidth}
 		if(title){
+			if(title.getBBox().width>parseFloat(longest)){
+				longest=title.getBBox().width+playobj.legends.legend_floatpad
+			}
 			title.attr({x:(parseFloat(longest)+parseFloat(playobj.legends.legend_floatpad))/2})
 			title.selectAll("tspan:not(:first-child)").attr({x:title.attr('x'),dy:1*parseFloat(title.attr('font-size'))})
 		}
+
 		floatkey.attr({height:lowery+playobj.legends.legend_floatpad,width:parseFloat(longest)+parseFloat(playobj.legends.legend_floatpad)})
 		floatkey.drag(moveFuncfloat,function(){x=this.attr('x');y=this.attr('y');prevx=0;prevy=0});
-		// var item={'geom':'point','grouping':'color','group_value':'g1',group_variable:'groupvar',xvar:'xvar',yvar:'yvar',position:i,lgroup:g}
 	}
 }
 
@@ -1564,6 +1568,9 @@ function draw_lines(axes,line,snapobj){
 						} else{
 							path=path+'M'+x_loc+','+y_loc
 						}
+						if(chartobject.line_geom.line_smoothing==1){
+							path=path+' R'
+						}
 					}
 				} else if(sub_current[line.xvar]!=undefined && sub_current[line.yvar]!=undefined){
 					// set various values for points. locations
@@ -1572,8 +1579,15 @@ function draw_lines(axes,line,snapobj){
 					// add to path or start path
 					if(j==0){
 						path=path+'M'+x_loc+','+y_loc
+						if(chartobject.line_geom.line_smoothing==1){
+							path=path+' R'
+						}
 					} else{
-						path=path+'L'+x_loc+','+y_loc
+						if(chartobject.line_geom.line_smoothing==1){
+							path=path+' '+x_loc+','+y_loc
+						} else {
+							path=path+'L'+x_loc+','+y_loc
+						}
 					}
 				} else {}
 			}
@@ -1585,6 +1599,7 @@ function draw_lines(axes,line,snapobj){
 		} else {
 			var greplace=current[0][line.grouping.color]
 		}
+		console.log(path)
 		snapobj.path(path).attr({'data_label':label,class:'dataelement',opacity:chartobject.line_geom.line_opacity,stroke:color,'stroke-width':linewidth,fill:'none','group':greplace,'fill-opacity':0,'colorchange':'stroke',context:'pathdata_context_menu','stroke-dasharray':linetype})
 	}
 }
@@ -3540,6 +3555,7 @@ function default_style(parameters) {
 			'line_maxsize':20,
 			'line_size':3,
 			'line_opacity':1,
+			'line_smoothing':0,
 		},
 		'point_geom':{
 			// scatter specific style

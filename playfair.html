@@ -4,9 +4,8 @@
 	<title>playfair - equitable graphs</title>
 
 	<!-- <script src="lib/saveSvgAsPng.js"></script> -->
-	<!-- for save as PNG support -->
 	<script src="lib/saveSvgAsPng.js"></script>
-	<!-- for save as SVG support-->
+	<script src="lib/catmullrom2bezier.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2014-11-29/FileSaver.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -642,12 +641,6 @@
 									<input id='pointpoint' type="radio" name="linepoint" value="pointpoint"><label for='pointpoint'><span><span></span></span></label><span class='pointpoint'></span>
 									<input id='pointcircleopen' type="radio" name="linepoint" value="pointcircleopen"><label for='pointcircleopen'><span><span></span></span></label><span class='pointcircleopen'></span>
 								</div>
-<!-- 								PUT MORE POINT TYPES HERE
-								<div>
-									<input id='pointcircle' type="radio" name="linepoint" value="pointcircle" checked><label for='pointcircle'><span><span></span></span></label><span class='pointcircle'></span>
-									<input id='pointpoint' type="radio" name="linepoint" value="pointpoint"><label for='pointpoint'><span><span></span></span></label><span class='pointpoint'></span>
-									<input id='pointcircleopen' type="radio" name="linepoint" value="pointcircleopen"><label for='pointcircleopen'><span><span></span></span></label><span class='pointcircleopen'></span>
-								</div> -->
 							</div>
 						</div>
 					</div>
@@ -726,6 +719,21 @@
 								</span>
 							</span>
 						</div>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-6'>
+						<div class='uibox_text'>Line Style</div>
+						<div class='uibox'>
+							<div class='col-md-6'>
+								<div>
+									<input type="checkbox" id="smoothlines" name="smoothlines" class="switch" />
+									<label for="smoothlines">Smooth lines</label>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class='col-md-6'>
 					</div>
 				</div>
 			</div>

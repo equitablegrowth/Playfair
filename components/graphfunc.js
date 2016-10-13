@@ -384,6 +384,14 @@ function redraw(keep) {
 				style.point_geom['point_fillopacity']=0
 			}
 
+			// line smoothing
+			var smoothlines=document.getElementById('smoothlines').checked
+			if(smoothlines===false){
+				style.line_geom['line_smoothing']=0
+			} else {
+				style.line_geom['line_smoothing']=1
+			}
+
 			// get style settings from the settings tab. These will override settings elsewhere in the document if they have been filled in
 			for(var group in style){
 				for(var sub in style[group]){
