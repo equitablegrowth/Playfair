@@ -463,10 +463,13 @@ var press_listener=function(ev) {
 	if(ev.ctrlKey!=true){
 		if(keycode==13){
 			if (typeof string=='object'){
-				if(tlocation[0]==string[tlocation[1]].length){
-					string.splice(tlocation[1]+1,0,'')
+				if(tlocation[0]==string[tlocation[1]].length | string[tlocation[1]]=='\u000A'){
+					string.splice(tlocation[1]+1,0,'\u000A')
+					selected_text.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 					selected_text.attr({text:string})
+					selected_text.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 					selected_text.selectAll("tspan:not(:first-child)").attr({x:selected_text.attr('x'),dy:1.1*parseFloat(selected_text.attr('font-size'))})
+					selected_text.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 					tlocation[1]=tlocation[1]+1
 					tlocation[0]=0
 				} else {
@@ -478,11 +481,15 @@ var press_listener=function(ev) {
 					tlocation[0]=0
 				}
 			} else {
+				console.log(tlocation,string.length)
 				if(tlocation[0]==string.length){
 					string=[string]
-					string.push('')
+					string.push('\u000A')
+					selected_text.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 					selected_text.attr({text:string})
+					selected_text.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 					selected_text.selectAll("tspan:not(:first-child)").attr({x:selected_text.attr('x'),dy:1.1*parseFloat(selected_text.attr('font-size'))})
+					selected_text.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 					tlocation[1]=tlocation[1]+1
 					tlocation[0]=0
 				} else {
