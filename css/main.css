@@ -61,7 +61,7 @@
 	.labeled_ele>label{border:1px solid #bbb;border-right:0px;width:100px;padding:5px 6px 5px 6px;text-align:center;margin:0;margin-right:-4px;background-color:#ddd;font-family:'Open Sans';font-weight:400;}
 	.labeled_ele>input{border:1px solid #bbb;width:100px;padding:5px 6px 5px 6px;text-align:center;margin:0;margin-right:-4px;background-color:#ddd;font-family:'Open Sans';font-weight:400;}
 	.select_carat{position:relative;width:calc(100% - 100px);}
-	.select_carat:after{border-radius:1px;content:"\f078";font-family:'FontAwesome';width:35px;height:28px;background-color:#67c2a5;color:white;right:2px;top:-4px;position:absolute;padding-left:11px;padding-top:4px;margin-bottom:5px;pointer-events:none}
+	.select_carat:after{border-radius:1px;content:"\f078";font-family:'FontAwesome';width:35px;height:28px;background-color:white;color:#67c2a5;right:2px;top:-4px;position:absolute;padding-left:11px;padding-top:4px;margin-bottom:5px;pointer-events:none}
 	.styled-select select{width:calc(100% - 100px);display:inline-block;position:relative;-moz-appearance:none;-webkit-appearance:none;padding:5px 6px 5px 6px;margin:0px;border:1px solid #bbb;background-color:white;border-radius:0px;}
 	.styled-select select[disabled]{color:#bbb;}
 	.styled-input input{width:calc(100% - 100px);display:inline-block;position:relative;-moz-appearance:none;-webkit-appearance:none;padding:5px 6px 5px 6px;margin:0px;border:1px solid #bbb;background-color:white;border-radius:0px;}
@@ -89,9 +89,9 @@
 	/* on-off switches */
 	/* these are adapted from Craig Buckler's switches here: http://www.sitepoint.com/css3-toggle-switch/ */
 	input.switch:empty{display:none;}
-	input.switch:empty ~ label{position:relative;float:left;text-indent:42px;margin:7px 0px 7px 0px;cursor:pointer;-webkit-user-select:none;-moz-user-select:none;user-select:none;font-family:'Open Sans';font-size:1em;font-weight:400;}
-	input.switch:empty ~ label:before, input.switch:empty ~ label:after{position:absolute;display:inline-block;top:0;bottom:0;left:0;content:' ';width:37px;background-color:#ccc;border-radius:1px;-webkit-transition:all 100ms ease-in;transition:all 100ms ease-in;}
-	input.switch:empty ~ label:after{width:19px;top:1px;bottom:1px;margin-left:1px;background-color:#fff;border-radius:1px;}
+	input.switch:empty ~ label{height:18px;position:relative;float:left;text-indent:37px;margin:7px 0px 7px 0px;cursor:pointer;-webkit-user-select:none;-moz-user-select:none;user-select:none;font-family:'Open Sans';font-size:1em;font-weight:400;}
+	input.switch:empty ~ label:before, input.switch:empty ~ label:after{position:absolute;display:inline-block;top:0;bottom:0;left:0;content:' ';width:33px;background-color:#ccc;border-radius:1px;-webkit-transition:all 100ms ease-in;transition:all 100ms ease-in;}
+	input.switch:empty ~ label:after{width:15px;top:1px;bottom:1px;margin-left:1px;background-color:#fff;border-radius:0px;}
 	input.switch:checked ~ label:before{background-color: #67c2a5;}
 	input.switch:checked ~ label:after{margin-left: 1.2em;}
 	.switchcell{display:table-cell;vertical-align:middle;width:44px;}
@@ -99,8 +99,8 @@
 	.tableswitch{display:table;width:100%;}
 
 	/* UI boxes for GUI elements */
-	.uibox {border:1px solid #ccc ;margin-top:0px;margin-bottom:5px;padding:7px 15px 7px 15px;border-radius:1px;}
-	.uibox_text{font-size:1.1em;margin-bottom:0px;color:#aaa;font-weight:bold;font-family:'Open Sans';margin-bottom:-5px;margin-left:5px;}
+	.uibox {border:0px solid #ccc ;margin-top:0px;margin-bottom:10px;padding:7px 5px 7px 15px;border-radius:4px;background:#ddd;margin-top:5px;}
+	.uibox_text{text-transform:uppercase;font-size:1em;margin-bottom:0px;color:white;font-weight:bold;font-family:'Open Sans';margin-top:0px;}
 
 	/* point types */
 	.pointcircle {width:12px;height:12px;border:2px solid #67c2a5;-webkit-border-radius:6px;border-radius:6px;display:inline-block;vertical-align:middle;margin-left:4px;margin-right:0px;background-color:rgba(103, 194, 165, 0.3)}
