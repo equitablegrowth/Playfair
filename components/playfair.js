@@ -59,7 +59,7 @@ window.playfair = (function () {
 		}
 
 		// data is now row by variable. That is, it is an object where the
-		// primary keys are row numbers and then within each row there is
+		// primary keys are row names and then within each row there is
 		// a value for each variable in the dataset.
 		this.flatdata=data
 		this.dataset=datadict
@@ -501,7 +501,7 @@ window.playfair = (function () {
 			}
 		}
 
-		// this is the klugiest thing but... my strategy for handling missing values was bad(TM) so I am kinda
+		// this is the klugiest thing but... my strategy for handling missing values was bad so I am kinda
 		// patching it here by taking them and turning them into undefined. I know. This is the worst.
 		for(var key in this.flat_data){
 			for(var i=0;i<this.flat_data[key];i++){
@@ -3092,7 +3092,7 @@ function draw_axes(playobj,xvar,yvar,shiftx,shifty,legend_height) {
 	}
 
 	// Subtract graph start x from xoffset and add ytick_to_yaxis to get the actual width of the xoffset.
-	// As a kind of safeguard, if the yoffset width comes back huge, adjust it to 15% of graphing space.
+	// As a safeguard, if the yoffset width comes back huge, adjust it to 15% of graphing space.
 	// Long labels should wrap to be no larger than y_offset
 	total_xoffset=total_xoffset-playobj.x+playobj.y_ticks.ytick_to_yaxis
 	if(total_xoffset>playobj.y_ticks.ytick_maxsize*playobj.width){total_xoffset=playobj.y_ticks.ytick_maxsize*playobj.width}
