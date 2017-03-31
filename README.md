@@ -26,7 +26,7 @@ A lot of graphing apps will make you a barchart or a linechart. But EG's needs a
 
 ![alt text](http://www.austinclemens.com/Playfair/assets/ggplot2.gif "Adding geoms to a graph")
 
-In addition, the layout of a Playfair graph is fairly flexible and can be edited using the settings tab. This makes it possible to create some chart types that are not specifically supported or that require significant alterations to Playfair's charting style. You might recognize the chart below, from Edward Tufte's The Visual Display of Quantitative Information. It is the canonical example of what people call slopegraphs or slope charts. The chart below was created in Playfair, admittedly with about 30 minutes of work. [You can compare it to the original here] (http://charliepark.org/slopegraphs/).
+In addition, the layout of a Playfair graph is fairly flexible and can be edited using the settings tab. This makes it possible to create some chart types that are not specifically supported or that require significant alterations to Playfair's charting style. You might recognize the chart below, from Edward Tufte's The Visual Display of Quantitative Information. It is the canonical example of what people call slopegraphs or slope charts. The chart below was created in Playfair, admittedly with about 30 minutes of work. [You can compare it to the original here](http://charliepark.org/slopegraphs/).
 
 ![alt text](http://www.austinclemens.com/Playfair/assets/slopechart.png "Slope chart")
 
@@ -52,10 +52,10 @@ Playfair's current theme system is largely undocumented but parameters are clear
 
 I've created a short tutorial that should help you figure out the basics of Playfair. Click here to view the tutorial.
 
-1. [Loading data] (http://www.austinclemens.com/Playfair/playfair_docs/tutorial1.html)
-2. [A simple graph] (http://www.austinclemens.com/Playfair/playfair_docs/tutorial2.html)
-3. [Annotations] (http://www.austinclemens.com/Playfair/playfair_docs/tutorial3.html)
-4. [More complicated] (http://www.austinclemens.com/Playfair/playfair_docs/tutorial4.html)
-5. [The settings tab] (http://www.austinclemens.com/Playfair/playfair_docs/tutorial5.html)
+1. [Loading data](http://www.austinclemens.com/Playfair/playfair_docs/tutorial1.html)
+2. [A simple graph](http://www.austinclemens.com/Playfair/playfair_docs/tutorial2.html)
+3. [Annotations](http://www.austinclemens.com/Playfair/playfair_docs/tutorial3.html)
+4. [More complicated](http://www.austinclemens.com/Playfair/playfair_docs/tutorial4.html)
+5. [The settings tab](http://www.austinclemens.com/Playfair/playfair_docs/tutorial5.html)
 
-[You can try out Playfair online too (loading, saving, and theming are all disabled). Click here!] (http://www.austinclemens.com/Playfair/playfair.html)
+[You can try out Playfair online too (loading, saving, and theming are all disabled). Click here!](http://www.austinclemens.com/Playfair/playfair.html)
