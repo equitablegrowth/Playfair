@@ -1,20 +1,20 @@
 # Playfair
 
-1. [What is Playfair?] (https://github.com/equitablegrowth/Playfair#what-is-playfair)
-2. [Features] (https://github.com/equitablegrowth/Playfair#features)
-3. [Tutorial] (https://github.com/equitablegrowth/Playfair#tutorial)
+1. [What is Playfair?](https://github.com/equitablegrowth/Playfair#what-is-playfair)
+2. [Features](https://github.com/equitablegrowth/Playfair#features)
+3. [Tutorial](https://github.com/equitablegrowth/Playfair#tutorial)
 
 ## What is Playfair?
 
-[You can try out Playfair online (loading, saving, and theming are all disabled). Click here.] (http://www.austinclemens.com/Playfair/playfair.html)
+[You can try out Playfair online (loading, saving, and theming are all disabled). Click here.](http://www.austinclemens.com/Playfair/playfair.html)
 
 Playfair is a web app for graphing data. It supports MANY different kinds of graphs, can be themed, and is intended to create ready-to-publish graphs with annotations. It was created to allow researchers at the Washington Center for Equitable Growth to assemble publication-ready graphs without having to rely on our (two person) design team. There are a lot of web graphing apps out there, but Equitable Growth has a fairly specific set of needs that required a unique solution. Playfair's major design priorities are:
 
-1. [Power and flexibility (ggplot2-style graphing)] (#power-and-flexibility-ggplot2-style-graphing)
-2. [Annotation and on-chart editing] (#annotation-and-on-chart-editing)
-3. [Easy to deploy] (#easy-to-deploy)
-4. [Collaborative editing] (#collaborative-editing)
-5. [Easy to theme] (#easy-to-theme)
+1. [Power and flexibility (ggplot2-style graphing)](#power-and-flexibility-ggplot2-style-graphing)
+2. [Annotation and on-chart editing](#annotation-and-on-chart-editing)
+3. [Easy to deploy](#easy-to-deploy)
+4. [Collaborative editing](#collaborative-editing)
+5. [Easy to theme](#easy-to-theme)
 
 #### What isn't Playfair?
 Playfair isn't as easy to use as most graphing apps. In particular, Playfair requires long data instead of wide data and people who aren't accustomed to working with data often find this confusing. Combined with the large number of options Playfair has, this makes Playfair best for users with some data analysis experience.
