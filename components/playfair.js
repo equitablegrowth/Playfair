@@ -3377,14 +3377,14 @@ function default_style(parameters) {
 			'hedsize':'24px',
 			'hedsizemin':'22px',
 			'hedweight':600,
-			'hedface':'Asap',
+			'hedface':'PTSans',
 			'hedtextfill':'black',
 
 			// dek
 			'deksize':'18px',
 			'deksizemin':'16px',
 			'dekweight':400,
-			'dekface':'Asap',
+			'dekface':'PTSans',
 			'dektextfill':'black',
 			'maxdeklines':2,	
 		},
