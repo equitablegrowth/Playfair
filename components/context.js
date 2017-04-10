@@ -539,7 +539,7 @@ function pointtype(e,type) {
 				snapobj.selectAll("circle[group='"+group+"']").attr({'stroke-width':1,r:r+2,'fill-opacity':0})
 			}
 		} else {
-			item.attr({'stroke-width':2,'fill-opacity':0})
+			item.attr({'stroke-width':1,'fill-opacity':0})
 			if(item.attr('ident')=='key'){
 				group=item.attr('group')
 				snapobj.selectAll("circle[group='"+group+"']").attr({'stroke-width':2,'fill-opacity':0})
@@ -565,6 +565,26 @@ function thickpath(e) {
 	if(item.attr('ident')=='key'){
 		group=item.attr('group')
 		snapobj.selectAll("path[group='"+group+"']").attr({'stroke-width':parseInt(item.attr('stroke-width'))})
+	}
+}
+
+function thincircle(e) {
+	item=Snap(e)
+	if (item.attr('r')>1){
+		item.attr({'r':parseFloat(item.attr('r'))-1})
+		if(item.attr('ident')=='key'){
+			group=item.attr('group')
+			snapobj.selectAll("circle[group='"+group+"']").attr({'r':parseFloat(item.attr('r'))})
+		}
+	}
+}
+
+function thickcircle(e) {
+	item=Snap(e)
+	item.attr({'r':parseFloat(item.attr('r'))+1})
+	if(item.attr('ident')=='key'){
+		group=item.attr('group')
+		snapobj.selectAll("circle[group='"+group+"']").attr({'r':parseFloat(item.attr('r'))})
 	}
 }
 

@@ -233,7 +233,7 @@ function loadData(coerce_array) {
 
 		for (j=1;j<d.length;j++) {
 			if (column_types[i]=='text'){
-				final_data[d[0][i]].push(d[j][i])
+				final_data[d[0][i]].push(d[j][i].replace("<","").replace(">",""))
 			} else if (column_types[i]=='numeric') {
 				if(d[j][i]==''){
 					console.log('MISSING')

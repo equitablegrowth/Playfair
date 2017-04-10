@@ -11,7 +11,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.4.1/snap.svg-min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.5.1/snap.svg-min.js"></script>
 	<!-- playfair components -->
 	<script src="components/context.js"></script>
 	<script src="components/miscfunc.js"></script>
@@ -33,6 +33,35 @@
 		@import url(http://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700,800);
 		@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,700,600,300);
 		@font-face {font-family:'Macondo';font-style: normal;font-weight: 400;src: url(fonts/Macondo-Regular.ttf) format('truetype');}
+		@font-face {font-family:'Archivo';font-style: normal;font-weight: 400;src: url(fonts/ArchivoNarrow-Regular.ttf) format('truetype');}
+		@font-face {font-family:'Archivo';font-style: normal;font-weight: 600;src: url(fonts/ArchivoNarrow-Bold.ttf) format('truetype');}
+		@font-face {font-family:'Asap';font-style: normal;font-weight: 400;src: url(fonts/Asap-Regular.ttf) format('truetype');}
+		@font-face {font-family:'Asap';font-style: normal;font-weight: 600;src: url(fonts/Asap-Bold.ttf) format('truetype');}
+		@font-face {font-family:'BreeSerif';font-style: normal;font-weight: 400;src: url(fonts/BreeSerif-Regular.ttf) format('truetype');}
+		@font-face {font-family:'Cabin';font-style: normal;font-weight: 400;src: url(fonts/Cabin-Regular.ttf) format('truetype');}
+		@font-face {font-family:'Cabin';font-style: normal;font-weight: 600;src: url(fonts/Cabin-Bold.ttf) format('truetype');}
+		@font-face {font-family:'Cuprum';font-style: normal;font-weight: 400;src: url(fonts/Cuprum-Regular.ttf) format('truetype');}
+		@font-face {font-family:'Cuprum';font-style: normal;font-weight: 600;src: url(fonts/Cuprum-Bold.ttf) format('truetype');}
+		@font-face {font-family:'Dosis';font-style: normal;font-weight: 400;src: url(fonts/Dosis-Regular.ttf) format('truetype');}
+		@font-face {font-family:'Dosis';font-style: normal;font-weight: 600;src: url(fonts/Dosis-Bold.ttf) format('truetype');}
+		@font-face {font-family:'FjallaOne';font-style: normal;font-weight: 400;src: url(fonts/FjallaOne-Regular.ttf) format('truetype');}
+		@font-face {font-family:'Karma';font-style: normal;font-weight: 400;src: url(fonts/Karma-Regular.ttf) format('truetype');}
+		@font-face {font-family:'Karma';font-style: normal;font-weight: 600;src: url(fonts/Karma-Bold.ttf) format('truetype');}
+		@font-face {font-family:'Lato';font-style: normal;font-weight: 400;src: url(fonts/Lato-Regular.ttf) format('truetype');}
+		@font-face {font-family:'Lato';font-style: normal;font-weight: 600;src: url(fonts/Lato-Bold.ttf) format('truetype');}
+		@font-face {font-family:'Lato';font-style: normal;font-weight: 200;src: url(fonts/Lato-Light.ttf) format('truetype');}
+		@font-face {font-family:'Lora';font-style: normal;font-weight: 400;src: url(fonts/Lora-Regular.ttf) format('truetype');}
+		@font-face {font-family:'Lora';font-style: normal;font-weight: 600;src: url(fonts/Lora-Bold.ttf) format('truetype');}
+		@font-face {font-family:'Marvel';font-style: normal;font-weight: 400;src: url(fonts/Marvel-Regular.ttf) format('truetype');}
+		@font-face {font-family:'Marvel';font-style: normal;font-weight: 600;src: url(fonts/Marvel-Bold.ttf) format('truetype');}
+		@font-face {font-family:'NewsCycle';font-style: normal;font-weight: 400;src: url(fonts/NewsCycle-Regular.ttf) format('truetype');}
+		@font-face {font-family:'NewsCycle';font-style: normal;font-weight: 600;src: url(fonts/NewsCycle-Bold.ttf) format('truetype');}
+		@font-face {font-family:'Nunito';font-style: normal;font-weight: 400;src: url(fonts/Nunito-Regular.ttf) format('truetype');}
+		@font-face {font-family:'Nunito';font-style: normal;font-weight: 600;src: url(fonts/Nunito-Bold.ttf) format('truetype');}
+		@font-face {font-family:'Oswald';font-style: normal;font-weight: 400;src: url(fonts/Oswald-Regular.ttf) format('truetype');}
+		@font-face {font-family:'Oswald';font-style: normal;font-weight: 600;src: url(fonts/Oswald-Bold.ttf) format('truetype');}
+		@font-face {font-family:'PTSans';font-style: normal;font-weight: 400;src: url(fonts/PT_Sans-Web-Regular.ttf) format('truetype');}
+		@font-face {font-family:'PTSans';font-style: normal;font-weight: 600;src: url(fonts/PT_Sans-Web-Bold.ttf) format('truetype');}
 	</style>
 </head>
 
@@ -190,7 +219,7 @@
 		<hr>
 		<li><span class='pointcirclecontext' onclick=pointtype(clickedevent.target,'pointcircle')></span><span class='pointpointcontext' onclick=pointtype(clickedevent.target,'pointpoint')></span><span class='pointcircleopencontext' onclick=pointtype(clickedevent.target,'pointcircleopen')></span></li>
 		<hr>
-		<li>Size: <span class='contextbuttons' onclick=thickpath(clickedevent.target)><i class="fa fa-expand"></i></span><span class='contextbuttons' onclick=thinpath(clickedevent.target)><i class="fa fa-compress"></i></span></li>
+		<li>Size: <span class='contextbuttons' onclick=thickcircle(clickedevent.target)><i class="fa fa-expand"></i></span><span class='contextbuttons' onclick=thincircle(clickedevent.target)><i class="fa fa-compress"></i></span></li>
 		<hr>
 		<li>Opacity: <span class='contextbuttons' onclick=fadein(clickedevent.target)><i class="fa fa-eye" style='opacity:1'></i></span><span class='contextbuttons' onclick=fadeout(clickedevent.target)><i class="fa fa-eye" style='opacity:.2'></i></span></li>
 		<hr>
@@ -244,7 +273,7 @@
 <!-- Header -->
 <h1 class='text-center'>playfair</h1>
 <div class='h4'>playfair is compatible with Chrome and Firefox (beta)</div>
-<div class='h4'>v2.1  <a href='changelog.html'>changelog</a></div>
+<div class='h4'>v2.3  <a href='changelog.html'>changelog</a></div>
 <!-- Tabs -->
 <ul class="nav nav-tabs" id='maintabs'>
 	<li class="active"><a data-toggle="tab" href="#data">Data</a></li>
@@ -519,6 +548,7 @@
 							<!-- <input id='rightkey' type='radio' name='key' value='right'><label for='rightkey'><span><span></span></span>Right</label> -->
 							<input id='floatkey' type='radio' name='key' value='float' checked><label for='floatkey'><span><span></span></span>Float</label>
 						</div>
+						<button type="button" class="btn btn-default" id='redraw2' onclick='$(".variable_select").trigger("change")'>Reset legend</button>
 					</div>
 					<div class='cold-md-6'>
 						<div class='uibox' id='PREVIEWbase'>
@@ -1419,7 +1449,7 @@ var annoweight=400
 var annoface='Lato'
 var annofill='black'
 var colormenu="<li><span class='colorbox' style='background-color:#205946' onclick=change_color(clickedevent.target,'#205946')></span><span class='colorbox' style='background-color:#33836A' onclick=change_color(clickedevent.target,'#33836A')></span><span class='colorbox' style='background-color:#67c2a5' onclick=change_color(clickedevent.target,'#67c2a5')></span><span class='colorbox' style='background-color:#b7dfd1' onclick=change_color(clickedevent.target,'#b7dfd1')></span><span class='colorbox' style='background-color:#e2f2ed' onclick=change_color(clickedevent.target,'#e2f2ed')></span></span><span class='colorbox' style='background-color:#ffffff' onclick=change_color(clickedevent.target,'#ffffff')></span></li><li><span class='colorbox' style='background-color:#8e2a1d' onclick=change_color(clickedevent.target,'#8e2a1d')></span><span class='colorbox' style='background-color:#c63f26' onclick=change_color(clickedevent.target,'#c63f26')></span><span class='colorbox' style='background-color:#f58c63' onclick=change_color(clickedevent.target,'#f58c63')></span><span class='colorbox' style='background-color:#fbcdbb' onclick=change_color(clickedevent.target,'#fbcdbb')></span><span class='colorbox' style='background-color:#fef1eb' onclick=change_color(clickedevent.target,'#fef1eb')></span></span><span class='colorbox' style='background-color:#000000' onclick=change_color(clickedevent.target,'#000000')></span></li><li><span class='colorbox' style='background-color:#24385B' onclick=change_color(clickedevent.target,'#24385B')></span><span class='colorbox' style='background-color:#3F578C' onclick=change_color(clickedevent.target,'#3F578C')></span><span class='colorbox' style='background-color:#8c9fca' onclick=change_color(clickedevent.target,'#8c9fca')></span><span class='colorbox' style='background-color:#ccdaf0' onclick=change_color(clickedevent.target,'#ccdaf0')></span><span class='colorbox' style='background-color:#f1f3f9' onclick=change_color(clickedevent.target,'#f1f3f9')></span></span><span class='colorbox' style='background-color:#a3a3a3' onclick=change_color(clickedevent.target,'#a3a3a3')></span></li><li><span class='colorbox' style='background-color:#e78ac3' onclick=change_color(clickedevent.target,'#e78ac3')></span><span class='colorbox' style='background-color:#a6d854' onclick=change_color(clickedevent.target,'#a6d854')></span><span class='colorbox' style='background-color:#ffd92f' onclick=change_color(clickedevent.target,'#ffd92f')></span><span class='colorbox' style='background-color:#e5c494' onclick=change_color(clickedevent.target,'#e5c494')></span><span class='colorbox' style='background-color:#ece9e8' onclick=change_color(clickedevent.target,'#ece9e8')></span></span><span class='colorbox' style='background-color:#c3c3c3' onclick=change_color(clickedevent.target,'#c3c3c3')></span></li>"
-var shadowfilter=grapharea.filter(Snap.filter.shadow(0, 2, 3))
+var shadowfilter=grapharea.filter(Snap.filter.shadow(1, 1, 1,'#333',1))
 var theme
 placeholder()
 setInterval(blink,1000)
@@ -1468,7 +1498,7 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 // version of Playfair because of CORS. Firefox however can use them
 // offline.
 
-fonts=['Archivo','Asap','BreeSerif','Cabin','Cuprum','Dosis','FjallaOne','Karma','Lato','Lora','Macondo','Marvel','NewsCycle','Nunito','Oswald','PT Sans']
+fonts=["Macondo","Archivo","Asap","BreeSerif","Cabin","Cuprum","Dosis","FjallaOne","Karma","Lato","Lora","Marvel","NewsCycle","Nunito","Oswald","PTSans"]
 
 ///////////////////////// COLORMENU SETUP //////////////////////////////
 // set up the initial state of the contextual colormenu
@@ -1616,7 +1646,7 @@ $(".variable_select").change(function(){
 		console.log(string)
 
 		$(function() {
-			console.log(string)
+			// console.log(string)
 			$(string).sortable({
 				connectWith:'.connectedSortable'
 			}).disableSelection()

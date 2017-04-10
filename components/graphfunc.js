@@ -289,6 +289,12 @@ function redraw(keep) {
 			// Why not just use.clear()? Because it will destroy all the embedded font declarations
 			// this is apparently a known bug in Snap
 			if(keep){
+				try{
+					var boundsx=grapharea.select('[ident3="keybounder"]').getBBox().x
+					var boundsy=grapharea.select('[ident3="keybounder"]').getBBox().y
+				} catch(err){
+					
+				}
 				grapharea.selectAll('rect:not([annotation])').remove()
 				grapharea.selectAll('text:not([annotation])').remove()
 				grapharea.selectAll('line:not([annotation])').remove()
@@ -466,6 +472,7 @@ function redraw(keep) {
 				if(keep){
 					// bring annotations to front
 					var ann=grapharea.selectAll('[annotation]')
+
 					for(var i=0;i<ann.length;i++){
 						if(ann[i].attr('arrow')){
 							var color=ann[i].attr('stroke')
@@ -474,6 +481,25 @@ function redraw(keep) {
 							ann[i].attr({'marker-end':tempamarker})
 						}
 						grapharea.append(ann[i])
+					}
+
+					// position key to match previous draw
+					var keys=grapharea.selectAll('[ident2="floatkey"]')
+					for(var i=0;i<keys.length;i++){
+						coords=keys[i].getBBox()
+						if(keys[i].type=='circle'){
+							keys[i].attr({cx:coords.cx+boundsx,cy:coords.cy+boundsy})
+						} else if (keys[i].type=='line'){
+							console.log(coords)
+							keys[i].attr({x1:coords.x+boundsx,y1:coords.y+boundsy,x2:coords.x2+boundsx,y2:coords.y2+boundsy})
+						} else if (keys[i].type=='text'){
+							keys[i].selectAll("tspan:not(:first-child)").attr({x:coords.x+boundsx,y:coords.y+boundsy})
+							keys[i].attr({x:coords.x+boundsx,y:coords.y+boundsy})
+						} else if (keys[i].type=='path'){
+							keys[i].transform('t'+boundsx+','+boundsy)
+						} else {
+							keys[i].attr({x:coords.x+boundsx,y:coords.y+boundsy})
+						}
 					}
 				}
 			})
@@ -488,6 +514,7 @@ function redraw(keep) {
 	// 	console.trace()
 	// }
 }
+
 
 /////////////////////// END UPDATE GRAPH ///////////////////////////////
 ////////////////////////////////////////////////////////////////////////
