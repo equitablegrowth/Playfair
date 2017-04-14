@@ -244,9 +244,14 @@ function populate_settings(theme,cb){
 			if(i==0){
 				tab.append("<div class='row'></div>")
 			}
-			i=i+1
-			var row=$('#sett_'+key+' .row:last-of-type')
-			row.append("<div class='col-md-4'><div class='labeled_elewide'><label>"+sub+"</label><span class='styled-inputwide'><input type='text styled-input' id='"+sub+"' data-key='"+key+"'></span></div></div>")
+			if(sub.indexOf('textface')!==-1){
+
+			} else {
+
+				i=i+1
+				var row=$('#sett_'+key+' .row:last-of-type')
+				row.append("<div class='col-md-4'><div class='labeled_elewide'><label>"+sub+"</label><span class='styled-inputwide'><input type='text styled-input' id='"+sub+"' data-key='"+key+"'></span></div></div>")
+			}
 		}
 
 		tab.append("<br><div class='row'><div class='text-center col-md-12'><button type='button' class='btn btn-default' id='saveset' onclick='export_settings()'><i class='fa fa-download'></i> Save settings as theme</button></div></div>")
