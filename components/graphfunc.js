@@ -493,7 +493,7 @@ function redraw(keep) {
 							console.log(coords)
 							keys[i].attr({x1:coords.x+boundsx,y1:coords.y+boundsy,x2:coords.x2+boundsx,y2:coords.y2+boundsy})
 						} else if (keys[i].type=='text'){
-							keys[i].selectAll("tspan:not(:first-child)").attr({x:coords.x+boundsx,y:coords.y+boundsy})
+							keys[i].selectAll("tspan:not(:first-child)").attr({x:coords.x+boundsx,dy:parseFloat(Snap(keys[i]).attr('font-size'))})
 							keys[i].attr({x:coords.x+boundsx,y:coords.y+boundsy})
 						} else if (keys[i].type=='path'){
 							keys[i].transform('t'+boundsx+','+boundsy)

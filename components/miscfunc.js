@@ -244,10 +244,15 @@ function populate_settings(theme,cb){
 			if(i==0){
 				tab.append("<div class='row'></div>")
 			}
-			if(sub.indexOf('textface')!==-1){
-
+			if(sub.indexOf('face')!==-1){
+				i=i+1
+				var row=$('#sett_'+key+' .row:last-of-type')
+				var options=''
+				for(var o=0;o<fonts.length;o++){
+					options=options+"<option value='"+fonts[o]+"'>"+fonts[o]+"</option>"
+				}
+				row.append("<div class='col-md-4'><div class='labeled_elewide'><label>"+sub+"</label><span class='styled-select2'><span class='select_carat2'><select id='"+sub+"' data-key='"+key+"'>"+options+"</select></span></span></div></div>")
 			} else {
-
 				i=i+1
 				var row=$('#sett_'+key+' .row:last-of-type')
 				row.append("<div class='col-md-4'><div class='labeled_elewide'><label>"+sub+"</label><span class='styled-inputwide'><input type='text styled-input' id='"+sub+"' data-key='"+key+"'></span></div></div>")
@@ -263,6 +268,13 @@ function populate_settings(theme,cb){
 		var param=settings[i].id
 		var key=$('#'+param).attr('data-key')
 		settings[i].placeholder=JSON.stringify(theme[key][param])
+	}
+	var settings2=$('#settings select')
+	for(var i=0;i<settings2.length;i++){
+		var param=settings2[i].id
+		var key=$('#'+param).attr('data-key')
+		console.log(param,key,theme[key][param])
+		settings2[i].value=theme[key][param]
 	}
 	vtabs(1)
 	if(cb){

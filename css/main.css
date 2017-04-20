@@ -66,7 +66,7 @@
 	.styled-select select[disabled]{color:#bbb;}
 	.select_carat2{position:relative;width:160px;}
 	.select_carat2:after{border-radius:1px;content:"\f078";font-family:'FontAwesome';width:35px;height:28px;background-color:white;color:#67c2a5;right:2px;top:-4px;position:absolute;padding-left:11px;padding-top:4px;margin-bottom:5px;pointer-events:none}
-	.styled-select2 select{width:160px;display:inline-block;position:relative;-moz-appearance:none;-webkit-appearance:none;padding:5px 6px 5px 6px;margin:0px;border:1px solid #bbb;background-color:white;border-radius:0px;}
+	.styled-select2 select{width:calc(100% - 160px);display:inline-block;position:relative;-moz-appearance:none;-webkit-appearance:none;padding:5px 6px 5px 6px;margin:0px;border:1px solid #bbb;background-color:white;border-radius:0px;}
 	.styled-select2 select[disabled]{color:#bbb;}
 	.styled-input input{width:calc(100% - 100px);display:inline-block;position:relative;-moz-appearance:none;-webkit-appearance:none;padding:5px 6px 5px 6px;margin:0px;border:1px solid #bbb;background-color:white;border-radius:0px;}
 	.styled-inputwide input{width:calc(100% - 160px);display:inline-block;position:relative;-moz-appearance:none;-webkit-appearance:none;padding:5px 6px 5px 6px;margin:0px;border:1px solid #bbb;background-color:white;border-radius:0px;}
@@ -82,7 +82,7 @@
 	@-moz-document url-prefix() { 
 		.styled-select select{width:calc(100% - 100px);display:inline-block;position:relative;-moz-appearance:none;-webkit-appearance:none;padding:4px 6px 4px 6px;margin:0px;border:1px solid #bbb;background-color:white;border-radius:0px;}
 		.select_carat:after{border-radius:1px;content:"\f078";font-family:'FontAwesome';width:35px;height:28px;background-color:#67c2a5;color:white;right:6px;top:-4px;position:absolute;padding-left:11px;padding-top:4px;margin-bottom:5px;pointer-events:none}
-	} 
+	}
 
 	/* radio buttons */
 	input[type=radio]:not(old){width:20px;margin:6;padding:0;font-size:1em;opacity:0;}

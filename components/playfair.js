@@ -1168,7 +1168,7 @@ function draw_key(legend,playobj,snapobj,prelim){
 
 		if(ltitle!==''){
 			var lines=multitext(ltitle,{'font-size':playobj.legends.legend_titletextsize,'font-weight':playobj.legends.legend_titletextweight,'font-family':playobj.legends.legend_titletextface},maxwidth-2*playobj.legends.legend_floatpad)
-			var title=snapobj.text(playobj.legends.legend_floatpad,playobj.legends.legend_floatpad,lines).attr({unique:'keytitle',ident2:'floatkey',ident:'key',fill:playobj.legends.legend_titletextfill,'font-size':playobj.legends.legend_titletextsize,'font-weight':playobj.legends.legend_titletextweight,'font-family':playobj.legends.legend_titletextface,'dominant-baseline':'text-before-edge',colorchange:'fill',context:'text_context_menu','text-anchor':'middle'})
+			var title=snapobj.text(playobj.legends.legend_floatpad,playobj.legends.legend_floatpad,lines).attr({unique:'keytitle',ident2:'floatkey',ident:'key',fill:playobj.legends.legend_titletextfill,'font-size':playobj.legends.legend_titletextsize,'font-weight':playobj.legends.legend_titletextweight,'font-family':playobj.legends.legend_titletextface,'dominant-baseline':'text-before-edge',colorchange:'fill',context:'text_context_menu'})
 			title.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 			title.selectAll("tspan:not(:first-child)").attr({x:title.attr('x'),dy:1*parseFloat(title.attr('font-size'))})
 			if(maxitemwidth<title.getBBox().x2){maxitemwidth=title.getBBox().x2}
@@ -1332,8 +1332,8 @@ function draw_key(legend,playobj,snapobj,prelim){
 			if(title.getBBox().width>parseFloat(longest)){
 				longest=title.getBBox().width+playobj.legends.legend_floatpad
 			}
-			title.attr({x:(parseFloat(longest)+parseFloat(playobj.legends.legend_floatpad))/2})
-			title.selectAll("tspan:not(:first-child)").attr({x:title.attr('x'),dy:1*parseFloat(title.attr('font-size'))})
+			// title.attr({x:(parseFloat(longest)+parseFloat(playobj.legends.legend_floatpad))/2})
+			// title.selectAll("tspan:not(:first-child)").attr({x:title.attr('x'),dy:1*parseFloat(title.attr('font-size'))})
 		}
 
 		floatkey.attr({height:lowery,width:parseFloat(longest)+parseFloat(playobj.legends.legend_floatpad)})
