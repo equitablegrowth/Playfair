@@ -4,29 +4,29 @@
 
 // detect width changes - if < 1200, then graphdiv needs to be align-right
 var width = $(window).width();
-$(window).resize(function(){
-	if($(this).width() < 1200){
-		$('#graphdiv').addClass('text-right')
-		$('#graphdiv').removeClass('text-center')
-		$('#help_general').css('width','calc(100% - 765px)')
-		$('#help_text').css('width','calc(100% - 765px)')
-	}
-	if($(this).width() >= 1200){
-		$('#graphdiv').addClass('text-center')
-		$('#graphdiv').removeClass('text-right')
-		$('#help_general').css('width','calc((100% - 785px)/2)')
-		$('#help_text').css('width','calc((100% - 785px)/2)')
-	}
-});
+// $(window).resize(function(){
+// 	if($(this).width() < 1200){
+// 		$('#graphdiv').addClass('text-right')
+// 		$('#graphdiv').removeClass('text-center')
+// 		$('#help_general').css('width','calc(100% - 765px)')
+// 		$('#help_text').css('width','calc(100% - 765px)')
+// 	}
+// 	if($(this).width() >= 1200){
+// 		$('#graphdiv').addClass('text-center')
+// 		$('#graphdiv').removeClass('text-right')
+// 		$('#help_general').css('width','calc((100% - 785px)/2)')
+// 		$('#help_text').css('width','calc((100% - 785px)/2)')
+// 	}
+// });
 
-$(document).ready(function(){
-	if($(window).width()<1200){
-		$('#graphdiv').addClass('text-right')
-		$('#graphdiv').removeClass('text-center')
-		$('#help_general').css('width','calc(100% - 765px)')
-		$('#help_text').css('width','calc(100% - 765px)')
-	}
-})
+// $(document).ready(function(){
+// 	if($(window).width()<1200){
+// 		$('#graphdiv').addClass('text-right')
+// 		$('#graphdiv').removeClass('text-center')
+// 		$('#help_general').css('width','calc(100% - 765px)')
+// 		$('#help_text').css('width','calc(100% - 765px)')
+// 	}
+// })
 
 function highlight_element(ev) {
 	if(selected==0){

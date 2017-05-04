@@ -276,23 +276,25 @@
 <!-- ********************************************************************** -->
 <!-- ************************** BODY STARTS HERE ************************** -->
 <!-- ********************************************************************** -->
-<div class='container'>
+<div class='container-fluid'>
 
 <!-- Header -->
-<h1 class='text-center'>playfair</h1>
-<div class='h4'>playfair is compatible with Chrome and Firefox (beta)</div>
-<div class='h4'>v2.3  <a href='changelog.html'>changelog</a></div>
-<!-- Tabs -->
-<ul class="nav nav-tabs" id='maintabs'>
-	<li class="active"><a data-toggle="tab" href="#data">Data</a></li>
-	<li><a data-toggle="tab" href="#design">Design</a></li>
-	<li><a data-toggle='tab' href="#legend">Legend</a></li>
-	<li><a data-toggle="tab" href="#chart">Chart</a></li>
-	<!-- <li class='disabled'><a href="#waffle">Waffle</a></li>	 -->
-	<!-- <li class='disabled'><a href="#maps">Choropleth</a></li>  -->
-	<li><a data-toggle='tab' href="#settings">Settings</a></li>
-	<li class='list_button' onclick='reset()'>Reset all fields</a></span>
-</ul>
+<div class='header'>
+	<h1 class='text-center'>playfair</h1>
+	<div class='h4'>compatible with <img height=20 src='img/chrome.png'> and <img height=25 src='img/firefox.png'></div>
+	<div class='h4'>v2.3  <a href='changelog.html'>changelog</a></div>
+	<!-- Tabs -->
+	<ul class="nav nav-tabs" id='maintabs'>
+		<li class="active"><a data-toggle="tab" href="#data">Data</a></li>
+		<li><a data-toggle="tab" href="#design">Design</a></li>
+		<li><a data-toggle='tab' href="#legend">Legend</a></li>
+		<li><a data-toggle="tab" href="#chart">Chart</a></li>
+		<!-- <li class='disabled'><a href="#waffle">Waffle</a></li>	 -->
+		<!-- <li class='disabled'><a href="#maps">Choropleth</a></li>  -->
+		<li><a data-toggle='tab' href="#settings">Settings</a></li>
+		<li class='list_button' onclick='reset()'>Reset all fields</a></li>
+	</ul>
+</div>
 <div class='tab-container'>
 <div class="tab-content">
 
@@ -303,7 +305,9 @@
 	<div id='data' class='tab-pane active'>
 		<div class='v-nav'>
 			<ul class='unselectable'>
+			<!-- <div class='fakerow'> -->
 				<li id='data_first' tab='data_main' class='first current'>Data Entry</li>
+			<!-- </div> -->
 			</ul>
 
 			<div class='tab-content'>
@@ -1362,6 +1366,9 @@
 <br>
 
 <div class='text-center' id='graphdiv'>
+
+<div id='constraint'>
+
 <div class='helpboxouter'>
 	<div class='helpbox' id='help_general'>
 		<p><span class='helphighlight'><b>Hover</b></span> an element to highlight it temporarily.</p>
@@ -1379,7 +1386,6 @@
 		<p>You can also drag the selected text around the graphing area.</p>
 	</div>
 </div>
-<div id='constraint'>
 
 <svg id='grapharea' height='520px' width='745px'>
 	<defs>
@@ -1408,8 +1414,8 @@
 
 </div>
 
+<footer class='footer'>
 <div class='text-center unselectable bottom'>
-
 
 <div class='btn-group' role='group'>
 	<button type="button" class="btn btn-default" id='redraw1' onclick='redraw()'><i class="fa fa-line-chart"></i> Chart</button>
@@ -1434,6 +1440,7 @@
 <input id="filename" type="file" name="filename" style="display: none;" />
 
 </div>
+</footer>
 
 <img id="png_save" style="clear:both;display:none;">
 
