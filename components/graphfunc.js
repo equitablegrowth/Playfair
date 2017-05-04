@@ -346,6 +346,20 @@ function redraw(keep) {
 				style.logo.logo=0
 			}
 
+			// log axes
+			var logy=document.getElementById('logy').checked
+			var logx=document.getElementById('logx').checked
+			if(logy==true){
+				style.ylog=1
+			} else {
+				style.ylog=0
+			}
+			if(logx==true){
+				style.xlog=1
+			} else {
+				style.xlog=0
+			}
+
 			// which grids should be drawn
 			if (xgrid===false){
 				style.x_grids.xgrid_opacity=0

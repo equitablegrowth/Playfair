@@ -1,4 +1,3 @@
-
 	*{margin:0;padding:0;}
 	h1 {font-family:Lancelot;font-size:50;margin:0;line-height:75%;margin-bottom:13;margin-top:10px;}
 	h3 {font-size:15px;margin-top:0px;margin-bottom:0px;font-family:Raleway;font-weight:500;}
@@ -148,7 +147,7 @@
 	.v-nav>ul>li {display:inline-block;text-align:center;font-size:.9em;font-family:'Open Sans';list-style-type:none;margin:0;margin-right:-4px;padding:5px 12px 5px 12px;cursor:pointer;color:white;font-weight:600;}
 	.v-nav>ul>li:hover {background-color:#133328;}
 	.v-nav>ul>li.current{background-color:#205946;}
-	.v-nav>div.tab-content{padding-left:7%;padding-right:7%;margin-bottom:20px;padding-bottom:30px;padding-top:30px;background-color:#eeeeee;}
+	.v-nav>div.tab-content{padding-left:5%;padding-right:5%;margin-bottom:20px;padding-bottom:30px;padding-top:30px;background-color:#eeeeee;}
 
 	/* hidden ui elements */
 	#png_save{display:none;}

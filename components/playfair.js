@@ -1110,9 +1110,11 @@ function draw_key_top(legend,playobj,snapobj){
 	}
 }
 
-function draw_key(legend,playobj,snapobj,prelim){
+function draw_key(legend,playobj,snapobj,prelim,vertical){
 	console.log(legend)
-	// listener for drag events on a float ing key
+	vertical=(typeof vertical!=='undefined') ? vertical:1;
+
+	// listener for drag events on a floating key
 	var moveFuncfloat=function(dx,dy,posx,posy){
 		key_elements=grapharea.selectAll('[ident="key"]')
 		for(var i=0;i<key_elements.length;i++){
@@ -1332,6 +1334,8 @@ function draw_key(legend,playobj,snapobj,prelim){
 			if(title.getBBox().width>parseFloat(longest)){
 				longest=title.getBBox().width+playobj.legends.legend_floatpad
 			}
+			// took out centering for 2.3 bc the move func for keys doesn't handle centered text well and you could still manually
+			// position a legend head if necessary
 			// title.attr({x:(parseFloat(longest)+parseFloat(playobj.legends.legend_floatpad))/2})
 			// title.selectAll("tspan:not(:first-child)").attr({x:title.attr('x'),dy:1*parseFloat(title.attr('font-size'))})
 		}
@@ -2680,6 +2684,20 @@ function get_coord(value,[limit_start,limit_end],[pixel_start,pixel_end],type,ar
 	// if(shiftx==1){x_step=domain/(xvar.length)}
 	var range=Math.abs(pixel_end-pixel_start)
 	// console.log(value,[limit_start,limit_end],[pixel_start,pixel_end],type,array,y,shift)
+	if(y==1 & chartobject.ylog==1 & value!=0 & type!='text' & chartobject.datedenom[y]==0){
+		if(value<0){
+			alert("Can't have a logged axis with negative values.")
+			return NaN
+		}
+		value=Math.log(value)
+	}
+	if(y==0 & chartobject.xlog==1 & value!=0 & type!='text' & chartobject.datedenom[y]==0){
+		if(value<0){
+			alert("Can't have a logged axis with negative values.")
+			return NaN
+		}
+		value=Math.log(value)
+	}
 
 	if(type!='text'){
 		if(chartobject.datedenom[y]>0){

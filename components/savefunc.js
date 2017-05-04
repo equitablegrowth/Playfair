@@ -91,10 +91,12 @@ function cloudload() {
 		success: function(response){
 			$("#savedialog").fadeIn(50);
 			$("#loadbox").fadeIn(50);
-			var response = JSON.parse(response);
-			for (var i=0;i<response.length;i++){
-				$('#load_filebox').append('<a href="#" class="list-group-item filerow">'+response[i]+'</a')
-			}
+			loadresponse = JSON.parse(response);
+			console.log('test')
+			console.log(loadresponse)
+			for (var i=0;i<loadresponse.length;i++){
+				$('#load_filebox').append('<a href="#" class="list-group-item filerow">'+loadresponse[i]+'</a')
+			};
 		},
 		error: function(){
 			loadfromhd()
@@ -112,6 +114,7 @@ function cancelload() {
 	$("#loadbox").fadeOut(1);
 	$("#savedialog").fadeOut(1);
 	$('#load_filebox').empty()
+	$('#searchahead').val('')
 }
 
 function savetoserver() {

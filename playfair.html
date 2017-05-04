@@ -107,6 +107,14 @@
 <!-- ********************************************** -->
 
 <div class='savebox' id='loadbox'>
+	<div class='row marginfix'>
+		<div class='col-md-12'>
+		<div class='col-md-12'>
+			Search:
+			<input type='text' class='form-control' placeholder='Start typing to search' id='searchahead'>
+		</div>
+		</div>
+	</div>
 <br>
 	<div class='row marginfix'>
 		<div class='col-md-12'>
@@ -285,7 +293,7 @@
 	<li><a data-toggle='tab' href="#settings">Settings</a></li>
 	<li class='list_button' onclick='reset()'>Reset all fields</a></span>
 </ul>
-
+<div class='tab-container'>
 <div class="tab-content">
 
 <!-- ********************************************************************** -->
@@ -508,12 +516,30 @@
 								</div>
 							</div>
 						</div>
+
+						<div class='uibox'>
+						<div class='uibox_text'>Log Axes</div>
+							<div class='row'>
+								<div class="col-md-5">
+									<div>
+										<input type="checkbox" id="logx" name='logx' class="switch" />
+										<label for="logx">Log X axis</label>
+									</div>
+								</div>
+								 <div class="col-md-7">
+								 	<div>
+										<input type="checkbox" id="logy" name='logy' class="switch" />
+										<label for="logy">Log Y axis</label>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div> 
+
 				</div>
 			</div>
 		</div>
 	</div>
-
 
 <!-- ********************************************************************** -->
 <!-- ************************* LEGEND STARTS HERE ************************* -->
@@ -562,8 +588,6 @@
 			</div>
 		</div>
 	</div>
-
-
 
 <!-- ********************************************************************** -->
 <!-- ************************ CHART STARTS HERE ************************ -->
@@ -808,16 +832,6 @@
 							</span>
 						</div>
 
-<!-- 						<div class="labeled_ele">
-							<label>Group On</label>
-							<span class='styled-select'>
-								<span class='select_carat'>
-									<select class="variable_select group_select" id='bar_select_group' disabled>
-										<option value='none'>Nothing selected</option>
-									</select>
-								</span>
-							</span>
-						</div> -->
 					</div>
 				</div>
 
@@ -1058,7 +1072,6 @@
 					</div>
 				</div>
 			</div>
-
 
 <!-- SEGMENTS/TREND LINES -->
 			<div class='tab-content'>
@@ -1344,6 +1357,7 @@
 
 <!-- ************************* END TAB CONTENT **************************** -->
 </div>
+</div>
 <!-- <hr> -->
 <br>
 
@@ -1354,7 +1368,7 @@
 		<p><span class='helphighlight'><b>Double-click</b></span> on text to select it</p>
 		<p><span class='helphighlight'><b>Right-click</b></span> to insert annotations, label data points, change element colors, and more.</p>
 		<p><span class='helphighlight'><b>Drag</b></span> callouts, arrows, and floating keys.</p>
-		<p><b>Remember</b> if you click the redraw button you will lose anything you have added directly to the graph!</p>
+		<p><b>Remember</b> if you click the chart button you will lose anything you have added directly to the graph!</p>
 	</div>
 	<div class='helpbox' id='help_text'>
 		<p><kbd><i class="fa fa-arrow-left"></i></kbd> / <kbd><i class="fa fa-arrow-right"></i></kbd> : move cursor</p>
@@ -1432,6 +1446,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // Globals referenced by functions
+var loadresponse
 var loaded_data=0
 var alerted=0
 var graph_type=''
@@ -1568,9 +1583,9 @@ $(".variable_select").change(function(){
 	// console.log(structure)
 
 	if(structure.length>0){
-		$('#PREVIEWbase').empty()
-		$('#PREVIEWbase').prepend("<div id='PREVIEW'></div>")
-		$('#PREVIEWbase').prepend("Use the preview below to delete key items you don't want (by clicking the x), change the order of items, and arrange them in groups.")
+		$('#PREVIEW').empty()
+		// $('#PREVIEWbase').prepend("<div id='PREVIEW'></div>")
+		$('#PREVIEW').prepend("Use the preview below to delete key items you don't want (by clicking the x), change the order of items, and arrange them in groups.")
 
 		var geoms=[]
 
@@ -1653,14 +1668,14 @@ $(".variable_select").change(function(){
 		})
 
 		if(keycount===1){
-			$('#PREVIEWbase').empty()
-			$('#PREVIEWbase').prepend("<div id='PREVIEW'></div>")
-			$('#PREVIEWbase').prepend("Select your variables from the chart tab, then come back here to see a preview of the legend and to make modifications. Currently, no legend will be created.")
+			$('#PREVIEW').empty()
+			// $('#PREVIEWbase').prepend("<div id='PREVIEW'></div>")
+			$('#PREVIEW').prepend("Select your variables from the chart tab, then come back here to see a preview of the legend and to make modifications. Currently, no legend will be created.")
 		}
 	} else {
-		$('#PREVIEWbase').empty()
-		$('#PREVIEWbase').prepend("<div id='PREVIEW'></div>")
-		$('#PREVIEWbase').prepend("Select your variables from the chart tab, then come back here to see a preview of the legend and to make modifications. Currently, no legend will be created.")
+		$('#PREVIEW').empty()
+		// $('#PREVIEWbase').prepend("<div id='PREVIEW'></div>")
+		$('#PREVIEW').prepend("Select your variables from the chart tab, then come back here to see a preview of the legend and to make modifications. Currently, no legend will be created.")
 	}
 })
 
@@ -1753,6 +1768,18 @@ function reset(){
 	$('#grapharea').attr('height',height)
 	$('#grapharea').attr('width',width)
 }
+
+// listen for key presses in the searchahead box to filter search list
+$('#searchahead').keyup(function(){
+	$('#load_filebox').empty()
+	temploadresponse=$.grep(loadresponse,function(n,i){
+		return n.toLowerCase().indexOf($('#searchahead').val().toLowerCase())>-1
+	})
+	for (var i=0;i<temploadresponse.length;i++){
+		$('#load_filebox').append('<a href="#" class="list-group-item filerow">'+temploadresponse[i]+'</a')
+	};
+})
+
 
 </script>
 </html>
