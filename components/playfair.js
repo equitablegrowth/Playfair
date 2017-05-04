@@ -2690,6 +2690,8 @@ function get_coord(value,[limit_start,limit_end],[pixel_start,pixel_end],type,ar
 			return NaN
 		}
 		value=Math.log(value)
+		if(limit_start>0){limit_start=Math.log(limit_start)}
+		if(limit_end>0){limit_end=Math.log(limit_end)}
 	}
 	if(y==0 & chartobject.xlog==1 & value!=0 & type!='text' & chartobject.datedenom[y]==0){
 		if(value<0){
@@ -2697,6 +2699,8 @@ function get_coord(value,[limit_start,limit_end],[pixel_start,pixel_end],type,ar
 			return NaN
 		}
 		value=Math.log(value)
+		if(limit_start>0){limit_start=Math.log(limit_start)}
+		if(limit_end>0){limit_end=Math.log(limit_end)}
 	}
 
 	if(type!='text'){
