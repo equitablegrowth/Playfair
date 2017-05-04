@@ -17,10 +17,10 @@
 	.header{padding-top:30px;background:white;}
 
 	/* misc */
-	.bottom{background-color:#eeeeee;padding-top:30px;padding-bottom:30px}
+	.bottom{background-color:#eeeeee;padding-top:30px;padding-bottom:30px;}
 	.h4 {font-family:Raleway;font-weight:300;margin:0px;font-size:1em;text-align:center;}
 	.helpboxouter{position:relative;}
-	.container {margin-top:20px;margin-bottom:250px;height:100%;}
+	/*.container {margin-top:20px;margin-bottom:250px;height:100%;}*/
 	.nav-tabs {margin-top:10px;border:0px;max-width:1000px;margin-left:auto;margin-right:auto;}
 	.tab-pane {width:100%;margin-top:0px;margin-left:auto;margin-right:auto;}
 	.input-group-addon {min-width:90px;background-color:#ddd;}
@@ -153,7 +153,7 @@
 	.v-nav>ul>li {max-width:1000px;font-size:.9em;font-family:'Open Sans';list-style-type:none;padding:5px 12px 5px 12px;cursor:pointer;color:white;font-weight:600;}
 	.v-nav>ul>li:hover {background-color:#133328;}
 	.v-nav>ul>li.current{background-color:#205946;}
-	.v-nav>div.tab-content{padding-left:5%;padding-right:5%;margin-bottom:0px;padding-bottom:10px;padding-top:20px;background-color:#eeeeee;}
+	.v-nav>div.tab-content{padding-left:5%;padding-right:5%;margin-bottom:0px;padding-bottom:20px;padding-top:20px;background-color:#eeeeee;}
 
 	/* hidden ui elements */
 	#png_save{display:none;}
