@@ -177,5 +177,5 @@
 	.list-group-item{border:0px;}
 
 	/* help box */
-	.helpbox{color:#888;font-size:.9em;max-width:220px;border:1px solid #dddddd;border-radius:2px;padding:16px 12px 10px 14px;text-align:left;margin-right:20px;}
+	.helpbox{color:#888;font-size:.9em;max-width:200px;border:1px solid #dddddd;border-radius:2px;padding:16px 12px 10px 14px;text-align:left;margin-right:20px;}
 	.helphighlight{background-color:#ddd;padding:0px 3px 0px 3px;}

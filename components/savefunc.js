@@ -6,7 +6,7 @@ function savepng() {
 
 	// saveSvgAsPng(document.getElementById('grapharea'),'playfair.png', {scale:2.0})
 	// var scale=window.devicePixelRatio
-	saveSvgAsPng(document.getElementById("grapharea"), "playfair.png", {scale:2}, function(){});
+	saveSvgAsPng(document.getElementById("grapharea"), "playfair.png", {scale:2});
 
 	// var svg = document.getElementById('grapharea')
 	// var img = document.getElementById('png_save')
@@ -400,7 +400,7 @@ function load_populate(response) {
 			grapharea.select('filter').remove()
 		} catch(err){}
 		grapharea=Snap('#grapharea')
-		shadowfilter=grapharea.filter(Snap.filter.shadow(0, 2, 3))
+		shadowfilter=grapharea.filter(Snap.filter.shadow(1, 1, 1,'#333',1))
 		grapharea.append(shadowfilter)
 
 		// re-populate key - this won't get you the same key options as the saved graph

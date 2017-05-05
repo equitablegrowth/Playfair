@@ -60,8 +60,6 @@
 		@font-face {font-family:'Nunito';font-style: normal;font-weight: 600;src: url(fonts/Nunito-Bold.ttf) format('truetype');}
 		@font-face {font-family:'Oswald';font-style: normal;font-weight: 400;src: url(fonts/Oswald-Regular.ttf) format('truetype');}
 		@font-face {font-family:'Oswald';font-style: normal;font-weight: 600;src: url(fonts/Oswald-Bold.ttf) format('truetype');}
-		@font-face {font-family:'PTSans';font-style: normal;font-weight: 400;src: url(fonts/PT_Sans-Web-Regular.ttf) format('truetype');}
-		@font-face {font-family:'PTSans';font-style: normal;font-weight: 600;src: url(fonts/PT_Sans-Web-Bold.ttf) format('truetype');}
 	</style>
 </head>
 
@@ -170,7 +168,6 @@
 		<hr>
 		<li>Width: <span class='contextbuttons' onclick=thickpath(clickedevent.target)><i class="fa fa-expand"></i></span><span class='contextbuttons' onclick=thinpath(clickedevent.target)><i class="fa fa-compress"></i></span></li>
 		<hr>
-		<hr>
 		<li>Opacity: <span class='contextbuttons' onclick=fadein(clickedevent.target)><i class="fa fa-eye" style='opacity:1'></i></span><span class='contextbuttons' onclick=fadeout(clickedevent.target)><i class="fa fa-eye" style='opacity:.2'></i></span></li>
 		<hr>
 	</ul>
@@ -262,7 +259,6 @@
 		<li onclick=startpath(clickedevent) class='highlight'>Start Path</li>
 		<li onclick=startarrow(clickedevent) class='highlight'>Start Arrow</li>
 		<li onclick=startline(clickedevent) class='highlight'>Start Line</li>
-		<hr>
 		<hr>
 		<li>Opacity: <span class='contextbuttons' onclick=fadein(clickedevent.target)><i class="fa fa-eye" style='opacity:1'></i></span><span class='contextbuttons' onclick=fadeout(clickedevent.target)><i class="fa fa-eye" style='opacity:.2'></i></span></li>
 		<hr>
@@ -1481,6 +1477,14 @@ var shadowfilter=grapharea.filter(Snap.filter.shadow(1, 1, 1,'#333',1))
 var theme
 placeholder()
 setInterval(blink,1000)
+
+// save primaryload out with no output so fonts are loaded
+// try{
+// 	saveSvgAsPng(document.getElementById("primaryload"),{nooutput:1});
+// } catch(err){
+// 	console.log("Running offline, can't load fonts.")
+// }
+// saveSvgAsPng(document.getElementById("grapharea"),'none.png',{nooutput:1});
 
 // set up cursor blink
 // is this a stupid way to do this?
