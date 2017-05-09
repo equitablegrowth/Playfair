@@ -3,20 +3,18 @@
 // for future editing in playfair.
 
 function savepng() {
+	// the only trick here is that the current version of savesvgaspng inserts its own separate
+	// defs object into the svg and that causes some small problems - it prevents fonts from
+	// loading on the first try for reasons I don't understand. So, first check to see if we
+	// are online (if location is file:///). If we are, throw away the current defs in grapharea.
+	// If we're not, keep defs because that's all you have for fonts!
 
-	// saveSvgAsPng(document.getElementById('grapharea'),'playfair.png', {scale:2.0})
-	// var scale=window.devicePixelRatio
-	saveSvgAsPng(document.getElementById("grapharea"), "playfair.png", {scale:2});
-
-	// var svg = document.getElementById('grapharea')
-	// var img = document.getElementById('png_save')
-
-	// svg.toDataURL("image/png", {
-	// 	callback: function(data) {
-	// 		img.href=data
-	// 		img.click()
-	// 	}
-	// })
+	if(window.location.href.indexOf('file:///')===-1){
+		$('#grapharea > defs').remove()
+    	saveSvgAsPng(document.getElementById("grapharea"), "playfair.png", {scale:2});
+    } else {
+    	saveSvgAsPng(document.getElementById("grapharea"), "playfair.png", {scale:2});
+    }
 }
 
 function savesvg() {
