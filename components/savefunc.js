@@ -9,12 +9,7 @@ function savepng() {
 	// are online (if location is file:///). If we are, throw away the current defs in grapharea.
 	// If we're not, keep defs because that's all you have for fonts!
 
-	if(window.location.href.indexOf('file:///')===-1){
-		$('#grapharea > defs').remove()
-    	saveSvgAsPng(document.getElementById("grapharea"), "playfair.png", {scale:2});
-    } else {
-    	saveSvgAsPng(document.getElementById("grapharea"), "playfair.png", {scale:2});
-    }
+    saveSvgAsPng(document.getElementById("grapharea"), "playfair.png", {scale:2});
 }
 
 function savesvg() {
