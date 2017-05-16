@@ -131,7 +131,7 @@ $(document).ready(function(){
 })
 
 function change_theme(cb){
-	if($('#themes').val()!='none'){
+	if($('#themes').val()!='none' & $('#themes').val()!=null){
 		var option=$('#themes').val()+'.txt'
 		var dictionary={'loadtheme':option}
 
