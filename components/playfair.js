@@ -2668,40 +2668,14 @@ function draw_rects(axes,rect,snapobj){
 }
 
 function draw_maps(map,snapobj){
-	// console.log(axes)
 	// map is {'location':location,'category':category,'geography':states|counties,'values':values}
 	// loop through observations in the xvar and yvar
-	if(shade.xarr.length>0){
-		for(var i=0;i<shade.xarr.length;i++){
-			var current=shade.xarr[i]
-			var x_left=get_coord(current[0],chartobject.xlimits,[axes[0],axes[1]],'nottext',chartobject.xarray,0,chartobject.shiftx)
-			var x_right=get_coord(current[1],chartobject.xlimits,[axes[0],axes[1]],'nottext',chartobject.xarray,0,chartobject.shiftx)
-			var y_top=axes[2]
-			var y_bottom=axes[3]
+	// categories are always based on the 'category' variable if available - values are really for keys, if the var is continuous
+	// however, if categories are not passed, separate the data into quintiles and pick colors accordingly.
 
-			if((x_left>=axes[0] & x_left<=axes[1]) | (x_right<=axes[1] & x_right>=axes[0])){
-				if(x_left<axes[0]){x_left=axes[0]}
-				if(x_right>axes[1]){x_right=axes[1]}
-				snapobj.path('M'+x_left+','+y_top+'L'+x_right+','+y_top+'L'+x_right+','+y_bottom+'L'+x_left+','+y_bottom+'L'+x_left+','+y_top).attr({fill:chartobject.shade_geom.shadefill,'fill-opacity':chartobject.shade_geom.shadeopacity,'shape-rendering':'crispEdges',context:'color_context_menu',colorchange:'fill'})
-			}
-		}
-	}
-
-	if(shade.yarr.length>0){
-		for(var i=0;i<shade.yarr.length;i++){
-			var current=shade.yarr[i]
-			var x_left=axes[0]
-			var x_right=axes[1]
-			var y_bottom=get_coord(current[0],chartobject.ylimits,[axes[2],axes[3]],'nottext',chartobject.yarray,1,chartobject.shifty)
-			var y_top=get_coord(current[1],chartobject.ylimits,[axes[2],axes[3]],'nottext',chartobject.yarray,1,chartobject.shifty)
-
-			if((y_top>=axes[3] & y_top<=axes[2]) | (y_bottom<=axes[2] & y_bottom>=axes[3])){
-				if(y_top<axes[3]){y_top=axes[3]}
-				if(y_bottom>axes[2]){y_bottom=axes[2]}
-				snapobj.path('M'+x_left+','+y_top+'L'+x_right+','+y_top+'L'+x_right+','+y_bottom+'L'+x_left+','+y_bottom+'L'+x_left+','+y_top).attr({fill:chartobject.shade_geom.shadefill,'fill-opacity':chartobject.shade_geom.shadeopacity,'shape-rendering':'crispEdges',context:'color_context_menu',colorchange:'fill'})
-			}
-		}
-	}
+	// it would be nice if it was easy to arbitrarily add maps just by putting them in the map folder. I am going to punt on that
+	// for now because that is server-side work and won't function for people who use Playfair on the desktop. The US Counties and
+	// States maps can be defaults that work everywhere.
 
 	snapobj.append(snapobj.selectAll('[obj_type="gridline"]'))
 }
