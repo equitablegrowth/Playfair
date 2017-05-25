@@ -28,6 +28,16 @@ function preview() {
 	var geom_dict={}
 	var ready=0
 
+	if($("#map_location").val()!='none' & ($("#map_category").val()!='none' | $("#map_values").val()!='none')){
+		var location=$("#map_location").val()
+		var category=$("#map_category").val()
+		var values=$("#map_values").val()
+		var geography=$("#map_geography").val()
+
+		geom_dict['map']={'location':location,'category':category,'geography':geography,'values':values}
+		ready=1
+	}
+
 	if($("#point_select_x").val()!='none' & $("#point_select_y").val()!='none'){
 		var x_var=$("#point_select_x").val()
 		var y_var=$("#point_select_y").val()
@@ -286,8 +296,9 @@ function redraw(keep) {
 			// initialize playfair.js. First use init_graph to set up workspace, then call the
 			// data method to set up data and variables.
 
-			// Why not just use.clear()? Because it will destroy all the embedded font declarations
-			// this is apparently a known bug in Snap
+			// Why not just use .clear()? Because it will destroy all the embedded font declarations
+			// this is apparently a known bug in Snap - defs aren't retained even though documentation
+			// says they should be (may be fixed in 0.5.1 not sure)
 			if(keep){
 				try{
 					var boundsx=grapharea.select('[ident3="keybounder"]').getBBox().x
@@ -443,45 +454,48 @@ function redraw(keep) {
 			chartobject.prepheader(hed,dek)
 			chartobject.prepfooter(source,note,function(){
 				// draw the initial graph, dependent on current value of graph_type
-				if (graph_type=='Chart') {
-					if ($('#customx').val()!='' && $("#customxcheck").prop('checked')==true){
-						chartobject.xarray=$('#customx').val().split(',')
-					}
-					if ($('#customy').val()!='' && $("#customycheck").prop('checked')==true){
-						chartobject.yarray=$('#customy').val().split(',')
-					}
-
-					if ($('#xlimits').val()!='' && $("#xlimitscheck").prop('checked')==true){
-						chartobject.xlimits=$('#xlimits').val().split(',')
-					} 
-					if ($('#ylimits').val()!='' && $("#ylimitscheck").prop('checked')==true){
-						chartobject.ylimits=$('#ylimits').val().split(',')
-					} 
-
-					console.log(chartobject)
-					chartobject.chart(legend)
-
-					// push the calculated yaxis and xaxis to the front-end interface boxes
-					if(Object.prototype.toString.call(chartobject.xarray[0])==='[object Date]'){
-						temp=[]
-						for(var i=0;i<chartobject.xarray.length;i++){
-							temp.push((chartobject.xarray[i].getUTCMonth()+1)+'/'+chartobject.xarray[i].getUTCDate()+'/'+chartobject.xarray[i].getUTCFullYear())
-						}
-						$('#customx').val(temp)
-					} else{
-						$('#customx').val(chartobject.xarray)
-					}
-
-					if(Object.prototype.toString.call(chartobject.yarray[0])==='[object Date]'){
-						temp=[]
-						for(var i=0;i<chartobject.yarray.length;i++){
-							temp.push((chartobject.yarray[i].getUTCMonth()+1)+'/'+chartobject.yarray[i].getUTCDate()+'/'+chartobject.yarray[i].getUTCFullYear())
-						}
-						$('#customy').val(temp)
-					} else{
-						$('#customy').val(chartobject.yarray)
-					}
+				// 5/24 changed this because... I'm not sure I want graph_type to decide anything
+				// it's still here so maybe this is the right way to go but right now there are only 2 options:
+				// maps and charts. I think maps should just override charts.
+				// if (graph_type=='Chart') {
+				if ($('#customx').val()!='' && $("#customxcheck").prop('checked')==true){
+					chartobject.xarray=$('#customx').val().split(',')
 				}
+				if ($('#customy').val()!='' && $("#customycheck").prop('checked')==true){
+					chartobject.yarray=$('#customy').val().split(',')
+				}
+
+				if ($('#xlimits').val()!='' && $("#xlimitscheck").prop('checked')==true){
+					chartobject.xlimits=$('#xlimits').val().split(',')
+				} 
+				if ($('#ylimits').val()!='' && $("#ylimitscheck").prop('checked')==true){
+					chartobject.ylimits=$('#ylimits').val().split(',')
+				} 
+
+				console.log(chartobject)
+				chartobject.chart(legend)
+
+				// push the calculated yaxis and xaxis to the front-end interface boxes
+				if(Object.prototype.toString.call(chartobject.xarray[0])==='[object Date]'){
+					temp=[]
+					for(var i=0;i<chartobject.xarray.length;i++){
+						temp.push((chartobject.xarray[i].getUTCMonth()+1)+'/'+chartobject.xarray[i].getUTCDate()+'/'+chartobject.xarray[i].getUTCFullYear())
+					}
+					$('#customx').val(temp)
+				} else{
+					$('#customx').val(chartobject.xarray)
+				}
+
+				if(Object.prototype.toString.call(chartobject.yarray[0])==='[object Date]'){
+					temp=[]
+					for(var i=0;i<chartobject.yarray.length;i++){
+						temp.push((chartobject.yarray[i].getUTCMonth()+1)+'/'+chartobject.yarray[i].getUTCDate()+'/'+chartobject.yarray[i].getUTCFullYear())
+					}
+					$('#customy').val(temp)
+				} else{
+					$('#customy').val(chartobject.yarray)
+				}
+				// }
 
 				if(keep){
 					// bring annotations to front

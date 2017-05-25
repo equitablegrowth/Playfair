@@ -601,12 +601,6 @@ window.playfair = (function () {
 		this.ylabel= parameters['label']
 	}
 
-	// general method for making charts that are not of a special type .data has already initialized the chart with geoms.
-	// options:
-	// xlimit_min - a limit that is not a tick (or at least, doesn't have to be a tick)
-	// xlimit_max - upper limit for x
-	// ylimit_min
-	// ylimit_max
 	Playfair.prototype.chart=function(legend) {
 		var snapobj=this.svg
 		var graph_obj=this
@@ -681,29 +675,43 @@ window.playfair = (function () {
 		// set background fill
 		var graph_background=snapobj.rect(graph_obj.x,graph_obj.y+graph_obj.header.head_height,graph_obj.width,graph_obj.height-(graph_obj.header.head_height+graph_obj.footer.footer_height)).attr({class:'background',fill:this.grapharea.chartfill})
 
+		// if the map geom is all set, then the type is map and this will override all charts
+		if(typeof(chartobject.map)!=='undefined'){
+			chartobject.type=='map'
+		} else {
+			chartobject.type=='chart'
+		}
+
 		// draw axes
-		if(typeof(legend)!=='undefined' & chartobject.legends.legend_location=='top'){
+		if(typeof(legend)!=='undefined' & chartobject.legends.legend_location=='top' & chartobject.type=='chart'){
 			var key_height=draw_key_top(legend,graph_obj,snapobj)
 			var axes=draw_axes(this,xaxis,yaxis,graph_obj.shiftx,graph_obj.shifty,key_height)
 			console.log(key_height)
-		} else {
+		} else if(chartobject.type=='chart'){
 			console.log('drawing axes with parameters: ',xaxis,yaxis,graph_obj.shiftx,graph_obj.shifty)
 			var axes=draw_axes(this,xaxis,yaxis,graph_obj.shiftx,graph_obj.shifty,0)
+		} else if(chartobject.type=='map'){
+			// don't need to do anything here for now, because the chart background is already filled in,
+			// but in case you do in the future for some reason
 		}
 
 		// draw geoms
-		if(typeof(chartobject.shade)!=='undefined'){draw_shade(axes,graph_obj.shade,snapobj)}
-		if(typeof(chartobject.rect)!=='undefined'){draw_rects(axes,graph_obj.rect,snapobj)}
-		if(typeof(chartobject.bar)!=='undefined'){draw_bars(axes,graph_obj.bar,snapobj)}
-		if(typeof(chartobject.area)!=='undefined'){draw_area(axes,graph_obj.area,snapobj)}
-		if(typeof(chartobject.bounds)!=='undefined'){draw_bounds(axes,graph_obj.bounds,snapobj)}
-		if(typeof(chartobject.stackedbar)!=='undefined'){draw_stackedbars(axes,graph_obj.stackedbar,snapobj)}
-		if(typeof(chartobject.step)!=='undefined'){draw_steps(axes,graph_obj.step,snapobj)}
-		if(typeof(chartobject.line)!=='undefined'){draw_lines(axes,graph_obj.line,snapobj)}
-		if(typeof(chartobject.segment)!=='undefined'){draw_segments(axes,graph_obj.segment,snapobj)}
-		if(typeof(chartobject.point)!=='undefined'){draw_points(axes,graph_obj.point,snapobj)}
-		if(typeof(chartobject.text)!=='undefined'){draw_text(axes,graph_obj.text,snapobj)}
-		if(typeof(chartobject.trend)!=='undefined'){draw_trends(axes,graph_obj.trend,snapobj)}
+		if(chartobject.type=='chart'){
+			if(typeof(chartobject.shade)!=='undefined'){draw_shade(axes,graph_obj.shade,snapobj)}
+			if(typeof(chartobject.rect)!=='undefined'){draw_rects(axes,graph_obj.rect,snapobj)}
+			if(typeof(chartobject.bar)!=='undefined'){draw_bars(axes,graph_obj.bar,snapobj)}
+			if(typeof(chartobject.area)!=='undefined'){draw_area(axes,graph_obj.area,snapobj)}
+			if(typeof(chartobject.bounds)!=='undefined'){draw_bounds(axes,graph_obj.bounds,snapobj)}
+			if(typeof(chartobject.stackedbar)!=='undefined'){draw_stackedbars(axes,graph_obj.stackedbar,snapobj)}
+			if(typeof(chartobject.step)!=='undefined'){draw_steps(axes,graph_obj.step,snapobj)}
+			if(typeof(chartobject.line)!=='undefined'){draw_lines(axes,graph_obj.line,snapobj)}
+			if(typeof(chartobject.segment)!=='undefined'){draw_segments(axes,graph_obj.segment,snapobj)}
+			if(typeof(chartobject.point)!=='undefined'){draw_points(axes,graph_obj.point,snapobj)}
+			if(typeof(chartobject.text)!=='undefined'){draw_text(axes,graph_obj.text,snapobj)}
+			if(typeof(chartobject.trend)!=='undefined'){draw_trends(axes,graph_obj.trend,snapobj)}
+		} else if(chartobject.type=='map'){
+			draw_map(graph_obj.map,snapobj)
+		}
 
 		// draw key
 		// check playobj.legends.legend_location for 'float' or 'top' to draw correctly
@@ -2657,6 +2665,45 @@ function draw_rects(axes,rect,snapobj){
 	snapobj.append(snapobj.selectAll('[zeroline="1"]'))
 }
 
+function draw_maps(map,snapobj){
+	// console.log(axes)
+	// map is {'location':location,'category':category,'geography':states|counties,'values':values}
+	// loop through observations in the xvar and yvar
+	if(shade.xarr.length>0){
+		for(var i=0;i<shade.xarr.length;i++){
+			var current=shade.xarr[i]
+			var x_left=get_coord(current[0],chartobject.xlimits,[axes[0],axes[1]],'nottext',chartobject.xarray,0,chartobject.shiftx)
+			var x_right=get_coord(current[1],chartobject.xlimits,[axes[0],axes[1]],'nottext',chartobject.xarray,0,chartobject.shiftx)
+			var y_top=axes[2]
+			var y_bottom=axes[3]
+
+			if((x_left>=axes[0] & x_left<=axes[1]) | (x_right<=axes[1] & x_right>=axes[0])){
+				if(x_left<axes[0]){x_left=axes[0]}
+				if(x_right>axes[1]){x_right=axes[1]}
+				snapobj.path('M'+x_left+','+y_top+'L'+x_right+','+y_top+'L'+x_right+','+y_bottom+'L'+x_left+','+y_bottom+'L'+x_left+','+y_top).attr({fill:chartobject.shade_geom.shadefill,'fill-opacity':chartobject.shade_geom.shadeopacity,'shape-rendering':'crispEdges',context:'color_context_menu',colorchange:'fill'})
+			}
+		}
+	}
+
+	if(shade.yarr.length>0){
+		for(var i=0;i<shade.yarr.length;i++){
+			var current=shade.yarr[i]
+			var x_left=axes[0]
+			var x_right=axes[1]
+			var y_bottom=get_coord(current[0],chartobject.ylimits,[axes[2],axes[3]],'nottext',chartobject.yarray,1,chartobject.shifty)
+			var y_top=get_coord(current[1],chartobject.ylimits,[axes[2],axes[3]],'nottext',chartobject.yarray,1,chartobject.shifty)
+
+			if((y_top>=axes[3] & y_top<=axes[2]) | (y_bottom<=axes[2] & y_bottom>=axes[3])){
+				if(y_top<axes[3]){y_top=axes[3]}
+				if(y_bottom>axes[2]){y_bottom=axes[2]}
+				snapobj.path('M'+x_left+','+y_top+'L'+x_right+','+y_top+'L'+x_right+','+y_bottom+'L'+x_left+','+y_bottom+'L'+x_left+','+y_top).attr({fill:chartobject.shade_geom.shadefill,'fill-opacity':chartobject.shade_geom.shadeopacity,'shape-rendering':'crispEdges',context:'color_context_menu',colorchange:'fill'})
+			}
+		}
+	}
+
+	snapobj.append(snapobj.selectAll('[obj_type="gridline"]'))
+}
+
 
 
 /////////////////////////////////////////////////////////////
@@ -3095,7 +3142,6 @@ function draw_axes(playobj,xvar,yvar,shiftx,shifty,legend_height) {
 	// shiftx and shifty are optional parameters. If shiftx or shifty==1, that axis will
 	// be shifted such that labels occur between ticks, appropriate for a bar graph. There
 	// will also be one more tick to accomodate this change
-
 	snapobj=playobj.svg
 
 	// placeholder until I figure out top keys

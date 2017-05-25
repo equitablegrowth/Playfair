@@ -288,7 +288,7 @@
 		<li><a data-toggle='tab' href="#legend">Legend</a></li>
 		<li><a data-toggle="tab" href="#chart">Chart</a></li>
 		<!-- <li class='disabled'><a href="#waffle">Waffle</a></li>	 -->
-		<!-- <li class='disabled'><a href="#maps">Choropleth</a></li>  -->
+		<li><a data-toggle="tab" href="#map">Map</a></li> 
 		<li><a data-toggle='tab' href="#settings">Settings</a></li>
 		<li class='list_button' onclick='reset()'>Reset all fields</a></li>
 	</ul>
@@ -1350,6 +1350,69 @@
 				</div>
 			</div>
 
+		</div>
+	</div>
+
+<!-- ********************************************************************** -->
+<!-- *********************** MAP STARTS HERE ************************* -->
+<!-- ********************************************************************** -->
+	<div id='map' class='tab-pane'>
+		<div class='v-nav'>
+			<ul class='unselectable'>
+			<!-- <div class='fakerow'> -->
+				<li id='map_first' tab='map_main' class='first current'>Choropleth</li>
+			<!-- </div> -->
+			</ul>
+
+			<div class='tab-content'>
+				<div class='row'>
+					<div class='col-md-6'>
+						<div class="labeled_ele">
+							<label>Locations</label>
+							<span class='styled-select'>
+								<span class='select_carat'>
+									<select class="variable_select x_select" id='map_location' disabled>
+										<option value='none'>Nothing selected</option>
+									</select>
+								</span>
+							</span>
+						</div>
+						<div class="labeled_ele">
+							<label>Category</label>
+							<span class='styled-select'>
+								<span class='select_carat'>
+									<select class="variable_select y_select" id='map_category' disabled>
+										<option value='none'>Nothing selected</option>
+									</select>
+								</span>
+							</span>
+						</div>
+					</div>
+					<div class='col-md-6'>
+						<div class="labeled_ele">
+							<label>Values</label>
+							<span class='styled-select'>
+								<span class='select_carat'>
+									<select class="variable_select y_select" id='map_values' disabled>
+										<option value='none'>Nothing selected</option>
+									</select>
+								</span>
+							</span>
+						</div>
+						<div class="labeled_ele">
+							<label>Geography</label>
+							<span class='styled-select'>
+								<span class='select_carat'>
+									<select id='map_geography'>
+										<option value='states'>States</option>
+										<option value='counties'>Counties</option>
+									</select>
+								</span>
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 
