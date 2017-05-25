@@ -74,6 +74,7 @@ window.playfair = (function () {
 		this.segment=geom_dict.segment
 		this.trend=geom_dict.trend
 		this.rect=geom_dict.rect
+		this.map=geom_dict.map
 		this.bounds=geom_dict.bounds
 		this.shifty=0
 		this.shiftx=0
@@ -605,76 +606,6 @@ window.playfair = (function () {
 		var snapobj=this.svg
 		var graph_obj=this
 
-		// get the appropriate axis for x variables
-		// this first if is to check for a custom (user-defined) axis.
-		if(typeof graph_obj.xarray=='undefined'){
-			if(isNaN(graph_obj.xmax)==true){
-				var xaxis=graph_obj.xstrings
-				xaxis.dtype='text'
-			} else if(typeof(graph_obj.xmax)=='number'){
-				var xaxis=create_numerical_axis([graph_obj.xmin,graph_obj.xmax])
-				xaxis.dtype='numeric'
-			} else if(Object.prototype.toString.call(graph_obj.xmax)==='[object Date]'){
-				var xaxis=create_date_axis([graph_obj.xmin,graph_obj.xmax],0)
-				xaxis.dtype='date'
-			}
-			graph_obj.xarray=xaxis
-		} else {
-			if(Object.prototype.toString.call(graph_obj.xmax)==='[object Date]'){
-				for (var i=0;i<graph_obj.xarray.length;i++){
-					graph_obj.xarray[i]=new Date(moment(graph_obj.xarray[i]))
-					graph_obj.xarray.dtype='date'
-				}
-			}
-		}
-
-		xaxis=graph_obj.xarray
-
-		// get the appropriate axis for y variables
-		if(typeof graph_obj.yarray=='undefined'){
-			if(isNaN(graph_obj.ymax)==true){
-				var yaxis=graph_obj.ystrings
-				yaxis.dtype='text'
-			} else if(typeof(graph_obj.ymax)=='number'){
-				var yaxis=create_numerical_axis([graph_obj.ymin,graph_obj.ymax])
-				yaxis.dtype='numeric'
-			} else if(Object.prototype.toString.call(graph_obj.ymax)==='[object Date]'){
-				var yaxis=create_date_axis([graph_obj.ymin,graph_obj.ymax],1)
-				yaxis.dtype='date'
-			}
-			graph_obj.yarray=yaxis
-		} else {
-			if(Object.prototype.toString.call(graph_obj.ymax)==='[object Date]'){
-				for (var i=0;i<graph_obj.yarray.length;i++){
-					graph_obj.yarray[i]=new Date(moment(graph_obj.yarray[i]))
-					graph_obj.yarray.dtype='date'
-				}
-			}
-		}
-
-		yaxis=graph_obj.yarray
-
-		// as above but for limits to the graph instead of axes
-		if(typeof graph_obj.xlimits=='undefined'){
-			graph_obj.xlimits=[graph_obj.xarray[0],graph_obj.xarray[graph_obj.xarray.length-1]]
-		} else {
-			if (Object.prototype.toString.call(graph_obj.xmax)==='[object Date]'){
-				graph_obj.xlimits=[new Date(moment(graph_obj.xlimits[0])),new Date(moment(graph_obj.xlimits[1]))]
-			}
-		}
-
-		if(typeof graph_obj.ylimits=='undefined'){
-			graph_obj.ylimits=[graph_obj.yarray[0],graph_obj.yarray[graph_obj.yarray.length-1]]
-		} else {
-			if (Object.prototype.toString.call(graph_obj.ymax)==='[object Date]'){
-				graph_obj.ylimits=[new Date(moment(graph_obj.ylimits[0])),new Date(moment(graph_obj.ylimits[1]))]
-			}
-		}
-
-		// start drawing stuff
-		// set background fill
-		var graph_background=snapobj.rect(graph_obj.x,graph_obj.y+graph_obj.header.head_height,graph_obj.width,graph_obj.height-(graph_obj.header.head_height+graph_obj.footer.footer_height)).attr({class:'background',fill:this.grapharea.chartfill})
-
 		// if the map geom is all set, then the type is map and this will override all charts
 		if(typeof(chartobject.map)!=='undefined'){
 			chartobject.type='map'
@@ -682,7 +613,77 @@ window.playfair = (function () {
 			chartobject.type='chart'
 		}
 
-		console.log(chartobject.type)
+		// get the appropriate axis for x variables
+		// this first if is to check for a custom (user-defined) axis.
+		if(chartobject.type=='chart'){
+			if(typeof graph_obj.xarray=='undefined'){
+				if(isNaN(graph_obj.xmax)==true){
+					var xaxis=graph_obj.xstrings
+					xaxis.dtype='text'
+				} else if(typeof(graph_obj.xmax)=='number'){
+					var xaxis=create_numerical_axis([graph_obj.xmin,graph_obj.xmax])
+					xaxis.dtype='numeric'
+				} else if(Object.prototype.toString.call(graph_obj.xmax)==='[object Date]'){
+					var xaxis=create_date_axis([graph_obj.xmin,graph_obj.xmax],0)
+					xaxis.dtype='date'
+				}
+				graph_obj.xarray=xaxis
+			} else {
+				if(Object.prototype.toString.call(graph_obj.xmax)==='[object Date]'){
+					for (var i=0;i<graph_obj.xarray.length;i++){
+						graph_obj.xarray[i]=new Date(moment(graph_obj.xarray[i]))
+						graph_obj.xarray.dtype='date'
+					}
+				}
+			}
+
+			xaxis=graph_obj.xarray
+
+			// get the appropriate axis for y variables
+			if(typeof graph_obj.yarray=='undefined'){
+				if(isNaN(graph_obj.ymax)==true){
+					var yaxis=graph_obj.ystrings
+					yaxis.dtype='text'
+				} else if(typeof(graph_obj.ymax)=='number'){
+					var yaxis=create_numerical_axis([graph_obj.ymin,graph_obj.ymax])
+					yaxis.dtype='numeric'
+				} else if(Object.prototype.toString.call(graph_obj.ymax)==='[object Date]'){
+					var yaxis=create_date_axis([graph_obj.ymin,graph_obj.ymax],1)
+					yaxis.dtype='date'
+				}
+				graph_obj.yarray=yaxis
+			} else {
+				if(Object.prototype.toString.call(graph_obj.ymax)==='[object Date]'){
+					for (var i=0;i<graph_obj.yarray.length;i++){
+						graph_obj.yarray[i]=new Date(moment(graph_obj.yarray[i]))
+						graph_obj.yarray.dtype='date'
+					}
+				}
+			}
+
+			yaxis=graph_obj.yarray
+
+			// as above but for limits to the graph instead of axes
+			if(typeof graph_obj.xlimits=='undefined'){
+				graph_obj.xlimits=[graph_obj.xarray[0],graph_obj.xarray[graph_obj.xarray.length-1]]
+			} else {
+				if (Object.prototype.toString.call(graph_obj.xmax)==='[object Date]'){
+					graph_obj.xlimits=[new Date(moment(graph_obj.xlimits[0])),new Date(moment(graph_obj.xlimits[1]))]
+				}
+			}
+
+			if(typeof graph_obj.ylimits=='undefined'){
+				graph_obj.ylimits=[graph_obj.yarray[0],graph_obj.yarray[graph_obj.yarray.length-1]]
+			} else {
+				if (Object.prototype.toString.call(graph_obj.ymax)==='[object Date]'){
+					graph_obj.ylimits=[new Date(moment(graph_obj.ylimits[0])),new Date(moment(graph_obj.ylimits[1]))]
+				}
+			}
+		}
+
+		// start drawing stuff
+		// set background fill
+		var graph_background=snapobj.rect(graph_obj.x,graph_obj.y+graph_obj.header.head_height,graph_obj.width,graph_obj.height-(graph_obj.header.head_height+graph_obj.footer.footer_height)).attr({class:'background',fill:this.grapharea.chartfill})
 
 		// draw axes
 		if(typeof(legend)!=='undefined' & chartobject.legends.legend_location=='top' & chartobject.type=='chart'){
@@ -2667,7 +2668,7 @@ function draw_rects(axes,rect,snapobj){
 	snapobj.append(snapobj.selectAll('[zeroline="1"]'))
 }
 
-function draw_maps(map,snapobj){
+function draw_map(map,snapobj){
 	// map is {'location':location,'category':category,'geography':states|counties,'values':values}
 	// loop through observations in the xvar and yvar
 	// categories are always based on the 'category' variable if available - values are really for keys, if the var is continuous
@@ -2675,9 +2676,52 @@ function draw_maps(map,snapobj){
 
 	// it would be nice if it was easy to arbitrarily add maps just by putting them in the map folder. I am going to punt on that
 	// for now because that is server-side work and won't function for people who use Playfair on the desktop. The US Counties and
-	// States maps can be defaults that work everywhere.
+	// States maps can be defaults that work everywhere. EDIT: HAHA this doesn't work offline anyways because CORS ofc
 
-	snapobj.append(snapobj.selectAll('[obj_type="gridline"]'))
+	// If this was gonna be drop-in though:
+	//   1. Need a python script to check contents of /maps and populate #map-geography based on name
+	//   2. SVGs should have class=some-id that will match the variables used to color the map
+	//   3. hopefully you can figure out all the sizing issues! This actually seems easy-ish
+
+	if(map['location']=='states'){var loc='maps/states.svg'}
+	else if(map['location']=='counties'){var loc='maps/counties.svg'}
+	else {var loc='maps/'+map['location']+'.svg'}
+
+	// get available space
+	var avail_height=chartobject.height-chartobject.footer.footer_height-chartobject.header.head_height-chartobject.grapharea.top_margin-chartobject.grapharea.chart_toppad-chartobject.grapharea.bottom_margin-chartobject.grapharea.chart_bottompad
+	var avail_width=chartobject.width-chartobject.grapharea.right_margin-chartobject.grapharea.left_margin-chartobject.grapharea.chart_leftpad-chartobject.grapharea.chart_rightpad
+	var start_x=chartobject.grapharea.left_margin+chartobject.grapharea.chart_leftpad
+	var start_y=chartobject.header.head_height+chartobject.grapharea.top_margin+chartobject.grapharea.chart_toppad
+
+	// load map, get dimensions, create the appropriate viewbox, then size based on available height/width
+	var g=snapobj.group()
+	var map=Snap.load('maps/states.svg', function(loadedFragment){
+		g.append(loadedFragment)
+		var map=g.select('svg')
+		var mapd=map.getBBox()
+
+		var boxaspect=avail_width/avail_height
+		var mapaspect=mapd.width/mapd.height
+
+		map.attr({x:start_x,y:start_y,viewBox:"0 0 "+mapd.width.toFixed(0)+' '+mapd.height.toFixed(0),height:'',width:''})
+
+		if(boxaspect>mapaspect){
+			console.log('width scaling')
+			// scale width of map
+			map.attr({width:avail_width})
+
+			// center map vertically
+			map.attr({y:start_y+(avail_height-(mapd.height*(avail_width/mapd.width)))/2})
+		} else {
+			console.log('height scaling')
+			// scale height of map
+			map.attr({height:avail_height})
+
+			// center map horizontally
+			map.attr({x:start_x+(avail_width-(mapd.width*(avail_height/mapd.height)))/2})
+		}
+
+	})
 }
 
 
