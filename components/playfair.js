@@ -2693,6 +2693,8 @@ function draw_map(map,snapobj){
 	var start_x=chartobject.grapharea.left_margin+chartobject.grapharea.chart_leftpad
 	var start_y=chartobject.header.head_height+chartobject.grapharea.top_margin+chartobject.grapharea.chart_toppad
 
+	console.log(avail_height,avail_width,start_x,start_y)
+
 	// load map, get dimensions, create the appropriate viewbox, then size based on available height/width
 	var g=snapobj.group()
 	var map=Snap.load('maps/states.svg', function(loadedFragment){
@@ -2703,15 +2705,20 @@ function draw_map(map,snapobj){
 		var boxaspect=avail_width/avail_height
 		var mapaspect=mapd.width/mapd.height
 
+		console.log(boxaspect,mapaspect)
+		console.log(mapd.width,mapd.height)
+
 		map.attr({x:start_x,y:start_y,viewBox:"0 0 "+mapd.width.toFixed(0)+' '+mapd.height.toFixed(0),height:'',width:''})
 
-		if(boxaspect>mapaspect){
+		if(boxaspect<mapaspect){
 			console.log('width scaling')
 			// scale width of map
 			map.attr({width:avail_width})
 
 			// center map vertically
+			console.log(start_y,avail_height,mapd.height,avail_width,mapd.width)
 			map.attr({y:start_y+(avail_height-(mapd.height*(avail_width/mapd.width)))/2})
+			console.log(map.attr('y'))
 		} else {
 			console.log('height scaling')
 			// scale height of map
@@ -2719,6 +2726,7 @@ function draw_map(map,snapobj){
 
 			// center map horizontally
 			map.attr({x:start_x+(avail_width-(mapd.width*(avail_height/mapd.height)))/2})
+			console.log(map.attr('x'))
 		}
 
 	})
