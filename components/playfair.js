@@ -677,10 +677,12 @@ window.playfair = (function () {
 
 		// if the map geom is all set, then the type is map and this will override all charts
 		if(typeof(chartobject.map)!=='undefined'){
-			chartobject.type=='map'
+			chartobject.type='map'
 		} else {
-			chartobject.type=='chart'
+			chartobject.type='chart'
 		}
+
+		console.log(chartobject.type)
 
 		// draw axes
 		if(typeof(legend)!=='undefined' & chartobject.legends.legend_location=='top' & chartobject.type=='chart'){
