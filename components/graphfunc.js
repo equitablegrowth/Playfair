@@ -312,6 +312,7 @@ function redraw(keep) {
 				grapharea.selectAll('circle:not([annotation])').remove()
 				grapharea.selectAll('path:not([annotation])').remove()
 				grapharea.selectAll('image:not([annotation])').remove()
+				grapharea.selectAll('g:not([annotation])').remove()
 			} else {
 				grapharea.selectAll('rect').remove()
 				grapharea.selectAll('text').remove()
@@ -319,6 +320,7 @@ function redraw(keep) {
 				grapharea.selectAll('circle').remove()
 				grapharea.selectAll('path').remove()
 				grapharea.selectAll('image').remove()
+				grapharea.selectAll('g').remove()
 			}
 
 			chartobject=playfair.init_graph(grapharea,0,0,width,height)

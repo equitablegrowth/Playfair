@@ -2701,37 +2701,84 @@ function draw_map(map,snapobj){
 		g.append(loadedFragment)
 		var map=g.select('svg')
 		var mapd=map.getBBox()
-
 		var boxaspect=avail_width/avail_height
 		var mapaspect=mapd.width/mapd.height
-
-		console.log(boxaspect,mapaspect)
-		console.log(mapd.width,mapd.height)
-
-		map.attr({x:start_x,y:start_y,viewBox:"0 0 "+mapd.width.toFixed(0)+' '+mapd.height.toFixed(0),height:'',width:''})
+		console.log(avail_width,avail_height,mapd.width,mapd.height,start_x,start_y)
 
 		if(boxaspect<mapaspect){
 			console.log('width scaling')
 			// scale width of map
-			map.attr({width:avail_width})
-
-			// center map vertically
-			console.log(start_y,avail_height,mapd.height,avail_width,mapd.width)
-			map.attr({y:start_y+(avail_height-(mapd.height*(avail_width/mapd.width)))/2})
-			console.log(map.attr('y'))
+			var scale=avail_width/mapd.width
+			var xdiff=(mapd.width-mapd.width*scale)/2
+			var ydiff=(mapd.height-mapd.height*scale)/2
+			var ycenter=(avail_height-(mapd.height*scale))/2
+			console.log(xdiff,ydiff,start_x,start_y,scale)
+			g.transform('s'+scale+'t'+(start_x-xdiff)/scale+','+(ycenter+start_y-ydiff)/scale)
 		} else {
 			console.log('height scaling')
 			// scale height of map
-			map.attr({height:avail_height})
-
-			// center map horizontally
-			map.attr({x:start_x+(avail_width-(mapd.width*(avail_height/mapd.height)))/2})
-			console.log(map.attr('x'))
+			var scale=avail_height/mapd.height
+			var xdiff=(mapd.width-mapd.width*scale)/2
+			var ydiff=(mapd.height-mapd.height*scale)/2
+			var xcenter=(avail_width-(mapd.width*scale))/2
+			console.log(xdiff,ydiff,start_x,start_y,scale)
+			g.transform('s'+scale+'t'+(xcenter+start_x-xdiff)/scale+','+(start_y-ydiff)/scale)
 		}
 
+		// add data and styling to map
+		for(var i=0;i<chartobject.dataset.length;i++){
+			var current=chartobject.dataset[i]
+
+			if(map.category!=='none'){
+				// color map by category
+
+			} else {
+				// auto bin and color by values instead
+			}
+		}
 	})
 }
 
+	// // axes are [xleft,xright,ybottom,ytop]
+	// // point is {'xvar':x_var,'yvar':y_var,'labels':label,'labelall':pointlabel,'grouping':{'color':color,'size':size,'type':type}}
+
+	// // create sets of options for each grouping variable
+	// if(point.grouping.color!=='none'){
+	// 	var color_groups=get_color_groups(point)
+	// } 
+
+	// if(point.grouping.type!=='none'){
+	// 	var temp=chartobject.dataset.filter(function(row){
+	// 		return row[point.xvar]!==undefined & row[point.yvar]!==undefined
+	// 	})
+	// 	var type_groups=[]
+	// 	for(var i=0;i<temp.length;i++){
+	// 		type_groups.push(temp[i][point.grouping.type])
+	// 	}
+	// 	var type_groups=[...new Set(type_groups)]
+	// } 
+
+	// // check for sizing variable and get min and max for scaling
+	// if(point.size!=='none'){
+	// 	var minsize=Math.min(...chartobject.flatdata[point.size])
+	// 	var maxsize=Math.max(...chartobject.flatdata[point.size])
+	// }
+
+	// // loop through observations in the dataset to draw points
+	// for(var i=0;i<chartobject.dataset.length;i++){
+	// 	var current=chartobject.dataset[i]
+
+	// 	// check for sizing variable and set point size
+	// 	if(point.size!=='none'){
+	// 		var pointsize=((current[point.size]-minsize)/(maxsize-minsize))*(parseFloat(chartobject.point_geom.point_maxsize)-parseFloat(chartobject.point_geom.point_minsize))+parseFloat(chartobject.point_geom.point_minsize)
+	// 	} else {
+	// 		var pointsize=chartobject.point_geom.point_size
+	// 	}
+
+	// 	// set various values for points. locations
+	// 	if(current[point.xvar]!=undefined && current[point.yvar]!=undefined  && ((point.grouping.color=='none') || (point.grouping.color!=='none' && current[point.grouping.color]!==undefined))){
+	// 		var x_loc=get_coord(current[point.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[point.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
+	// 		var y_loc=get_coord(current[point.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[point.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
 
 
 /////////////////////////////////////////////////////////////
