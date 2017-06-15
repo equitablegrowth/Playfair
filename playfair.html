@@ -280,7 +280,7 @@
 <div class='header'>
 	<h1 class='text-center'>playfair</h1>
 	<div class='h4'>compatible with <img height=20 src='img/chrome.png'> and <img height=25 src='img/firefox.png'></div>
-	<div class='h4'>v2.3  <a href='changelog.html'>changelog</a></div>
+	<div class='h4'>v2.4  <a href='changelog.html'>changelog</a></div>
 	<!-- Tabs -->
 	<ul class="nav nav-tabs" id='maintabs'>
 		<li class="active"><a data-toggle="tab" href="#data">Data</a></li>
@@ -1645,6 +1645,8 @@ $(".variable_select").change(function(){
 			for(var grouper in temp.grouping){
 				if(temp.grouping[grouper]!=='none'){
 					// get all groups for this grouper - x and y must not be missing
+					// xvar and yvar can totally be missing... I think. But if they were missing they would
+					// be undefined, not empty strings.
 					var groups=[]
 					for(var i=0;i<datadict.length;i++){
 						if(datadict[i][xvar]!=='' && datadict[i][yvar]!=='' && datadict[i][temp.grouping[grouper]]!==''){

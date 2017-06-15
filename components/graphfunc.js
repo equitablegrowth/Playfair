@@ -34,7 +34,41 @@ function preview() {
 		var values=$("#map_values").val()
 		var geography=$("#map_geography").val()
 
-		geom_dict['map']={'location':location,'category':category,'geography':geography,'values':values}
+		// if no category is given, use the values to create quintiles
+		if(category==='none'){
+			var temp=final_data[values].slice()
+			temp.sort(function(a,b){
+				return a-b
+			})
+
+			final_data['placeholder']=[]
+
+			var first_cut=(temp[Math.floor(temp.length/5)-1]+temp[Math.ceil(temp.length/5)])/2
+			var second_cut=(temp[Math.floor(2*temp.length/5)]+temp[Math.ceil(2*temp.length/5)])/2
+			var third_cut=(temp[Math.floor(3*temp.length/5)]+temp[Math.ceil(3*temp.length/5)])/2
+			var fourth_cut=(temp[Math.floor(4*temp.length/5)]+temp[Math.ceil(4*temp.length/5)])/2
+			var category='placeholder'
+
+			function pick_cat(a){
+				if(a<first_cut){return temp[0]+' - '+temp[Math.round(temp.length/5)-1]}
+				if(a<second_cut){return temp[Math.round(temp.length/5)-1]+' - '+temp[Math.round(2*temp.length/5)-1]}
+				if(a<third_cut){return temp[Math.round(2*temp.length/5)-1]+' - '+temp[Math.round(3*temp.length/5)-1]}
+				if(a<fourth_cut){return temp[Math.round(3*temp.length/5)-1]+' - '+temp[Math.round(4*temp.length/5)-1]}
+				else{return temp[Math.round(4*temp.length/5)-1]+' - '+temp[Math.round(5*temp.length/5)-1]}
+			}
+
+			for(var i=0;i<final_data[values].length;i++){
+				var a=final_data[values][i]
+				final_data.placeholder.push(pick_cat(a))
+			}
+
+			for(var i=0;i<datadict.length;i++){
+				var a=datadict[i][values]
+				datadict[i][category]=pick_cat(a)
+			}
+		}
+
+		geom_dict['map']={'location':location,'geography':geography,'values':values,'grouping':{'category':category}}
 		ready=1
 	}
 
@@ -508,7 +542,7 @@ function redraw(keep) {
 
 					for(var i=0;i<ann.length;i++){
 						if(ann[i].attr('arrow')){
-							var color=ann[i].attr('stroke')
+							var color=ann[i].attr()['stroke']
 							var temparrow = grapharea.path('M0,0 L0,4 L6,2 L0,0').attr({fill:color})
 							var tempamarker = temparrow.marker(0,0,6,4,0,2).attr({fill:color});
 							ann[i].attr({'marker-end':tempamarker})

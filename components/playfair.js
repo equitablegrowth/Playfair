@@ -1305,16 +1305,18 @@ function draw_key(legend,playobj,snapobj,prelim,vertical){
 				}
 			}
 
-			// bars or stacked bars or area 
-			if((legend[i].geom=='bar' || legend[i].geom=='stackedbar' || legend[i].geom=='area' || legend[i].geom=='bounds') && keyitem_dict[keyitem_name]==undefined){
+			// bars or stacked bars or area or map
+			if((legend[i].geom=='bar' || legend[i].geom=='stackedbar' || legend[i].geom=='area' || legend[i].geom=='bounds' || legend[i].geom=='map') && keyitem_dict[keyitem_name]==undefined){
 				if(legend[i].grouping=='color'){
 					keyitem_dict[keyitem_name]=snapobj.rect(x,y-playobj.legends.legend_elementsize/2,playobj.legends.legend_elementsize,playobj.legends.legend_elementsize).attr({fill:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'group':legend[i].group_value,'class':'dataelement',colorchange:'fill',context:'data_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
 				} else if(legend[i].grouping=='type'){
 					keyitem_dict[keyitem_name]=snapobj.rect(x,y-playobj.legends.legend_elementsize/2,playobj.legends.legend_elementsize,playobj.legends.legend_elementsize).attr({fill:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'group':legend[i].group_value,'class':'dataelement',colorchange:'fill',context:'data_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+				} else if(legend[i].geom=='map'){
+					keyitem_dict[keyitem_name]=snapobj.rect(x,y-playobj.legends.legend_elementsize/2,playobj.legends.legend_elementsize,playobj.legends.legend_elementsize).attr({fill:chartobject.color_scales.sequential_color[numeric % chartobject.color_scales.sequential_color.length],'group':legend[i].group_value,'class':'dataelement',colorchange:'fill',context:'data_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
 				} else {
 					keyitem_dict[keyitem_name]=snapobj.rect(x,y-playobj.legends.legend_elementsize/2,playobj.legends.legend_elementsize,playobj.legends.legend_elementsize).attr({fill:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'group':legend[i].group_value,'class':'dataelement',colorchange:'fill',context:'data_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
 				}
-			} else if((legend[i].geom=='bar' || legend[i].geom=='stackedbar' || legend[i].geom=='area' || legend[i].geom=='bounds') && keyitem_dict[keyitem_name]!==undefined){
+			} else if((legend[i].geom=='bar' || legend[i].geom=='stackedbar' || legend[i].geom=='area' || legend[i].geom=='bounds' || legend[i].geom=='bounds') && keyitem_dict[keyitem_name]!==undefined){
 				if(legend[i].grouping=='color'){
 					keyitem_dict[keyitem_name].attr({'fill':chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],context:'data_context_menu'})
 				} else if(legend[i].grouping=='type'){
@@ -2668,8 +2670,8 @@ function draw_rects(axes,rect,snapobj){
 	snapobj.append(snapobj.selectAll('[zeroline="1"]'))
 }
 
-function draw_map(map,snapobj){
-	// map is {'location':location,'category':category,'geography':states|counties,'values':values}
+function draw_map(geom,snapobj){
+	// map is {'location':location,'geography':states|counties,'values':values,'grouping':{'category':category}}
 	// loop through observations in the xvar and yvar
 	// categories are always based on the 'category' variable if available - values are really for keys, if the var is continuous
 	// however, if categories are not passed, separate the data into quintiles and pick colors accordingly.
@@ -2683,9 +2685,9 @@ function draw_map(map,snapobj){
 	//   2. SVGs should have class=some-id that will match the variables used to color the map
 	//   3. hopefully you can figure out all the sizing issues! This actually seems easy-ish
 
-	if(map['location']=='states'){var loc='maps/states.svg'}
-	else if(map['location']=='counties'){var loc='maps/counties.svg'}
-	else {var loc='maps/'+map['location']+'.svg'}
+	if(geom['location']=='states'){var loc='maps/states.svg'}
+	else if(geom['location']=='counties'){var loc='maps/counties.svg'}
+	else {var loc='maps/'+geom['location']+'.svg'}
 
 	// get available space
 	var avail_height=chartobject.height-chartobject.footer.footer_height-chartobject.header.head_height-chartobject.grapharea.top_margin-chartobject.grapharea.chart_toppad-chartobject.grapharea.bottom_margin-chartobject.grapharea.chart_bottompad
@@ -2698,12 +2700,50 @@ function draw_map(map,snapobj){
 	// load map, get dimensions, create the appropriate viewbox, then size based on available height/width
 	var g=snapobj.group()
 	var map=Snap.load('maps/states.svg', function(loadedFragment){
+
+		// if no category is given, use the values to create quintiles
+		if(geom.grouping.category==='none'){
+			var temp=chartobject.dataset.filter(function(row){
+				return row[geom.values]!==undefined & row[geom.location]!==undefined
+			})
+			var all_values=[]
+			for(var i=0;i<temp.length;i++){
+				all_values.push(temp[i][geom.values])
+			}
+			all_values.sort(function(a,b){
+				return a-b
+			})
+			var first_cut=(all_values[Math.floor(all_values.length/5)-1]+all_values[Math.ceil(all_values.length/5)])/2
+			var second_cut=(all_values[Math.floor(2*all_values.length/5)]+all_values[Math.ceil(2*all_values.length/5)])/2
+			var third_cut=(all_values[Math.floor(3*all_values.length/5)]+all_values[Math.ceil(3*all_values.length/5)])/2
+			var fourth_cut=(all_values[Math.floor(4*all_values.length/5)]+all_values[Math.ceil(4*all_values.length/5)])/2
+			geom.grouping.category='placeholder'
+			for(var i=0;i<chartobject.dataset.length;i++){
+				var a=chartobject.dataset[i][geom.values]
+
+				function pick_cat(a){
+					if(a<first_cut){return all_values[0]+' - '+all_values[Math.round(all_values.length/5)-1]}
+					if(a<second_cut){return all_values[Math.round(all_values.length/5)-1]+' - '+all_values[Math.round(2*all_values.length/5)-1]}
+					if(a<third_cut){return all_values[Math.round(2*all_values.length/5)-1]+' - '+all_values[Math.round(3*all_values.length/5)-1]}
+					if(a<fourth_cut){return all_values[Math.round(3*all_values.length/5)-1]+' - '+all_values[Math.round(4*all_values.length/5)-1]}
+					else{return all_values[Math.round(4*all_values.length/5)-1]+' - '+all_values[Math.round(5*all_values.length/5)-1]}
+				}
+
+				chartobject.dataset[i].placeholder=pick_cat(a)
+			}
+		}
+
+		// add the map to the chartarea and gather measurements to do scaling. Then scale the map
+		// to fit the available area.
 		g.append(loadedFragment)
 		var map=g.select('svg')
 		var mapd=map.getBBox()
 		var boxaspect=avail_width/avail_height
 		var mapaspect=mapd.width/mapd.height
 		console.log(avail_width,avail_height,mapd.width,mapd.height,start_x,start_y)
+
+		// add context to all paths in the map
+		map.selectAll('path').attr({'context':'data_context_menu','colorchange':'fill'})
 
 		if(boxaspect<mapaspect){
 			console.log('width scaling')
@@ -2725,15 +2765,34 @@ function draw_map(map,snapobj){
 			g.transform('s'+scale+'t'+(xcenter+start_x-xdiff)/scale+','+(start_y-ydiff)/scale)
 		}
 
+		// special version of this function for maps
+		function get_color_groups_maps(geom){
+			var temp=chartobject.dataset.filter(function(row){
+				return row[geom.grouping.category]!==undefined & row[geom.location]!==undefined
+			})
+			var color_groups=[]
+			for(var i=0;i<temp.length;i++){
+				color_groups.push(temp[i][geom.grouping.category])
+			}
+			var color_groups=[...new Set(color_groups)]	
+			return color_groups
+		}
+
 		// add data and styling to map
 		for(var i=0;i<chartobject.dataset.length;i++){
 			var current=chartobject.dataset[i]
 
-			if(map.category!=='none'){
-				// color map by category
+			// color map by category
+			var color_groups=get_color_groups_maps(geom)
+			for(var i=0;i<chartobject.dataset.length;i++){
+				var current=chartobject.dataset[i]
+				var location=current[geom.location].replace(/ /g,'')
+				var category=current[geom.grouping.category]
+				var color=chartobject.color_scales.sequential_color[color_groups.indexOf(category) % chartobject.color_scales.sequential_color.length]
 
-			} else {
-				// auto bin and color by values instead
+				// check class and id
+				console.log(location)
+				g.select('.'+location).attr({fill:color,data_label:location,group:category})
 			}
 		}
 	})
