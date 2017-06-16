@@ -276,6 +276,10 @@ function labeldata(target) {
 			}
 		}
 	} else if (item.node.nodeName=='path'){
+		// for maps, need to transform this stuff because the map has been transformed.
+		parents=item.parent()
+		console.log(parents.transform()['string'])
+		console.log(parents.parent().transform()['string'])
 		coords=item.getBBox()
 		console.log(coords)
 		y=parseFloat(item.realPath.split(',')[item.realPath.split(',').length-1])

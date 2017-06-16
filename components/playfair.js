@@ -2685,9 +2685,7 @@ function draw_map(geom,snapobj){
 	//   2. SVGs should have class=some-id that will match the variables used to color the map
 	//   3. hopefully you can figure out all the sizing issues! This actually seems easy-ish
 
-	if(geom['location']=='states'){var loc='maps/states.svg'}
-	else if(geom['location']=='counties'){var loc='maps/counties.svg'}
-	else {var loc='maps/'+geom['location']+'.svg'}
+	var loc='maps/'+geom['geography']+'.svg'
 
 	// get available space
 	var avail_height=chartobject.height-chartobject.footer.footer_height-chartobject.header.head_height-chartobject.grapharea.top_margin-chartobject.grapharea.chart_toppad-chartobject.grapharea.bottom_margin-chartobject.grapharea.chart_bottompad
@@ -2699,7 +2697,7 @@ function draw_map(geom,snapobj){
 
 	// load map, get dimensions, create the appropriate viewbox, then size based on available height/width
 	var g=snapobj.group()
-	var map=Snap.load('maps/states.svg', function(loadedFragment){
+	var map=Snap.load(loc, function(loadedFragment){
 
 		// if no category is given, use the values to create quintiles
 		if(geom.grouping.category==='none'){
@@ -2793,51 +2791,11 @@ function draw_map(geom,snapobj){
 				// check class and id
 				console.log(location)
 				g.select('.'+location).attr({fill:color,data_label:location,group:category})
+				g.select('#'+location).attr({fill:color,data_label:location,group:category})
 			}
 		}
 	})
 }
-
-	// // axes are [xleft,xright,ybottom,ytop]
-	// // point is {'xvar':x_var,'yvar':y_var,'labels':label,'labelall':pointlabel,'grouping':{'color':color,'size':size,'type':type}}
-
-	// // create sets of options for each grouping variable
-	// if(point.grouping.color!=='none'){
-	// 	var color_groups=get_color_groups(point)
-	// } 
-
-	// if(point.grouping.type!=='none'){
-	// 	var temp=chartobject.dataset.filter(function(row){
-	// 		return row[point.xvar]!==undefined & row[point.yvar]!==undefined
-	// 	})
-	// 	var type_groups=[]
-	// 	for(var i=0;i<temp.length;i++){
-	// 		type_groups.push(temp[i][point.grouping.type])
-	// 	}
-	// 	var type_groups=[...new Set(type_groups)]
-	// } 
-
-	// // check for sizing variable and get min and max for scaling
-	// if(point.size!=='none'){
-	// 	var minsize=Math.min(...chartobject.flatdata[point.size])
-	// 	var maxsize=Math.max(...chartobject.flatdata[point.size])
-	// }
-
-	// // loop through observations in the dataset to draw points
-	// for(var i=0;i<chartobject.dataset.length;i++){
-	// 	var current=chartobject.dataset[i]
-
-	// 	// check for sizing variable and set point size
-	// 	if(point.size!=='none'){
-	// 		var pointsize=((current[point.size]-minsize)/(maxsize-minsize))*(parseFloat(chartobject.point_geom.point_maxsize)-parseFloat(chartobject.point_geom.point_minsize))+parseFloat(chartobject.point_geom.point_minsize)
-	// 	} else {
-	// 		var pointsize=chartobject.point_geom.point_size
-	// 	}
-
-	// 	// set various values for points. locations
-	// 	if(current[point.xvar]!=undefined && current[point.yvar]!=undefined  && ((point.grouping.color=='none') || (point.grouping.color!=='none' && current[point.grouping.color]!==undefined))){
-	// 		var x_loc=get_coord(current[point.xvar],chartobject.xlimits,[axes[0],axes[1]],chartobject.flatdata[point.xvar].dtype,chartobject.xarray,0,chartobject.shiftx)
-	// 		var y_loc=get_coord(current[point.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[point.yvar].dtype,chartobject.yarray,1,chartobject.shifty)
 
 
 /////////////////////////////////////////////////////////////

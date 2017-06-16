@@ -339,4 +339,25 @@ function vtabs(opt) {
 	}
 }
 
+///////////////////////// MAPS DROPDOWN ////////////////////////////////
+// Populate the maps tab location dropdown.
+
+$( document ).ready(function() {
+	$.ajax({
+		url:'cgi-bin/listmaps.py',
+		type: 'post',
+		datatype: 'html',
+		data: 1,
+		success: function(response){
+			loadresponse = JSON.parse(response);
+			console.log(loadresponse)
+			for (var i=0;i<loadresponse.length;i++){
+				$('#map_geography').append('<option value='+loadresponse[i].replace('.svg','')+'>'+loadresponse[i].replace('.svg','')+'</option>');
+			};
+		},
+		error: function(){
+			console.log("Can't load maps!")
+		}
+	})
+})
 
