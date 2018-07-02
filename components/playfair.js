@@ -2780,8 +2780,8 @@ function draw_map(geom,snapobj){
 
 				// check class and id
 				console.log(location)
-				try{g.select('.'+location).attr({fill:color,data_label:location,group:category})} catch(err){}
-				try{g.select('#'+location).attr({fill:color,data_label:location,group:category})} catch(err){}
+				g.select('.'+location).attr({fill:color,data_label:location,group:category})
+				g.select('#'+location).attr({fill:color,data_label:location,group:category})
 			}
 		}
 	})
