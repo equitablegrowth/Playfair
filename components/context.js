@@ -199,7 +199,7 @@ function addtext(target) {
 		var annofill='black'
 	}
 
-	var text=grapharea.text(target.clientX-svgx,target.clientY-svgy,'Text Annotation').attr({'font-family':annoface,'font-size':annosize,'text-anchor':'start','fill':annofill,'font-weight':annoweight,'dominant-baseline':'text-before-edge',cursor:'pointer',colorchange:'fill',context:'text_context_menu',annotation:1})
+	var text=grapharea.text(target.clientX-svgx,target.clientY-svgy,'Text Annotation').attr({'font-family':annoface,'font-size':annosize,'text-anchor':'start','fill':annofill,'font-weight':annoweight,dy:'0.7em',cursor:'pointer',colorchange:'fill',context:'text_context_menu',annotation:1})
 	console.log(text,annosize)
 	text.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 }
@@ -259,19 +259,19 @@ function labeldata(target) {
 		coords=item.getBBox()
 		if(item.attr('orient')=='vertical'){
 			if(item.attr('data_label')<0){
-				var datalabel=grapharea.text(coords.x+coords.width/2,coords.y2,item.attr('data_label')).attr({ident:'foot','font-family':chartobject.data_labels.dataface,'font-size':chartobject.data_labels.datasize,'font-weight':chartobject.data_labels.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'middle',colorchange:'fill',context:'text_context_menu',annotation:1})
+				var datalabel=grapharea.text(coords.x+coords.width/2,coords.y2,item.attr('data_label')).attr({ident:'foot','font-family':chartobject.data_labels.dataface,'font-size':chartobject.data_labels.datasize,'font-weight':chartobject.data_labels.dataweight,dy:'0.7em','text-anchor':'middle',colorchange:'fill',context:'text_context_menu',annotation:1})
 				datalabel.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 			} else {
-				var datalabel=grapharea.text(coords.x+coords.width/2,coords.y-parseInt(chartobject.data_labels.datasize)*1.15,item.attr('data_label')).attr({ident:'foot','font-family':chartobject.data_labels.dataface,'font-size':chartobject.data_labels.datasize,'font-weight':chartobject.data_labels.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'middle',colorchange:'fill',context:'text_context_menu',annotation:1})
+				var datalabel=grapharea.text(coords.x+coords.width/2,coords.y-parseInt(chartobject.data_labels.datasize)*1.15,item.attr('data_label')).attr({ident:'foot','font-family':chartobject.data_labels.dataface,'font-size':chartobject.data_labels.datasize,'font-weight':chartobject.data_labels.dataweight,dy:'0.7em','text-anchor':'middle',colorchange:'fill',context:'text_context_menu',annotation:1})
 				datalabel.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 			}
 		}
 		if(item.attr('orient')=='horizontal'){
 			if(item.attr('data_label')<0){
-				var datalabel=grapharea.text(coords.x-5,coords.y+coords.height/2-parseInt(chartobject.data_labels.datasize),item.attr('data_label')).attr({ident:'foot','font-family':chartobject.data_labels.dataface,'font-size':chartobject.data_labels.datasize,'font-weight':chartobject.data_labels.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu',annotation:1})
+				var datalabel=grapharea.text(coords.x-5,coords.y+coords.height/2-parseInt(chartobject.data_labels.datasize),item.attr('data_label')).attr({ident:'foot','font-family':chartobject.data_labels.dataface,'font-size':chartobject.data_labels.datasize,'font-weight':chartobject.data_labels.dataweight,dy:'0.7em','text-anchor':'start',colorchange:'fill',context:'text_context_menu',annotation:1})
 				datalabel.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 			} else {
-				var datalabel=grapharea.text(coords.x+coords.width+5,coords.y+coords.height/2-parseInt(chartobject.data_labels.datasize),item.attr('data_label')).attr({ident:'foot','font-family':chartobject.data_labels.dataface,'font-size':chartobject.data_labels.datasize,'font-weight':chartobject.data_labels.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu',annotation:1})
+				var datalabel=grapharea.text(coords.x+coords.width+5,coords.y+coords.height/2-parseInt(chartobject.data_labels.datasize),item.attr('data_label')).attr({ident:'foot','font-family':chartobject.data_labels.dataface,'font-size':chartobject.data_labels.datasize,'font-weight':chartobject.data_labels.dataweight,dy:'0.7em','text-anchor':'start',colorchange:'fill',context:'text_context_menu',annotation:1})
 				datalabel.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 			}
 		}
@@ -283,12 +283,12 @@ function labeldata(target) {
 		coords=item.getBBox()
 		console.log(coords)
 		y=parseFloat(item.realPath.split(',')[item.realPath.split(',').length-1])
-		var datalabel=grapharea.text(coords.x2+5,y-parseInt(chartobject.data_labels.datasize)+3,item.attr('data_label')).attr({ident:'foot','font-family':chartobject.data_labels.dataface,'font-size':chartobject.data_labels.datasize,'font-weight':chartobject.data_labels.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu',annotation:1})
+		var datalabel=grapharea.text(coords.x2+5,y-parseInt(chartobject.data_labels.datasize)+3,item.attr('data_label')).attr({ident:'foot','font-family':chartobject.data_labels.dataface,'font-size':chartobject.data_labels.datasize,'font-weight':chartobject.data_labels.dataweight,dy:'0.7em','text-anchor':'start',colorchange:'fill',context:'text_context_menu',annotation:1})
 		datalabel.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 	}
 	else {
 		coords=item.getBBox()
-		var datalabel=grapharea.text(coords.x+coords.width/2,coords.y-parseInt(chartobject.data_labels.datasize)-3,item.attr('data_label')).attr({ident:'foot','font-family':chartobject.data_labels.dataface,'font-size':chartobject.data_labels.datasize,'font-weight':chartobject.data_labels.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'middle',colorchange:'fill',context:'text_context_menu',annotation:1})
+		var datalabel=grapharea.text(coords.x+coords.width/2,coords.y-parseInt(chartobject.data_labels.datasize)-3,item.attr('data_label')).attr({ident:'foot','font-family':chartobject.data_labels.dataface,'font-size':chartobject.data_labels.datasize,'font-weight':chartobject.data_labels.dataweight,dy:'0.7em','text-anchor':'middle',colorchange:'fill',context:'text_context_menu',annotation:1})
 		datalabel.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 	}
 }

@@ -26,6 +26,7 @@ function changedimensions() {
 function preview() {
 	// set up geom_dict by looking at all the stuff in chart and gathering variables as appropriate
 	var geom_dict={}
+	var facet={}
 	var ready=0
 
 	if($("#map_location").val()!='none' & ($("#map_category").val()!='none' | $("#map_values").val()!='none')){
@@ -70,6 +71,14 @@ function preview() {
 
 		geom_dict['map']={'location':location,'geography':geography,'values':values,'grouping':{'category':category}}
 		ready=1
+	}
+
+	if($("#facet_variable").val()!='none'){
+		var facet_variable=$("#facet_variable").val()
+		var facet_rows=$("#frows").val()
+		var facet_columns=$("#fcolumns").val()
+
+		facet={'facet_variable':facet_variable,'facet_rows':facet_rows,'facet_columns':facet_columns}
 	}
 
 	if($("#point_select_x").val()!='none' & $("#point_select_y").val()!='none'){
@@ -274,7 +283,7 @@ function preview() {
 		ready=1
 	}
 
-	return [geom_dict,ready]
+	return [geom_dict,ready,facet]
 }
 
 // redraw is the main graphing setup function. Gets variable values and passes them to playfair.js
@@ -296,6 +305,7 @@ function redraw(keep) {
 		var prev=preview()
 		var ready=prev[1]
 		var geom_dict=prev[0]
+		var facets=prev[2]
 
 		// grab all text elements from the design tab
 		var hed=$("#hed").val()
@@ -359,7 +369,7 @@ function redraw(keep) {
 
 			chartobject=playfair.init_graph(grapharea,0,0,width,height)
 			console.log(geom_dict)
-			chartobject.data(final_data,geom_dict)
+			chartobject.data(final_data,geom_dict,facets)
 
 			// initialize styling, the header, and the footer. The footer loads an image (the logo)
 			// and so callouts after it need to be written as callbacks to the footer function.
@@ -372,7 +382,8 @@ function redraw(keep) {
 			var yminorgrid=document.getElementById('yminorgrid').checked
 
 			// legend
-			var legendloc=$('input[name=key]:checked').val()
+			// var legendloc=$('input[name=key]:checked').val()
+			var legendloc="float"
 
 			// barchart specific
 			barspace=document.getElementById('spacing').checked

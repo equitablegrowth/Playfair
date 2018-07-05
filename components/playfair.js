@@ -34,7 +34,8 @@ window.playfair = (function () {
 	// data comes in as the final_data object - this is an object where each
 	// key is a row-heading that corresponds to a list of values
 	// is any of this documentation even accurate anymore? Who can say?
-	Playfair.prototype.data = function(data,geom_dict) {
+	Playfair.prototype.data = function(data,geom_dict,facets) {
+		// facet={'facet_variable':facet_variable,'facet_rows':facet_rows,'facet_columns':facet_columns}
 
 		var datadict=[]
 		for(var key in data){
@@ -683,37 +684,43 @@ window.playfair = (function () {
 
 		// start drawing stuff
 		// set background fill
-		var graph_background=snapobj.rect(graph_obj.x,graph_obj.y+graph_obj.header.head_height,graph_obj.width,graph_obj.height-(graph_obj.header.head_height+graph_obj.footer.footer_height)).attr({class:'background',fill:this.grapharea.chartfill})
+		var graph_background=snapobj.rect(graph_obj.x,graph_obj.y+graph_obj.header.head_height,graph_obj.width,graph_obj.height-(graph_obj.header.head_height+graph_obj.footer_height)).attr({class:'background',fill:this.grapharea.chartfill})
 
-		// draw axes
-		if(typeof(legend)!=='undefined' & chartobject.legends.legend_location=='top' & chartobject.type=='chart'){
-			var key_height=draw_key_top(legend,graph_obj,snapobj)
-			var axes=draw_axes(this,xaxis,yaxis,graph_obj.shiftx,graph_obj.shifty,key_height)
-			console.log(key_height)
-		} else if(chartobject.type=='chart'){
-			console.log('drawing axes with parameters: ',xaxis,yaxis,graph_obj.shiftx,graph_obj.shifty)
-			var axes=draw_axes(this,xaxis,yaxis,graph_obj.shiftx,graph_obj.shifty,0)
-		} else if(chartobject.type=='map'){
-			// don't need to do anything here for now, because the chart background is already filled in,
-			// but in case you do in the future for some reason
-		}
+		// next draw axes and geoms. Cycle through the small multiple variable for this.
+		for(var i=0;i<graph_obj.facetarray.length;i++){
+			// get bounds of potential graphing region
+			var bounds=get_bounds(this)
 
-		// draw geoms
-		if(chartobject.type=='chart'){
-			if(typeof(chartobject.shade)!=='undefined'){draw_shade(axes,graph_obj.shade,snapobj)}
-			if(typeof(chartobject.rect)!=='undefined'){draw_rects(axes,graph_obj.rect,snapobj)}
-			if(typeof(chartobject.bar)!=='undefined'){draw_bars(axes,graph_obj.bar,snapobj)}
-			if(typeof(chartobject.area)!=='undefined'){draw_area(axes,graph_obj.area,snapobj)}
-			if(typeof(chartobject.bounds)!=='undefined'){draw_bounds(axes,graph_obj.bounds,snapobj)}
-			if(typeof(chartobject.stackedbar)!=='undefined'){draw_stackedbars(axes,graph_obj.stackedbar,snapobj)}
-			if(typeof(chartobject.step)!=='undefined'){draw_steps(axes,graph_obj.step,snapobj)}
-			if(typeof(chartobject.line)!=='undefined'){draw_lines(axes,graph_obj.line,snapobj)}
-			if(typeof(chartobject.segment)!=='undefined'){draw_segments(axes,graph_obj.segment,snapobj)}
-			if(typeof(chartobject.point)!=='undefined'){draw_points(axes,graph_obj.point,snapobj)}
-			if(typeof(chartobject.text)!=='undefined'){draw_text(axes,graph_obj.text,snapobj)}
-			if(typeof(chartobject.trend)!=='undefined'){draw_trends(axes,graph_obj.trend,snapobj)}
-		} else if(chartobject.type=='map'){
-			draw_map(graph_obj.map,snapobj)
+			// draw axes
+			if(typeof(legend)!=='undefined' & chartobject.legends.legend_location=='top' & chartobject.type=='chart'){
+				var key_height=draw_key_top(legend,graph_obj,snapobj)
+				var axes=draw_axes(this,xaxis,yaxis,graph_obj.shiftx,graph_obj.shifty,bounds,key_height)
+				console.log(key_height)
+			} else if(chartobject.type=='chart'){
+				console.log('drawing axes with parameters: ',xaxis,yaxis,graph_obj.shiftx,graph_obj.shifty)
+				var axes=draw_axes(this,xaxis,yaxis,graph_obj.shiftx,graph_obj.shifty,bounds,0)
+			} else if(chartobject.type=='map'){
+				// don't need to do anything here for now, because the chart background is already filled in,
+				// but in case you do in the future for some reason
+			}
+
+			// draw geoms
+			if(chartobject.type=='chart'){
+				if(typeof(chartobject.shade)!=='undefined'){draw_shade(axes,graph_obj.shade,snapobj)}
+				if(typeof(chartobject.rect)!=='undefined'){draw_rects(axes,graph_obj.rect,snapobj)}
+				if(typeof(chartobject.bar)!=='undefined'){draw_bars(axes,graph_obj.bar,snapobj)}
+				if(typeof(chartobject.area)!=='undefined'){draw_area(axes,graph_obj.area,snapobj)}
+				if(typeof(chartobject.bounds)!=='undefined'){draw_bounds(axes,graph_obj.bounds,snapobj)}
+				if(typeof(chartobject.stackedbar)!=='undefined'){draw_stackedbars(axes,graph_obj.stackedbar,snapobj)}
+				if(typeof(chartobject.step)!=='undefined'){draw_steps(axes,graph_obj.step,snapobj)}
+				if(typeof(chartobject.line)!=='undefined'){draw_lines(axes,graph_obj.line,snapobj)}
+				if(typeof(chartobject.segment)!=='undefined'){draw_segments(axes,graph_obj.segment,snapobj)}
+				if(typeof(chartobject.point)!=='undefined'){draw_points(axes,graph_obj.point,snapobj)}
+				if(typeof(chartobject.text)!=='undefined'){draw_text(axes,graph_obj.text,snapobj)}
+				if(typeof(chartobject.trend)!=='undefined'){draw_trends(axes,graph_obj.trend,snapobj)}
+			} else if(chartobject.type=='map'){
+				draw_map(graph_obj.map,snapobj)
+			}
 		}
 
 		// draw key
@@ -755,8 +762,8 @@ window.playfair = (function () {
 				// draw footer and source.
 				if(graphobj.source.length>0){
 					source='Source: '+graphobj.source
-					lines=multitext(source,{'font-family':graphobj.source_text.sourceface,'font-size':graphobj.source_text.sourcesize,'font-weight':graphobj.source_text.sourceweight,'dominant-baseline':'text-before-edge',fill:graphobj.source_text.sourcetextfill},graphobj.width-graphobj.footer.footer_leftpad-graphobj.footer.footer_rightpad-logo_coords.width-20)
-					var source=snapobj.text(graphobj.x+graphobj.footer.footer_leftpad,graphobj.y+graphobj.height-logo_coords.height-graphobj.footer.footer_bottompad,lines).attr({fill:notefill,ident:'foot','font-family':graphobj.source_text.sourceface,'font-size':graphobj.source_text.sourcesize,'font-weight':graphobj.source_text.sourceweight,'dominant-baseline':'text-before-edge',colorchange:'fill',context:'text_context_menu'})
+					lines=multitext(source,{'font-family':graphobj.source_text.sourceface,'font-size':graphobj.source_text.sourcesize,'font-weight':graphobj.source_text.sourceweight,dy:'0.75em',fill:graphobj.source_text.sourcetextfill},graphobj.width-graphobj.footer.footer_leftpad-graphobj.footer.footer_rightpad-logo_coords.width-20)
+					var source=snapobj.text(graphobj.x+graphobj.footer.footer_leftpad,graphobj.y+graphobj.height-logo_coords.height-graphobj.footer.footer_bottompad,lines).attr({fill:notefill,ident:'foot','font-family':graphobj.source_text.sourceface,'font-size':graphobj.source_text.sourcesize,'font-weight':graphobj.source_text.sourceweight,dy:'0.75em',colorchange:'fill',context:'text_context_menu'})
 					source.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 					source.selectAll("tspan:not(:first-child)").attr({x:source.attr('x'),dy:parseInt(graphobj.source_text.sourcesize)})
 					source_coords=source.getBBox().y2
@@ -764,11 +771,11 @@ window.playfair = (function () {
 
 				if(graphobj.note.length>0){
 					note='Note: '+graphobj.note
-					lines=multitext(note,{fill:graphobj.note_text.notetextfill,'font-family':graphobj.note_text.noteface,'font-size':graphobj.note_text.notesize,'font-weight':graphobj.note_text.noteweight,'dominant-baseline':'text-before-edge'},graphobj.width-graphobj.footer.footer_leftpad-graphobj.footer.footer_rightpad-logo_coords.width-20)
+					lines=multitext(note,{fill:graphobj.note_text.notetextfill,'font-family':graphobj.note_text.noteface,'font-size':graphobj.note_text.notesize,'font-weight':graphobj.note_text.noteweight,dy:'0.75em'},graphobj.width-graphobj.footer.footer_leftpad-graphobj.footer.footer_rightpad-logo_coords.width-20)
 					if(graphobj.source.length>0){
-						var note=snapobj.text(graphobj.x+graphobj.footer.footer_leftpad,source_coords+notetoppad,lines).attr({fill:sourcefill,ident:'foot','font-family':graphobj.note_text.noteface,'font-size':graphobj.note_text.notesize,'font-weight':graphobj.note_text.noteweight,'dominant-baseline':'text-before-edge',colorchange:'fill',context:'text_context_menu'})
+						var note=snapobj.text(graphobj.x+graphobj.footer.footer_leftpad,source_coords+notetoppad,lines).attr({fill:sourcefill,ident:'foot','font-family':graphobj.note_text.noteface,'font-size':graphobj.note_text.notesize,'font-weight':graphobj.note_text.noteweight,dy:'0.75em',colorchange:'fill',context:'text_context_menu'})
 					} else {
-						var note=snapobj.text(graphobj.x+graphobj.footer.footer_leftpad,source_coords,lines).attr({fill:sourcefill,ident:'foot','font-family':graphobj.note_text.noteface,'font-size':graphobj.note_text.notesize,'font-weight':graphobj.note_text.noteweight,'dominant-baseline':'text-before-edge',colorchange:'fill',context:'text_context_menu'})
+						var note=snapobj.text(graphobj.x+graphobj.footer.footer_leftpad,source_coords,lines).attr({fill:sourcefill,ident:'foot','font-family':graphobj.note_text.noteface,'font-size':graphobj.note_text.notesize,'font-weight':graphobj.note_text.noteweight,dy:'0.75em',colorchange:'fill',context:'text_context_menu'})
 					}					
 					note.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 					note.selectAll("tspan:not(:first-child)").attr({x:note.attr('x'),dy:parseInt(graphobj.note_text.notesize)})
@@ -777,9 +784,9 @@ window.playfair = (function () {
 
 				graphobj.logo.logo_height=logo_coords.height
 				graphobj.logo.logo_width=logo_coords.width
-				graphobj.footer.footer_height=logo_coords.height+graphobj.footer.footer_toppad+graphobj.footer.footer_bottompad
+				graphobj.footer_height=logo_coords.height+graphobj.footer.footer_toppad+graphobj.footer.footer_bottompad
 
-				var foot_fill=snapobj.rect(0,graphobj.height-graphobj.footer.footer_height,graphobj.width,graphobj.footer.footer_height).attr({id:'footerrect',fill:graphobj.footer.footerfill})
+				var foot_fill=snapobj.rect(0,graphobj.height-graphobj.footer_height,graphobj.width,graphobj.footer_height).attr({id:'footerrect',fill:graphobj.footer.footerfill})
 				
 				foot_text=snapobj.selectAll("text[ident='foot']")
 				for (var i=0;i<foot_text.length;i++){
@@ -788,18 +795,18 @@ window.playfair = (function () {
 				snapobj.append(logo)
 
 				// If the note+source is taller than the logo height, make the footer bigger and shove all three elements up
-				if(note_coords+chartobject.footer.footer_bottompad-(graphobj.y+graphobj.height-logo_coords.height-graphobj.footer.footer_bottompad-graphobj.footer.footer_toppad)>graphobj.footer.footer_height){
+				if(note_coords+chartobject.footer.footer_bottompad-(graphobj.y+graphobj.height-logo_coords.height-graphobj.footer.footer_bottompad-graphobj.footer.footer_toppad)>graphobj.footer_height){
 					var difference=note_coords+chartobject.footer.footer_bottompad-(graphobj.y+graphobj.height)
-					graphobj.footer.footer_height=graphobj.footer.footer_height+difference
-					snapobj.selectAll('rect[id="footerrect"').attr({height:graphobj.footer.footer_height})
-					snapobj.selectAll('rect[id="footerrect"').attr({y:graphobj.height-graphobj.footer.footer_height})
+					graphobj.footer_height=graphobj.footer_height+difference
+					snapobj.selectAll('rect[id="footerrect"').attr({height:graphobj.footer_height})
+					snapobj.selectAll('rect[id="footerrect"').attr({y:graphobj.height-graphobj.footer_height})
 					logo.attr({y:parseFloat(logo.attr('y'))-difference/2})
 					try{source.attr({y:parseFloat(source.attr('y')-difference)})}catch(err){}
 					try{note.attr({y:parseFloat(note.attr('y')-difference)})}catch(err){}
 				}
 
 				// if the logo is taller than the note+source, vertically center them around the logo's centerline - should there be a vertical-center flag for this in theme?
-				if(note_coords+chartobject.footer.footer_bottompad-(graphobj.y+graphobj.height-logo_coords.height-graphobj.footer.footer_bottompad-graphobj.footer.footer_toppad)<graphobj.footer.footer_height){
+				if(note_coords+chartobject.footer.footer_bottompad-(graphobj.y+graphobj.height-logo_coords.height-graphobj.footer.footer_bottompad-graphobj.footer.footer_toppad)<graphobj.footer_height){
 					var difference=note_coords+chartobject.footer.footer_bottompad-(graphobj.y+graphobj.height)
 					console.log('centering note/source',difference)
 					try{source.attr({y:parseFloat(source.attr('y')-difference/2)})}catch(err){console.log('err')}
@@ -811,8 +818,8 @@ window.playfair = (function () {
 		} else {
 			if(graphobj.source.length>0){
 				source='Source: '+graphobj.source
-				lines=multitext(source,{'font-family':graphobj.source_text.sourceface,'font-size':graphobj.source_text.sourcesize,'font-weight':graphobj.source_text.sourceweight,'dominant-baseline':'text-before-edge',fill:graphobj.source_text.sourcetextfill},graphobj.width-graphobj.footer.footer_leftpad-graphobj.footer.footer_rightpad)
-				var source=snapobj.text(graphobj.x+graphobj.footer.footer_leftpad,graphobj.y+graphobj.height+graphobj.footer.footer_toppad,lines).attr({ident:'foot','font-family':graphobj.source_text.sourceface,fill:sourcefill,'font-size':graphobj.source_text.sourcesize,'font-weight':graphobj.source_text.sourceweight,'dominant-baseline':'text-before-edge',colorchange:'fill',context:'text_context_menu'})
+				lines=multitext(source,{'font-family':graphobj.source_text.sourceface,'font-size':graphobj.source_text.sourcesize,'font-weight':graphobj.source_text.sourceweight,dy:'0.75em',fill:graphobj.source_text.sourcetextfill},graphobj.width-graphobj.footer.footer_leftpad-graphobj.footer.footer_rightpad)
+				var source=snapobj.text(graphobj.x+graphobj.footer.footer_leftpad,graphobj.y+graphobj.height+graphobj.footer.footer_toppad,lines).attr({ident:'foot','font-family':graphobj.source_text.sourceface,fill:sourcefill,'font-size':graphobj.source_text.sourcesize,'font-weight':graphobj.source_text.sourceweight,dy:'0.75em',colorchange:'fill',context:'text_context_menu'})
 				source.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 				source.selectAll("tspan:not(:first-child)").attr({x:source.attr('x'),dy:parseInt(graphobj.source_text.sourcesize)})
 				source_coords=source.getBBox().y2
@@ -820,8 +827,8 @@ window.playfair = (function () {
 
 			if(graphobj.note.length>0){
 				note='Note: '+graphobj.note
-				lines=multitext(note,{fill:graphobj.note_text.notetextfill,'font-family':graphobj.note_text.noteface,'font-size':graphobj.note_text.notesize,'font-weight':graphobj.note_text.noteweight,'dominant-baseline':'text-before-edge'},graphobj.width-graphobj.footer.footer_leftpad-graphobj.footer.footer_rightpad)
-				var note=snapobj.text(graphobj.x+graphobj.footer.footer_leftpad,source_coords+graphobj.note_text.notetoppad,lines).attr({fill:notefill,ident:'foot','font-family':graphobj.note_text.noteface,'font-size':graphobj.note_text.notesize,'font-weight':graphobj.note_text.noteweight,'dominant-baseline':'text-before-edge',colorchange:'fill',context:'text_context_menu'})
+				lines=multitext(note,{fill:graphobj.note_text.notetextfill,'font-family':graphobj.note_text.noteface,'font-size':graphobj.note_text.notesize,'font-weight':graphobj.note_text.noteweight,dy:'0.75em'},graphobj.width-graphobj.footer.footer_leftpad-graphobj.footer.footer_rightpad)
+				var note=snapobj.text(graphobj.x+graphobj.footer.footer_leftpad,source_coords+graphobj.note_text.notetoppad,lines).attr({fill:notefill,ident:'foot','font-family':graphobj.note_text.noteface,'font-size':graphobj.note_text.notesize,'font-weight':graphobj.note_text.noteweight,dy:'0.75em',colorchange:'fill',context:'text_context_menu'})
 				note.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 				note.selectAll("tspan:not(:first-child)").attr({x:note.attr('x'),dy:parseInt(graphobj.note_text.notesize)})
 				note_coords=note.getBBox().y2
@@ -829,16 +836,16 @@ window.playfair = (function () {
 
 			graphobj.logo.logo_height=0
 			graphobj.logo.logo_width=0
-			graphobj.footer.footer_height=0
+			graphobj.footer_height=0
 
 			if(graphobj.note.length>0 || graphobj.source.length>0){
-				graphobj.footer.footer_height=note_coords+graphobj.footer.footer_bottompad-(graphobj.y+graphobj.height)
-				try{source.attr({y:graphobj.y+graphobj.height-graphobj.footer.footer_height+graphobj.footer.footer_toppad})}catch(err){}
+				graphobj.footer_height=note_coords+graphobj.footer.footer_bottompad-(graphobj.y+graphobj.height)
+				try{source.attr({y:graphobj.y+graphobj.height-graphobj.footer_height+graphobj.footer.footer_toppad})}catch(err){}
 				try{var source_coords=source.getBBox().y2}catch(err){}
 				try{note.attr({y:source_coords})}catch(err){}
 			}
 
-			var foot_fill=snapobj.rect(0,graphobj.height-graphobj.footer.footer_height,graphobj.width,graphobj.footer.footer_height).attr({id:'footerrect',fill:graphobj.footer.footerfill})
+			var foot_fill=snapobj.rect(0,graphobj.height-graphobj.footer_height,graphobj.width,graphobj.footer_height).attr({id:'footerrect',fill:graphobj.footer.footerfill})
 			snapobj.append(note)
 			snapobj.append(source)
 
@@ -847,31 +854,31 @@ window.playfair = (function () {
 	}
 
 	Playfair.prototype.prepheader = function(hed,dek) {
-		snapobj=this.svg
+		var snapobj=this.svg
 
 		chartobject.hed=hed
 		chartobject.dek=dek
 
-		headerwidth=chartobject.width-chartobject.header.header_leftpad-chartobject.header.header_rightpad
+		var headerwidth=chartobject.width-chartobject.header.header_leftpad-chartobject.header.header_rightpad
 
 		// draw main title
 		var hedfontsize=parseInt(chartobject.title_text.hedsize)
-		while(multitext(hed,{'font-family':chartobject.title_text.hedface,'font-size':hedfontsize+'px','font-weight':chartobject.title_text.hedweight,'dominant-baseline':'text-before-edge',fill:chartobject.title_text.hedtextfill},headerwidth).length>1){
-			hedfontsize=hedfontsize-1
+		while(multitext(hed,{'font-family':chartobject.title_text.hedface,'font-size':hedfontsize+'px','font-weight':chartobject.title_text.hedweight,dy:'0.3em',fill:chartobject.title_text.hedtextfill},headerwidth).length>1){
+			var hedfontsize=hedfontsize-1
 		}
 
 		if (hedfontsize<parseInt(chartobject.title_text.hedsizemin)){
-			hedfontsize=chartobject.title_text.hedsizemin
+			var hedfontsize=chartobject.title_text.hedsizemin
 			alert('Your headline is too long.')
 		}
 
-		var hed=snapobj.text(chartobject.x+chartobject.header.header_leftpad,chartobject.y+chartobject.header.header_toppad,hed).attr({'font-family':chartobject.title_text.hedface,'font-size':hedfontsize,'font-weight':chartobject.title_text.hedweight,'dominant-baseline':'text-before-edge',fill:chartobject.title_text.hedtextfill,colorchange:'fill',context:'text_context_menu'})
+		var hed=snapobj.text(chartobject.x+chartobject.header.header_leftpad,chartobject.y+chartobject.header.header_toppad,hed).attr({'font-family':chartobject.title_text.hedface,'font-size':hedfontsize,'font-weight':chartobject.title_text.hedweight,dy:'0.75em',fill:chartobject.title_text.hedtextfill,colorchange:'fill',context:'text_context_menu'})
 		hed.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 		var hed_coords=hed.getBBox()
 
 		// draw subtitle
 		var dekfontsize=parseInt(chartobject.title_text.deksize)
-		while(multitext(dek,{'font-family':chartobject.title_text.dekface,'font-size':dekfontsize,'font-weight':chartobject.title_text.dekweight,'dominant-baseline':'text-before-edge',fill:chartobject.title_text.dektextfill},headerwidth).length>2){
+		while(multitext(dek,{'font-family':chartobject.title_text.dekface,'font-size':dekfontsize,'font-weight':chartobject.title_text.dekweight,dy:'0.3em',fill:chartobject.title_text.dektextfill},headerwidth).length>chartobject.title_text.maxdeklines){
 			dekfontsize=dekfontsize-1
 		}
 
@@ -880,16 +887,12 @@ window.playfair = (function () {
 			alert('Your subhead is too long.')
 		}
 
-		lines=multitext(dek,{'font-family':chartobject.title_text.dekface,'font-size':dekfontsize,'font-weight':chartobject.title_text.dekweight,'dominant-baseline':'text-before-edge',fill:chartobject.title_text.dektextfill},headerwidth)
-	
-		if (lines.length>chartobject.title_text.maxdeklines){
-			var stop=chartobject.title_text.maxdeklines
-		} else {var stop=lines.length}
-
-		for(var i=0;i<stop;i++){
-			var dek=snapobj.text(chartobject.x+chartobject.header.header_leftpad,chartobject.y+hed_coords.y2+i*parseInt(dekfontsize)*1.1,lines[i]).attr({'font-family':chartobject.title_text.dekface,'font-size':dekfontsize,'font-weight':chartobject.title_text.dekweight,'dominant-baseline':'text-before-edge',ident:'dek',fill:chartobject.title_text.dektextfill,colorchange:'fill',context:'text_context_menu'})
-			dek.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
-		}
+		if(hed_coords.y2==0){var dek_start=chartobject.header.header_toppad}
+		else{var dek_start=hed_coords.y2}
+		var lines=multitext(dek,{'font-family':chartobject.title_text.dekface,'font-size':dekfontsize,'font-weight':chartobject.title_text.dekweight,dy:'0.3em',fill:chartobject.title_text.dektextfill},headerwidth)
+		var dek=snapobj.text(chartobject.x+chartobject.header.header_leftpad,dek_start,lines).attr({'font-family':chartobject.title_text.dekface,'font-size':dekfontsize,'font-weight':chartobject.title_text.dekweight,dy:'0.75em',ident:'dek',fill:chartobject.title_text.dektextfill,colorchange:'fill',context:'text_context_menu'})
+		dek.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
+		dek.selectAll("tspan:not(:first-child)").attr({x:dek.attr('x'),dy:parseFloat(dekfontsize)})
 		
 		var lower_hed=hed.getBBox().y2
 		var lower_dek=dek.getBBox().y2
@@ -992,7 +995,7 @@ function draw_key_top(legend,playobj,snapobj){
 			var current_group=legend[i].lgroup
 
 			if(keyitem_loc[keyitem_loc_name]==undefined){
-				var t=snapobj.text(xtext,y,legend[i].group_value).attr({ident2:'floatkey',ident:'key',fill:playobj.legends.legend_textfill,'font-size':playobj.legends.legend_textsize,'font-weight':playobj.legends.legend_textweight,'font-family':playobj.legends.legend_textface,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
+				var t=snapobj.text(xtext,y,legend[i].group_value).attr({ident2:'floatkey',ident:'key',fill:playobj.legends.legend_textfill,'font-size':playobj.legends.legend_textsize,'font-weight':playobj.legends.legend_textweight,'font-family':playobj.legends.legend_textface,dy:'0.3em','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
 				var box=t.getBBox()
 				currentx=box.x2+playobj.legends.legend_elementpad
 
@@ -1002,7 +1005,7 @@ function draw_key_top(legend,playobj,snapobj){
 					y=starty+line*(parseFloat(playobj.legends.legend_elementsize))+line*(parseFloat(playobj.legends.legend_elementpad))
 					currentx=startx
 					x=currentx
-					var t=snapobj.text(currentx+playobj.legends.legend_elementsize+playobj.legends.legend_elementpad,starty+line*(parseFloat(playobj.legends.legend_elementsize))+line*(parseFloat(playobj.legends.legend_elementpad)),legend[i].group_value).attr({ident2:'floatkey',ident:'key',fill:playobj.legends.legend_textfill,'font-size':playobj.legends.legend_textsize,'font-weight':playobj.legends.legend_textweight,'font-family':playobj.legends.legend_textface,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
+					var t=snapobj.text(currentx+playobj.legends.legend_elementsize+playobj.legends.legend_elementpad,starty+line*(parseFloat(playobj.legends.legend_elementsize))+line*(parseFloat(playobj.legends.legend_elementpad)),legend[i].group_value).attr({ident2:'floatkey',ident:'key',fill:playobj.legends.legend_textfill,'font-size':playobj.legends.legend_textsize,'font-weight':playobj.legends.legend_textweight,'font-family':playobj.legends.legend_textface,dy:'0.3em','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
 				}
 
 				keyitem_loc[keyitem_loc_name]={}
@@ -1181,7 +1184,7 @@ function draw_key(legend,playobj,snapobj,prelim,vertical){
 
 		if(ltitle!==''){
 			var lines=multitext(ltitle,{'font-size':playobj.legends.legend_titletextsize,'font-weight':playobj.legends.legend_titletextweight,'font-family':playobj.legends.legend_titletextface},maxwidth-2*playobj.legends.legend_floatpad)
-			var title=snapobj.text(playobj.legends.legend_floatpad,playobj.legends.legend_floatpad,lines).attr({unique:'keytitle',ident2:'floatkey',ident:'key',fill:playobj.legends.legend_titletextfill,'font-size':playobj.legends.legend_titletextsize,'font-weight':playobj.legends.legend_titletextweight,'font-family':playobj.legends.legend_titletextface,'dominant-baseline':'text-before-edge',colorchange:'fill',context:'text_context_menu'})
+			var title=snapobj.text(playobj.legends.legend_floatpad,playobj.legends.legend_floatpad,lines).attr({unique:'keytitle',ident2:'floatkey',ident:'key',fill:playobj.legends.legend_titletextfill,'font-size':playobj.legends.legend_titletextsize,'font-weight':playobj.legends.legend_titletextweight,'font-family':playobj.legends.legend_titletextface,dy:'0.3em',colorchange:'fill',context:'text_context_menu'})
 			title.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 			title.selectAll("tspan:not(:first-child)").attr({x:title.attr('x'),dy:1*parseFloat(title.attr('font-size'))})
 			if(maxitemwidth<title.getBBox().x2){maxitemwidth=title.getBBox().x2}
@@ -1219,7 +1222,7 @@ function draw_key(legend,playobj,snapobj,prelim,vertical){
 				if(overalls[legend[i].overall]==undefined){
 					var lines=multitext(legend[i].group_value,{'font-size':playobj.legends.legend_textsize,'font-weight':playobj.legends.legend_textweight,'font-family':playobj.legends.legend_textface},maxtextwidth)
 					// the +.5 here is a kluge that only applies to the values of legend_elementsize and legend_textsize you're using feels like it should be (legend_elementsize-legend_textsize)/2 but that doesn't get me what I want
-					var t=snapobj.text(xtext,y+.5,lines).attr({ident2:'floatkey',ident:'key',fill:playobj.legends.legend_textfill,'font-size':playobj.legends.legend_textsize,'font-weight':playobj.legends.legend_textweight,'font-family':playobj.legends.legend_textface,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
+					var t=snapobj.text(xtext,y+.5,lines).attr({ident2:'floatkey',ident:'key',fill:playobj.legends.legend_textfill,'font-size':playobj.legends.legend_textsize,'font-weight':playobj.legends.legend_textweight,'font-family':playobj.legends.legend_textface,dy:'0.3em','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
 					t.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 					t.selectAll("tspan:not(:first-child)").attr({x:t.attr('x'),dy:1*parseFloat(t.attr('font-size'))})
 					var xend=t.getBBox().x2
@@ -1441,7 +1444,7 @@ function draw_trends(axes,trend,snapobj){
 		console.log(pathcoords)
 
 		// finally add the text
-		var trendtext=snapobj.text((x_loc1+x_loc2)/2,(y_loc1+y_loc2)/2,'Trendline').attr({fill:chartobject.trend_geom.trend_textcolor,'font-family':chartobject.trend_geom.trend_textface,'font-weight':chartobject.trend_geom.trend_textweight,'dominant-baseline':'text-before-edge','text-anchor':'middle','colorchange':'fill',context:'text_context_menu'})
+		var trendtext=snapobj.text((x_loc1+x_loc2)/2,(y_loc1+y_loc2)/2,'Trendline').attr({fill:chartobject.trend_geom.trend_textcolor,'font-family':chartobject.trend_geom.trend_textface,'font-weight':chartobject.trend_geom.trend_textweight,dy:'0.3em','text-anchor':'middle','colorchange':'fill',context:'text_context_menu'})
 		trendtext.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 		var coords=trendtext.getBBox()
 		trendtext.attr({y:coords.y-chartobject.trend_geom.trend_linetotext-coords.height})
@@ -2122,7 +2125,7 @@ function draw_points(axes,point,snapobj){
 
 			// label point
 			if (point.labelall==true) {
-				var label=snapobj.text(x_loc,y_loc-pointsize-3,current[point.labels]).attr({'font-family':chartobject.data_labels.dataface,'font-size':chartobject.data_labels.datasize,'font-weight':chartobject.data_labels.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'middle',fill:chartobject.data_labels.datatextfill,colorchange:'fill',context:'text_context_menu'})
+				var label=snapobj.text(x_loc,y_loc-pointsize-3,current[point.labels]).attr({'font-family':chartobject.data_labels.dataface,'font-size':chartobject.data_labels.datasize,'font-weight':chartobject.data_labels.dataweight,dy:'0.3em','text-anchor':'middle',fill:chartobject.data_labels.datatextfill,colorchange:'fill',context:'text_context_menu'})
 				label.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 				var coords=label.getBBox()
 				label.attr({y:coords.y-coords.height})
@@ -2229,9 +2232,8 @@ function draw_text(axes,text,snapobj){
 			var y_loc=get_coord(current[text.yvar],chartobject.ylimits,[axes[2],axes[3]],chartobject.flatdata[text.yvar].dtype,chartobject.yarray,1,chartobject.shifty,chartobject.ybar)
 
 			// draw text
-			var t=snapobj.text(x_loc,y_loc,current[text.text]).attr({'text-anchor':chartobject.text_geom.text_align,fill:chartobject.text_geom.text_fill,opacity:chartobject.text_geom.text_opacity,'data_type':'text','class':'dataelement',colorchange:'fill',context:'text_context_menu','dominant-baseline':'text-before-edge','font-size':size,'font-family':chartobject.text_geom.text_face,'font-weight':chartobject.text_geom.text_weight})
+			var t=snapobj.text(x_loc,y_loc,current[text.text]).attr({'text-anchor':chartobject.text_geom.text_align,fill:chartobject.text_geom.text_fill,opacity:chartobject.text_geom.text_opacity,'data_type':'text','class':'dataelement',colorchange:'fill',context:'text_context_menu',dy:'0.3em','font-size':size,'font-family':chartobject.text_geom.text_face,'font-weight':chartobject.text_geom.text_weight})
 			t.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
-			center_baseline(t)
 		}
 	}
 }
@@ -2688,7 +2690,7 @@ function draw_map(geom,snapobj){
 	var loc='maps/'+geom['geography']+'.svg'
 
 	// get available space
-	var avail_height=chartobject.height-chartobject.footer.footer_height-chartobject.header.head_height-chartobject.grapharea.top_margin-chartobject.grapharea.chart_toppad-chartobject.grapharea.bottom_margin-chartobject.grapharea.chart_bottompad
+	var avail_height=chartobject.height-chartobject.footer_height-chartobject.header.head_height-chartobject.grapharea.top_margin-chartobject.grapharea.chart_toppad-chartobject.grapharea.bottom_margin-chartobject.grapharea.chart_bottompad
 	var avail_width=chartobject.width-chartobject.grapharea.right_margin-chartobject.grapharea.left_margin-chartobject.grapharea.chart_leftpad-chartobject.grapharea.chart_rightpad
 	var start_x=chartobject.grapharea.left_margin+chartobject.grapharea.chart_leftpad
 	var start_y=chartobject.header.head_height+chartobject.grapharea.top_margin+chartobject.grapharea.chart_toppad
@@ -3227,14 +3229,35 @@ function multitext(txt,attributes,max_width,svgname){
 	return lines
 }
 
+function get_bounds(playobj) {
+	// this function is to get the area of the chart area that is available for graphing.
+	// So take total drawable area, subtract off the header and footer, subtract left and
+	// right margins, return min x, max x, min y and max y
+	var snapobj=playobj.svg
 
-function draw_axes(playobj,xvar,yvar,shiftx,shifty,legend_height) {
+	var xpixelmin=playobj.x+playobj.grapharea.left_margin
+	var xpixelmax=playobj.x+playobj.width-playobj.grapharea.right_margin
+	var ypixelmin=playobj.y+playobj.header.head_height+playobj.grapharea.top_margin
+	var ypixelmax=playobj.y+playobj.height-playobj.footer_height-playobj.grapharea.bottom_margin
+
+	return [xpixelmin,xpixelmax,ypixelmin,ypixelmax]
+}
+
+
+function draw_axes(playobj,xvar,yvar,shiftx,shifty,bounds,legend_height) {
 	// console.log(xvar,yvar)
 	// draws the axes for a graph
+	// bounds is [xpixelmin,xpixelmax,ypixelmin,ypixelmax] from the get_bounds function
 	// shiftx and shifty are optional parameters. If shiftx or shifty==1, that axis will
 	// be shifted such that labels occur between ticks, appropriate for a bar graph. There
 	// will also be one more tick to accomodate this change
-	snapobj=playobj.svg
+	var snapobj=playobj.svg
+	var xpixelmin=bounds[0]
+	var xpixelmax=bounds[1]
+	var ypixelmin=bounds[2]
+	var ypixelmax=bounds[3]
+
+	console.log(xpixelmin,xpixelmax,ypixelmin,ypixelmax)
 
 	// placeholder until I figure out top keys
 	playobj.legends.legend_toppad=0
@@ -3248,13 +3271,7 @@ function draw_axes(playobj,xvar,yvar,shiftx,shifty,legend_height) {
 	// y label
 	if (typeof(playobj.ylabel)!=undefined){
 		var lines=multitext(String(playobj.ylabel),{'font-size':playobj.y_label.ylabel_textsize,'font-weight':playobj.y_label.ylabel_textweight,'font-family':playobj.y_label.ylabel_textface},playobj.y_label.ylabel_maxlength)
-
-		if(lines.length>2){
-			alert('Your y-axis label is too long.')
-			lines=lines.splice(0,2)
-		}
-
-		var ylab=snapobj.text(playobj.x+playobj.grapharea.left_margin,((playobj.y+playobj.height-playobj.logo.logo_height-playobj.footer.footer_toppad)+(playobj.y+playobj.header.head_height+playobj.grapharea.top_margin+legend_height+playobj.legends.legend_toppad+playobj.legends.legend_bottompad))/2,lines).attr({fill:playobj.y_label.ylabel_textfill,ident:'yaxis','font-size':playobj.y_label.ylabel_textsize,'font-weight':playobj.y_label.ylabel_textweight,'font-family':playobj.y_label.ylabel_textface,'dominant-baseline':'central','text-anchor':'middle',colorchange:'fill',context:'text_context_menu'})
+		var ylab=snapobj.text(xpixelmin+parseFloat(playobj.y_label.ylabel_textsize)/2,(ypixelmax+ypixelmin)/2,lines).attr({fill:playobj.y_label.ylabel_textfill,ident:'yaxis','font-size':playobj.y_label.ylabel_textsize,'font-weight':playobj.y_label.ylabel_textweight,'font-family':playobj.y_label.ylabel_textface,dy:'0.3em','text-anchor':'middle',colorchange:'fill',context:'text_context_menu'})
 		ylab.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 		ylab_coords=ylab.getBBox()
 		ylab.attr({y:ylab_coords.y-(ylab_coords.height/2),x:parseFloat(ylab.attr('x'))+(lines.length-1)*parseInt(playobj.y_label.ylabel_textsize)/2})
@@ -3262,57 +3279,55 @@ function draw_axes(playobj,xvar,yvar,shiftx,shifty,legend_height) {
 		// rotation does kinda weird things, so instead of rotating here it is done in the 2nd pass later
 		// ylab.transform('r270')
 		ylab_coords=ylab.getBBox()
-		ylab_width=ylab_coords.height
+		ylab_width=ylab_coords.r0
+		var ylabexist=1
+		if(ylab_width==0){ylabexist=0}
 	}
-	else{ylab_width=0}
+	else{var ylab_width=0;var ylabexist=0}
 
 	// y ticks and lines - no location, just figure out what the x offset is
-	total_xoffset=0
+	var total_xoffset=0
 	if(shifty==1){shifty=1}
 	else{shifty=0}
 
 	for(var i=0;i<yvar.length;i++){
 		if(Object.prototype.toString.call(yvar[i])==='[object Date]'){
-			string=formatDate(yvar[i],Math.max(...yvar)-Math.min(...yvar))
+			var string=formatDate(yvar[i],Math.max(...yvar)-Math.min(...yvar))
 		} else {
-			string=String(yvar[i])
+			var string=String(yvar[i])
 		}
-		var temp=snapobj.text(playobj.grapharea.left_margin+ylab_width+playobj.y_ticks.ytick_to_ylabel,0,string).attr({fill:playobj.y_ticks.ytick_textfill,ident:'yaxis','font-size':playobj.y_ticks.ytick_textsize,'font-weight':playobj.y_ticks.ytick_textweight,'font-family':playobj.y_ticks.ytick_textface,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
+		var temp=snapobj.text(xpixelmin+ylab_width+playobj.y_ticks.ytick_to_ylabel*ylabexist,0,string).attr({fill:playobj.y_ticks.ytick_textfill,ident:'yaxis','font-size':playobj.y_ticks.ytick_textsize,'font-weight':playobj.y_ticks.ytick_textweight,'font-family':playobj.y_ticks.ytick_textface,dy:'0.75em','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
 		temp.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
-		coords=temp.getBBox()
-		if (coords.x2>total_xoffset){total_xoffset=coords.x2}
+		var coords=temp.getBBox()
+		if(coords.x2>total_xoffset){total_xoffset=coords.x2}
 		temp.remove()
 	}
 
 	// Subtract graph start x from xoffset and add ytick_to_yaxis to get the actual width of the xoffset.
 	// As a safeguard, if the yoffset width comes back huge, adjust it to 15% of graphing space.
 	// Long labels should wrap to be no larger than y_offset
-	total_xoffset=total_xoffset-playobj.x+playobj.y_ticks.ytick_to_yaxis
+	// total_xoffset is now the width of all y-axis 'machiner' - labels, ticks, and space
+	total_xoffset=total_xoffset-xpixelmin+playobj.y_ticks.ytick_to_yaxis
 	if(total_xoffset>playobj.y_ticks.ytick_maxsize*playobj.width){total_xoffset=playobj.y_ticks.ytick_maxsize*playobj.width}
 
 	// now the full x-offset is known, can start drawing the x-axis. x label:
 	if (typeof(playobj.xlabel)!=undefined){
 		var lines=multitext(String(playobj.xlabel),{'font-size':playobj.x_label.xlabel_textsize,'font-weight':playobj.x_label.xlabel_textweight,'font-family':playobj.x_label.xlabel_textface},playobj.x_label.xlabel_maxlength)
-
-		if(lines.length>2){
-			alert('Your x-axis label is too long.')
-			lines=lines.splice(0,2)
-		}
-
-		var xlab=snapobj.text((total_xoffset+2*playobj.x+playobj.width-playobj.grapharea.right_margin)/2,playobj.y+playobj.height-playobj.grapharea.bottom_margin-playobj.footer.footer_height,lines).attr({fill:playobj.x_label.xlabel_textfill,ident:'xaxis','font-size':playobj.x_label.xlabel_textsize,'font-weight':playobj.x_label.xlabel_textweight,'font-family':playobj.x_label.xlabel_textface,'dominant-baseline':'text-before-edge','text-anchor':'middle',colorchange:'fill',context:'text_context_menu'})
+		var xlab=snapobj.text((total_xoffset+xpixelmax+xpixelmin)/2,0,lines).attr({fill:playobj.x_label.xlabel_textfill,ident:'xaxis','font-size':playobj.x_label.xlabel_textsize,dy:'0.75em','font-weight':playobj.x_label.xlabel_textweight,'font-family':playobj.x_label.xlabel_textface,'text-anchor':'middle',colorchange:'fill',context:'text_context_menu'})
 		xlab.selectAll("tspan:not(:first-child)").attr({x:xlab.attr('x'),dy:parseInt(playobj.x_label.xlabel_textsize)})
 		xlab.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
-		coords=xlab.getBBox()
-		xlab.attr({y:coords.y-coords.height})
-		coords=xlab.getBBox()
-		xlab_height=coords.height
+		var coords=xlab.getBBox()
+		var xlab_height=coords.height*.8
+		xlab.attr({y:ypixelmax-xlab_height})
+		var xlabexist=1
+		if(xlab_height==0){xlabexist=0}
 	}
-	else{xlab_height=0}
+	else{xlab_height=0;xlabexist=0}
 
 	// important parameters - the start and end of the x axis, domain, and x step size
-	xstart_xcoord=total_xoffset+playobj.x
-	xfinal_xcoord=playobj.x+playobj.width-playobj.grapharea.right_margin
-	domain=xfinal_xcoord-xstart_xcoord
+	var xstart_xcoord=total_xoffset+xpixelmin
+	var xfinal_xcoord=xpixelmax
+	var domain=xfinal_xcoord-xstart_xcoord
 	if(shiftx==1){
 		if(chartobject.xarray.dtype!='text'){
 			if(chartobject.datedenom[0]>0){
@@ -3333,7 +3348,7 @@ function draw_axes(playobj,xvar,yvar,shiftx,shifty,legend_height) {
 	}
 
 	// x ticks and x lines - again no location, just figure out what the total y offset is
-	total_yoffset=0
+	var xtickheight=0
 
 	for(var i=0;i<xvar.length;i++){
 		if(x_step<playobj.x_ticks.xtick_maxsize*playobj.width){maxwidth=x_step}
@@ -3345,29 +3360,23 @@ function draw_axes(playobj,xvar,yvar,shiftx,shifty,legend_height) {
 			string=String(xvar[i])
 		}
 
-		lines=multitext(string,{ident:'xaxis','font-size':playobj.x_ticks.xtick_textsize,'font-weight':playobj.x_label.xlabel_textweight,'font-family':playobj.x_label.xlabel_textface,'dominant-baseline':'text-before-edge','text-anchor':'middle'},maxwidth)
-		for(var j=0;j<lines.length;j++){
-			var temp=snapobj.text(0,j*parseInt(playobj.x_ticks.xtick_textsize),lines[j]).attr({fill:playobj.x_ticks.xtick_textfill,ident:'xaxis','font-size':playobj.x_ticks.xtick_textsize,'font-weight':playobj.x_ticks.xtick_textweight,'font-family':playobj.x_ticks.xtick_textface,'dominant-baseline':'text-before-edge','text-anchor':'middle',colorchange:'fill',context:'text_context_menu'})
-			temp.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
-			var coords=temp.getBBox()
-			temp.attr({y:coords.y-coords.height})
-			temp.remove()
-		}
-		if(coords.y>total_yoffset){total_yoffset=coords.y}
+		var lines=multitext(string,{ident:'xaxis','font-size':playobj.x_ticks.xtick_textsize,'font-weight':playobj.x_ticks.xtick_textweight,'font-family':playobj.x_ticks.xtick_textface,dy:'0.3em','text-anchor':'middle'},maxwidth)
+		var temp=snapobj.text(0,parseInt(playobj.x_ticks.xtick_textsize),lines).attr({fill:playobj.x_ticks.xtick_textfill,ident:'xaxis','font-size':playobj.x_ticks.xtick_textsize,'font-weight':playobj.x_ticks.xtick_textweight,'font-family':playobj.x_ticks.xtick_textface,'text-anchor':'middle',colorchange:'fill',context:'text_context_menu'})
+		temp.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
+		temp.selectAll("tspan:not(:first-child)").attr({x:temp.attr('x'),dy:parseFloat(playobj.x_ticks.xtick_textsize)})
+		var coords=temp.getBBox()
+		if(coords.height*.8>xtickheight){xtickheight=coords.height*.8}
+		temp.remove()
 	}
-
-	// subtract graph start y from yoffset and add xtick_to_xaxis to get the actual width of the yoffset.
-	var total_yoffset=total_yoffset+playobj.x_ticks.xtick_to_xaxis
 
 	// now make a second pass on both axes and draw the actual ticks/lines/tick labels using known yoffset and xoffset
 	// x axis objects first, y_end is the top of the functional graphing area:
-	var y_end=playobj.y+playobj.header.head_height+playobj.header.header_bottompad+playobj.header.header_toppad+playobj.grapharea.top_margin+legend_height+playobj.legends.legend_toppad+playobj.legends.legend_bottompad
+	var y_end=ypixelmin
 
 	for(var i=0;i<xvar.length;i++){
 		// x-axis labels
 		var mid=Math.abs((get_coord(xvar[0],playobj.xlimits,[xstart_xcoord,xfinal_xcoord],xvar.dtype,xvar,0,playobj.shiftx)-get_coord(xvar[1],playobj.xlimits,[xstart_xcoord,xfinal_xcoord],xvar.dtype,xvar,0,playobj.shiftx))/2)
 		var tempxmid=parseFloat(mid)+get_coord(xvar[i],playobj.xlimits,[xstart_xcoord,xfinal_xcoord],xvar.dtype,xvar,0,playobj.shiftx)
-		// console.log(tempxmid,xvar[i],mid)
 
 		if(Object.prototype.toString.call(xvar[i])==='[object Date]'){
 			string=formatDate(xvar[i],Math.max(...xvar)-Math.min(...xvar))
@@ -3375,19 +3384,15 @@ function draw_axes(playobj,xvar,yvar,shiftx,shifty,legend_height) {
 			string=String(xvar[i])
 		}
 
-		lines=multitext(string,{ident:'xaxis','font-size':playobj.x_ticks.xtick_textsize,'font-weight':playobj.x_label.xlabel_textweight,'font-family':playobj.x_label.xlabel_textface,'dominant-baseline':'text-before-edge','text-anchor':'middle'},maxwidth)
-		for(var j=0;j<lines.length;j++){
-			if (Object.prototype.toString.call(xvar[i])!='[object Date]' && ((parseInt(lines[j])>=1000 || parseInt(lines[j])<=-1000))){linesj=commas(lines[j])} else{linesj=lines[j]}
-			// var temp=snapobj.text(xstart_xcoord+xshift*shiftx+x_step*i,playobj.y+playobj.height-playobj.grapharea.bottom_margin-playobj.footer.footer_height-xlab_height-playobj.x_ticks.xtick_to_xlabel-total_yoffset+playobj.x_ticks.xtick_to_xaxis+j*parseInt(playobj.x_ticks.xtick_textsize),linesj).attr({fill:this.x_ticks.xtick_textfill,ident:'xaxis','font-size':playobj.x_ticks.xtick_textsize,'font-weight':playobj.x_ticks.xtick_textweight,'font-family':playobj.x_ticks.xtick_textface,'dominant-baseline':'text-before-edge','text-anchor':'middle',colorchange:'fill',context:'text_context_menu'})
-			var tempx=get_coord(xvar[i],playobj.xlimits,[xstart_xcoord,xfinal_xcoord],xvar.dtype,xvar,0,playobj.shiftx)
-			// console.log(xvar[i],playobj.xlimits,[xstart_xcoord,xfinal_xcoord],xvar.dtype,xvar,0,playobj.shiftx)
-			var temp=snapobj.text(tempx,playobj.y+playobj.height-playobj.grapharea.bottom_margin-playobj.footer.footer_height-xlab_height-playobj.x_ticks.xtick_to_xlabel-total_yoffset+playobj.x_ticks.xtick_to_xaxis+j*parseInt(playobj.x_ticks.xtick_textsize),linesj).attr({fill:playobj.x_ticks.xtick_textfill,ident:'xaxis','font-size':playobj.x_ticks.xtick_textsize,'font-weight':playobj.x_ticks.xtick_textweight,'font-family':playobj.x_ticks.xtick_textface,'dominant-baseline':'text-before-edge','text-anchor':'middle',colorchange:'fill',context:'text_context_menu'})
-			temp.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
-			var coords=temp.getBBox()
-			temp.attr({y:coords.y-coords.height})
-		}
+		var lines=multitext(string,{fill:playobj.x_ticks.xtick_textfill,ident:'xaxis','font-size':playobj.x_ticks.xtick_textsize,'font-weight':playobj.x_ticks.xtick_textweight,'font-family':playobj.x_ticks.xtick_textface,dy:'0.75em','text-anchor':'middle',colorchange:'fill',context:'text_context_menu'},maxwidth)
+		var tempx=get_coord(xvar[i],playobj.xlimits,[xstart_xcoord,xfinal_xcoord],xvar.dtype,xvar,0,playobj.shiftx)
+		var temp=snapobj.text(tempx,ypixelmax-xlab_height-xlabexist*playobj.x_ticks.xtick_to_xlabel-xtickheight,lines).attr({fill:playobj.x_ticks.xtick_textfill,ident:'xaxis','font-size':playobj.x_ticks.xtick_textsize,'font-weight':playobj.x_ticks.xtick_textweight,'font-family':playobj.x_ticks.xtick_textface,dy:'0.75em','text-anchor':'middle',colorchange:'fill',context:'text_context_menu'})
+		temp.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
+		temp.selectAll("tspan:not(:first-child)").attr({x:temp.attr('x'),dy:parseFloat(playobj.x_ticks.xtick_textsize)})
+		var coords=temp.getBBox()
+
 		// x-axis ticks, grid lines, and minor grid lines
-		y_start=playobj.y+playobj.height-total_yoffset-playobj.footer.footer_height-playobj.grapharea.bottom_margin-xlab_height-playobj.x_ticks.xtick_to_xlabel-coords.height
+		y_start=ypixelmax-xlab_height-xlabexist*playobj.x_ticks.xtick_to_xlabel-xtickheight-playobj.x_ticks.xtick_to_xaxis-playobj.x_ticks.xtick_length
 		var temp_line=snapobj.line(tempx,y_start,tempx,y_end).attr({stroke:playobj.x_grids.xgrid_fill,'stroke-width':playobj.x_grids.xgrid_thickness,'stroke-dasharray':playobj.x_grids.xgrid_dasharray,opacity:playobj.x_grids.xgrid_opacity,'shape-rendering':'crispEdges','obj_type':'gridline'})
 		if (i!=xvar.length-1){
 			var temp_minorline=snapobj.line(tempxmid,y_start,tempxmid,y_end).attr({stroke:playobj.x_grids.xgrid_minorfill,'stroke-width':playobj.x_grids.xgrid_minorthickness,opacity:playobj.x_grids.xgrid_minoropacity,'stroke-dasharray':playobj.x_grids.xgrid_minordasharray,'shape-rendering':'crispEdges'})
@@ -3407,18 +3412,15 @@ function draw_axes(playobj,xvar,yvar,shiftx,shifty,legend_height) {
 		}
 	}
 
-	// now add all the other stuff into total_yoffset so it really does reflect the entire footer + x labels
-	total_yoffset=total_yoffset+playobj.footer.footer_height+playobj.grapharea.bottom_margin+xlab_height+playobj.x_ticks.xtick_to_xlabel
-
 	// important parameters - the start and end of the y axis, range, and y step size
-	ystart_ycoord=y_start
-	yfinal_ycoord=playobj.y+playobj.header.head_height+playobj.header.header_bottompad+playobj.header.header_toppad+playobj.grapharea.top_margin+legend_height+playobj.legends.legend_toppad+playobj.legends.legend_bottompad
-	range=ystart_ycoord-yfinal_ycoord
+	var ystart_ycoord=y_start
+	var yfinal_ycoord=ypixelmin
+	var range=ystart_ycoord-yfinal_ycoord
 	if(shifty==1){y_step=range/(yvar.length)}
 	else{y_step=range/(yvar.length-1)}
 
 	// Now go back to the y ticks and redraw with appropriate coords
-	maxwidth=(playobj.y_ticks.ytick_maxsize*playobj.width)-playobj.grapharea.left_margin
+	var maxwidth=(playobj.y_ticks.ytick_maxsize*playobj.width)-playobj.grapharea.left_margin
 	// console.log(maxwidth)
 	for(var i=0;i<yvar.length;i++){
 		// y-axis labels		
@@ -3435,28 +3437,18 @@ function draw_axes(playobj,xvar,yvar,shiftx,shifty,legend_height) {
 		if (parseInt(string)>=1000 || parseInt(string)<=-1000){linesj=commas(string)}
 		var tempy=get_coord(string,playobj.ylimits,[ystart_ycoord,yfinal_ycoord],yvar.dtype,yvar,1,playobj.shifty,chartobject.ybar)
 
-		lines=multitext(string,{ident:'yaxis','font-size':playobj.y_ticks.ytick_textsize,'font-weight':playobj.y_ticks.ytick_textweight,'font-family':playobj.y_ticks.ytick_textface,'dominant-baseline':'text-before-edge','text-anchor':'end'},maxwidth)
-		var temp=snapobj.text(playobj.x+total_xoffset-playobj.y_ticks.ytick_to_yaxis,tempy,lines).attr({fill:playobj.y_ticks.ytick_textfill,ident:'yaxis','font-size':playobj.y_ticks.ytick_textsize,'font-weight':playobj.y_ticks.ytick_textweight,'font-family':playobj.y_ticks.ytick_textface,'dominant-baseline':'text-before-edge','text-anchor':'end',colorchange:'fill',context:'text_context_menu'})
+		lines=multitext(string,{ident:'yaxis','font-size':playobj.y_ticks.ytick_textsize,'font-weight':playobj.y_ticks.ytick_textweight,'font-family':playobj.y_ticks.ytick_textface,'text-anchor':'end'},maxwidth)
+		var temp=snapobj.text(xpixelmin+total_xoffset-playobj.y_ticks.ytick_to_yaxis,tempy,lines).attr({fill:playobj.y_ticks.ytick_textfill,ident:'yaxis','font-size':playobj.y_ticks.ytick_textsize,'font-weight':playobj.y_ticks.ytick_textweight,'font-family':playobj.y_ticks.ytick_textface,dy:'0.3em','text-anchor':'end',colorchange:'fill',context:'text_context_menu'})
 		// console.log(temp.getBBox())
 		temp.selectAll("tspan:not(:first-child)").attr({x:temp.attr('x'),dy:parseInt(playobj.y_ticks.ytick_textsize)})
 		temp.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
-		coords=temp.getBBox()
+		var coords=temp.getBBox()
 		// console.log("TICK COORDS",tempy,coords.y,coords.height,temp.getBBox())
-		temp.attr({y:coords.y-coords.height/2})
-
-		// for(var j=0;j<lines.length;j++){
-		// 	if (parseInt(lines[j])>=1000 || parseInt(lines[j])<=-1000){linesj=commas(lines[j])} else{linesj=lines[j]}
-		// 	// var temp=snapobj.text(playobj.x+total_xoffset-playobj.y_ticks.ytick_to_yaxis,ystart_ycoord-(y_step/2)*shifty-y_step*i+j*parseInt(playobj.x_ticks.xtick_textsize),linesj).attr({fill:this.y_ticks.ytick_textfill,ident:'yaxis','font-size':playobj.y_ticks.ytick_textsize,'font-weight':playobj.y_ticks.ytick_textweight,'font-family':playobj.y_ticks.ytick_textface,'dominant-baseline':'text-before-edge','text-anchor':'end',colorchange:'fill',context:'text_context_menu'})
-		// 	var tempy=get_coord(string,playobj.ylimits,[ystart_ycoord,yfinal_ycoord],yvar.dtype,yvar,1,playobj.shifty,chartobject.ybar)
-		// 	var temp=snapobj.text(playobj.x+total_xoffset-playobj.y_ticks.ytick_to_yaxis,tempy,linesj).attr({fill:this.y_ticks.ytick_textfill,ident:'yaxis','font-size':playobj.y_ticks.ytick_textsize,'font-weight':playobj.y_ticks.ytick_textweight,'font-family':playobj.y_ticks.ytick_textface,'dominant-baseline':'text-before-edge','text-anchor':'end',colorchange:'fill',context:'text_context_menu'})
-		// 	temp.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
-
-		// }
 
 		// y-axis ticks, grid lines, and minor grid lines
-		var temp_line=snapobj.line(playobj.x+total_xoffset,tempy,playobj.x+playobj.width-playobj.grapharea.right_margin,tempy).attr({stroke:playobj.y_grids.ygrid_fill,'stroke-width':playobj.y_grids.ygrid_thickness,'stroke-dasharray':playobj.y_grids.ygrid_dasharray,opacity:playobj.y_grids.ygrid_opacity,'shape-rendering':'crispEdges','obj_type':'gridline'})
-		if(i!=yvar.length-1){var temp_minorline=snapobj.line(playobj.x+total_xoffset,tempymid,playobj.x+playobj.width-playobj.grapharea.right_margin,tempymid).attr({stroke:playobj.y_grids.ygrid_minorfill,'stroke-width':playobj.y_grids.ygrid_minorthickness,opacity:playobj.y_grids.ygrid_minoropacity,'stroke-dasharray':playobj.y_grids.ygrid_minordasharray,'shape-rendering':'crispEdges'})}
-		var temp_tick=snapobj.line(playobj.x+total_xoffset,tempy,playobj.x+total_xoffset-playobj.y_ticks.ytick_length,tempy).attr({stroke:playobj.y_ticks.ytick_fill,'stroke-width':playobj.y_ticks.ytick_thickness,'shape-rendering':'crispEdges'})
+		var temp_line=snapobj.line(xpixelmin+total_xoffset,tempy,xpixelmax,tempy).attr({stroke:playobj.y_grids.ygrid_fill,'stroke-width':playobj.y_grids.ygrid_thickness,'stroke-dasharray':playobj.y_grids.ygrid_dasharray,opacity:playobj.y_grids.ygrid_opacity,'shape-rendering':'crispEdges','obj_type':'gridline'})
+		if(i!=yvar.length-1){var temp_minorline=snapobj.line(xpixelmin+total_xoffset,tempymid,xpixelmax,tempymid).attr({stroke:playobj.y_grids.ygrid_minorfill,'stroke-width':playobj.y_grids.ygrid_minorthickness,opacity:playobj.y_grids.ygrid_minoropacity,'stroke-dasharray':playobj.y_grids.ygrid_minordasharray,'shape-rendering':'crispEdges'})}
+		var temp_tick=snapobj.line(xpixelmin+total_xoffset,tempy,xpixelmin+total_xoffset-playobj.y_ticks.ytick_length,tempy).attr({stroke:playobj.y_ticks.ytick_fill,'stroke-width':playobj.y_ticks.ytick_thickness,'shape-rendering':'crispEdges'})
 
 		// handle y=0 as appropriate
 		if(Object.prototype.toString.call(yvar[i])!='[object Date]'){
@@ -3478,7 +3470,7 @@ function draw_axes(playobj,xvar,yvar,shiftx,shifty,legend_height) {
 	// for top keys, shove the x-coord over so they are aligned with the start of the grid
 	key_elements=grapharea.selectAll('[ident2="keytop"]')
 	for(var i=0;i<key_elements.length;i++){
-		item=key_elements[i]
+		var item=key_elements[i]
 		item.attr({x:parseFloat(item.attr('x'))+parseFloat(xstart_xcoord)})
 	}
 
@@ -3549,7 +3541,6 @@ function default_style(parameters) {
 		},
 		'header':{		
 			// header formatting
-			'head_height':0,
 			'headerfill':'#eee',
 			'header_toppad':11,
 			'header_bottompad':4,
@@ -3558,7 +3549,6 @@ function default_style(parameters) {
 		},
 		'footer':{
 			// footer formatting
-			'footer_height':0,
 			'footerfill':'#46b08e',
 			'footer_toppad':5,
 			'footer_bottompad':5,

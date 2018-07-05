@@ -169,15 +169,6 @@ function edit_text(ev) {
 	}
 }
 
-// *all text* needs to go through this algorithm if you want to center it on
-// a y-line. By default, the text box's upper left corner will be the y coord.
-// Text *MUST* have the attribute dominant-baseline:before-edge because an auto
-// baseline does not have the y-coord you assign to it. Yes, it's weird.
-function center_baseline(text) {
-	coords=text.getBBox()
-	text.attr({y:coords.y-(coords.height/2)})
-}
-
 function position_cursor(selected_text){
 	cursor.attr({height:selected_text.attr('font-size')})
 	console.log('tlocation: ',tlocation,'string: ',selected_text.attr('text'))
