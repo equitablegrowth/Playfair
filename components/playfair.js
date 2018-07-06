@@ -80,6 +80,7 @@ window.playfair = (function () {
 		this.shifty=0
 		this.shiftx=0
 		this.datedenom=[0,0]
+		this.facets=facets
 
 		var xmaxes=[]
 		var xmins=[]
@@ -686,10 +687,10 @@ window.playfair = (function () {
 		// set background fill
 		var graph_background=snapobj.rect(graph_obj.x,graph_obj.y+graph_obj.header.head_height,graph_obj.width,graph_obj.height-(graph_obj.header.head_height+graph_obj.footer_height)).attr({class:'background',fill:this.grapharea.chartfill})
 
-		// next draw axes and geoms. Cycle through the small multiple variable for this.
-		for(var i=0;i<graph_obj.facetarray.length;i++){
+		// NO SMALL MULTIPLES
+		if(Object.keys(graph_obj.facets).length==0){
 			// get bounds of potential graphing region
-			var bounds=get_bounds(this)
+			var bounds=get_bounds(this,1,1,1,1)
 
 			// draw axes
 			if(typeof(legend)!=='undefined' & chartobject.legends.legend_location=='top' & chartobject.type=='chart'){
@@ -720,6 +721,102 @@ window.playfair = (function () {
 				if(typeof(chartobject.trend)!=='undefined'){draw_trends(axes,graph_obj.trend,snapobj)}
 			} else if(chartobject.type=='map'){
 				draw_map(graph_obj.map,snapobj)
+			}
+		}		
+
+		// IF THERE ARE SMALL MULTIPLES
+		// next draw axes and geoms. Cycle through the small multiple variable for this.
+		if(graph_obj.facets.facet_variable!=undefined){
+			// create set of facet var values
+			var fvar=graph_obj.flatdata[graph_obj.facets.facet_variable]
+
+			function onlyUnique(value, index, self) { 
+    			return self.indexOf(value) === index;
+			}
+
+			var uniquefvar=fvar.filter(onlyUnique)
+			var column=1
+			var row=1
+			var maxrows=Math.ceil(uniquefvar.length/graph_obj.facets.facet_columns)
+
+			for(var i=0;i<uniquefvar.length;i++){
+				// get bounds of potential graphing region
+				var bounds=get_bounds(this,column,row,graph_obj.facets.facet_columns,maxrows)
+
+				// draw the facet title and adjust the bounds appropriately
+				var lines=multitext(uniquefvar[i],{ident:'fhead','font-size':graph_obj.small_multiples.header_textsize,'font-weight':graph_obj.small_multiples.header_textweight,'font-family':graph_obj.small_multiples.header_textface,dy:'0.75em','text-anchor':'middle'},bounds[1]-bounds[0])
+				var temp=snapobj.text((bounds[0]+bounds[1])/2,bounds[2],lines).attr({ident:'fhead','font-size':graph_obj.small_multiples.header_textsize,'font-weight':graph_obj.small_multiples.header_textweight,'font-family':graph_obj.small_multiples.header_textface,dy:'0.75em','text-anchor':'middle',context:'text_context_menu',colorchange:'fill'})
+				temp.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
+				temp.selectAll("tspan:not(:first-child)").attr({x:temp.attr('x'),dy:parseFloat(graph_obj.small_multiples.header_textsize)})
+				var coords=temp.getBBox()
+				bounds[2]=bounds[2]+coords.height*.8+graph_obj.small_multiples.header_to_graph
+
+				// draw axes
+				if(typeof(legend)!=='undefined' & chartobject.legends.legend_location=='top' & chartobject.type=='chart'){
+					var key_height=draw_key_top(legend,graph_obj,snapobj)
+					var axes=draw_axes(this,xaxis,yaxis,graph_obj.shiftx,graph_obj.shifty,bounds,key_height)
+					console.log(key_height)
+				} else if(chartobject.type=='chart'){
+					console.log('drawing axes with parameters: ',xaxis,yaxis,graph_obj.shiftx,graph_obj.shifty)
+					var axes=draw_axes(this,xaxis,yaxis,graph_obj.shiftx,graph_obj.shifty,bounds,0)
+				} else if(chartobject.type=='map'){
+					// don't need to do anything here for now, because the chart background is already filled in,
+					// but in case you do in the future for some reason
+				}
+
+				// save permanent data
+				var permflat=this.flatdata
+				var permset=this.dataset
+
+				// prepare temp data for this particular facet
+				tempset=[]
+				for(var j=0;j<permset.length;j++){
+					if(permset[j][graph_obj.facets.facet_variable]==uniquefvar[i]){
+						tempset.push(permset[j])
+					}
+				}
+				
+				tempflat={}
+				var varlist=Object.keys(tempset[0])
+				for(var j=0;j<varlist.length;j++){
+					tempflat[varlist[j]]=[]
+				}
+				for(var j=0;j<tempset.length;j++){
+					for(var k=0;k<varlist.length;k++){
+						tempflat[varlist[k]].push(tempset[j][varlist[k]])
+					}
+				}
+
+				graph_obj.flatdata=tempflat
+				graph_obj.dataset=tempset
+
+				// draw geoms
+				if(chartobject.type=='chart'){
+					if(typeof(chartobject.shade)!=='undefined'){draw_shade(axes,graph_obj.shade,snapobj)}
+					if(typeof(chartobject.rect)!=='undefined'){draw_rects(axes,graph_obj.rect,snapobj)}
+					if(typeof(chartobject.bar)!=='undefined'){draw_bars(axes,graph_obj.bar,snapobj)}
+					if(typeof(chartobject.area)!=='undefined'){draw_area(axes,graph_obj.area,snapobj)}
+					if(typeof(chartobject.bounds)!=='undefined'){draw_bounds(axes,graph_obj.bounds,snapobj)}
+					if(typeof(chartobject.stackedbar)!=='undefined'){draw_stackedbars(axes,graph_obj.stackedbar,snapobj)}
+					if(typeof(chartobject.step)!=='undefined'){draw_steps(axes,graph_obj.step,snapobj)}
+					if(typeof(chartobject.line)!=='undefined'){draw_lines(axes,graph_obj.line,snapobj)}
+					if(typeof(chartobject.segment)!=='undefined'){draw_segments(axes,graph_obj.segment,snapobj)}
+					if(typeof(chartobject.point)!=='undefined'){draw_points(axes,graph_obj.point,snapobj)}
+					if(typeof(chartobject.text)!=='undefined'){draw_text(axes,graph_obj.text,snapobj)}
+					if(typeof(chartobject.trend)!=='undefined'){draw_trends(axes,graph_obj.trend,snapobj)}
+				} else if(chartobject.type=='map'){
+					draw_map(graph_obj.map,snapobj)
+				}
+
+				// return data to permanent
+				this.flatdata=permflat
+				this.dataset=permset
+
+				// increment row and column
+				if(column==graph_obj.facets.facet_columns){
+					column=1
+					row=row+1
+				} else {column=column+1}
 			}
 		}
 
@@ -2125,7 +2222,7 @@ function draw_points(axes,point,snapobj){
 
 			// label point
 			if (point.labelall==true) {
-				var label=snapobj.text(x_loc,y_loc-pointsize-3,current[point.labels]).attr({'font-family':chartobject.data_labels.dataface,'font-size':chartobject.data_labels.datasize,'font-weight':chartobject.data_labels.dataweight,dy:'0.3em','text-anchor':'middle',fill:chartobject.data_labels.datatextfill,colorchange:'fill',context:'text_context_menu'})
+				var label=snapobj.text(x_loc,y_loc-pointsize-3,current[point.labels]).attr({'font-family':chartobject.data_labels.dataface,'font-size':chartobject.data_labels.datasize,'font-weight':chartobject.data_labels.dataweight,dy:'0.75em','text-anchor':'middle',fill:chartobject.data_labels.datatextfill,colorchange:'fill',context:'text_context_menu'})
 				label.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 				var coords=label.getBBox()
 				label.attr({y:coords.y-coords.height})
@@ -3229,20 +3326,23 @@ function multitext(txt,attributes,max_width,svgname){
 	return lines
 }
 
-function get_bounds(playobj) {
+function get_bounds(playobj,column,row,totalcolumns,totalrows) {
 	// this function is to get the area of the chart area that is available for graphing.
 	// So take total drawable area, subtract off the header and footer, subtract left and
 	// right margins, return min x, max x, min y and max y
-	var snapobj=playobj.svg
+	var availwidth=playobj.width-playobj.grapharea.left_margin-playobj.grapharea.right_margin-(totalcolumns-1)*playobj.small_multiples.horizontal_padding
+	var availheight=playobj.height-playobj.header.head_height-playobj.grapharea.top_margin-playobj.footer_height-playobj.grapharea.bottom_margin-(totalrows-1)*playobj.small_multiples.vertical_padding
 
-	var xpixelmin=playobj.x+playobj.grapharea.left_margin
-	var xpixelmax=playobj.x+playobj.width-playobj.grapharea.right_margin
-	var ypixelmin=playobj.y+playobj.header.head_height+playobj.grapharea.top_margin
-	var ypixelmax=playobj.y+playobj.height-playobj.footer_height-playobj.grapharea.bottom_margin
+	var widthpergraph=availwidth/totalcolumns
+	var heightpergraph=availheight/totalrows
+
+	var xpixelmin=playobj.x+playobj.grapharea.left_margin+(column-1)*widthpergraph+(column-1)*playobj.small_multiples.horizontal_padding
+	var xpixelmax=xpixelmin+widthpergraph
+	var ypixelmin=playobj.y+playobj.header.head_height+playobj.grapharea.top_margin+(row-1)*heightpergraph+(row-1)*playobj.small_multiples.vertical_padding
+	var ypixelmax=ypixelmin+heightpergraph
 
 	return [xpixelmin,xpixelmax,ypixelmin,ypixelmax]
 }
-
 
 function draw_axes(playobj,xvar,yvar,shiftx,shifty,bounds,legend_height) {
 	// console.log(xvar,yvar)
@@ -3791,6 +3891,16 @@ function default_style(parameters) {
 			// rect geom
 			'categorical_rect_width':.5,
 			'rect_opacity':.8,
+		},
+		'small_multiples':{
+			// small multiples
+			'vertical_padding':35,
+			'horizontal_padding':35,
+			'header_textface':'PTSans',
+			'header_textweight':400,
+			'header_textsize':'14px',
+			'header_textcolor':'black',
+			'header_to_graph':8,
 		}
 	}
 

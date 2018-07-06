@@ -75,10 +75,9 @@ function preview() {
 
 	if($("#facet_variable").val()!='none'){
 		var facet_variable=$("#facet_variable").val()
-		var facet_rows=$("#frows").val()
 		var facet_columns=$("#fcolumns").val()
 
-		facet={'facet_variable':facet_variable,'facet_rows':facet_rows,'facet_columns':facet_columns}
+		facet={'facet_variable':facet_variable,'facet_columns':facet_columns}
 	}
 
 	if($("#point_select_x").val()!='none' & $("#point_select_y").val()!='none'){
