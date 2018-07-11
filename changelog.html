@@ -21,7 +21,10 @@ body{width:700px;margin-left:auto;margin-right:auto;padding-top:22px;padding-bot
 <li>As part of above, fixed several positioning bugs where some parameters were double counted or not counted at all.</li>
 <li>Eliminated use of dominant-baseline, which is not implemented consistently across browsers.</li>
 <li>Fixed a bug where save as SVG included some HTML tags.</li>
-<li>New versions of saveSvgAsPng. Maybe fonts will behave better?</li>
+<li>New version of saveSvgAsPng. Greatly reduces the size of Playfair saves as fonts no longer have to be embedded.</li>
+<li>Playfair can now recognize numeric data in exponential notation.</li>
+<li>A few more layout parameters.</li>
+<li>Fixed a bug where non alphanumeric characters in variable names prevented keys from drawing.</li>
 </ul>
 
 <h1>v2.4</h1>

@@ -522,9 +522,10 @@ window.playfair = (function () {
 		}
 		
 		// if the user has specified one geom with a text axis and one geom with a date axis, exit here.
+		console.log(xtypes)
 		if(new Set(xtypes).size>1){
 			console.log('Exiting because of x types')
-			alert('Exiting. X variables provided are of different types. Types detected are: '+(new Set(xtypes)))
+			alert('Exiting. X variables provided are of different types. Types detected are: '+(Array.from(new Set(xtypes))))
 			return
 		} else {
 			this.xaxis_dtype=xtypes[0]
@@ -532,7 +533,7 @@ window.playfair = (function () {
 
 		if(new Set(xtypes).size>1){
 			console.log('Exiting because of y types')
-			alert('Exiting. Y variables provided are of different types. Types detected are: '+(new Set(ytypes)))
+			alert('Exiting. Y variables provided are of different types. Types detected are: '+(Array.from(new Set(ytypes))))
 			return
 		} else {
 			this.yaxis_dtype=ytypes[0]
@@ -870,7 +871,7 @@ window.playfair = (function () {
 					note='Note: '+graphobj.note
 					lines=multitext(note,{fill:graphobj.note_text.notetextfill,'font-family':graphobj.note_text.noteface,'font-size':graphobj.note_text.notesize,'font-weight':graphobj.note_text.noteweight,dy:'0.75em'},graphobj.width-graphobj.footer.footer_leftpad-graphobj.footer.footer_rightpad-logo_coords.width-20)
 					if(graphobj.source.length>0){
-						var note=snapobj.text(graphobj.x+graphobj.footer.footer_leftpad,source_coords+notetoppad,lines).attr({fill:sourcefill,ident:'foot','font-family':graphobj.note_text.noteface,'font-size':graphobj.note_text.notesize,'font-weight':graphobj.note_text.noteweight,dy:'0.75em',colorchange:'fill',context:'text_context_menu'})
+						var note=snapobj.text(graphobj.x+graphobj.footer.footer_leftpad,source_coords+notetoppad+graphobj.footer.note_to_source,lines).attr({fill:sourcefill,ident:'foot','font-family':graphobj.note_text.noteface,'font-size':graphobj.note_text.notesize,'font-weight':graphobj.note_text.noteweight,dy:'0.75em',colorchange:'fill',context:'text_context_menu'})
 					} else {
 						var note=snapobj.text(graphobj.x+graphobj.footer.footer_leftpad,source_coords,lines).attr({fill:sourcefill,ident:'foot','font-family':graphobj.note_text.noteface,'font-size':graphobj.note_text.notesize,'font-weight':graphobj.note_text.noteweight,dy:'0.75em',colorchange:'fill',context:'text_context_menu'})
 					}					
@@ -985,7 +986,7 @@ window.playfair = (function () {
 		}
 
 		if(hed_coords.y2==0){var dek_start=chartobject.header.header_toppad}
-		else{var dek_start=hed_coords.y2}
+		else{var dek_start=hed_coords.y2+chartobject.header.hed_to_dek}
 		var lines=multitext(dek,{'font-family':chartobject.title_text.dekface,'font-size':dekfontsize,'font-weight':chartobject.title_text.dekweight,dy:'0.3em',fill:chartobject.title_text.dektextfill},headerwidth)
 		var dek=snapobj.text(chartobject.x+chartobject.header.header_leftpad,dek_start,lines).attr({'font-family':chartobject.title_text.dekface,'font-size':dekfontsize,'font-weight':chartobject.title_text.dekweight,dy:'0.75em',ident:'dek',fill:chartobject.title_text.dektextfill,colorchange:'fill',context:'text_context_menu'})
 		dek.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
@@ -3399,7 +3400,7 @@ function draw_axes(playobj,xvar,yvar,shiftx,shifty,bounds,legend_height) {
 		var temp=snapobj.text(xpixelmin+ylab_width+playobj.y_ticks.ytick_to_ylabel*ylabexist,0,string).attr({fill:playobj.y_ticks.ytick_textfill,ident:'yaxis','font-size':playobj.y_ticks.ytick_textsize,'font-weight':playobj.y_ticks.ytick_textweight,'font-family':playobj.y_ticks.ytick_textface,dy:'0.75em','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
 		temp.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 		var coords=temp.getBBox()
-		if(coords.x2>total_xoffset){total_xoffset=coords.x2}
+		if(coords.x2>total_xoffset){total_xoffset=coords.x2} else {total_xoffset=xpixelmin+ylab_width}
 		temp.remove()
 	}
 
@@ -3646,6 +3647,7 @@ function default_style(parameters) {
 			'header_bottompad':4,
 			'header_leftpad':18,
 			'header_rightpad':0,
+			'hed_to_dek':0,
 		},
 		'footer':{
 			// footer formatting
@@ -3654,6 +3656,7 @@ function default_style(parameters) {
 			'footer_bottompad':5,
 			'footer_leftpad':18,
 			'footer_rightpad':14,
+			'note_to_source':0,
 		},
 		'title_text':{
 			// hed

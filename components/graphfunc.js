@@ -76,6 +76,7 @@ function preview() {
 	if($("#facet_variable").val()!='none'){
 		var facet_variable=$("#facet_variable").val()
 		var facet_columns=$("#fcolumns").val()
+		if(facet_columns==''){facet_columns=1}
 
 		facet={'facet_variable':facet_variable,'facet_columns':facet_columns}
 	}

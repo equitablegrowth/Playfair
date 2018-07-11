@@ -2,7 +2,6 @@
 // Handling right-clicks on various graph elements to allow the user to
 // change text, label data, insert callouts and etc.
 
-
 $(function() {
 	var svgarea=document.getElementById('grapharea')
 	var doubleClicked = false;

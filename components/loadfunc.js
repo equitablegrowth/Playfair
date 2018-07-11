@@ -16,6 +16,29 @@ function gen_coerce_array() {
 	loadData(coerce_array)
 }
 
+// taken from Github user jiggzson here: https://gist.github.com/jiggzson/b5f489af9ad931e3d186
+function scientificToDecimal(num) {
+    //if the number is in scientific notation remove it
+    if(/\d+\.?\d*e[\+\-]*\d+/i.test(num)) {
+        var zero = '0',
+            parts = String(num).toLowerCase().split('e'), //split into coeff and exponent
+            e = parts.pop(),//store the exponential part
+            l = Math.abs(e), //get the number of zeros
+            sign = e/l,
+            coeff_array = parts[0].split('.');
+        if(sign === -1) {
+            num = zero + '.' + new Array(l).join(zero) + coeff_array.join('');
+        }
+        else {
+            var dec = coeff_array[1];
+            if(dec) l = l - dec.length;
+            num = coeff_array.join('') + new Array(l+1).join(zero);
+        }
+    }
+    
+    return num;
+};
+
 function loadData(coerce_array) {
 	if (coerce_array===undefined){
 		coerce_array=[]
@@ -66,6 +89,8 @@ function loadData(coerce_array) {
 	}
 
 	var alpha=/[A-Za-z]/
+	var exponential=/[1-9](E|e)(-|\+)/
+	var nonexp=/([A-Da-d]|[F-Zf-z])/
 	var column_types=[]
 
 	// loop through columns and data points, check each one for dates. *ALL* datapoints must be
@@ -82,10 +107,17 @@ function loadData(coerce_array) {
 			for (var j=1;j<d.length;j++) {
 				var missing=0
 				if(isNaN(parseFloat(d[j][i]))==true && d[j][i]==''){var missing=1}
-				if (missing!=1 && moment(d[j][i], ["MM-DD-YYYY","MM/DD/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY","MM/YYYY","MM-YYYY","YYYYqQ"],true).isValid()==false){
+				if (missing!=1 && moment(d[j][i], ["MM-DD-YYYY","M-D-YYYY","MM/DD/YYYY","M/D/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY","MM/YYYY","MM-YYYY","YYYYqQ"],true).isValid()==false){
 					var date=false
 				}
-				if (d[j][i].search(alpha)>-1) {type='text'} else {
+				if (d[j][i].search(alpha)>-1) {
+					// look to see if maybe it's exponential notation. This is mostly to catch Excel's format so the exponential regex is not very flexible.
+					if (d[j][i].search(exponential)>-1 && d[j][i].search(nonexp)==-1){
+						d[j][i]=scientificToDecimal(d[j][i])
+					} else {
+						type='text'
+					}
+				} else {
 					// clean numeric junk
 					if(date==false){
 						d[j][i] = d[j][i].replace(/[^0-9\.-]+/g, "")
