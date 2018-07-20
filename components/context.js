@@ -9,20 +9,30 @@ $(function() {
 		height2=window.innerHeight
 		width2=window.innerWidth
 
+		legend_string=''
+		if(item.parent().node.id=='legendgroup') {
+			// detect clicks within the legend area
+			console.log('bueno')
+
+			// contextual menu add-on for legend
+			legend_string="<hr><ul class='contextMenu'><li><i class='fa fa-times'></i> Key Item</li></ul>"
+		}
+
 		if(doubleClicked == false && drawpath!=1) {
 			disableScroll()
 			if(e.target.attributes.context){
-				menu='#'+e.target.attributes.context.value
+				var menu='#'+e.target.attributes.context.value
 			} else if(e.target.nodeName=='tspan'){
-				menu='#text_context_menu'
+				var menu='#text_context_menu'
 			} else {
-				menu='#other_context_menu'
+				var menu='#other_context_menu'
 			}
 			console.log(e.target.attributes.context)
 			console.log(menu)
 
 			clickedevent=e
 			e.preventDefault();
+			$('.legendextras').append(legend_string)
 			$(menu).css("left", e.clientX-1);
 			$(menu).css("top", e.clientY-2);
 			$(menu).fadeIn(50, FocusContextOut());
@@ -37,12 +47,14 @@ $(function() {
 		} else {
 			e.preventDefault();
 			doubleClicked = false;
+			$('.legendextras').empty()
 			$(".contextMenuContainer").fadeOut(100);
 		}
 	});
 	function FocusContextOut() {
 		$(document).on("click", function () {
-			doubleClicked = false; 
+			doubleClicked = false;
+			$('.legendextras').empty()
 			$(".contextMenuContainer").fadeOut(100);
 			enableScroll()
 		});

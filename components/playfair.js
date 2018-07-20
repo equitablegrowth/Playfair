@@ -606,7 +606,7 @@ window.playfair = (function () {
 	}
 
 	Playfair.prototype.chart=function(legend) {
-		var snapobj=this.svg
+		snapobj=this.svg
 		var graph_obj=this
 
 		// if the map geom is all set, then the type is map and this will override all charts
@@ -687,6 +687,7 @@ window.playfair = (function () {
 		// start drawing stuff
 		// set background fill
 		var graph_background=snapobj.rect(graph_obj.x,graph_obj.y+graph_obj.header.head_height,graph_obj.width,graph_obj.height-(graph_obj.header.head_height+graph_obj.footer_height)).attr({class:'background',fill:this.grapharea.chartfill})
+		var graph_background=snapobj.rect(graph_obj.x+this.grapharea.chart_stroke_width/2,graph_obj.y+graph_obj.header.head_height+this.grapharea.chart_stroke_width/2,graph_obj.x+graph_obj.width-this.grapharea.chart_stroke_width,graph_obj.y+graph_obj.height-(graph_obj.header.head_height+graph_obj.footer_height)-this.grapharea.chart_stroke_width).attr({strokeWidth:this.grapharea.chart_stroke_width,stroke:this.grapharea.chart_stroke_color,fill:'none'})
 
 		// NO SMALL MULTIPLES
 		if(Object.keys(graph_obj.facets).length==0){
@@ -694,11 +695,7 @@ window.playfair = (function () {
 			var bounds=get_bounds(this,1,1,1,1)
 
 			// draw axes
-			if(typeof(legend)!=='undefined' & chartobject.legends.legend_location=='top' & chartobject.type=='chart'){
-				var key_height=draw_key_top(legend,graph_obj,snapobj)
-				var axes=draw_axes(this,xaxis,yaxis,graph_obj.shiftx,graph_obj.shifty,bounds,key_height)
-				console.log(key_height)
-			} else if(chartobject.type=='chart'){
+			if(chartobject.type=='chart'){
 				console.log('drawing axes with parameters: ',xaxis,yaxis,graph_obj.shiftx,graph_obj.shifty)
 				var axes=draw_axes(this,xaxis,yaxis,graph_obj.shiftx,graph_obj.shifty,bounds,0)
 			} else if(chartobject.type=='map'){
@@ -721,7 +718,7 @@ window.playfair = (function () {
 				if(typeof(chartobject.text)!=='undefined'){draw_text(axes,graph_obj.text,snapobj)}
 				if(typeof(chartobject.trend)!=='undefined'){draw_trends(axes,graph_obj.trend,snapobj)}
 			} else if(chartobject.type=='map'){
-				draw_map(graph_obj.map,snapobj)
+				draw_map(graph_obj.map,snapobj,bounds)
 			}
 		}		
 
@@ -753,11 +750,7 @@ window.playfair = (function () {
 				bounds[2]=bounds[2]+coords.height*.8+graph_obj.small_multiples.header_to_graph
 
 				// draw axes
-				if(typeof(legend)!=='undefined' & chartobject.legends.legend_location=='top' & chartobject.type=='chart'){
-					var key_height=draw_key_top(legend,graph_obj,snapobj)
-					var axes=draw_axes(this,xaxis,yaxis,graph_obj.shiftx,graph_obj.shifty,bounds,key_height)
-					console.log(key_height)
-				} else if(chartobject.type=='chart'){
+				if(chartobject.type=='chart'){
 					console.log('drawing axes with parameters: ',xaxis,yaxis,graph_obj.shiftx,graph_obj.shifty)
 					var axes=draw_axes(this,xaxis,yaxis,graph_obj.shiftx,graph_obj.shifty,bounds,0)
 				} else if(chartobject.type=='map'){
@@ -806,7 +799,9 @@ window.playfair = (function () {
 					if(typeof(chartobject.text)!=='undefined'){draw_text(axes,graph_obj.text,snapobj)}
 					if(typeof(chartobject.trend)!=='undefined'){draw_trends(axes,graph_obj.trend,snapobj)}
 				} else if(chartobject.type=='map'){
-					draw_map(graph_obj.map,snapobj)
+					console.log(chartobject.dataset)
+					console.log(graph_obj.dataset)
+					draw_map(graph_obj.map,snapobj,bounds)
 				}
 
 				// return data to permanent
@@ -823,11 +818,13 @@ window.playfair = (function () {
 
 		// draw key
 		// check playobj.legends.legend_location for 'float' or 'top' to draw correctly
-		if(typeof(legend)!=='undefined' & chartobject.legends.legend_location=='float'){draw_key(legend,graph_obj,snapobj)}
-		// if(typeof(legend)!=='undefined' & chartobject.legends.legend_location=='top'){draw_key_top(legend,graph_obj,snapobj)}
+		if(typeof(legend)!=='undefined'){draw_key(legend,graph_obj,snapobj)}
 
 		// redraw the key/fix key elements
 		snapobj.append(snapobj.selectAll('[ident2="keytop"]'))
+
+		// graph stroke
+		snapobj.rect(chartobject.x+chartobject.grapharea.graph_stroke_width/2,chartobject.y+chartobject.grapharea.graph_stroke_width/2,chartobject.width-chartobject.grapharea.graph_stroke_width,chartobject.height-chartobject.grapharea.graph_stroke_width).attr({strokeWidth:chartobject.grapharea.graph_stroke_width,stroke:chartobject.grapharea.graph_stroke_color,fill:'none'})
 	}
 
 	Playfair.prototype.prepfooter = function(source,note,callback) {
@@ -837,6 +834,7 @@ window.playfair = (function () {
 		// this.logo.logo=this.logo.logo
 		logoscale=chartobject.logo.logoscale
 		var logoopacity=chartobject.logo.logoopacity
+		var logoposition=chartobject.logo.logo_position
 
 		var snapobj=chartobject.svg
 		var width=chartobject.width
@@ -845,74 +843,142 @@ window.playfair = (function () {
 
 		var notefill=chartobject.note_text.notetextfill
 		var sourcefill=chartobject.source_text.sourcetextfill
-		var notetoppad=chartobject.note_text.notetoppad
 
 		// catch safari so you can... do something about this logo loading thing
 		var is_safari = !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/)
 
 		if (graphobj.logo.logo!=0){
 			var logo=snapobj.image(graphobj.logo.logo,0,0)
-			logo.node.addEventListener('load',function(){
-				logo.attr({logo:1,width:logo.attr('width')/logoscale,height:logo.attr('height')/logoscale,opacity:logoopacity})
-				logo_coords=logo.getBBox()
-				logo.attr({x:graphobj.x+graphobj.width-logo_coords.width-graphobj.footer.footer_rightpad,y:graphobj.y+graphobj.height-logo_coords.height-graphobj.footer.footer_bottompad})
+			var html_logo=document.getElementById('logodummy')
+			var image=new Image()
+			image.addEventListener('load',finishload,false)
+			image.src=graphobj.logo.logo
+			html_logo.src=image.src
+			// logo.node.addEventListener('load',finishload)
+			// if(is_safari==true){myfunc()}
+
+			function finishload(){
+				var html_logo=document.getElementById('logodummy')
+				var logoheight=html_logo.height
+				var logowidth=html_logo.width
+				logo.attr({logo:1,width:logowidth/logoscale,height:logoheight/logoscale,opacity:logoopacity})
+				var logo_coords=logo.getBBox()
+				var logo_height=logo.getBBox().height
+
+				// position logo
+				if(logoposition=='right'){
+					logo.attr({x:graphobj.x+graphobj.width-logo_coords.width-graphobj.footer.footer_rightpad,y:graphobj.y+graphobj.height-logo_coords.height-graphobj.footer.footer_bottompad})
+				}
+				if(logoposition=='left'){
+					logo.attr({x:graphobj.x+graphobj.footer.footer_leftpad,y:graphobj.y+graphobj.height-logo_coords.height-graphobj.footer.footer_bottompad})
+				}
+				if(logoposition=='center'){
+					logo.attr({x:graphobj.x-logo_coords.width/2+graphobj.width/2,y:graphobj.y+graphobj.height-logo_coords.height-graphobj.footer.footer_bottompad})
+				}
 
 				// draw footer and source.
+				var source_height=0
 				if(graphobj.source.length>0){
-					source='Source: '+graphobj.source
-					lines=multitext(source,{'font-family':graphobj.source_text.sourceface,'font-size':graphobj.source_text.sourcesize,'font-weight':graphobj.source_text.sourceweight,dy:'0.75em',fill:graphobj.source_text.sourcetextfill},graphobj.width-graphobj.footer.footer_leftpad-graphobj.footer.footer_rightpad-logo_coords.width-20)
-					var source=snapobj.text(graphobj.x+graphobj.footer.footer_leftpad,graphobj.y+graphobj.height-logo_coords.height-graphobj.footer.footer_bottompad,lines).attr({fill:notefill,ident:'foot','font-family':graphobj.source_text.sourceface,'font-size':graphobj.source_text.sourcesize,'font-weight':graphobj.source_text.sourceweight,dy:'0.75em',colorchange:'fill',context:'text_context_menu'})
+					var source='Source: '+graphobj.source
+					var lines=multitext(source,{'font-family':graphobj.source_text.sourceface,'font-size':graphobj.source_text.sourcesize,'font-weight':graphobj.source_text.sourceweight,dy:'0.75em',fill:graphobj.source_text.sourcetextfill},graphobj.width-graphobj.footer.footer_leftpad-graphobj.footer.footer_rightpad-logo_coords.width-20)
+					if(logoposition=='right'){
+						var source=snapobj.text(graphobj.x+graphobj.footer.footer_leftpad,graphobj.y+graphobj.height-logo_coords.height-graphobj.footer.footer_bottompad,lines).attr({fill:notefill,ident:'foot','font-family':graphobj.source_text.sourceface,'font-size':graphobj.source_text.sourcesize,'font-weight':graphobj.source_text.sourceweight,dy:'0.75em',colorchange:'fill',context:'text_context_menu'})
+					} else if(logoposition=='left') {
+						var source=snapobj.text(graphobj.x+graphobj.width-graphobj.footer.footer_rightpad,graphobj.y+graphobj.height-logo_coords.height-graphobj.footer.footer_bottompad,lines).attr({fill:notefill,ident:'foot','font-family':graphobj.source_text.sourceface,'font-size':graphobj.source_text.sourcesize,'font-weight':graphobj.source_text.sourceweight,dy:'0.75em',colorchange:'fill',context:'text_context_menu',textAnchor:'end'})
+					} else if(logoposition=='center'){
+						var source=snapobj.text(graphobj.x+graphobj.footer.footer_leftpad,graphobj.y+graphobj.height-graphobj.footer.footer_bottompad,lines).attr({fill:notefill,ident:'foot','font-family':graphobj.source_text.sourceface,'font-size':graphobj.source_text.sourcesize,'font-weight':graphobj.source_text.sourceweight,dy:'0.75em',colorchange:'fill',context:'text_context_menu'})
+					}
 					source.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 					source.selectAll("tspan:not(:first-child)").attr({x:source.attr('x'),dy:parseInt(graphobj.source_text.sourcesize)})
-					source_coords=source.getBBox().y2
+					var source_coords=source.getBBox().y2
+					var source_height=source.getBBox().height*.85
 				} else {source_coords=graphobj.y+graphobj.height-logo_coords.height-graphobj.footer.footer_bottompad}
 
+				var note_height=0
 				if(graphobj.note.length>0){
-					note='Note: '+graphobj.note
-					lines=multitext(note,{fill:graphobj.note_text.notetextfill,'font-family':graphobj.note_text.noteface,'font-size':graphobj.note_text.notesize,'font-weight':graphobj.note_text.noteweight,dy:'0.75em'},graphobj.width-graphobj.footer.footer_leftpad-graphobj.footer.footer_rightpad-logo_coords.width-20)
+					var note='Note: '+graphobj.note
+					var lines=multitext(note,{fill:graphobj.note_text.notetextfill,'font-family':graphobj.note_text.noteface,'font-size':graphobj.note_text.notesize,'font-weight':graphobj.note_text.noteweight,dy:'0.75em'},graphobj.width-graphobj.footer.footer_leftpad-graphobj.footer.footer_rightpad-logo_coords.width-20)
 					if(graphobj.source.length>0){
-						var note=snapobj.text(graphobj.x+graphobj.footer.footer_leftpad,source_coords+notetoppad+graphobj.footer.note_to_source,lines).attr({fill:sourcefill,ident:'foot','font-family':graphobj.note_text.noteface,'font-size':graphobj.note_text.notesize,'font-weight':graphobj.note_text.noteweight,dy:'0.75em',colorchange:'fill',context:'text_context_menu'})
+						if(logoposition=='right'){
+							var note=snapobj.text(graphobj.x+graphobj.footer.footer_leftpad,source_coords+graphobj.footer.note_to_source,lines).attr({fill:sourcefill,ident:'foot','font-family':graphobj.note_text.noteface,'font-size':graphobj.note_text.notesize,'font-weight':graphobj.note_text.noteweight,dy:'0.75em',colorchange:'fill',context:'text_context_menu'})
+						} else if(logoposition=='left') {
+							var note=snapobj.text(graphobj.x+graphobj.width-graphobj.footer.footer_rightpad,source_coords+graphobj.footer.note_to_source,lines).attr({fill:sourcefill,ident:'foot','font-family':graphobj.note_text.noteface,'font-size':graphobj.note_text.notesize,'font-weight':graphobj.note_text.noteweight,dy:'0.75em',colorchange:'fill',context:'text_context_menu',textAnchor:'end'})
+						} else if(logoposition=='center') {
+							var note=snapobj.text(graphobj.x+graphobj.footer.footer_leftpad,source_coords+graphobj.footer.note_to_source,lines).attr({fill:sourcefill,ident:'foot','font-family':graphobj.note_text.noteface,'font-size':graphobj.note_text.notesize,'font-weight':graphobj.note_text.noteweight,dy:'0.75em',colorchange:'fill',context:'text_context_menu'})
+						}
 					} else {
-						var note=snapobj.text(graphobj.x+graphobj.footer.footer_leftpad,source_coords,lines).attr({fill:sourcefill,ident:'foot','font-family':graphobj.note_text.noteface,'font-size':graphobj.note_text.notesize,'font-weight':graphobj.note_text.noteweight,dy:'0.75em',colorchange:'fill',context:'text_context_menu'})
-					}					
+						if(logoposition=='right'){
+							var note=snapobj.text(graphobj.x+graphobj.footer.footer_leftpad,source_coords,lines).attr({fill:sourcefill,ident:'foot','font-family':graphobj.note_text.noteface,'font-size':graphobj.note_text.notesize,'font-weight':graphobj.note_text.noteweight,dy:'0.75em',colorchange:'fill',context:'text_context_menu'})
+						} else if(logoposition=='left') {
+							var note=snapobj.text(graphobj.x+graphobj.width-graphobj.footer.footer_rightpad,source_coords,lines).attr({fill:sourcefill,ident:'foot','font-family':graphobj.note_text.noteface,'font-size':graphobj.note_text.notesize,'font-weight':graphobj.note_text.noteweight,dy:'0.75em',colorchange:'fill',context:'text_context_menu',textAnchor:'end'})
+						} else if(logoposition=='center') {
+							var note=snapobj.text(graphobj.x+graphobj.footer.footer_leftpad,graphobj.y+graphobj.height-graphobj.footer.footer_bottompad,lines).attr({fill:notefill,ident:'foot','font-family':graphobj.source_text.sourceface,'font-size':graphobj.source_text.sourcesize,'font-weight':graphobj.source_text.sourceweight,dy:'0.75em',colorchange:'fill',context:'text_context_menu'})
+						}
+					}
 					note.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 					note.selectAll("tspan:not(:first-child)").attr({x:note.attr('x'),dy:parseInt(graphobj.note_text.notesize)})
-					note_coords=note.getBBox().y2
+					var note_coords=note.getBBox().y2
+					var note_height=note.getBBox().height*.85
 				} else {note_coords=source_coords}
 
 				graphobj.logo.logo_height=logo_coords.height
 				graphobj.logo.logo_width=logo_coords.width
 				graphobj.footer_height=logo_coords.height+graphobj.footer.footer_toppad+graphobj.footer.footer_bottompad
 
-				var foot_fill=snapobj.rect(0,graphobj.height-graphobj.footer_height,graphobj.width,graphobj.footer_height).attr({id:'footerrect',fill:graphobj.footer.footerfill})
+				if(logoposition=='center'){
+					graphobj.footer_height=source_height+logo_height+note_height+graphobj.footer.footer_toppad+graphobj.footer.footer_bottompad
+					if(source_height>0 && note_height>0){
+						graphobj.footer_height=graphobj.footer_height+graphobj.footer.note_to_source
+					}
+					// bump everything up to the top + toppad
+					var foot_fill=snapobj.rect(0,graphobj.y+graphobj.height-graphobj.footer_height,graphobj.y+graphobj.width,graphobj.footer_height).attr({id:'footerrect',fill:graphobj.footer.footerfill})
+					console.log(graphobj.y+graphobj.height-graphobj.footer.footer_bottompad-logo_height,graphobj.y,graphobj.height,graphobj.footer.footer_bottompad,logo_height)
+					logo.attr({y:graphobj.y+graphobj.height-graphobj.footer.footer_bottompad-logo_height})
+					try{source.attr({y:graphobj.y+graphobj.height-graphobj.footer.footer_bottompad-logo_height-note_height-source_height-graphobj.footer.note_to_source})}catch(err){}
+					try{note.attr({y:graphobj.y+graphobj.height-graphobj.footer.footer_bottompad-logo_height-note_height-graphobj.footer.note_to_source})}catch(err){}
 				
-				foot_text=snapobj.selectAll("text[ident='foot']")
-				for (var i=0;i<foot_text.length;i++){
-					snapobj.append(foot_text[i])
-				}
-				snapobj.append(logo)
-
-				// If the note+source is taller than the logo height, make the footer bigger and shove all three elements up
-				if(note_coords+chartobject.footer.footer_bottompad-(graphobj.y+graphobj.height-logo_coords.height-graphobj.footer.footer_bottompad-graphobj.footer.footer_toppad)>graphobj.footer_height){
-					var difference=note_coords+chartobject.footer.footer_bottompad-(graphobj.y+graphobj.height)
-					graphobj.footer_height=graphobj.footer_height+difference
-					snapobj.selectAll('rect[id="footerrect"').attr({height:graphobj.footer_height})
-					snapobj.selectAll('rect[id="footerrect"').attr({y:graphobj.height-graphobj.footer_height})
-					logo.attr({y:parseFloat(logo.attr('y'))-difference/2})
-					try{source.attr({y:parseFloat(source.attr('y')-difference)})}catch(err){}
-					try{note.attr({y:parseFloat(note.attr('y')-difference)})}catch(err){}
+					// move to front
+					var foot_text=snapobj.selectAll("text[ident='foot']")
+					for (var i=0;i<foot_text.length;i++){
+						snapobj.append(foot_text[i])
+					}
+					snapobj.append(logo)
 				}
 
-				// if the logo is taller than the note+source, vertically center them around the logo's centerline - should there be a vertical-center flag for this in theme?
-				if(note_coords+chartobject.footer.footer_bottompad-(graphobj.y+graphobj.height-logo_coords.height-graphobj.footer.footer_bottompad-graphobj.footer.footer_toppad)<graphobj.footer_height){
-					var difference=note_coords+chartobject.footer.footer_bottompad-(graphobj.y+graphobj.height)
-					console.log('centering note/source',difference)
-					try{source.attr({y:parseFloat(source.attr('y')-difference/2)})}catch(err){console.log('err')}
-					try{note.attr({y:parseFloat(note.attr('y')-difference/2)})}catch(err){console.log('err')}
+				if(logoposition=='right' || logoposition=='left'){
+					var foot_fill=snapobj.rect(0,graphobj.height-graphobj.footer_height,graphobj.width,graphobj.footer_height).attr({id:'footerrect',fill:graphobj.footer.footerfill})
+					var foot_text=snapobj.selectAll("text[ident='foot']")
+					for (var i=0;i<foot_text.length;i++){
+						snapobj.append(foot_text[i])
+					}
+					snapobj.append(logo)
+
+					// If the note+source is taller than the logo height, make the footer bigger and shove all three elements up
+					if(note_coords+chartobject.footer.footer_bottompad-(graphobj.y+graphobj.height-logo_coords.height-graphobj.footer.footer_bottompad-graphobj.footer.footer_toppad)>graphobj.footer_height){
+						var difference=note_coords+chartobject.footer.footer_bottompad-(graphobj.y+graphobj.height)
+						graphobj.footer_height=graphobj.footer_height+difference
+						console.log(graphobj.footer_height)
+						snapobj.selectAll('rect[id="footerrect"]').attr({height:graphobj.footer_height})
+						snapobj.selectAll('rect[id="footerrect"]').attr({y:graphobj.height-graphobj.footer_height})
+						logo.attr({y:parseFloat(logo.attr('y'))-difference/2})
+						try{source.attr({y:parseFloat(source.attr('y')-difference)})}catch(err){}
+						try{note.attr({y:parseFloat(note.attr('y')-difference)})}catch(err){}
+					}
+
+					// if the logo is taller than the note+source, vertically center them around the logo's centerline - should there be a vertical-center flag for this in theme?
+					if(note_coords+chartobject.footer.footer_bottompad-(graphobj.y+graphobj.height-logo_coords.height-graphobj.footer.footer_bottompad-graphobj.footer.footer_toppad)<graphobj.footer_height){
+						var difference=note_coords+chartobject.footer.footer_bottompad-(graphobj.y+graphobj.height)
+						console.log('centering note/source',difference)
+						try{source.attr({y:parseFloat(source.attr('y')-difference/2)})}catch(err){console.log('err')}
+						try{note.attr({y:parseFloat(note.attr('y')-difference/2)})}catch(err){console.log('err')}
+					}
 				}
 
-				callback(logo_coords.height)
-			})
+				// draw stroke
+				snapobj.line(chartobject.x,chartobject.y+chartobject.height-graphobj.footer_height+chartobject.footer.footer_stroke_width/2,chartobject.x+chartobject.width,chartobject.y+chartobject.height-graphobj.footer_height+chartobject.footer.footer_stroke_width/2).attr({strokeWidth:graphobj.footer.footer_stroke_width,stroke:graphobj.footer.footer_stroke_color})
+
+				callback()
+			}
 		} else {
 			if(graphobj.source.length>0){
 				source='Source: '+graphobj.source
@@ -926,7 +992,7 @@ window.playfair = (function () {
 			if(graphobj.note.length>0){
 				note='Note: '+graphobj.note
 				lines=multitext(note,{fill:graphobj.note_text.notetextfill,'font-family':graphobj.note_text.noteface,'font-size':graphobj.note_text.notesize,'font-weight':graphobj.note_text.noteweight,dy:'0.75em'},graphobj.width-graphobj.footer.footer_leftpad-graphobj.footer.footer_rightpad)
-				var note=snapobj.text(graphobj.x+graphobj.footer.footer_leftpad,source_coords+graphobj.note_text.notetoppad,lines).attr({fill:notefill,ident:'foot','font-family':graphobj.note_text.noteface,'font-size':graphobj.note_text.notesize,'font-weight':graphobj.note_text.noteweight,dy:'0.75em',colorchange:'fill',context:'text_context_menu'})
+				var note=snapobj.text(graphobj.x+graphobj.footer.footer_leftpad,source_coords+graphobj.footer.note_to_source,lines).attr({fill:notefill,ident:'foot','font-family':graphobj.note_text.noteface,'font-size':graphobj.note_text.notesize,'font-weight':graphobj.note_text.noteweight,dy:'0.75em',colorchange:'fill',context:'text_context_menu'})
 				note.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 				note.selectAll("tspan:not(:first-child)").attr({x:note.attr('x'),dy:parseInt(graphobj.note_text.notesize)})
 				note_coords=note.getBBox().y2
@@ -947,7 +1013,11 @@ window.playfair = (function () {
 			snapobj.append(note)
 			snapobj.append(source)
 
-			callback(1)
+			// draw stroke
+			snapobj.line(chartobject.x,chartobject.y+chartobject.height-graphobj.footer_height+chartobject.footer.footer_stroke_width/2,chartobject.x+chartobject.width,chartobject.y+chartobject.height-graphobj.footer_height+chartobject.footer.footer_stroke_width/2).attr({strokeWidth:graphobj.footer.footer_stroke_width,stroke:graphobj.footer.footer_stroke_color})
+
+
+			callback()
 		}
 	}
 
@@ -1009,6 +1079,9 @@ window.playfair = (function () {
 		for(var i=0;i<deks.length;i++){
 			snapobj.append(deks[i])
 		}
+
+		// header stroke
+		snapobj.line(chartobject.x,chartobject.y+chartobject.header.head_height-chartobject.header.header_stroke_width/2,chartobject.x+chartobject.width,chartobject.y+chartobject.header.head_height-chartobject.header.header_stroke_width/2).attr({stroke:chartobject.header.header_stroke_color,strokeWidth:chartobject.header.header_stroke_width})
 	}
 
 	Playfair.prototype.style = function(parameters) {
@@ -1064,169 +1137,11 @@ function remove_missing2(array){
 	return temp
 }
 
-function draw_key_top(legend,playobj,snapobj){
-	console.log(legend,legend.length)
-	if(legend.length>1){
-		var maxwidth=legend[0][1]
-		if(legend[0][1]===''){maxwidth=playobj.width-playobj.grapharea.left_margin-playobj.grapharea.right_margin-playobj.legends.legend_leftpad-playobj.legends.legend_rightpad}
-		var rightmost=maxwidth+playobj.grapharea.left_margin+playobj.legends.legend_leftpad
-		var starty=playobj.y+playobj.header.header_toppad+playobj.header.header_bottompad+playobj.header.head_height+playobj.legends.legend_toppad
-		var startx=playobj.grapharea.left_margin+playobj.legends.legend_leftpad
-
-		var line=0
-		var currentx=startx
-		var keyitem_dict={}
-		var keyitem_loc={}
-		var current_group=legend[1].lgroup
-
-		for(var i=1;i<legend.length;i++){
-			var keyitem_name=legend[i].geom+legend[i].grouping+legend[i].group_value
-			var keyitem_loc_name=legend[i].overall
-			var numeric=legend[i].groupnumeric
-			var x=currentx
-			var y=starty+line*(parseFloat(playobj.legends.legend_elementsize))+line*(parseFloat(playobj.legends.legend_elementpad))
-			var keyitem_name=legend[i].geom+legend[i].grouping+legend[i].group_value
-			if(legend[i].lgroup!==current_group){
-				x=x+3*(playobj.legends.legend_elementpad)
-			}
-			var xtext=x+playobj.legends.legend_elementsize+playobj.legends.legend_elementpad
-			var current_group=legend[i].lgroup
-
-			if(keyitem_loc[keyitem_loc_name]==undefined){
-				var t=snapobj.text(xtext,y,legend[i].group_value).attr({ident2:'floatkey',ident:'key',fill:playobj.legends.legend_textfill,'font-size':playobj.legends.legend_textsize,'font-weight':playobj.legends.legend_textweight,'font-family':playobj.legends.legend_textface,dy:'0.3em','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
-				var box=t.getBBox()
-				currentx=box.x2+playobj.legends.legend_elementpad
-
-				if(box.x2>rightmost){
-					t.remove()
-					line=line+1
-					y=starty+line*(parseFloat(playobj.legends.legend_elementsize))+line*(parseFloat(playobj.legends.legend_elementpad))
-					currentx=startx
-					x=currentx
-					var t=snapobj.text(currentx+playobj.legends.legend_elementsize+playobj.legends.legend_elementpad,starty+line*(parseFloat(playobj.legends.legend_elementsize))+line*(parseFloat(playobj.legends.legend_elementpad)),legend[i].group_value).attr({ident2:'floatkey',ident:'key',fill:playobj.legends.legend_textfill,'font-size':playobj.legends.legend_textsize,'font-weight':playobj.legends.legend_textweight,'font-family':playobj.legends.legend_textface,dy:'0.3em','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
-				}
-
-				keyitem_loc[keyitem_loc_name]={}
-				keyitem_loc[keyitem_loc_name]['x']=x
-				keyitem_loc[keyitem_loc_name]['y']=y
-			} else {
-				x=keyitem_loc[keyitem_loc_name]['x']
-				y=keyitem_loc[keyitem_loc_name]['y']
-			}
-
-			// points
-			if(legend[i].geom=='point' && keyitem_dict[keyitem_name]==undefined){
-				if(legend[i].grouping=='color'){
-					keyitem_dict[keyitem_name]=snapobj.circle(x+playobj.legends.legend_elementsize/2,y+playobj.legends.legend_elementsize/2,playobj.point_geom.point_size).attr({fill:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],stroke:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'stroke-width':playobj.point_geom.point_strokewidth,'data_type':'point','group':legend[i].group_value,'class':'dataelement','fill-opacity':chartobject.point_geom.point_fillopacity,colorchange:'both',context:'point_context_menu',ident2:'floatkey',ident:'key'})
-				} else if(legend[i].grouping=='type'){
-					keyitem_dict[keyitem_name]=snapobj.circle(x+playobj.legends.legend_elementsize/2,y+playobj.legends.legend_elementsize/2,playobj.point_geom.point_size).attr({fill:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],stroke:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'stroke-width':playobj.point_geom.point_strokewidth,'data_type':'point','group':legend[i].group_value,'class':'dataelement','fill-opacity':chartobject.point_geom.point_fillopacity,colorchange:'both',context:'point_context_menu',ident2:'floatkey',ident:'key'})
-				} else {
-					keyitem_dict[keyitem_name]=snapobj.circle(x+playobj.legends.legend_elementsize/2,y+playobj.legends.legend_elementsize/2,playobj.point_geom.point_size).attr({fill:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],stroke:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'stroke-width':playobj.point_geom.point_strokewidth,'data_type':'point','group':legend[i].group_value,'class':'dataelement','fill-opacity':chartobject.point_geom.point_fillopacity,colorchange:'both',context:'point_context_menu',ident2:'floatkey',ident:'key'})
-				}
-			} else if(legend[i].geom=='point' && keyitem_dict[keyitem_name]!==undefined){
-				if(legend[i].grouping=='color'){
-					keyitem_dict[keyitem_name].attr({fill:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'stroke':chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length]})
-				}
-				if(legend[i].grouping=='type'){
-					// keyitem_dict[keyitem_name].attr({'stroke-width':chartobject.color_scales.qualitative_color[legend[i].position],})
-				}
-			}
-
-			// lines
-			if((legend[i].geom=='line') && keyitem_dict[keyitem_name]==undefined){
-				if(legend[i].grouping=='color'){
-					keyitem_dict[keyitem_name]=snapobj.line(x,y+playobj.legends.legend_elementsize/2,x+playobj.legends.legend_elementsize,y+playobj.legends.legend_elementsize/2).attr({stroke:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'stroke-width':playobj.line_geom.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
-				} else if(legend[i].grouping=='type'){
-					keyitem_dict[keyitem_name]=snapobj.line(x,y+playobj.legends.legend_elementsize/2,x+playobj.legends.legend_elementsize,y+playobj.legends.legend_elementsize/2).attr({stroke:chartobject.color_scales.qualitative_color[0],'stroke-width':playobj.line_geom.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges','stroke-dasharray':chartobject.line_geom.line_types[numeric % chartobject.line_geom.line_types.length]})
-				} else {
-					keyitem_dict[keyitem_name]=snapobj.line(x,y+playobj.legends.legend_elementsize/2,x+playobj.legends.legend_elementsize,y+playobj.legends.legend_elementsize/2).attr({stroke:chartobject.color_scales.qualitative_color[0],'stroke-width':playobj.line_geom.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
-				}
-			} else if(legend[i].geom=='line' && keyitem_dict[keyitem_name]!==undefined){
-				if(legend[i].grouping=='color'){
-					console.log('color')
-					// keyitem_dict[keyitem_name].attr({'stroke':chartobject.color_scales.qualitative_color[numeric]})
-				} else if(legend[i].grouping=='type'){
-					console.log('type')
-					keyitem_dict[keyitem_name].attr({'stroke-dasharray':chartobject.line_geom.line_types[numeric % chartobject.line_geom.line_types.length]})
-				}
-			}
-
-			// segments
-			if((legend[i].geom=='segment') && keyitem_dict[keyitem_name]==undefined){
-				if(legend[i].grouping=='color'){
-					keyitem_dict[keyitem_name]=snapobj.line(x,y+playobj.legends.legend_elementsize/2,x+playobj.legends.legend_elementsize,y+playobj.legends.legend_elementsize/2).attr({stroke:chartobject.color_scales.grayscale_color[numeric % chartobject.color_scales.qualitative_color.length],'stroke-width':playobj.segment_geom.segment_width,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
-				} else if(legend[i].grouping=='type'){
-					keyitem_dict[keyitem_name]=snapobj.line(x,y+playobj.legends.legend_elementsize/2,x+playobj.legends.legend_elementsize,y+playobj.legends.legend_elementsize/2).attr({stroke:chartobject.color_scales.grayscale_color[0],'stroke-width':playobj.segment_geom.segment_width,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges','stroke-dasharray':chartobject.line_geom.line_types[numeric % chartobject.line_geom.line_types.length]})
-				} else {
-					keyitem_dict[keyitem_name]=snapobj.line(x,y+playobj.legends.legend_elementsize/2,x+playobj.legends.legend_elementsize,y+playobj.legends.legend_elementsize/2).attr({stroke:chartobject.color_scales.grayscale_color[0],'stroke-width':playobj.segment_geom.segment_width,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
-				}
-			} else if(legend[i].geom=='segment' && keyitem_dict[keyitem_name]!==undefined){
-				if(legend[i].grouping=='color'){
-					console.log('color')
-					// keyitem_dict[keyitem_name].attr({'stroke':chartobject.color_scales.qualitative_color[numeric]})
-				} else if(legend[i].grouping=='type'){
-					console.log('type')
-					keyitem_dict[keyitem_name].attr({'stroke-dasharray':chartobject.line_geom.line_types[numeric % chartobject.line_geom.line_types.length]})
-				}
-			}
-
-			// steps
-			if((legend[i].geom=='step') && keyitem_dict[keyitem_name]==undefined){
-				if(legend[i].grouping=='color'){
-					keyitem_dict[keyitem_name]=snapobj.path('M'+x+','+(y+chartobject.legends.legend_elementsize*(2/3))+'L'+(x+chartobject.legends.legend_elementsize/2)+','+(y+chartobject.legends.legend_elementsize*(2/3))+'L'+(x+chartobject.legends.legend_elementsize/2)+','+(y+chartobject.legends.legend_elementsize*(1/3))+'L'+(x+chartobject.legends.legend_elementsize)+','+(y+chartobject.legends.legend_elementsize*(1/3))).attr({fill:'none',stroke:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'stroke-width':playobj.line_geom.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
-				} else if(legend[i].grouping=='type'){
-					keyitem_dict[keyitem_name]=snapobj.path('M'+x+','+(y+chartobject.legends.legend_elementsize*(2/3))+'L'+(x+chartobject.legends.legend_elementsize/2)+','+(y+chartobject.legends.legend_elementsize*(2/3))+'L'+(x+chartobject.legends.legend_elementsize/2)+','+(y+chartobject.legends.legend_elementsize*(1/3))+'L'+(x+chartobject.legends.legend_elementsize)+','+(y+chartobject.legends.legend_elementsize*(1/3))).attr({fill:'none',stroke:chartobject.color_scales.qualitative_color[0],'stroke-width':playobj.line_geom.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges','stroke-dasharray':chartobject.line_geom.line_types[numeric % chartobject.line_geom.line_types.length]})
-				} else {
-					keyitem_dict[keyitem_name]=snapobj.path('M'+x+','+(y+chartobject.legends.legend_elementsize*(2/3))+'L'+(x+chartobject.legends.legend_elementsize/2)+','+(y+chartobject.legends.legend_elementsize*(2/3))+'L'+(x+chartobject.legends.legend_elementsize/2)+','+(y+chartobject.legends.legend_elementsize*(1/3))+'L'+(x+chartobject.legends.legend_elementsize)+','+(y+chartobject.legends.legend_elementsize*(1/3))).attr({fill:'none',stroke:chartobject.color_scales.qualitative_color[0],'stroke-width':playobj.line_geom.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
-				}
-			} else if(legend[i].geom=='step' && keyitem_dict[keyitem_name]!==undefined){
-				if(legend[i].grouping=='color'){
-					keyitem_dict[keyitem_name].attr({'stroke':chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length]})
-				} else if(legend[i].grouping=='type'){
-					keyitem_dict[keyitem_name].attr({'stroke-dasharray':chartobject.line_geom.line_types[numeric % chartobject.line_geom.line_types.length]})
-				}
-			}
-
-			// bars or stacked bars or area
-			if((legend[i].geom=='bar' || legend[i].geom=='stackedbar' || legend[i].geom=='area' || legend[i].geom=='bounds') && keyitem_dict[keyitem_name]==undefined){
-				if(legend[i].grouping=='color'){
-					keyitem_dict[keyitem_name]=snapobj.rect(x,y,playobj.legends.legend_elementsize,playobj.legends.legend_elementsize).attr({fill:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'group':legend[i].group_value,'class':'dataelement',colorchange:'fill',context:'data_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
-				} else if(legend[i].grouping=='type'){
-					keyitem_dict[keyitem_name]=snapobj.rect(x,y,playobj.legends.legend_elementsize,playobj.legends.legend_elementsize).attr({fill:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'group':legend[i].group_value,'class':'dataelement',colorchange:'fill',context:'data_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
-				} else {
-					keyitem_dict[keyitem_name]=snapobj.rect(x,y,playobj.legends.legend_elementsize,playobj.legends.legend_elementsize).attr({fill:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'group':legend[i].group_value,'class':'dataelement',colorchange:'fill',context:'data_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
-				}
-			} else if((legend[i].geom=='bar' || legend[i].geom=='stackedbar' || legend[i].geom=='area' || legend[i].geom=='bounds') && keyitem_dict[keyitem_name]!==undefined){
-				if(legend[i].grouping=='color'){
-					keyitem_dict[keyitem_name].attr({'fill':chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length]})
-				} else if(legend[i].grouping=='type'){
-					// keyitem_dict[keyitem_name].attr({'stroke-dasharray':chartobject.line_geom.line_types[numeric]})
-				}
-			}
-
-			// rect
-			if(legend[i].geom=='rect' && keyitem_dict[keyitem_name]===undefined){
-				keyitem_dict[keyitem_name]=snapobj.rect(x,y,playobj.legends.legend_elementsize,playobj.legends.legend_elementsize).attr({fill:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'fill-opacity':chartobject.rect_geom.rect_opacity,'shape-rendering':'crispEdges',ident2:'floatkey',ident:'key'})
-			}
-
-			// shade
-			if(legend[i].geom=='shade' && keyitem_dict[keyitem_name]===undefined){
-				keyitem_dict[keyitem_name]=snapobj.rect(x,y,playobj.legends.legend_elementsize,playobj.legends.legend_elementsize).attr({fill:chartobject.grapharea.chartfill,'shape-rendering':'crispEdges',ident2:'floatkey',ident:'key',context:'color_context_menu',colorchange:'fill'})
-				keyitem_dict[keyitem_name]=snapobj.rect(x,y,playobj.legends.legend_elementsize,playobj.legends.legend_elementsize).attr({fill:chartobject.shade_geom.shadefill,'fill-opacity':chartobject.shade_geom.shadeopacity,'shape-rendering':'crispEdges',ident2:'floatkey',ident:'key'})
-			}
-		}
-
-		return (line+1)*parseFloat(playobj.legends.legend_elementsize)+(line+1)*parseFloat(playobj.legends.legend_elementpad)
-	} else {
-		return 0
-	}
-}
-
 function draw_key(legend,playobj,snapobj,prelim,vertical){
 	console.log(legend)
 	vertical=(typeof vertical!=='undefined') ? vertical:1;
 
-	// listener for drag events on a floating key
+	//listener for drag events on a floating key
 	var moveFuncfloat=function(dx,dy,posx,posy){
 		key_elements=grapharea.selectAll('[ident="key"]')
 		for(var i=0;i<key_elements.length;i++){
@@ -1261,11 +1176,20 @@ function draw_key(legend,playobj,snapobj,prelim,vertical){
 					y:coords.y-prevy+dy
 				})
 			}
+			grapharea.select('[id="legendgroup"]').attr({
+					x:coords.x-prevx+dx,
+					y:coords.y-prevy+dy
+			})
 			grapharea.append(key_elements[i])
+			grapharea.select('[id="legendgroup"]').append(key_elements[i])
 		}
 		prevx=dx
 		prevy=dy
 	}
+
+	// create a group for all key elements
+	var g=snapobj.group()
+	g.attr({id:'legendgroup'})
 
 	// use legend object to draw a key for the figure
 	if(legend.length>1){
@@ -1275,6 +1199,7 @@ function draw_key(legend,playobj,snapobj,prelim,vertical){
 		var longest=0
 		var ltitle=legend[0][0]
 		var floatkey=snapobj.rect(0,0,0,0).attr({ident3:'keybounder',ident2:'floatkey',ident:'key',fill:playobj.legends.legend_floatbackground,stroke:playobj.legends.legend_floatstroke,'stroke-width':playobj.legends.legend_floatthickness,'shape-rendering':'crispEdges',colorchange:'fill'})
+		g.append(floatkey)
 
 		var maxitemwidth=0
 		var maxycoord=0
@@ -1289,6 +1214,7 @@ function draw_key(legend,playobj,snapobj,prelim,vertical){
 			if(maxycoord<title.getBBox().y2){maxycoord=title.getBBox().y2}
 			starty=title.getBBox().y2+playobj.legends.legend_elementpad
 			longest=title.getBBox().x2
+			g.append(title)
 		}
 
 		// store each item in a dict so it can be modified as necessary
@@ -1327,6 +1253,7 @@ function draw_key(legend,playobj,snapobj,prelim,vertical){
 					if(xend>longest){longest=xend}
 					extralines=extralines+(lines.length-1)
 					console.log("EXTRALINES",extralines)
+					g.append(t)
 					if(legend[i].group_value!==''){
 						y=t.getBBox().cy
 					}
@@ -1336,11 +1263,17 @@ function draw_key(legend,playobj,snapobj,prelim,vertical){
 			// points
 			if(legend[i].geom=='point' && keyitem_dict[keyitem_name]==undefined){
 				if(legend[i].grouping=='color'){
-					keyitem_dict[keyitem_name]=snapobj.circle(x+playobj.legends.legend_elementsize/2,y,playobj.point_geom.point_size).attr({fill:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],stroke:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'stroke-width':playobj.point_geom.point_strokewidth,'data_type':'point','group':legend[i].group_value,'class':'dataelement','fill-opacity':chartobject.point_geom.point_fillopacity,colorchange:'both',context:'point_context_menu',ident2:'floatkey',ident:'key'})
+					var temp=snapobj.circle(x+playobj.legends.legend_elementsize/2,y,playobj.point_geom.point_size).attr({fill:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],stroke:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'stroke-width':playobj.point_geom.point_strokewidth,'data_type':'point','group':legend[i].group_value,'class':'dataelement','fill-opacity':chartobject.point_geom.point_fillopacity,colorchange:'both',context:'point_context_menu',ident2:'floatkey',ident:'key'})
+					keyitem_dict[keyitem_name]=temp
+					g.append(temp)
 				} else if(legend[i].grouping=='type'){
-					keyitem_dict[keyitem_name]=snapobj.circle(x+playobj.legends.legend_elementsize/2,y,playobj.point_geom.point_size).attr({fill:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],stroke:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'stroke-width':playobj.point_geom.point_strokewidth,'data_type':'point','group':legend[i].group_value,'class':'dataelement','fill-opacity':chartobject.point_geom.point_fillopacity,colorchange:'both',context:'point_context_menu',ident2:'floatkey',ident:'key'})
+					var temp=snapobj.circle(x+playobj.legends.legend_elementsize/2,y,playobj.point_geom.point_size).attr({fill:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],stroke:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'stroke-width':playobj.point_geom.point_strokewidth,'data_type':'point','group':legend[i].group_value,'class':'dataelement','fill-opacity':chartobject.point_geom.point_fillopacity,colorchange:'both',context:'point_context_menu',ident2:'floatkey',ident:'key'})
+					keyitem_dict[keyitem_name]=temp
+					g.append(temp)
 				} else {
-					keyitem_dict[keyitem_name]=snapobj.circle(x+playobj.legends.legend_elementsize/2,y,playobj.point_geom.point_size).attr({fill:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],stroke:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'stroke-width':playobj.point_geom.point_strokewidth,'data_type':'point','group':legend[i].group_value,'class':'dataelement','fill-opacity':chartobject.point_geom.point_fillopacity,colorchange:'both',context:'point_context_menu',ident2:'floatkey',ident:'key'})
+					var temp=snapobj.circle(x+playobj.legends.legend_elementsize/2,y,playobj.point_geom.point_size).attr({fill:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],stroke:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'stroke-width':playobj.point_geom.point_strokewidth,'data_type':'point','group':legend[i].group_value,'class':'dataelement','fill-opacity':chartobject.point_geom.point_fillopacity,colorchange:'both',context:'point_context_menu',ident2:'floatkey',ident:'key'})
+					keyitem_dict[keyitem_name]=temp
+					g.append(temp)
 				}
 			} else if(legend[i].geom=='point' && keyitem_dict[keyitem_name]!==undefined){
 				if(legend[i].grouping=='color'){
@@ -1354,11 +1287,17 @@ function draw_key(legend,playobj,snapobj,prelim,vertical){
 			// lines
 			if((legend[i].geom=='line') && keyitem_dict[keyitem_name]==undefined){
 				if(legend[i].grouping=='color'){
-					keyitem_dict[keyitem_name]=snapobj.line(x,y,x+playobj.legends.legend_elementsize,y).attr({stroke:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'stroke-width':playobj.line_geom.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+					var temp=snapobj.line(x,y,x+playobj.legends.legend_elementsize,y).attr({stroke:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'stroke-width':playobj.line_geom.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+					keyitem_dict[keyitem_name]=temp
+					g.append(temp)				
 				} else if(legend[i].grouping=='type'){
-					keyitem_dict[keyitem_name]=snapobj.line(x,y,x+playobj.legends.legend_elementsize,y).attr({stroke:chartobject.color_scales.qualitative_color[0],'stroke-width':playobj.line_geom.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges','stroke-dasharray':chartobject.line_geom.line_types[numeric]})
+					var temp=snapobj.line(x,y,x+playobj.legends.legend_elementsize,y).attr({stroke:chartobject.color_scales.qualitative_color[0],'stroke-width':playobj.line_geom.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges','stroke-dasharray':chartobject.line_geom.line_types[numeric]})
+					keyitem_dict[keyitem_name]=temp
+					g.append(temp)				
 				} else {
-					keyitem_dict[keyitem_name]=snapobj.line(x,y,x+playobj.legends.legend_elementsize,y).attr({stroke:chartobject.color_scales.qualitative_color[0],'stroke-width':playobj.line_geom.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+					var temp=snapobj.line(x,y,x+playobj.legends.legend_elementsize,y).attr({stroke:chartobject.color_scales.qualitative_color[0],'stroke-width':playobj.line_geom.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+					keyitem_dict[keyitem_name]=temp
+					g.append(temp)				
 				}
 			} else if(legend[i].geom=='line' && keyitem_dict[keyitem_name]!==undefined){
 				if(legend[i].grouping=='color'){
@@ -1373,11 +1312,17 @@ function draw_key(legend,playobj,snapobj,prelim,vertical){
 			// segments
 			if((legend[i].geom=='segment') && keyitem_dict[keyitem_name]==undefined){
 				if(legend[i].grouping=='color'){
-					keyitem_dict[keyitem_name]=snapobj.line(x,y,x+playobj.legends.legend_elementsize,y).attr({stroke:chartobject.color_scales.grayscale_color[numeric % chartobject.color_scales.grayscale_color.length],'stroke-width':playobj.line_geom.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+					var temp=snapobj.line(x,y,x+playobj.legends.legend_elementsize,y).attr({stroke:chartobject.color_scales.grayscale_color[numeric % chartobject.color_scales.grayscale_color.length],'stroke-width':playobj.line_geom.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+					keyitem_dict[keyitem_name]=temp
+					g.append(temp)				
 				} else if(legend[i].grouping=='type'){
-					keyitem_dict[keyitem_name]=snapobj.line(x,y,x+playobj.legends.legend_elementsize,y).attr({stroke:chartobject.color_scales.grayscale_color[0],'stroke-width':playobj.line_geom.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges','stroke-dasharray':chartobject.line_geom.line_types[numeric % chartobject.line_geom.line_types.length]})
+					var temp=snapobj.line(x,y,x+playobj.legends.legend_elementsize,y).attr({stroke:chartobject.color_scales.grayscale_color[0],'stroke-width':playobj.line_geom.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges','stroke-dasharray':chartobject.line_geom.line_types[numeric % chartobject.line_geom.line_types.length]})
+					keyitem_dict[keyitem_name]=temp
+					g.append(temp)				
 				} else {
-					keyitem_dict[keyitem_name]=snapobj.line(x,y,x+playobj.legends.legend_elementsize,y).attr({stroke:chartobject.color_scales.grayscale_color[0],'stroke-width':playobj.line_geom.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+					var temp=snapobj.line(x,y,x+playobj.legends.legend_elementsize,y).attr({stroke:chartobject.color_scales.grayscale_color[0],'stroke-width':playobj.line_geom.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+					keyitem_dict[keyitem_name]=temp
+					g.append(temp)				
 				}
 			} else if(legend[i].geom=='segment' && keyitem_dict[keyitem_name]!==undefined){
 				if(legend[i].grouping=='color'){
@@ -1392,11 +1337,17 @@ function draw_key(legend,playobj,snapobj,prelim,vertical){
 			// steps
 			if((legend[i].geom=='step') && keyitem_dict[keyitem_name]==undefined){
 				if(legend[i].grouping=='color'){
-					keyitem_dict[keyitem_name]=snapobj.path('M'+x+','+(y+chartobject.legends.legend_elementsize*(1/6))+'L'+(x+chartobject.legends.legend_elementsize/2)+','+(y+chartobject.legends.legend_elementsize*(1/6))+'L'+(x+chartobject.legends.legend_elementsize/2)+','+(y-chartobject.legends.legend_elementsize*(1/6))+'L'+(x+chartobject.legends.legend_elementsize)+','+(y-chartobject.legends.legend_elementsize*(1/6))).attr({fill:'none',stroke:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'stroke-width':playobj.line_geom.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+					var temp=snapobj.path('M'+x+','+(y+chartobject.legends.legend_elementsize*(1/6))+'L'+(x+chartobject.legends.legend_elementsize/2)+','+(y+chartobject.legends.legend_elementsize*(1/6))+'L'+(x+chartobject.legends.legend_elementsize/2)+','+(y-chartobject.legends.legend_elementsize*(1/6))+'L'+(x+chartobject.legends.legend_elementsize)+','+(y-chartobject.legends.legend_elementsize*(1/6))).attr({fill:'none',stroke:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'stroke-width':playobj.line_geom.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+					keyitem_dict[keyitem_name]=temp
+					g.append(temp)				
 				} else if(legend[i].grouping=='type'){
-					keyitem_dict[keyitem_name]=snapobj.path('M'+x+','+(y+chartobject.legends.legend_elementsize*(1/6))+'L'+(x+chartobject.legends.legend_elementsize/2)+','+(y+chartobject.legends.legend_elementsize*(1/6))+'L'+(x+chartobject.legends.legend_elementsize/2)+','+(y-chartobject.legends.legend_elementsize*(1/6))+'L'+(x+chartobject.legends.legend_elementsize)+','+(y-chartobject.legends.legend_elementsize*(1/6))).attr({fill:'none',stroke:chartobject.color_scales.qualitative_color[0],'stroke-width':playobj.line_geom.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges','stroke-dasharray':chartobject.line_geom.line_types[numeric % chartobject.line_geom.line_types.length]})
+					var temp=snapobj.path('M'+x+','+(y+chartobject.legends.legend_elementsize*(1/6))+'L'+(x+chartobject.legends.legend_elementsize/2)+','+(y+chartobject.legends.legend_elementsize*(1/6))+'L'+(x+chartobject.legends.legend_elementsize/2)+','+(y-chartobject.legends.legend_elementsize*(1/6))+'L'+(x+chartobject.legends.legend_elementsize)+','+(y-chartobject.legends.legend_elementsize*(1/6))).attr({fill:'none',stroke:chartobject.color_scales.qualitative_color[0],'stroke-width':playobj.line_geom.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges','stroke-dasharray':chartobject.line_geom.line_types[numeric % chartobject.line_geom.line_types.length]})
+					keyitem_dict[keyitem_name]=temp
+					g.append(temp)				
 				} else {
-					keyitem_dict[keyitem_name]=snapobj.path('M'+x+','+(y+chartobject.legends.legend_elementsize*(1/6))+'L'+(x+chartobject.legends.legend_elementsize/2)+','+(y+chartobject.legends.legend_elementsize*(1/6))+'L'+(x+chartobject.legends.legend_elementsize/2)+','+(y-chartobject.legends.legend_elementsize*(1/6))+'L'+(x+chartobject.legends.legend_elementsize)+','+(y-chartobject.legends.legend_elementsize*(1/6))).attr({fill:'none',stroke:chartobject.color_scales.qualitative_color[0],'stroke-width':playobj.line_geom.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+					var temp=snapobj.path('M'+x+','+(y+chartobject.legends.legend_elementsize*(1/6))+'L'+(x+chartobject.legends.legend_elementsize/2)+','+(y+chartobject.legends.legend_elementsize*(1/6))+'L'+(x+chartobject.legends.legend_elementsize/2)+','+(y-chartobject.legends.legend_elementsize*(1/6))+'L'+(x+chartobject.legends.legend_elementsize)+','+(y-chartobject.legends.legend_elementsize*(1/6))).attr({fill:'none',stroke:chartobject.color_scales.qualitative_color[0],'stroke-width':playobj.line_geom.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+					keyitem_dict[keyitem_name]=temp
+					g.append(temp)				
 				}
 			} else if(legend[i].geom=='step' && keyitem_dict[keyitem_name]!==undefined){
 				if(legend[i].grouping=='color'){
@@ -1409,13 +1360,21 @@ function draw_key(legend,playobj,snapobj,prelim,vertical){
 			// bars or stacked bars or area or map
 			if((legend[i].geom=='bar' || legend[i].geom=='stackedbar' || legend[i].geom=='area' || legend[i].geom=='bounds' || legend[i].geom=='map') && keyitem_dict[keyitem_name]==undefined){
 				if(legend[i].grouping=='color'){
-					keyitem_dict[keyitem_name]=snapobj.rect(x,y-playobj.legends.legend_elementsize/2,playobj.legends.legend_elementsize,playobj.legends.legend_elementsize).attr({fill:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'group':legend[i].group_value,'class':'dataelement',colorchange:'fill',context:'data_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+					var temp=snapobj.rect(x,y-playobj.legends.legend_elementsize/2,playobj.legends.legend_elementsize,playobj.legends.legend_elementsize).attr({fill:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'group':legend[i].group_value,'class':'dataelement',colorchange:'fill',context:'data_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+					keyitem_dict[keyitem_name]=temp
+					g.append(temp)
 				} else if(legend[i].grouping=='type'){
-					keyitem_dict[keyitem_name]=snapobj.rect(x,y-playobj.legends.legend_elementsize/2,playobj.legends.legend_elementsize,playobj.legends.legend_elementsize).attr({fill:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'group':legend[i].group_value,'class':'dataelement',colorchange:'fill',context:'data_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+					var temp=snapobj.rect(x,y-playobj.legends.legend_elementsize/2,playobj.legends.legend_elementsize,playobj.legends.legend_elementsize).attr({fill:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'group':legend[i].group_value,'class':'dataelement',colorchange:'fill',context:'data_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+					keyitem_dict[keyitem_name]=temp
+					g.append(temp)				
 				} else if(legend[i].geom=='map'){
-					keyitem_dict[keyitem_name]=snapobj.rect(x,y-playobj.legends.legend_elementsize/2,playobj.legends.legend_elementsize,playobj.legends.legend_elementsize).attr({fill:chartobject.color_scales.sequential_color[numeric % chartobject.color_scales.sequential_color.length],'group':legend[i].group_value,'class':'dataelement',colorchange:'fill',context:'data_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+					var temp=snapobj.rect(x,y-playobj.legends.legend_elementsize/2,playobj.legends.legend_elementsize,playobj.legends.legend_elementsize).attr({fill:chartobject.color_scales.sequential_color[numeric % chartobject.color_scales.sequential_color.length],'group':legend[i].group_value,'class':'dataelement',colorchange:'fill',context:'data_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+					keyitem_dict[keyitem_name]=temp
+					g.append(temp)				
 				} else {
-					keyitem_dict[keyitem_name]=snapobj.rect(x,y-playobj.legends.legend_elementsize/2,playobj.legends.legend_elementsize,playobj.legends.legend_elementsize).attr({fill:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'group':legend[i].group_value,'class':'dataelement',colorchange:'fill',context:'data_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+					var temp=snapobj.rect(x,y-playobj.legends.legend_elementsize/2,playobj.legends.legend_elementsize,playobj.legends.legend_elementsize).attr({fill:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'group':legend[i].group_value,'class':'dataelement',colorchange:'fill',context:'data_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
+					keyitem_dict[keyitem_name]=temp
+					g.append(temp)				
 				}
 			} else if((legend[i].geom=='bar' || legend[i].geom=='stackedbar' || legend[i].geom=='area' || legend[i].geom=='bounds' || legend[i].geom=='bounds') && keyitem_dict[keyitem_name]!==undefined){
 				if(legend[i].grouping=='color'){
@@ -1427,13 +1386,18 @@ function draw_key(legend,playobj,snapobj,prelim,vertical){
 
 			// rect
 			if(legend[i].geom=='rect' && keyitem_dict[keyitem_name]===undefined){
-				keyitem_dict[keyitem_name]=snapobj.rect(x,y-playobj.legends.legend_elementsize/2,playobj.legends.legend_elementsize,playobj.legends.legend_elementsize).attr({'stroke':'#aaa','stroke-width':1,fill:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'fill-opacity':chartobject.rect_geom.rect_opacity,'shape-rendering':'crispEdges',ident2:'floatkey',ident:'key',context:'data_context_menu'})
+				var temp=snapobj.rect(x,y-playobj.legends.legend_elementsize/2,playobj.legends.legend_elementsize,playobj.legends.legend_elementsize).attr({'stroke':'#aaa','stroke-width':1,fill:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'fill-opacity':chartobject.rect_geom.rect_opacity,'shape-rendering':'crispEdges',ident2:'floatkey',ident:'key',context:'data_context_menu'})
+				keyitem_dict[keyitem_name]=temp
+				g.append(temp)			
 			}
 
 			// shade
 			if(legend[i].geom=='shade' && keyitem_dict[keyitem_name]===undefined){
-				keyitem_dict[keyitem_name]=snapobj.rect(x,y-playobj.legends.legend_elementsize/2,playobj.legends.legend_elementsize,playobj.legends.legend_elementsize).attr({fill:chartobject.grapharea.chartfill,'shape-rendering':'crispEdges',ident2:'floatkey',ident:'key',context:'color_context_menu',colorchange:'fill'})
-				keyitem_dict[keyitem_name]=snapobj.rect(x,y-playobj.legends.legend_elementsize/2,playobj.legends.legend_elementsize,playobj.legends.legend_elementsize).attr({'stroke':'#aaa','stroke-width':1,fill:chartobject.shade_geom.shadefill,'fill-opacity':chartobject.shade_geom.shadeopacity,'shape-rendering':'crispEdges',ident2:'floatkey',ident:'key'})
+				var temp1=snapobj.rect(x,y-playobj.legends.legend_elementsize/2,playobj.legends.legend_elementsize,playobj.legends.legend_elementsize).attr({fill:chartobject.grapharea.chartfill,'shape-rendering':'crispEdges',ident2:'floatkey',ident:'key',context:'color_context_menu',colorchange:'fill'})
+				var temp2=snapobj.rect(x,y-playobj.legends.legend_elementsize/2,playobj.legends.legend_elementsize,playobj.legends.legend_elementsize).attr({'stroke':'#aaa','stroke-width':1,fill:chartobject.shade_geom.shadefill,'fill-opacity':chartobject.shade_geom.shadeopacity,'shape-rendering':'crispEdges',ident2:'floatkey',ident:'key'})
+				keyitem_dict[keyitem_name]=temp2
+				g.append(temp1)
+				g.append(temp2)
 			}
 
 			var lowbound=y+playobj.legends.legend_elementsize+(lines.length-1)*textoffset
@@ -1493,6 +1457,15 @@ function draw_trends(axes,trend,snapobj){
 		var tempheight=pathcoords.height
 		var unitslope=tempheight/tempwidth
 
+		// this is dumb but because the unitslope method above gives the same answer for positively and negatively sloping lines, need a little
+		// kluge here to see which one this is.
+		if(x_loc1<x_loc2){
+			if(y_loc1<y_loc2){unitslope=unitslope*-1}
+		} 
+		if(x_loc2<x_loc1){
+			if(y_loc2<y_loc1){unitslope=unitslope*-1}
+		}
+
 		// truncate trendlines that leave the graph
 		// fake box that covers the plotting region
 		var tempbox=snapobj.path('M'+(axes[0]-1)+','+(axes[3]-1)+'L'+(axes[1]+1)+','+(axes[3]-1)+'L'+(axes[1]+1)+','+(axes[2]+1)+'L'+(axes[0]-1)+','+(axes[2]+1)+'L'+(axes[0]-1)+','+(axes[3]-1)).attr({})
@@ -1542,10 +1515,9 @@ function draw_trends(axes,trend,snapobj){
 		console.log(pathcoords)
 
 		// finally add the text
-		var trendtext=snapobj.text((x_loc1+x_loc2)/2,(y_loc1+y_loc2)/2,'Trendline').attr({fill:chartobject.trend_geom.trend_textcolor,'font-family':chartobject.trend_geom.trend_textface,'font-weight':chartobject.trend_geom.trend_textweight,dy:'0.3em','text-anchor':'middle','colorchange':'fill',context:'text_context_menu'})
+		var trendtext=snapobj.text((x_loc1+x_loc2)/2,(y_loc1+y_loc2)/2+chartobject.trend_geom.trend_to_text,'Trendline').attr({fill:chartobject.trend_geom.trend_textcolor,'font-family':chartobject.trend_geom.trend_textface,'font-weight':chartobject.trend_geom.trend_textweight,dy:'0.75em','text-anchor':'middle','colorchange':'fill',context:'text_context_menu',fontSize:chartobject.trend_geom.trend_textsize})
 		trendtext.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 		var coords=trendtext.getBBox()
-		trendtext.attr({y:coords.y-chartobject.trend_geom.trend_linetotext-coords.height})
 		var inclincation=-(Math.atan(parseFloat(unitslope))*360)/(2*Math.PI)
 		trendtext.transform('r'+inclincation+' '+coords.cx+' '+coords.cy)
 	}
@@ -1694,14 +1666,12 @@ function draw_lines(axes,line,snapobj){
 		}
 
 		var path=''
+		var skipped=0
 		// now loop through points in the line
 		for(var j=0;j<current.length;j++){
 			var sub_current=current[j]
+			try{var sub_next=current[j+1]} catch(err){}
 
-			try{
-				var sub_next=current[j+1]
-			} catch(err){}
-			console.log(sub_current)
 			if(sub_current[connect]!==undefined){
 				if((sub_current[line.xvar]==undefined && connect==line.yvar) || (sub_current[line.yvar]==undefined && connect==line.xvar)){
 					// check to see if this is the last point - if so there won't be a sub_next
@@ -1719,6 +1689,7 @@ function draw_lines(axes,line,snapobj){
 							if(chartobject.line_geom.line_smoothing==1){
 								path=path+' R'
 							}
+							skipped=1
 						}
 					}
 				} else if(sub_current[line.xvar]!=undefined && sub_current[line.yvar]!=undefined){
@@ -1731,16 +1702,19 @@ function draw_lines(axes,line,snapobj){
 						if(chartobject.line_geom.line_smoothing==1){
 							path=path+' R'
 						}
-					} else{
+					} else if(skipped==0){
 						if(chartobject.line_geom.line_smoothing==1){
 							path=path+' '+x_loc+','+y_loc
 						} else {
 							path=path+'L'+x_loc+','+y_loc
 						}
+					} else if(skipped==1){
+						skipped=0
 					}
 				} else {}
 			}
 		}
+		console.log(path)
 
 		// draw line
 		if(current[0][line.grouping.color]==undefined){
@@ -1834,14 +1808,8 @@ function draw_area(axes,line,snapobj){
 		// now loop through points in the line
 		for(var j=0;j<current.length;j++){
 			var sub_current=current[j]
-
-			try{
-				var sub_next=current[j+1]
-			} catch(err){}
-
-			try{
-				var sub_prev=prev_current[j]
-			} catch(err){}
+			try{var sub_next=current[j+1]} catch(err){}
+			try{var sub_prev=prev_current[j]} catch(err){}
 
 			if(isNaN(sub_current[connect])==false){
 				if((sub_current[line.xvar]==undefined && connect==line.yvar) || (sub_current[line.yvar]==undefined && connect==line.xvar)){
@@ -2770,38 +2738,32 @@ function draw_rects(axes,rect,snapobj){
 	snapobj.append(snapobj.selectAll('[zeroline="1"]'))
 }
 
-function draw_map(geom,snapobj){
+function draw_map(geom,snapobj,bounds){
 	// map is {'location':location,'geography':states|counties,'values':values,'grouping':{'category':category}}
 	// loop through observations in the xvar and yvar
 	// categories are always based on the 'category' variable if available - values are really for keys, if the var is continuous
 	// however, if categories are not passed, separate the data into quintiles and pick colors accordingly.
-
-	// it would be nice if it was easy to arbitrarily add maps just by putting them in the map folder. I am going to punt on that
-	// for now because that is server-side work and won't function for people who use Playfair on the desktop. The US Counties and
-	// States maps can be defaults that work everywhere. EDIT: HAHA this doesn't work offline anyways because CORS ofc
-
-	// If this was gonna be drop-in though:
-	//   1. Need a python script to check contents of /maps and populate #map-geography based on name
-	//   2. SVGs should have class=some-id that will match the variables used to color the map
-	//   3. hopefully you can figure out all the sizing issues! This actually seems easy-ish
+	// bounds is from get_bounds and used for drawing maps in small multiples.
+	// [xpixelmin,xpixelmax,ypixelmin,ypixelmax]
 
 	var loc='maps/'+geom['geography']+'.svg'
 
 	// get available space
-	var avail_height=chartobject.height-chartobject.footer_height-chartobject.header.head_height-chartobject.grapharea.top_margin-chartobject.grapharea.chart_toppad-chartobject.grapharea.bottom_margin-chartobject.grapharea.chart_bottompad
-	var avail_width=chartobject.width-chartobject.grapharea.right_margin-chartobject.grapharea.left_margin-chartobject.grapharea.chart_leftpad-chartobject.grapharea.chart_rightpad
-	var start_x=chartobject.grapharea.left_margin+chartobject.grapharea.chart_leftpad
-	var start_y=chartobject.header.head_height+chartobject.grapharea.top_margin+chartobject.grapharea.chart_toppad
+	var avail_height=bounds[3]-bounds[2]
+	var avail_width=bounds[1]-bounds[0]
+	var start_x=bounds[0]
+	var start_y=bounds[2]
+	var facetdata=chartobject.dataset
 
-	console.log(avail_height,avail_width,start_x,start_y)
+	console.log(avail_height,avail_width,start_x,start_y,facetdata)
 
 	// load map, get dimensions, create the appropriate viewbox, then size based on available height/width
 	var g=snapobj.group()
 	var map=Snap.load(loc, function(loadedFragment){
-
 		// if no category is given, use the values to create quintiles
 		if(geom.grouping.category==='none'){
-			var temp=chartobject.dataset.filter(function(row){
+			console.log("MAKING QUINTILES")
+			var temp=facetdata.filter(function(row){
 				return row[geom.values]!==undefined & row[geom.location]!==undefined
 			})
 			var all_values=[]
@@ -2816,8 +2778,8 @@ function draw_map(geom,snapobj){
 			var third_cut=(all_values[Math.floor(3*all_values.length/5)]+all_values[Math.ceil(3*all_values.length/5)])/2
 			var fourth_cut=(all_values[Math.floor(4*all_values.length/5)]+all_values[Math.ceil(4*all_values.length/5)])/2
 			geom.grouping.category='placeholder'
-			for(var i=0;i<chartobject.dataset.length;i++){
-				var a=chartobject.dataset[i][geom.values]
+			for(var i=0;i<facetdata.length;i++){
+				var a=facetdata[i][geom.values]
 
 				function pick_cat(a){
 					if(a<first_cut){return all_values[0]+' - '+all_values[Math.round(all_values.length/5)-1]}
@@ -2827,8 +2789,22 @@ function draw_map(geom,snapobj){
 					else{return all_values[Math.round(4*all_values.length/5)-1]+' - '+all_values[Math.round(5*all_values.length/5)-1]}
 				}
 
-				chartobject.dataset[i].placeholder=pick_cat(a)
+				facetdata[i].placeholder=pick_cat(a)
 			}
+			console.log(facetdata)
+
+			// sort the data so they render lowest to highest
+			function object_sort(a,b){
+				if(a[geom.values]<b[geom.values]){
+					return -1
+				}
+				if(a[geom.values]>b[geom.values]){
+					return 1
+				}
+				return 0
+			}
+
+			facetdata=facetdata.sort(object_sort)
 		}
 
 		// add the map to the chartarea and gather measurements to do scaling. Then scale the map
@@ -2865,31 +2841,32 @@ function draw_map(geom,snapobj){
 
 		// special version of this function for maps
 		function get_color_groups_maps(geom){
-			var temp=chartobject.dataset.filter(function(row){
+			var temp=facetdata.filter(function(row){
 				return row[geom.grouping.category]!==undefined & row[geom.location]!==undefined
 			})
 			var color_groups=[]
 			for(var i=0;i<temp.length;i++){
 				color_groups.push(temp[i][geom.grouping.category])
 			}
+			console.log(facetdata,color_groups)
 			var color_groups=[...new Set(color_groups)]	
+			console.log(color_groups)
 			return color_groups
 		}
 
 		// add data and styling to map
-		for(var i=0;i<chartobject.dataset.length;i++){
-			var current=chartobject.dataset[i]
+		for(var i=0;i<facetdata.length;i++){
+			var current=facetdata[i]
 
 			// color map by category
 			var color_groups=get_color_groups_maps(geom)
-			for(var i=0;i<chartobject.dataset.length;i++){
-				var current=chartobject.dataset[i]
+			for(var i=0;i<facetdata.length;i++){
+				var current=facetdata[i]
 				var location=current[geom.location].replace(/ /g,'')
 				var category=current[geom.grouping.category]
 				var color=chartobject.color_scales.sequential_color[color_groups.indexOf(category) % chartobject.color_scales.sequential_color.length]
 
 				// check class and id
-				console.log(location)
 				try{g.select('.'+location).attr({fill:color,data_label:location,group:category})} catch(err){}
 				try{g.select('#'+location).attr({fill:color,data_label:location,group:category})} catch(err){}
 			}
@@ -3639,6 +3616,10 @@ function default_style(parameters) {
 			'chart_bottompad':0,
 			'chart_leftpad':0,
 			'chart_rightpad':0,
+			'chart_stroke_width':0,
+			'chart_stroke_color':'#222',
+			'graph_stroke_width':0,
+			'graph_stroke_color':'#222',
 		},
 		'header':{		
 			// header formatting
@@ -3648,6 +3629,8 @@ function default_style(parameters) {
 			'header_leftpad':18,
 			'header_rightpad':0,
 			'hed_to_dek':0,
+			'header_stroke_width':0,
+			'header_stroke_color':'#222',
 		},
 		'footer':{
 			// footer formatting
@@ -3657,6 +3640,8 @@ function default_style(parameters) {
 			'footer_leftpad':18,
 			'footer_rightpad':14,
 			'note_to_source':0,
+			'footer_stroke_width':0,
+			'footer_stroke_color':'#222',
 		},
 		'title_text':{
 			// hed
@@ -3687,11 +3672,9 @@ function default_style(parameters) {
 			'noteweight':400,
 			'noteface':'PTSans',
 			'notetextfill':'white',
-			'notetoppad':2,	
 		},
 		'legends':{
 			// legend
-			'legend_location':'float',
 			'legend_maxwidth':.1,
 			'legend_textsize':'12px',
 			'legend_textweight':400,
@@ -3706,12 +3689,12 @@ function default_style(parameters) {
 			'legend_rightpad':0,
 			'legend_leftpad':0,
 			'legend_elementsize':15,
-			'legend_elementpad':5,
+			'legend_element_to_text':5,
+			'legend_element_to_next':6,
+			'legend_section_space':8,
 			'legend_floatbackground':'white',
 			'legend_floatthickness':1,
 			'legend_floatstroke':'#b5b5b5',
-			'legend_floatpad':8,
-			'legend_entrypadding':8,
 		},
 		'x_grids':{
 			// x grids
@@ -3827,7 +3810,8 @@ function default_style(parameters) {
 			// logo
 			'logo':"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAAA7CAYAAAD8boGtAAAGe0lEQVR4nO2d7XXqOBCG3+zZBtgSvCWwJXBLICWQEkwJuSWQEkgJUEIoISkhlDD7Q57rYSzLY2NJBPSc45OESLY+Xo8seUY8AQARISM1gArAF4DfOQuSkQ2AZfNT8gbg1Py8S56A5AJcAljBNXYlPt/i8QRYAdjDtUmIM4BnAMfoJUrMX4mvtwLwAeAVl+J7RCq4tljCCWwLZxCeAPyCGxGYBYBD8/OuSC3Ar+EkD8MOTlBnAP/h0vofm890e8UU4BLuhiC0N0Z0cgiQ7/JHG24lq+YA3POd78Y8w1nC40C6uajRim4JN0pF5+8UF+lhC/cceHfDioG1+D30XPcFJ8IU6H5I0i+pLaDmnPn6uZACPGUrxSVbtGU5AXhJcdGcFvBRqXBpXW7lJjzBPXcmJbcFfEQeffZ/QRFgeooABUWAhawUARayUgRYyEoRYCErRYCFrBQBFrLSJ8C6OaSf1rr57Lv5nI/v5vMV0rPpKdNn8/kQZDh2gfx1IB8fFdr2PHjO15dviGvr3ofs56n5D+guN23gXM+4nIc//yGiujm+qcuaiD49n/s4EFFFRDAe8ry1Mc+CiF6N5fkYKI+FXSB/bchfkb39JLHrLs9ZE9HeWIZQW0j98LWXTVl8LKUAfeJjPps0C89F9cm/iWhlLPRYAS495Tyo6+kKHwznPHjqfPDUt+9Yq7wfzXl9aTcqrbWDY9Rd94FmKG9F/TdERd120fwRoDy0oCzC8BWirwOuEaC+S1970lV02VlDZVlQtyM2hvLI/Mw3hYU7VYCx6n6NAEN5h0aHVyLyPgO+D/ztY9sckr0h31ik69Kb55rMl0q77knHnNH1Txzzykye/x1xHAxi1f1f+L2wLYTSvzb/f0brAyqPLeCfhExtvN+4FGuFbpDNtbyhrcCQu5B0c7KISTt8DnWcRKaNFUAUs+6AE+3Ysv9qyvMPum5l7F0TNGBzL8O84FLAcwtwKtZOkB1QwSbCCu0KwBG349/HpHB+OKMrtC0MxmxuAZ5x2YlL3IbHs7UM2gJYBKiH31sjR/ufYYzgi7EQrS1AjvXBqegbaI3hDmQr77MCj4r5MS6FAG/BAo5Biyj0GLFCO8TFmnzcNTEEqDvhpwnwiMvJSEiAKSYfd40lJmTsXZ3TCvArqCXGzWI1b2jDEnmSoZ9pFmjFeUL+ycdcdU9KDAHOnT/ECnFiWKUAAdehWoDSMuawfrHqnpQYUXF6yI0RTM0v4vUSwztaS3TNOiRPRjj/Bt1lhVyTj9h1T0oMAeqGmXNoWsC9YZEz63c4sWgLdY1HCJ9XduIG7duSHJOPlHVPRoxJiGygI+btnIM6/wv6d426dvKjJyPyuSrH8Juy7smIIUDZOXMOTbyHHrNFf+fLCcI16EV1tnwsxlRvPnLUPQlzC1Du+Tfl3WIIvaAdWmnnnaeuxfdmJMfSS466J2FOAcoZ2Rnj9xYZemepG7VvaK/hRCK9RaZ2iJ5gsLcw4IbnKRZel8XyrjZH3YHp75HN17QI0FKIGm5POb7wM2yz30XP7z70UOfbv66GuwmOcBMG7qiFSr+D/RWhtHILUc6p1k9f17IPX666jxGgvMYCY9YilZOhdphk58G1Sseu3NIp8ZNsjqggv7dsKO9KpZUu5xW1Dpsf1DqESidOdq3fNX9PDR1grN7S8th5zmNpsxR1X1DXGdni1r8kvzs/kcHJ2CpAC30euj6P3ZC3bE39HTIUD7GnbuP4sIYM8KHLG4oTmVJuLnuow2LVfSgcg/GVzZKvL69ZgKGAJW40qzUYI+4+kaypG8OxH0jPZQ/FaoQO6XJPE84xJigpZHFi1N2KL77kmrwgIu8u+Rtchg4+jXgOuFcquHBHwD1jpdq19O4pgek2cr/3vVuKAG2wAKcuvRR6KAIcRm6kXqzfzBQBDsPrWdpdvzADRYBhZMTbG4rL/ewUAYYpk4/IFAH2I71K3lG+ZiwKRYD9lMlHAooA+2Hrd8Qdfk3qrVAE6Ee73BciUQToR/r8leE3IkWAXfTSSyEiFgH+GPfumWDrVxaeE1AEeMkS7eRDehUXIuEToBZckq9uT0CF9ivpP9F1Gee4W8C5wD/yN7onwydAHdL3Y4KcB+CtLAAnxj1av8cK7VcL8LayhQRIh1SOqPJZPN5D+RZ3ALXCFjD0SHGCPaCqMAMswE/YIqC+4Da1/qnw6zUZvwy0i81l2C0UHon/ARkzCDw40WUEAAAAAElFTkSuQmCC",
 			'logoscale':3,
-			'logoopacity':1,	
+			'logoopacity':1,
+			'logo_position':'right',
 		},
 		'bar_geom':{
 			// barchart specific style
@@ -3858,10 +3842,11 @@ function default_style(parameters) {
 			'trend_fill':'#c64027',
 			'trend_textface':'PTSans',
 			'trend_textweight':600,
-			'trend_textsize':'12px',
+			'trend_textsize':'16px',
 			'trend_textcolor':'#c64027',
 			'trend_linetotext':3,
 			'trend_opacity':1,
+			'trend_to_text':4,
 		},
 		'text_geom':{
 			// text geom specific

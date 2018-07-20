@@ -67,6 +67,18 @@ function preview() {
 				var a=datadict[i][values]
 				datadict[i][category]=pick_cat(a)
 			}
+
+			function object_sort(a,b){
+				if(a[geom.values]<b[geom.values]){
+					return -1
+				}
+				if(a[geom.values]>b[geom.values]){
+					return 1
+				}
+				return 0
+			}
+
+			facetdata=facetdata.sort(object_sort)
 		}
 
 		geom_dict['map']={'location':location,'geography':geography,'values':values,'grouping':{'category':category}}
@@ -519,7 +531,6 @@ function redraw(keep) {
 					chartobject.ylimits=$('#ylimits').val().split(',')
 				} 
 
-				console.log(chartobject)
 				chartobject.chart(legend)
 
 				// push the calculated yaxis and xaxis to the front-end interface boxes

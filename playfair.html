@@ -1,7 +1,7 @@
 <html>
 
 <head>
-	<title>playfair - equitable graphs</title>
+	<title>playfair - production ready graphs</title>
 
 	<!-- <script src="lib/saveSvgAsPng.js"></script> -->
 	<script src="lib/saveSvgAsPng.js"></script>
@@ -66,6 +66,12 @@
 </head>
 
 <!-- ********************************************** -->
+<!-- ***************** LOGO DUMMY ***************** -->
+<!-- ********************************************** -->
+
+<img id='logodummy'></img>
+
+<!-- ********************************************** -->
 <!-- ***************** SAVE DIALOG **************** -->
 <!-- ********************************************** -->
 
@@ -100,7 +106,6 @@
 		</div>
 	</div>
 </div>
-
 
 <!-- ********************************************** -->
 <!-- ***************** LOAD DIALOG **************** -->
@@ -152,6 +157,7 @@
 	</ul>
 	<ul class='colormenu'>
 	</ul>
+	<div class='legendextras'></div>
 </div>
 
 <div class="contextMenuContainer" id='other_context_menu'>
@@ -162,6 +168,7 @@
 		<hr>
 		<li onclick=addtext(clickedevent) class='highlight'>Add Text</li>
 	</ul>
+	<div class='legendextras'></div>
 </div>
 
 <div class="contextMenuContainer" id='path_context_menu'>
@@ -178,6 +185,7 @@
 	<hr>
 	<ul class='colormenu'>
 	</ul>
+	<div class='legendextras'></div>
 </div>
 
 <div class="contextMenuContainer" id='pathdata_context_menu'>
@@ -195,6 +203,7 @@
 	<hr>
 	<ul class='colormenu'>
 	</ul>
+	<div class='legendextras'></div>
 </div>
 
 <div class="contextMenuContainer" id='data_context_menu'>
@@ -212,6 +221,7 @@
 	</ul>
 	<ul class='colormenu'>
 	</ul>
+	<div class='legendextras'></div>
 </div>
 
 <div class="contextMenuContainer" id='point_context_menu'>
@@ -233,6 +243,7 @@
 	</ul>
 	<ul class='colormenu'>
 	</ul>
+	<div class='legendextras'></div>
 </div>
 
 <div class="contextMenuContainer" id='callout_context_menu'>
@@ -251,6 +262,7 @@
 	</ul>
 	<ul class='colormenu'>
 	</ul>
+	<div class='legendextras'></div>
 </div>
 
 <div class="contextMenuContainer" id='color_context_menu'>
@@ -267,8 +279,8 @@
 	</ul>
 	<ul class='colormenu'>
 	</ul>
+	<div class='legendextras'></div>
 </div>
-
 
 <body>
 <!-- ********************************************************************** -->
@@ -279,8 +291,7 @@
 <!-- Header -->
 <div class='header'>
 	<h1 class='text-center'>playfair</h1>
-	<div class='h4'>compatible with <img height=20 src='img/chrome.png'> and <img height=25 src='img/firefox.png'></div>
-	<div class='h4'>v2.4  <a href='changelog.html'>changelog</a></div>
+	<div class='h4'>compatible with <img height=20 src='img/chrome.png'>, <img height=25 src='img/firefox.png'>, and <img height=22 src='img/safari.png'><br>v2.4  <a href='changelog.html'>changelog</a></div>
 	<!-- Tabs -->
 	<ul class="nav nav-tabs" id='maintabs'>
 		<li class="active"><a data-toggle="tab" href="#data">Data</a></li>
@@ -1509,31 +1520,27 @@
 </div>
 
 <footer class='footer'>
-<div class='text-center unselectable bottom'>
+	<div class='text-center unselectable bottom'>
 
-<div class='btn-group' role='group'>
-	<button type="button" class="btn btn-default" id='redraw1' onclick='redraw()'><i class="fa fa-line-chart"></i> Chart</button>
-	<button type="button" class="btn btn-default" id='redraw2' onclick='redraw(1)'><i class="fa fa-refresh"></i> Redraw w/annotations</button>
-</div>
+		<div class='btn-group' role='group'>
+			<button type="button" class="btn btn-default" id='redraw1' onclick='redraw()'><i class="fa fa-line-chart"></i> Chart</button>
+			<button type="button" class="btn btn-default" id='redraw2' onclick='redraw(1)'><i class="fa fa-refresh"></i> Redraw w/annotations</button>
+		</div>
 
-<div class="btn-group" role="group">
-	<button type="button" class="btn btn-default" id='savepng' onclick=savepng()><i class="fa fa-download"></i> Download PNG</button>
-	<button type="button" class="btn btn-default" id='savesvg' onclick=savesvg()><i class="fa fa-arrows-h"></i> Download SVG</button>
-</div>
+		<div class="btn-group" role="group">
+			<button type="button" class="btn btn-default" id='savepng' onclick=savepng()><i class="fa fa-download"></i> Download PNG</button>
+			<button type="button" class="btn btn-default" id='savesvg' onclick=savesvg()><i class="fa fa-arrows-h"></i> Download SVG</button>
+		</div>
 
-<div class="btn-group" role="group">
-	<button type="button" class="btn btn-default" id='savetext' onclick=cloudsave()><i class="fa fa-cloud-upload"></i> Save</button>
-	<button type="button" class="btn btn-default" id='importtext' onclick=cloudload()><i class="fa fa-cloud-download"></i> Load</button>
-</div>
+		<div class="btn-group" role="group">
+			<button type="button" class="btn btn-default" id='savetext' onclick=cloudsave()><i class="fa fa-cloud-upload"></i> Save</button>
+			<button type="button" class="btn btn-default" id='importtext' onclick=cloudload()><i class="fa fa-cloud-download"></i> Load</button>
+		</div>
 
-<hr>
-<small>[<a href='https://github.com/equitablegrowth/Playfair/#boards?repos=44823593'>report a bug</a>]</small>
-</div>
+	</div>
 
-<a href="JavaScript:void(0)" id='png_save' download="Playfair_graph.png" target="_blank"/></a>
-<input id="filename" type="file" name="filename" style="display: none;" />
-
-</div>
+	<a href="JavaScript:void(0)" id='png_save' download="Playfair_graph.png" target="_blank"/></a>
+	<input id="filename" type="file" name="filename" style="display: none;" />
 </footer>
 
 <img id="png_save" style="clear:both;display:none;">
@@ -1553,8 +1560,8 @@ var alerted=0
 var graph_type=''
 var dragging=0
 var hovered=0
-var height=520
-var width=745
+var height=480
+var width=680
 var chartobject
 var clickedevent
 var grapharea = Snap('#grapharea')
@@ -1592,7 +1599,7 @@ $('[data-toggle="tooltip"]').tooltip()
 
 // Initial graph state
 function placeholder(){
-	var bounding_box=grapharea.rect(0,0,width-.5,height-.5).attr({class:'background',fill:'none','stroke':'lightgray','stroke-width':3.5,'stroke-dasharray':'12,8','shape-rendering':'crispEdges'})
+	var bounding_box=grapharea.rect(1,1,width-2,height-2).attr({class:'background',fill:'none','stroke':'#ddd','stroke-width':1})
 }
 
 // Handlers for the graphing area
@@ -1717,9 +1724,9 @@ $(".variable_select").change(function(){
 				created.push()
 				var temp=structure[i]
 				if(created.indexOf(temp.xvar+temp.yvar+temp.group_variable)==-1){
-					var l_xvar=temp.xvar.replace(/(\s|[^A-Za-z0-9])+/g, '-')
-					var l_yvar=temp.yvar.replace(/(\s|[^A-Za-z0-9])+/g, '-')
-					var l_group_variable=temp.group_variable.replace(/(\s|[^A-Za-z0-9])+/g, '-')
+					try{var l_xvar=temp.xvar.replace(/(\s|[^A-Za-z0-9])+/g, '-')}catch(err){var l_xvar=''}
+					try{var l_yvar=temp.yvar.replace(/(\s|[^A-Za-z0-9])+/g, '-')}catch(err){var l_yvar=''}
+					try{var l_group_variable=temp.group_variable.replace(/(\s|[^A-Za-z0-9])+/g, '-')}catch(err){var l_group_variable=''}
 					if(l_xvar===undefined){l_xvar='none'}
 					if(l_yvar===undefined){l_yvar='none'}
 					if(l_group_variable===undefined){l_group_variable='none'}
@@ -1735,9 +1742,9 @@ $(".variable_select").change(function(){
 		for(var i=0;i<structure.length;i++){
 			if(structure[i].geom!='text'){
 				var temp=structure[i]
-				var l_xvar=temp.xvar.replace(/(\s|[^A-Za-z0-9])+/g, '-')
-				var l_yvar=temp.yvar.replace(/(\s|[^A-Za-z0-9])+/g, '-')
-				var l_group_variable=temp.group_variable.replace(/(\s|[^A-Za-z0-9])+/g, '-')
+				try{var l_xvar=temp.xvar.replace(/(\s|[^A-Za-z0-9])+/g, '-')}catch(err){var l_xvar=''}
+				try{var l_yvar=temp.yvar.replace(/(\s|[^A-Za-z0-9])+/g, '-')}catch(err){var l_yvar=''}
+				try{var l_group_variable=temp.group_variable.replace(/(\s|[^A-Za-z0-9])+/g, '-')}catch(err){var l_group_variable=''}
 				if(l_xvar===undefined){l_xvar='none'}
 				if(l_yvar===undefined){l_yvar='none'}
 				if(l_group_variable===undefined){l_group_variable='none'}
@@ -1761,9 +1768,9 @@ $(".variable_select").change(function(){
 		var string=''
 		for(var i=0;i<structure.length;i++){
 			var temp=structure[i]
-			var l_xvar=temp.xvar.replace(/(\s|[^A-Za-z0-9])+/g, '-')
-			var l_yvar=temp.yvar.replace(/(\s|[^A-Za-z0-9])+/g, '-')
-			var l_group_variable=temp.group_variable.replace(/(\s|[^A-Za-z0-9])+/g, '-')
+			try{var l_xvar=temp.xvar.replace(/(\s|[^A-Za-z0-9])+/g, '-')}catch(err){var l_xvar=''}
+			try{var l_yvar=temp.yvar.replace(/(\s|[^A-Za-z0-9])+/g, '-')}catch(err){var l_yvar=''}
+			try{var l_group_variable=temp.group_variable.replace(/(\s|[^A-Za-z0-9])+/g, '-')}catch(err){var l_group_variable=''}
 			if(l_xvar===undefined){l_xvar='none'}
 			if(l_yvar===undefined){l_yvar='none'}
 			if(l_group_variable===undefined){l_group_variable='none'}
@@ -1872,10 +1879,10 @@ function reset(){
 
 	if (base_input_dict['gwidth'][1]!=''){
 		width=parseFloat(base_input_dict['gwidth'][1])
-	} else {width=745}
+	} else {width=680}
 	if (base_input_dict['gheight'][1]!=''){
 		height=parseFloat(base_input_dict['gheight'][1])
-	} else {height=520}
+	} else {height=480}
 
 	$('#grapharea').attr('height',height)
 	$('#grapharea').attr('width',width)
