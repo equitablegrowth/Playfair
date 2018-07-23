@@ -1194,7 +1194,7 @@ function draw_key(legend,playobj,snapobj,prelim,vertical){
 	// use legend object to draw a key for the figure
 	if(legend.length>1){
 		var maxwidth=legend[0][1]
-		var maxtextwidth=maxwidth-2*playobj.legends.legend_floatpad-playobj.legends.legend_elementsize
+		var maxtextwidth=maxwidth-playobj.legends.legend_leftpad-playobj.legends.legend_rightpad-playobj.legends.legend_elementsize-playobj.legends.legend_element_to_text
 		if(legend[0][1]===''){maxwidth=Number.POSITIVE_INFINITY;maxtextwidth=Number.POSITIVE_INFINITY}
 		var longest=0
 		var ltitle=legend[0][0]
@@ -1202,17 +1202,16 @@ function draw_key(legend,playobj,snapobj,prelim,vertical){
 		g.append(floatkey)
 
 		var maxitemwidth=0
-		var maxycoord=0
-		var starty=playobj.legends.legend_floatpad
+		var starty=playobj.legends.legend_toppad
+		var notext=0
 
 		if(ltitle!==''){
-			var lines=multitext(ltitle,{'font-size':playobj.legends.legend_titletextsize,'font-weight':playobj.legends.legend_titletextweight,'font-family':playobj.legends.legend_titletextface},maxwidth-2*playobj.legends.legend_floatpad)
-			var title=snapobj.text(playobj.legends.legend_floatpad,playobj.legends.legend_floatpad,lines).attr({unique:'keytitle',ident2:'floatkey',ident:'key',fill:playobj.legends.legend_titletextfill,'font-size':playobj.legends.legend_titletextsize,'font-weight':playobj.legends.legend_titletextweight,'font-family':playobj.legends.legend_titletextface,dy:'0.3em',colorchange:'fill',context:'text_context_menu'})
+			var lines=multitext(ltitle,{'font-size':playobj.legends.legend_titletextsize,'font-weight':playobj.legends.legend_titletextweight,'font-family':playobj.legends.legend_titletextface},maxwidth-playobj.legends.legend_leftpad-playobj.legends.legend_rightpad)
+			var title=snapobj.text(playobj.legends.legend_leftpad,playobj.legends.legend_toppad,lines).attr({unique:'keytitle',ident2:'floatkey',ident:'key',fill:playobj.legends.legend_titletextfill,'font-size':playobj.legends.legend_titletextsize,'font-weight':playobj.legends.legend_titletextweight,'font-family':playobj.legends.legend_titletextface,dy:'0.75em',colorchange:'fill',context:'text_context_menu'})
 			title.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 			title.selectAll("tspan:not(:first-child)").attr({x:title.attr('x'),dy:1*parseFloat(title.attr('font-size'))})
 			if(maxitemwidth<title.getBBox().x2){maxitemwidth=title.getBBox().x2}
-			if(maxycoord<title.getBBox().y2){maxycoord=title.getBBox().y2}
-			starty=title.getBBox().y2+playobj.legends.legend_elementpad
+			starty=title.getBBox().y2*.8+playobj.legends.legend_element_to_next
 			longest=title.getBBox().x2
 			g.append(title)
 		}
@@ -1221,58 +1220,41 @@ function draw_key(legend,playobj,snapobj,prelim,vertical){
 		// sample legend entry:
 		// {geom:point,group_value:1,group_variable:g1,grouping:color,xvar:x,yvar:y,position:1,lgroup:0,overall:0,group_numeric:2}
 		var keyitem_dict={}
-		var lowery=0
-		var extralines=0
-		var overalls={}
 
 		// draw items
 		// starting at 1 skips the row that is maxwidth and title
+		console.log(legend)
+		var y=starty
 		for(var i=1;i<legend.length;i++){
-			var textoffset=parseFloat(playobj.legends.legend_textsize)
-			console.log(legend[i])
-			// var y=midy
-			var y=starty+(textoffset*extralines)+(legend[i].overall*parseFloat(playobj.legends.legend_elementsize))+(legend[i].lgroup*playobj.legends.legend_floatpad)+(legend[i].overall*parseFloat(playobj.legends.legend_elementpad))
-			if(overalls[legend[i].overall]){y=overalls[legend[i].overall]}
-			var x=playobj.legends.legend_floatpad
-			var xtext=playobj.legends.legend_floatpad+playobj.legends.legend_elementsize+playobj.legends.legend_elementpad
+			var x=playobj.legends.legend_leftpad
+			var xtext=x+playobj.legends.legend_elementsize+playobj.legends.legend_element_to_text
 			var numeric=legend[i].groupnumeric
-
-			// console.log(x,y,xtext)
-			// console.log(starty,legend[i].overall,)
-
 			var keyitem_name=legend[i].geom+legend[i].grouping+legend[i].group_value
 
+			// text
 			if(keyitem_dict[keyitem_name]==undefined){
-				if(overalls[legend[i].overall]==undefined){
+				if(notext==0){
 					var lines=multitext(legend[i].group_value,{'font-size':playobj.legends.legend_textsize,'font-weight':playobj.legends.legend_textweight,'font-family':playobj.legends.legend_textface},maxtextwidth)
-					// the +.5 here is a kluge that only applies to the values of legend_elementsize and legend_textsize you're using feels like it should be (legend_elementsize-legend_textsize)/2 but that doesn't get me what I want
-					var t=snapobj.text(xtext,y+.5,lines).attr({ident2:'floatkey',ident:'key',fill:playobj.legends.legend_textfill,'font-size':playobj.legends.legend_textsize,'font-weight':playobj.legends.legend_textweight,'font-family':playobj.legends.legend_textface,dy:'0.3em','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
+					var t=snapobj.text(xtext,y+playobj.legends.legend_elementsize,lines).attr({ident2:'floatkey',ident:'key',fill:playobj.legends.legend_textfill,'font-size':playobj.legends.legend_textsize,'font-weight':playobj.legends.legend_textweight,'font-family':playobj.legends.legend_textface,dy:'-0.25em','text-anchor':'start',colorchange:'fill',context:'text_context_menu'})
 					t.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
-					t.selectAll("tspan:not(:first-child)").attr({x:t.attr('x'),dy:1*parseFloat(t.attr('font-size'))})
-					var xend=t.getBBox().x2
-					if(xend>longest){longest=xend}
-					extralines=extralines+(lines.length-1)
-					console.log("EXTRALINES",extralines)
+					t.selectAll("tspan:not(:first-child)").attr({x:t.attr('x'),dy:parseFloat(t.attr('font-size'))})
+					if(t.getBBox().x2>longest){longest=t.getBBox().x2}
 					g.append(t)
-					if(legend[i].group_value!==''){
-						y=t.getBBox().cy
-					}
+				} else {
+					notext=0
 				}
 			}
 
 			// points
 			if(legend[i].geom=='point' && keyitem_dict[keyitem_name]==undefined){
 				if(legend[i].grouping=='color'){
-					var temp=snapobj.circle(x+playobj.legends.legend_elementsize/2,y,playobj.point_geom.point_size).attr({fill:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],stroke:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'stroke-width':playobj.point_geom.point_strokewidth,'data_type':'point','group':legend[i].group_value,'class':'dataelement','fill-opacity':chartobject.point_geom.point_fillopacity,colorchange:'both',context:'point_context_menu',ident2:'floatkey',ident:'key'})
-					keyitem_dict[keyitem_name]=temp
+					var temp=snapobj.circle(x+playobj.legends.legend_elementsize/2,y+playobj.legends.legend_elementsize/2,playobj.point_geom.point_size).attr({fill:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],stroke:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'stroke-width':playobj.point_geom.point_strokewidth,'data_type':'point','group':legend[i].group_value,'class':'dataelement','fill-opacity':chartobject.point_geom.point_fillopacity,colorchange:'both',context:'point_context_menu',ident2:'floatkey',ident:'key'})
 					g.append(temp)
 				} else if(legend[i].grouping=='type'){
-					var temp=snapobj.circle(x+playobj.legends.legend_elementsize/2,y,playobj.point_geom.point_size).attr({fill:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],stroke:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'stroke-width':playobj.point_geom.point_strokewidth,'data_type':'point','group':legend[i].group_value,'class':'dataelement','fill-opacity':chartobject.point_geom.point_fillopacity,colorchange:'both',context:'point_context_menu',ident2:'floatkey',ident:'key'})
-					keyitem_dict[keyitem_name]=temp
+					var temp=snapobj.circle(x+playobj.legends.legend_elementsize/2,y+playobj.legends.legend_elementsize/2,playobj.point_geom.point_size).attr({fill:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],stroke:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'stroke-width':playobj.point_geom.point_strokewidth,'data_type':'point','group':legend[i].group_value,'class':'dataelement','fill-opacity':chartobject.point_geom.point_fillopacity,colorchange:'both',context:'point_context_menu',ident2:'floatkey',ident:'key'})
 					g.append(temp)
 				} else {
-					var temp=snapobj.circle(x+playobj.legends.legend_elementsize/2,y,playobj.point_geom.point_size).attr({fill:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],stroke:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'stroke-width':playobj.point_geom.point_strokewidth,'data_type':'point','group':legend[i].group_value,'class':'dataelement','fill-opacity':chartobject.point_geom.point_fillopacity,colorchange:'both',context:'point_context_menu',ident2:'floatkey',ident:'key'})
-					keyitem_dict[keyitem_name]=temp
+					var temp=snapobj.circle(x+playobj.legends.legend_elementsize/2,y+playobj.legends.legend_elementsize/2,playobj.point_geom.point_size).attr({fill:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],stroke:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'stroke-width':playobj.point_geom.point_strokewidth,'data_type':'point','group':legend[i].group_value,'class':'dataelement','fill-opacity':chartobject.point_geom.point_fillopacity,colorchange:'both',context:'point_context_menu',ident2:'floatkey',ident:'key'})
 					g.append(temp)
 				}
 			} else if(legend[i].geom=='point' && keyitem_dict[keyitem_name]!==undefined){
@@ -1287,24 +1269,19 @@ function draw_key(legend,playobj,snapobj,prelim,vertical){
 			// lines
 			if((legend[i].geom=='line') && keyitem_dict[keyitem_name]==undefined){
 				if(legend[i].grouping=='color'){
-					var temp=snapobj.line(x,y,x+playobj.legends.legend_elementsize,y).attr({stroke:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'stroke-width':playobj.line_geom.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
-					keyitem_dict[keyitem_name]=temp
+					var temp=snapobj.line(x,y+playobj.legends.legend_elementsize/2,x+playobj.legends.legend_elementsize,y+playobj.legends.legend_elementsize/2).attr({stroke:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'stroke-width':playobj.line_geom.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
 					g.append(temp)				
 				} else if(legend[i].grouping=='type'){
-					var temp=snapobj.line(x,y,x+playobj.legends.legend_elementsize,y).attr({stroke:chartobject.color_scales.qualitative_color[0],'stroke-width':playobj.line_geom.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges','stroke-dasharray':chartobject.line_geom.line_types[numeric]})
-					keyitem_dict[keyitem_name]=temp
+					var temp=snapobj.line(x,y+playobj.legends.legend_elementsize/2,x+playobj.legends.legend_elementsize,y+playobj.legends.legend_elementsize/2).attr({stroke:chartobject.color_scales.qualitative_color[0],'stroke-width':playobj.line_geom.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges','stroke-dasharray':chartobject.line_geom.line_types[numeric]})
 					g.append(temp)				
 				} else {
-					var temp=snapobj.line(x,y,x+playobj.legends.legend_elementsize,y).attr({stroke:chartobject.color_scales.qualitative_color[0],'stroke-width':playobj.line_geom.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
-					keyitem_dict[keyitem_name]=temp
+					var temp=snapobj.line(x,y+playobj.legends.legend_elementsize/2,x+playobj.legends.legend_elementsize,y+playobj.legends.legend_elementsize/2).attr({stroke:chartobject.color_scales.qualitative_color[0],'stroke-width':playobj.line_geom.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
 					g.append(temp)				
 				}
 			} else if(legend[i].geom=='line' && keyitem_dict[keyitem_name]!==undefined){
 				if(legend[i].grouping=='color'){
-					console.log('color')
 					// keyitem_dict[keyitem_name].attr({'stroke':chartobject.color_scales.qualitative_color[numeric]})
 				} else if(legend[i].grouping=='type'){
-					console.log('type')
 					keyitem_dict[keyitem_name].attr({'stroke-dasharray':chartobject.line_geom.line_types[numeric % chartobject.color_scales.qualitative_color.length]})
 				}
 			}
@@ -1312,24 +1289,19 @@ function draw_key(legend,playobj,snapobj,prelim,vertical){
 			// segments
 			if((legend[i].geom=='segment') && keyitem_dict[keyitem_name]==undefined){
 				if(legend[i].grouping=='color'){
-					var temp=snapobj.line(x,y,x+playobj.legends.legend_elementsize,y).attr({stroke:chartobject.color_scales.grayscale_color[numeric % chartobject.color_scales.grayscale_color.length],'stroke-width':playobj.line_geom.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
-					keyitem_dict[keyitem_name]=temp
+					var temp=snapobj.line(x,y+playobj.legends.legend_elementsize/2,x+playobj.legends.legend_elementsize,y+playobj.legends.legend_elementsize/2).attr({stroke:chartobject.color_scales.grayscale_color[numeric % chartobject.color_scales.grayscale_color.length],'stroke-width':playobj.line_geom.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
 					g.append(temp)				
 				} else if(legend[i].grouping=='type'){
-					var temp=snapobj.line(x,y,x+playobj.legends.legend_elementsize,y).attr({stroke:chartobject.color_scales.grayscale_color[0],'stroke-width':playobj.line_geom.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges','stroke-dasharray':chartobject.line_geom.line_types[numeric % chartobject.line_geom.line_types.length]})
-					keyitem_dict[keyitem_name]=temp
+					var temp=snapobj.line(x,y+playobj.legends.legend_elementsize/2,x+playobj.legends.legend_elementsize,y+playobj.legends.legend_elementsize/2).attr({stroke:chartobject.color_scales.grayscale_color[0],'stroke-width':playobj.line_geom.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges','stroke-dasharray':chartobject.line_geom.line_types[numeric % chartobject.line_geom.line_types.length]})
 					g.append(temp)				
 				} else {
-					var temp=snapobj.line(x,y,x+playobj.legends.legend_elementsize,y).attr({stroke:chartobject.color_scales.grayscale_color[0],'stroke-width':playobj.line_geom.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
-					keyitem_dict[keyitem_name]=temp
+					var temp=snapobj.line(x,y+playobj.legends.legend_elementsize/2,x+playobj.legends.legend_elementsize,y+playobj.legends.legend_elementsize/2).attr({stroke:chartobject.color_scales.grayscale_color[0],'stroke-width':playobj.line_geom.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
 					g.append(temp)				
 				}
 			} else if(legend[i].geom=='segment' && keyitem_dict[keyitem_name]!==undefined){
 				if(legend[i].grouping=='color'){
-					console.log('color')
 					// keyitem_dict[keyitem_name].attr({'stroke':chartobject.color_scales.qualitative_color[numeric]})
 				} else if(legend[i].grouping=='type'){
-					console.log('type')
 					keyitem_dict[keyitem_name].attr({'stroke-dasharray':chartobject.line_geom.line_types[numeric % chartobject.line_geom.line_types.length]})
 				}
 			}
@@ -1337,16 +1309,13 @@ function draw_key(legend,playobj,snapobj,prelim,vertical){
 			// steps
 			if((legend[i].geom=='step') && keyitem_dict[keyitem_name]==undefined){
 				if(legend[i].grouping=='color'){
-					var temp=snapobj.path('M'+x+','+(y+chartobject.legends.legend_elementsize*(1/6))+'L'+(x+chartobject.legends.legend_elementsize/2)+','+(y+chartobject.legends.legend_elementsize*(1/6))+'L'+(x+chartobject.legends.legend_elementsize/2)+','+(y-chartobject.legends.legend_elementsize*(1/6))+'L'+(x+chartobject.legends.legend_elementsize)+','+(y-chartobject.legends.legend_elementsize*(1/6))).attr({fill:'none',stroke:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'stroke-width':playobj.line_geom.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
-					keyitem_dict[keyitem_name]=temp
+					var temp=snapobj.path('M'+x+','+(y+chartobject.legends.legend_elementsize*(2/6))+'L'+(x+chartobject.legends.legend_elementsize/2)+','+(y+chartobject.legends.legend_elementsize*(2/6))+'L'+(x+chartobject.legends.legend_elementsize/2)+','+(y+chartobject.legends.legend_elementsize*(4/6))+'L'+(x+chartobject.legends.legend_elementsize)+','+(y+chartobject.legends.legend_elementsize*(4/6))).attr({fill:'none',stroke:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'stroke-width':playobj.line_geom.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
 					g.append(temp)				
 				} else if(legend[i].grouping=='type'){
-					var temp=snapobj.path('M'+x+','+(y+chartobject.legends.legend_elementsize*(1/6))+'L'+(x+chartobject.legends.legend_elementsize/2)+','+(y+chartobject.legends.legend_elementsize*(1/6))+'L'+(x+chartobject.legends.legend_elementsize/2)+','+(y-chartobject.legends.legend_elementsize*(1/6))+'L'+(x+chartobject.legends.legend_elementsize)+','+(y-chartobject.legends.legend_elementsize*(1/6))).attr({fill:'none',stroke:chartobject.color_scales.qualitative_color[0],'stroke-width':playobj.line_geom.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges','stroke-dasharray':chartobject.line_geom.line_types[numeric % chartobject.line_geom.line_types.length]})
-					keyitem_dict[keyitem_name]=temp
+					var temp=snapobj.path('M'+x+','+(y+chartobject.legends.legend_elementsize*(2/6))+'L'+(x+chartobject.legends.legend_elementsize/2)+','+(y+chartobject.legends.legend_elementsize*(2/6))+'L'+(x+chartobject.legends.legend_elementsize/2)+','+(y+chartobject.legends.legend_elementsize*(4/6))+'L'+(x+chartobject.legends.legend_elementsize)+','+(y+chartobject.legends.legend_elementsize*(4/6))).attr({fill:'none',stroke:chartobject.color_scales.qualitative_color[0],'stroke-width':playobj.line_geom.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges','stroke-dasharray':chartobject.line_geom.line_types[numeric % chartobject.line_geom.line_types.length]})
 					g.append(temp)				
 				} else {
-					var temp=snapobj.path('M'+x+','+(y+chartobject.legends.legend_elementsize*(1/6))+'L'+(x+chartobject.legends.legend_elementsize/2)+','+(y+chartobject.legends.legend_elementsize*(1/6))+'L'+(x+chartobject.legends.legend_elementsize/2)+','+(y-chartobject.legends.legend_elementsize*(1/6))+'L'+(x+chartobject.legends.legend_elementsize)+','+(y-chartobject.legends.legend_elementsize*(1/6))).attr({fill:'none',stroke:chartobject.color_scales.qualitative_color[0],'stroke-width':playobj.line_geom.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
-					keyitem_dict[keyitem_name]=temp
+					var temp=snapobj.path('M'+x+','+(y+chartobject.legends.legend_elementsize*(2/6))+'L'+(x+chartobject.legends.legend_elementsize/2)+','+(y+chartobject.legends.legend_elementsize*(2/6))+'L'+(x+chartobject.legends.legend_elementsize/2)+','+(y+chartobject.legends.legend_elementsize*(4/6))+'L'+(x+chartobject.legends.legend_elementsize)+','+(y+chartobject.legends.legend_elementsize*(4/6))).attr({fill:'none',stroke:chartobject.color_scales.qualitative_color[0],'stroke-width':playobj.line_geom.line_size,'group':legend[i].group_value,'class':'dataelement',colorchange:'stroke',context:'path_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
 					g.append(temp)				
 				}
 			} else if(legend[i].geom=='step' && keyitem_dict[keyitem_name]!==undefined){
@@ -1360,20 +1329,16 @@ function draw_key(legend,playobj,snapobj,prelim,vertical){
 			// bars or stacked bars or area or map
 			if((legend[i].geom=='bar' || legend[i].geom=='stackedbar' || legend[i].geom=='area' || legend[i].geom=='bounds' || legend[i].geom=='map') && keyitem_dict[keyitem_name]==undefined){
 				if(legend[i].grouping=='color'){
-					var temp=snapobj.rect(x,y-playobj.legends.legend_elementsize/2,playobj.legends.legend_elementsize,playobj.legends.legend_elementsize).attr({fill:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'group':legend[i].group_value,'class':'dataelement',colorchange:'fill',context:'data_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
-					keyitem_dict[keyitem_name]=temp
+					var temp=snapobj.rect(x,y,playobj.legends.legend_elementsize,playobj.legends.legend_elementsize).attr({fill:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'group':legend[i].group_value,'class':'dataelement',colorchange:'fill',context:'data_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
 					g.append(temp)
 				} else if(legend[i].grouping=='type'){
-					var temp=snapobj.rect(x,y-playobj.legends.legend_elementsize/2,playobj.legends.legend_elementsize,playobj.legends.legend_elementsize).attr({fill:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'group':legend[i].group_value,'class':'dataelement',colorchange:'fill',context:'data_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
-					keyitem_dict[keyitem_name]=temp
+					var temp=snapobj.rect(x,y,playobj.legends.legend_elementsize,playobj.legends.legend_elementsize).attr({fill:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'group':legend[i].group_value,'class':'dataelement',colorchange:'fill',context:'data_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
 					g.append(temp)				
 				} else if(legend[i].geom=='map'){
-					var temp=snapobj.rect(x,y-playobj.legends.legend_elementsize/2,playobj.legends.legend_elementsize,playobj.legends.legend_elementsize).attr({fill:chartobject.color_scales.sequential_color[numeric % chartobject.color_scales.sequential_color.length],'group':legend[i].group_value,'class':'dataelement',colorchange:'fill',context:'data_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
-					keyitem_dict[keyitem_name]=temp
+					var temp=snapobj.rect(x,y,playobj.legends.legend_elementsize,playobj.legends.legend_elementsize).attr({fill:chartobject.color_scales.sequential_color[numeric % chartobject.color_scales.sequential_color.length],'group':legend[i].group_value,'class':'dataelement',colorchange:'fill',context:'data_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
 					g.append(temp)				
 				} else {
-					var temp=snapobj.rect(x,y-playobj.legends.legend_elementsize/2,playobj.legends.legend_elementsize,playobj.legends.legend_elementsize).attr({fill:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'group':legend[i].group_value,'class':'dataelement',colorchange:'fill',context:'data_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
-					keyitem_dict[keyitem_name]=temp
+					var temp=snapobj.rect(x,y,playobj.legends.legend_elementsize,playobj.legends.legend_elementsize).attr({fill:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'group':legend[i].group_value,'class':'dataelement',colorchange:'fill',context:'data_context_menu',ident2:'floatkey',ident:'key','shape-rendering':'crispEdges'})
 					g.append(temp)				
 				}
 			} else if((legend[i].geom=='bar' || legend[i].geom=='stackedbar' || legend[i].geom=='area' || legend[i].geom=='bounds' || legend[i].geom=='bounds') && keyitem_dict[keyitem_name]!==undefined){
@@ -1386,24 +1351,45 @@ function draw_key(legend,playobj,snapobj,prelim,vertical){
 
 			// rect
 			if(legend[i].geom=='rect' && keyitem_dict[keyitem_name]===undefined){
-				var temp=snapobj.rect(x,y-playobj.legends.legend_elementsize/2,playobj.legends.legend_elementsize,playobj.legends.legend_elementsize).attr({'stroke':'#aaa','stroke-width':1,fill:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'fill-opacity':chartobject.rect_geom.rect_opacity,'shape-rendering':'crispEdges',ident2:'floatkey',ident:'key',context:'data_context_menu'})
-				keyitem_dict[keyitem_name]=temp
+				var temp=snapobj.rect(x,y,playobj.legends.legend_elementsize,playobj.legends.legend_elementsize).attr({'stroke':'#aaa','stroke-width':1,fill:chartobject.color_scales.qualitative_color[numeric % chartobject.color_scales.qualitative_color.length],'fill-opacity':chartobject.rect_geom.rect_opacity,'shape-rendering':'crispEdges',ident2:'floatkey',ident:'key',context:'data_context_menu'})
 				g.append(temp)			
 			}
 
 			// shade
 			if(legend[i].geom=='shade' && keyitem_dict[keyitem_name]===undefined){
-				var temp1=snapobj.rect(x,y-playobj.legends.legend_elementsize/2,playobj.legends.legend_elementsize,playobj.legends.legend_elementsize).attr({fill:chartobject.grapharea.chartfill,'shape-rendering':'crispEdges',ident2:'floatkey',ident:'key',context:'color_context_menu',colorchange:'fill'})
-				var temp2=snapobj.rect(x,y-playobj.legends.legend_elementsize/2,playobj.legends.legend_elementsize,playobj.legends.legend_elementsize).attr({'stroke':'#aaa','stroke-width':1,fill:chartobject.shade_geom.shadefill,'fill-opacity':chartobject.shade_geom.shadeopacity,'shape-rendering':'crispEdges',ident2:'floatkey',ident:'key'})
-				keyitem_dict[keyitem_name]=temp2
-				g.append(temp1)
+				var temp=snapobj.rect(x,y,playobj.legends.legend_elementsize,playobj.legends.legend_elementsize).attr({fill:chartobject.grapharea.chartfill,'shape-rendering':'crispEdges',ident2:'floatkey',ident:'key',context:'color_context_menu',colorchange:'fill'})
+				var temp2=snapobj.rect(x,y,playobj.legends.legend_elementsize,playobj.legends.legend_elementsize).attr({'stroke':'#aaa','stroke-width':1,fill:chartobject.shade_geom.shadefill,'fill-opacity':chartobject.shade_geom.shadeopacity,'shape-rendering':'crispEdges',ident2:'floatkey',ident:'key'})
+				g.append(temp)
 				g.append(temp2)
 			}
 
-			var lowbound=y+playobj.legends.legend_elementsize+(lines.length-1)*textoffset
-			if(lowbound>lowery){lowery=lowbound}
-
-			overalls[legend[i].overall]=y
+			// set current y - should always be current lower bound of last item drawn, need to check if text or elementsize is bigger and size accordingly.
+			if(keyitem_dict[keyitem_name]==undefined){
+				keyitem_dict[keyitem_name]=temp
+				if(legend[i+1]){
+					if(legend[i+1].grouping==legend[i].grouping && legend[i+1].group_value==legend[i].group_value && legend[i+1].group_variable==legend[i].group_variable){
+						var notext=1
+					} else {
+						if(y+playobj.legends.legend_elementsize<y+t.getBBox().height*.8){
+							// y is bottom of the text
+							y=y+t.getBBox().height*.8
+						} else {
+							// y is bottom of the element
+							y=y+playobj.legends.legend_elementsize
+						}
+						y=y+playobj.legends.legend_element_to_next
+					}
+				} else {
+					if(y+playobj.legends.legend_elementsize<y+t.getBBox().height*.8){
+						// y is bottom of the text
+						y=y+t.getBBox().height*.8
+					} else {
+						// y is bottom of the element
+						y=y+playobj.legends.legend_elementsize
+					}
+					y=y+playobj.legends.legend_element_to_next
+				}
+			}	
 		}
 
 		// center title and expand floatkey box
@@ -1412,13 +1398,10 @@ function draw_key(legend,playobj,snapobj,prelim,vertical){
 			if(title.getBBox().width>parseFloat(longest)){
 				longest=title.getBBox().width+playobj.legends.legend_floatpad
 			}
-			// took out centering for 2.3 bc the move func for keys doesn't handle centered text well and you could still manually
-			// position a legend head if necessary
-			// title.attr({x:(parseFloat(longest)+parseFloat(playobj.legends.legend_floatpad))/2})
-			// title.selectAll("tspan:not(:first-child)").attr({x:title.attr('x'),dy:1*parseFloat(title.attr('font-size'))})
 		}
 
-		floatkey.attr({height:lowery,width:parseFloat(longest)+parseFloat(playobj.legends.legend_floatpad)})
+		console.log(longest, playobj.legends.legend_rightpad)
+		floatkey.attr({height:y-playobj.legends.legend_element_to_next+playobj.legends.legend_bottompad,width:longest+playobj.legends.legend_rightpad})
 		floatkey.drag(moveFuncfloat,function(){x=this.attr('x');y=this.attr('y');prevx=0;prevy=0});
 	}
 }
@@ -3337,10 +3320,6 @@ function draw_axes(playobj,xvar,yvar,shiftx,shifty,bounds,legend_height) {
 
 	console.log(xpixelmin,xpixelmax,ypixelmin,ypixelmax)
 
-	// placeholder until I figure out top keys
-	playobj.legends.legend_toppad=0
-	playobj.legends.legend_bottompad=0
-
 	// first draw the y-axis and add all elements to a group. Until the x-axis is drawn,
 	// the correct y-location for all these elements is unknown. Draw as if it will be
 	// sitting at the bottom of the graph, then move up the correct amount when x-axis is
@@ -3612,10 +3591,6 @@ function default_style(parameters) {
 
 			// chart formatting
 			'chartfill':'#eee',
-			'chart_toppad':0,
-			'chart_bottompad':0,
-			'chart_leftpad':0,
-			'chart_rightpad':0,
 			'chart_stroke_width':0,
 			'chart_stroke_color':'#222',
 			'graph_stroke_width':0,
@@ -3650,7 +3625,6 @@ function default_style(parameters) {
 			'hedweight':600,
 			'hedface':'PTSans',
 			'hedtextfill':'black',
-
 			// dek
 			'deksize':'18px',
 			'deksizemin':'16px',
@@ -3684,10 +3658,10 @@ function default_style(parameters) {
 			'legend_titletextweight':600,
 			'legend_titletextface':'PTSans',
 			'legend_titletextfill':'black',
-			'legend_toppad':4,
-			'legend_bottompad':0,
-			'legend_rightpad':0,
-			'legend_leftpad':0,
+			'legend_toppad':8,
+			'legend_bottompad':6,
+			'legend_rightpad':6,
+			'legend_leftpad':6,
 			'legend_elementsize':15,
 			'legend_element_to_text':5,
 			'legend_element_to_next':6,
