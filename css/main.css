@@ -1,12 +1,3 @@
-	:root {
-		--ui1:#33836A;
-		--ui2:#67c2a5;
-		--ui3:#F46036;
-		--ui4:;
-		--ui5:;
-		--ui6:#eeeeee;
-	};
-
 	*{margin:0;padding:0;}
 	h1 {font-family:Lancelot;font-size:50;margin:0;line-height:75%;margin-bottom:13;margin-top:0px;}
 	h3 {font-size:15px;margin-top:0px;margin-bottom:0px;font-family:Raleway;font-weight:500;}
@@ -176,3 +167,13 @@
 	/* help box */
 	.helpbox{color:#888;font-size:.9em;max-width:200px;border:1px solid #dddddd;border-radius:2px;padding:16px 12px 10px 14px;text-align:left;margin-right:20px;}
 	.helphighlight{background-color:#ddd;padding:0px 3px 0px 3px;}
+
+
+	:root{
+		--ui1:#33836A;
+		--ui2:#67c2a5;
+		--ui3:#F46036;
+		--ui4:;
+		--ui5:;
+		--ui6:#eeeeee;
+	}
