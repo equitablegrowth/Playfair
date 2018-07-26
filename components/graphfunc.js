@@ -328,27 +328,6 @@ function redraw(keep) {
 		var ylabel=$("#ylabel").val()
 
 		if (ready==1) {
-			// check legends box and retrieve whatever is in there as an object to pass to playfair
-			var legtitle=$("#legtitle").val()
-			var legwidth=$("#legwidth").val()
-			var legend=[[legtitle,legwidth]]
-			var g=0
-			var o=0
-			$('#PREVIEW ul').each(function(){
-				var i=0
-				$(this).find('li').each(function(){
-					var ligeoms=$(this).attr('data-geom').split(',')
-					console.log(ligeoms)
-					for(var i=0;i<ligeoms.length;i++){
-						var item={'geom':ligeoms[i],'grouping':$(this).attr('data-grouping'),'group_value':$(this).attr('data-group_value'),group_variable:$(this).attr('data-group_variable'),xvar:$(this).attr('data-xvar'),yvar:$(this).attr('data-yvar'),groupnumeric:$(this).attr('data-groupnumeric'),position:i,lgroup:g,overall:o}
-						legend.push(item)
-					}
-					i=i+1
-					o=o+1
-				})
-				g=g+1
-			})
-
 			// initialize playfair.js. First use init_graph to set up workspace, then call the
 			// data method to set up data and variables.
 
@@ -382,6 +361,11 @@ function redraw(keep) {
 			chartobject=playfair.init_graph(grapharea,0,0,width,height)
 			console.log(geom_dict)
 			chartobject.data(final_data,geom_dict,facets)
+
+			// check legends box and retrieve whatever is in there as an object to pass to playfair
+			var legtitle=$("#legtitle").val()
+			var legwidth=$("#legwidth").val()
+			chartobject.legendoptions=[legtitle,legwidth]
 
 			// initialize styling, the header, and the footer. The footer loads an image (the logo)
 			// and so callouts after it need to be written as callbacks to the footer function.
@@ -505,6 +489,18 @@ function redraw(keep) {
 			chartobject.style(style)
 			change_colormenu(style)
 			change_linetypemenu(style)
+
+			// get independent axes and independent legends values
+			if($('#ilegends').prop('checked')==true){
+				chartobject.independent_key=1
+			} else {
+				chartobject.independent_key=0
+			}
+			if($('#iaxes').prop('checked')==true){
+				chartobject.independent_axis=1
+			} else {
+				chartobject.independent_axis=0
+			}
 
 			// initialize axes
 			chartobject.xaxis({'label':xlabel,'number_of_ticks':5,'decimal':undefined,'format':undefined})

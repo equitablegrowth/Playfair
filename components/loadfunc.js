@@ -273,17 +273,17 @@ function loadData(coerce_array) {
 				} else {
 					final_data[d[0][i]].push(parseFloat(d[j][i]))
 				}
-			} else if (column_types[i]=='date' & coerce_array[i]=='date'){
+			} else if (column_types[i]=='date' && coerce_array[i]=='date'){
 				if(d[j][i]==''){
 					final_data[d[0][i]].push(d[j][i])
 				} else {
-					final_data[d[0][i]].push(new Date(d[j][i]))
+					final_data[d[0][i]].push(new Date(moment(d[j][i], ["MM-DD-YYYY","M-D-YYYY","MM/DD/YYYY","M/D/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY","MM/YYYY","MM-YYYY","YYYYqQ"],true)))
 				}
 			} else if (column_types[i]=='date') {
 				if(d[j][i]==''){
 					final_data[d[0][i]].push(d[j][i])
 				} else {
-					final_data[d[0][i]].push(new Date(d[j][i]))
+					final_data[d[0][i]].push(new Date(moment(d[j][i], ["MM-DD-YYYY","M-D-YYYY","MM/DD/YYYY","M/D/YYYY","YYYY-MM-DD","MM-DD-YY","MM/DD/YY","MMMM YYYY","MMMM DD YYYY","MMMM DD, YYYY","MMMM, YYYY","MM/YYYY","MM-YYYY","YYYYqQ"],true)))
 				}
 			}
 		}

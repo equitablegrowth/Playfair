@@ -292,7 +292,7 @@ function export_settings(){
 		savetheme[id.slice(5)]={}
 
 		// from SO: http://stackoverflow.com/a/827312
-		$('#'+id).find('input').each(function(){params.push(this.id)})
+		$('#'+id).find('input, select').each(function(){params.push(this.id)})
 
 		for (var j=0;j<params.length;j++){
 			if($('#'+params[j]).val()==""){
@@ -302,6 +302,8 @@ function export_settings(){
 			}
 		}
 	}
+
+	console.log(savetheme)
 
 	var data=encodeURIComponent(JSON.stringify(savetheme))
 	data=data.replace(/%5C/g,'')

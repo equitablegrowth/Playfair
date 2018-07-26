@@ -10,8 +10,8 @@ $(function() {
 		width2=window.innerWidth
 
 		legend_string=''
-		if(item.parent().node.id=='legendgroup') {
-			// detect clicks within the legend area
+		if(item.parent().node.id.slice(0,item.parent().node.id.length-1)=='legendgroup') {
+			// detect right clicks within the legend area
 			console.log('bueno')
 
 			// contextual menu add-on for legend

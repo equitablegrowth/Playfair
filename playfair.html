@@ -62,6 +62,13 @@
 		@font-face {font-family:'Nunito';font-style: normal;font-weight: 600;src: url(fonts/Nunito-Bold.ttf) format('truetype');}
 		@font-face {font-family:'Oswald';font-style: normal;font-weight: 400;src: url(fonts/Oswald-Regular.ttf) format('truetype');}
 		@font-face {font-family:'Oswald';font-style: normal;font-weight: 600;src: url(fonts/Oswald-Bold.ttf) format('truetype');}
+		@font-face {font-family:'RopaSans';font-style: normal;font-weight: 400;src: url(fonts/RopaSans-Regular.ttf) format('truetype');}
+		@font-face {font-family:'Rajdhani';font-style: normal;font-weight: 200;src: url(fonts/Rajdhani-Regular.ttf) format('truetype');}
+		@font-face {font-family:'Rajdhani';font-style: normal;font-weight: 400;src: url(fonts/Rajdhani-Medium.ttf) format('truetype');}
+		@font-face {font-family:'Rajdhani';font-style: normal;font-weight: 600;src: url(fonts/Rajdhani-Bold.ttf) format('truetype');}
+		@font-face {font-family:'Barlow';font-style: normal;font-weight: 200;src: url(fonts/Barlow-Light.ttf) format('truetype');}
+		@font-face {font-family:'Barlow';font-style: normal;font-weight: 600;src: url(fonts/Barlow-Bold.ttf) format('truetype');}
+		@font-face {font-family:'Barlow';font-style: normal;font-weight: 400;src: url(fonts/Barlow-Regular.ttf) format('truetype');}
 	</style>
 </head>
 
@@ -69,7 +76,7 @@
 <!-- ***************** LOGO DUMMY ***************** -->
 <!-- ********************************************** -->
 
-<img id='logodummy'></img>
+<img id='logodummy' style='display:none'></img>
 
 <!-- ********************************************** -->
 <!-- ***************** SAVE DIALOG **************** -->
@@ -406,8 +413,8 @@
 								</span>
 							</span>
 						</div>
+						<div class='uibox_ribbon'><div class='uibox_text'>Logo</div></div>
 						<div class='uibox'>
-						<div class='uibox_text'>Logo</div>
 							<input id='nologo' type='radio' name='logo' value='nologo'><label for='nologo'><span><span></span></span>None</label>
 							<input id='brlogo' type='radio' name='logo' value='brlogo' checked><label for='brlogo'><span><span></span></span>Bottom-right</label>
 						</div>
@@ -418,7 +425,7 @@
 							<div class="labeled_ele">
 								<label>Width</label>
 								<span class='styled-input'>
-									<input type="text styled-input" placeholder="745" id='gwidth' onchange="changedimensions()">
+									<input type="text styled-input" placeholder="680" id='gwidth' onchange="changedimensions()">
 								</span>
 							</div>
 						</div>
@@ -426,7 +433,7 @@
 							<div class="labeled_ele">
 								<label>Height</label>
 								<span class='styled-input'>
-									<input type="text styled-input" placeholder="520" id='gheight' onchange="changedimensions()">
+									<input type="text styled-input" placeholder="480" id='gheight' onchange="changedimensions()">
 								</span>
 							</div>
 						</div>
@@ -437,8 +444,8 @@
 			<div class='tab-content'>
 				<div class='row'>
 					<div class='col-md-6'>
+						<div class='uibox_ribbon'><div class='uibox_text'>Custom Axes</div></div>
 						<div class='uibox'>
-						<div class='uibox_text'>Custom Axes</div>
 							<div class='col-md-6'>
 								<div class='tableswitch'>
 									<div class='switchcell'>
@@ -504,8 +511,8 @@
 						</div>
 					</div>
 					<div class="col-md-6">
+						<div class='uibox_ribbon'><div class='uibox_text'>Gridlines</div></div>
 						<div class='uibox'>
-						<div class='uibox_text'>Gridlines</div>
 							<div class='row'>
 								<div class="col-md-5">
 									<div>
@@ -531,8 +538,8 @@
 							</div>
 						</div>
 
+						<div class='uibox_ribbon'><div class='uibox_text'>Log Axes</div></div>
 						<div class='uibox'>
-						<div class='uibox_text'>Log Axes</div>
 							<div class='row'>
 								<div class="col-md-5">
 									<div>
@@ -577,7 +584,7 @@
 						<div class="labeled_ele">
 							<label>Width</label>
 							<span class='styled-input'>
-								<input type="text styled-input" placeholder="Set the width of the legend." id='legwidth'>
+								<input type="text styled-input" placeholder="Set the maximum width of the legend." id='legwidth'>
 							</span>
 						</div>
 
@@ -694,9 +701,8 @@
 				</div>
 				<div class='row'>
 					<div class='col-md-6'>
+						<div class='uibox_ribbon'><div class='uibox_text'>Point Style</div></div>
 						<div class='uibox'>
-						<div class='uibox_text'>Point Style</div>
-
 							<div class='col-md-6'>
 								<div>
 									<input type="checkbox" id="labels" name="labels" class="switch" />
@@ -791,8 +797,8 @@
 				</div>
 				<div class='row'>
 					<div class='col-md-6'>
+						<div class='uibox_ribbon'><div class='uibox_text'>Line Style</div></div>
 						<div class='uibox'>
-						<div class='uibox_text'>Line Style</div>
 							<div class='col-md-6'>
 								<div>
 									<input type="checkbox" id="smoothlines" name="smoothlines" class="switch" />
@@ -849,8 +855,8 @@
 
 				<div class='row'>
 					<div class='col-md-6'>
+						<div class='uibox_ribbon'><div class='uibox_text'>Bar Style</div></div>
 						<div class='uibox'>
-						<div class='uibox_text'>Bar Style</div>
 							<div class='row'>
 								<div class='col-md-6'>
 									<div>
@@ -914,8 +920,8 @@
 
 				<div class='row'>
 					<div class='col-md-6'>
+						<div class='uibox_ribbon'><div class='uibox_text'>Bar Style</div></div>
 						<div class='uibox'>
-						<div class='uibox_text'>Bar Style</div>
 							<div class='row'>
 								<div class='col-md-6'>
 									<div>
@@ -940,8 +946,8 @@
 <!-- AREA -->
 			<div class='tab-content'>
 			<div class='row'>
+				<div class='uibox_ribbon'><div class='uibox_text'>Stacked Areas</div></div>
 				<div class='uibox'>
-				<div class='uibox_text'>Stacked Areas</div>
 					<div class='row'>
 						<div class='col-md-6'>
 							<div class="labeled_ele">
@@ -981,8 +987,8 @@
 					</div>
 				</div>
 
+				<div class='uibox_ribbon'><div class='uibox_text'>Top/bottom bounded areas</div></div>
 				<div class='uibox'>
-				<div class='uibox_text'>Top/bottom bounded areas</div>
 					<div class='row'>
 						<div class='col-md-6'>
 							<div class="labeled_ele">
@@ -1091,8 +1097,8 @@
 			<div class='tab-content'>
 
 				<div class='row'>
+				<div class='uibox_ribbon'><div class='uibox_text'>Segments</div></div>
 				<div class='uibox'>
-				<div class='uibox_text'>Segments</div>
 					<div class='row'>
 						<div class='col-md-6'>
 							<div class="labeled_ele">
@@ -1178,8 +1184,8 @@
 				</div>
 
 				<div class='row'>
+				<div class='uibox_ribbon'><div class='uibox_text'>Trendlines</div></div>
 				<div class='uibox'>
-				<div class='uibox_text'>Trendlines</div>
 					<div class='row'>
 						<div class='col-md-12'>
 							<textarea id='trend_text' rows="6" placeholder='To generate labeled trendlines, enter the start and end coordinates for each line as an array with two elements. For example: [[1,3],[2,4]], [[8,3],[-2,4]] would generate a trend line from the point (1,3) to (2,4) and also from (8,3) to (-2,4). For dates, you can enter coordinates like this: [[1/1/1917,5],[1/1/1975,12]] to get a line that runs from the y-value 5 in 1917 to the y-value 12 in 1975.'></textarea>
@@ -1461,6 +1467,26 @@
 						</div>
 					</div>
 				</div>
+				<div class='row'>
+					<div class='col-md-6'>
+						<div>
+							<input type="checkbox" id="ilegends" name="ilegends" class="switch" />
+							<label for="ilegends">Independent legends</label>
+						</div>
+					</div>
+					<div class="col-md-6">
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-6'>
+						<div>
+							<input type="checkbox" id="iaxes" name="iaxes" class="switch" />
+							<label for="iaxes">Independent axes</label>
+						</div>
+					</div>
+					<div class="col-md-6">
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -1504,7 +1530,7 @@
 </div>
 
 <div id='graphbox'>
-	<svg id='grapharea' height='520px' width='745px'>
+	<svg id='grapharea' height='480' width='680px'>
 		<defs>
 			<style>
 
@@ -1629,7 +1655,7 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 // version of Playfair because of CORS. Firefox however can use them
 // offline.
 
-fonts=["Lato","PTSans","Verdana","Georgia","Palatino","Garamond","Bookman","Arial","Helvetica","Impact","Courier","Courier New","Times","Times New Roman","Macondo","Archivo","Asap","BreeSerif","Cabin","Cuprum","Dosis","FjallaOne","Karma","Lora","Marvel","NewsCycle","Nunito","Oswald"]
+fonts=["Lato","PTSans","Verdana","Georgia","Palatino","Garamond","Bookman","Arial","Helvetica","Impact","Courier","Courier New","Times","Times New Roman","Macondo","Archivo","Asap","BreeSerif","Cabin","Cuprum","Dosis","FjallaOne","Karma","Lora","Marvel","NewsCycle","Nunito","Oswald","RopaSans","Rajdhani","Barlow"]
 fonts.sort()
 
 ///////////////////////// COLORMENU SETUP //////////////////////////////
@@ -1637,166 +1663,6 @@ fonts.sort()
 
 $('.colormenu').append(colormenu)
 
-//////////////////////// LEGEND INTERFACE //////////////////////////////
-// when a variable_select is changed, run preview() and check to see if
-// any geom types have been completed. If they have, create a preview of
-// what the key will look like by creating each grouping.
-
-$(".variable_select").change(function(){
-	var geom=preview()[0]
-	// console.log(geom)
-	var structure=[]
-
-	// geom: {point:{xvar:x,yvar:y,grouping:{color:g1,type:g2}},line:{xvar:x,yvar:y,grouping:{color:g1,type:g2}}}
-	for(var key in geom){
-		if(key!=='trend'){
-			var temp=geom[key]
-			var xvar=temp['xvar']
-			var yvar=temp['yvar']
-			var groupingvars=0
-			for(var grouper in temp.grouping){
-				if(temp.grouping[grouper]!=='none'){
-					// get all groups for this grouper - x and y must not be missing
-					// xvar and yvar can totally be missing... I think. But if they were missing they would
-					// be undefined, not empty strings.
-					var groups=[]
-					for(var i=0;i<datadict.length;i++){
-						if(datadict[i][xvar]!=='' && datadict[i][yvar]!=='' && datadict[i][temp.grouping[grouper]]!==''){
-							groups.push(datadict[i][temp.grouping[grouper]])
-						}
-					}
-
-					groups=[... new Set(groups)]
-
-					for(var i=0;i<groups.length;i++){
-						var key_entry={}
-						key_entry['geom']=key
-						key_entry['grouping']=grouper
-						key_entry['group_value']=groups[i]
-						key_entry['group_variable']=temp.grouping[grouper]
-						key_entry['xvar']=xvar
-						key_entry['yvar']=yvar
-						structure.push(key_entry)
-					}
-
-					groupingvars=1
-				}
-			}
-
-			if(groupingvars==0 && Object.keys(geom).length>1){
-				var key_entry={}
-				key_entry['geom']=key
-				key_entry['grouping']='none'
-				key_entry['group_value']=yvar
-				if(key=='shade'){key_entry['group_value']=temp['legend_head']}
-				key_entry['group_variable']='none'
-				key_entry['xvar']=xvar
-				key_entry['yvar']=yvar
-				structure.push(key_entry)
-			}
-		}
-	}
-
-	// final structure is:
-	// [ {geom='point',grouping='color',group_value='g1',group_variable='groupvar',xvar='xvar',yvar='yvar'} ... ]
-	// console.log(structure)
-	if(structure.length>0){
-		$('#PREVIEW').empty()
-		// $('#PREVIEWbase').prepend("<div id='PREVIEW'></div>")
-		$('#PREVIEW').prepend("Use the preview below to delete key items you don't want (by clicking the x), change the order of items, and arrange them in groups.")
-
-		var geoms=[]
-
-		for(var i=0;i<structure.length;i++){
-			geoms.push(structure[i]['geom'])
-		}
-
-		// combos stores xvar yvar grouping_variable combos to check future key items against for consolidation
-		var combos=[]
-		// created stores geom+grouping combos to set up the appropriate number of groups
-		var created=[]
-		// keycount is used to track how many key items are created
-		var keycount=0
-
-		// append the group holders to #PREVIEW
-		for(var i=0;i<structure.length;i++){
-			if(structure[i].geom!='text'){
-				created.push()
-				var temp=structure[i]
-				if(created.indexOf(temp.xvar+temp.yvar+temp.group_variable)==-1){
-					try{var l_xvar=temp.xvar.replace(/(\s|[^A-Za-z0-9])+/g, '-')}catch(err){var l_xvar=''}
-					try{var l_yvar=temp.yvar.replace(/(\s|[^A-Za-z0-9])+/g, '-')}catch(err){var l_yvar=''}
-					try{var l_group_variable=temp.group_variable.replace(/(\s|[^A-Za-z0-9])+/g, '-')}catch(err){var l_group_variable=''}
-					if(l_xvar===undefined){l_xvar='none'}
-					if(l_yvar===undefined){l_yvar='none'}
-					if(l_group_variable===undefined){l_group_variable='none'}
-					$('#PREVIEW').append("<ul id='"+l_xvar+l_yvar+l_group_variable+"sortable' class='connectedSortable'>")
-				}
-				created.push(temp.xvar+temp.yvar+temp.group_variable)
-			}
-		}
-
-		// append the actual legend rows to #PREVIEW
-		var groupnumeric=0
-		var current=structure[0].geom+structure[0].grouping
-		for(var i=0;i<structure.length;i++){
-			if(structure[i].geom!='text'){
-				var temp=structure[i]
-				try{var l_xvar=temp.xvar.replace(/(\s|[^A-Za-z0-9])+/g, '-')}catch(err){var l_xvar=''}
-				try{var l_yvar=temp.yvar.replace(/(\s|[^A-Za-z0-9])+/g, '-')}catch(err){var l_yvar=''}
-				try{var l_group_variable=temp.group_variable.replace(/(\s|[^A-Za-z0-9])+/g, '-')}catch(err){var l_group_variable=''}
-				if(l_xvar===undefined){l_xvar='none'}
-				if(l_yvar===undefined){l_yvar='none'}
-				if(l_group_variable===undefined){l_group_variable='none'}
-				if (temp.geom+temp.grouping!=current){
-					current=temp.geom+temp.grouping
-					var groupnumeric=0
-				}
-				if(combos.indexOf(temp.xvar+temp.yvar+temp.group_variable+temp.group_value)==-1){
-					$('#'+l_xvar+l_yvar+l_group_variable+'sortable').append('<li class="ui-state-default" id=keyitem'+i+' data-string="'+temp.xvar+temp.yvar+temp.group_variable+temp.group_value+'" data-geom='+temp.geom+' data-grouping='+temp.grouping+' data-group_value="'+temp.group_value+'" data-group_variable="'+temp.group_variable+'" data-xvar="'+temp.xvar+'" data-yvar="'+temp.yvar+'" data-groupnumeric='+groupnumeric+' >'+temp.geom+' | '+temp.group_variable+' = '+temp.group_value+'<div class="xbox" onclick=destroy("keyitem'+i+'")></div></li>')
-					keycount=keycount+1
-					combos.push(temp.xvar+temp.yvar+temp.group_variable+temp.group_value)
-				} else {
-					var exist_geom=$('[data-string="'+temp.xvar+temp.yvar+temp.group_variable+temp.group_value+'"]').attr('data-geom')
-					$('[data-string="'+temp.xvar+temp.yvar+temp.group_variable+temp.group_value+'"]').attr('data-geom',exist_geom+','+temp.geom)
-					$('[data-string="'+temp.xvar+temp.yvar+temp.group_variable+temp.group_value+'"]').html(exist_geom+','+temp.geom+' | '+temp.group_variable+' = '+temp.group_value)
-				}
-				groupnumeric=groupnumeric+1
-			}
-		}
-
-		var string=''
-		for(var i=0;i<structure.length;i++){
-			var temp=structure[i]
-			try{var l_xvar=temp.xvar.replace(/(\s|[^A-Za-z0-9])+/g, '-')}catch(err){var l_xvar=''}
-			try{var l_yvar=temp.yvar.replace(/(\s|[^A-Za-z0-9])+/g, '-')}catch(err){var l_yvar=''}
-			try{var l_group_variable=temp.group_variable.replace(/(\s|[^A-Za-z0-9])+/g, '-')}catch(err){var l_group_variable=''}
-			if(l_xvar===undefined){l_xvar='none'}
-			if(l_yvar===undefined){l_yvar='none'}
-			if(l_group_variable===undefined){l_group_variable='none'}
-			string=string+'#'+l_xvar.replace(/[\s&]+/g, '-')+l_yvar.replace(/[\s&]+/g, '-')+l_group_variable.replace(/[\s&]+/g, '-')+'sortable'+', '
-		}
-		string=string.slice(0,-2)
-		console.log(string)
-
-		$(function() {
-			// console.log(string)
-			$(string).sortable({
-				connectWith:'.connectedSortable'
-			}).disableSelection()
-		})
-
-		if(keycount===1){
-			$('#PREVIEW').empty()
-			// $('#PREVIEWbase').prepend("<div id='PREVIEW'></div>")
-			$('#PREVIEW').prepend("Select your variables from the chart tab, then come back here to see a preview of the legend and to make modifications. Currently, no legend will be created.")
-		}
-	} else {
-		$('#PREVIEW').empty()
-		// $('#PREVIEWbase').prepend("<div id='PREVIEW'></div>")
-		$('#PREVIEW').prepend("Select your variables from the chart tab, then come back here to see a preview of the legend and to make modifications. Currently, no legend will be created.")
-	}
-})
 
 // from stackoverflow - Justin Johnson - http://stackoverflow.com/a/1890233/3001940
 function unique(arr) {
@@ -1827,7 +1693,7 @@ function destroy(id){
 	$('#'+id).remove()
 }
 
-// reset all fields
+// reset all fields button
 $(document).ready(function(){
 	base_input_dict={}
 	var inputs, index;
