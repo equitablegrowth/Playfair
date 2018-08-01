@@ -11,11 +11,8 @@ $(function() {
 
 		legend_string=''
 		if(item.parent().node.id.slice(0,item.parent().node.id.length-1)=='legendgroup') {
-			// detect right clicks within the legend area
-			console.log('bueno')
-
 			// contextual menu add-on for legend
-			legend_string="<hr><ul class='contextMenu'><li><i class='fa fa-times'></i> Key Item</li></ul>"
+			legend_string="<hr><ul class='contextMenu'><li class='highlight' onclick=delkey(clickedevent.target)><i class='fa fa-times'></i> Key Item</li></ul>"
 		}
 
 		if(doubleClicked == false && drawpath!=1) {
@@ -67,6 +64,38 @@ $(function() {
 		e.preventDefault();
 	})
 })
+
+function delkey(target) {
+	var item=Snap(target)
+	try{if(target.nodeName=='tspan'){item=item.parent()}}catch(err){}
+	var graphnum=item.attr('ident')
+	var rownum=item.attr('keyrow')
+	var rowheight=grapharea.selectAll("[keyrow='"+rownum+"'][ident='"+graphnum+"'][delrect='1']").getBBox().height
+	grapharea.selectAll("[keyrow='"+rownum+"'][ident='"+graphnum+"']").remove()
+	grapharea.select("[ident='"+graphnum+"'][ident3='keybounder']").attr({height:grapharea.select("[ident='"+graphnum+"'][ident3='keybounder']").getBBox().height-rowheight})
+	var remainingelements=grapharea.selectAll("[ident='"+graphnum+"']")
+	for(var i=0;i<remainingelements.length;i++){
+		var tempitem=Snap(remainingelements[i])
+		if(parseInt(tempitem.attr('keyrow'))>parseInt(rownum)){
+			console.log(tempitem)
+			if(tempitem.type=='circle'){
+				tempitem.attr({cy:tempitem.attr('cy')-rowheight})
+			} else if(tempitem.type=='line'){
+				tempitem.attr({y1:tempitem.attr('y1')-rowheight,y2:tempitem.attr('y2')-rowheight})
+			} else if(tempitem.type=='text'){
+				// tempitem.selectAll("tspan:not(:first-child)").attr({y:coords.x-prevx+dx})
+				tempitem.attr({y:tempitem.attr('y')-rowheight})
+			} else {
+				tempitem.attr({y:tempitem.attr('y')-rowheight})
+			}
+		}
+
+		// delete keyboarder if all elements are gone.
+		if(grapharea.select("[id='legendgroup"+graphnum.slice(3,4)+"']").children().length==1){
+			grapharea.select("[id='legendgroup"+graphnum.slice(3,4)+"']").remove()
+		}
+	}
+}
 
 function boldtext(target) {
 	var item=Snap(target)

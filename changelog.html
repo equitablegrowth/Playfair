@@ -22,16 +22,17 @@ body{width:700px;margin-left:auto;margin-right:auto;padding-top:22px;padding-bot
 <li>Eliminated use of dominant-baseline, which is not implemented consistently across browsers.</li>
 <li>Fixed a bug where save as SVG included some HTML tags.</li>
 <li>New version of saveSvgAsPng. Greatly reduces the size of Playfair saves as fonts no longer have to be embedded.</li>
-<li>Playfair can now recognize numeric data in exponential notation.</li>
-<li>A few more layout parameters.</li>
+<li>Playfair can now recognize numeric data in exponential notation (primarily when importing from excel).</li>
 <li>Fixed a bug where non alphanumeric characters in variable names prevented keys from drawing.</li>
 <li>Fixed a number of bugs with trendlines.</li>
 <li>Fixed a bug with smoothed lines in the presence of missing data.</li>
 <li>More parameters for chart layout and design. You can now have a rule above the footer, below the header, around the charting area, or around the entire graph.</li>
-<li>More options for logo placement. Logos can now be align left, centered above the source and note, or centered below the source and note.</li>
-<li>Playfair is fully compatible with Safari (to my knowledge). Fixed a bug where Playfair had trouble interpreting dates in Firefox.</li>
-<li>Cleaned up the CSS some but it still sucks.</li>
+<li>More options for logo placement. Logos can now be align left or centered below the source and note.</li>
+<li>Playfair is now fully compatible with Safari (to my knowledge). Fixed a bug where Playfair had trouble interpreting dates in Firefox and Safari.</li>
+<li>Cleaned up the CSS some but it still sucks. Some interface improvements.</li>
 <li>Fixed a bug where saving settings out as a theme did not capture setting fonts.</li>
+<li>Fixed a problem where graph measurements could shift subtly between the first and second draw because a font was not loaded and text measurements changed due to the font face.</li>
+<li>Instead of editing legend items in the legend tab, edit them on graph by right-clicking and selecting the x to remove a key item.</li>
 </ul>
 
 <h1>v2.4</h1>

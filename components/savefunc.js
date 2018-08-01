@@ -303,7 +303,7 @@ function load_populate(response) {
 		$('#grapharea').attr('height',height)
 		$('#grapharea').attr('width',width)
 
-		// insert the returned svg into the svg slot
+		// insert the returned svg into the svg element
 		document.getElementById("grapharea").innerHTML=svg
 
 		var moveFuncfloat=function(dx,dy,posx,posy){

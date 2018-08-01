@@ -6,6 +6,7 @@
 	<!-- <script src="lib/saveSvgAsPng.js"></script> -->
 	<script src="lib/saveSvgAsPng.js"></script>
 	<script src="lib/catmullrom2bezier.js"></script>
+	<script src="lib/fontfaceobserver.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2014-11-29/FileSaver.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -20,7 +21,6 @@
 	<script src="components/savefunc.js"></script>
 	<script src="components/loadfunc.js"></script>
 	<script src="components/graphfunc.js"></script>
-
 	<!-- stylesheets -->
 	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
 	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
@@ -29,24 +29,22 @@
 	<link rel="stylesheet" href="css/main.css" type="text/css" />
 
 	<style>
-		@import url(http://fonts.googleapis.com/css?family=Lancelot);
-		@import url(http://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700,800);
-		@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,700,600,300);
+		@import url('https://fonts.googleapis.com/css?family=Raleway:300,500,600|Open+Sans:400,600|Lancelot');
 		@font-face {font-family:'Macondo';font-style: normal;font-weight: 400;src: url(fonts/Macondo-Regular.ttf) format('truetype');}
 		@font-face {font-family:'Archivo';font-style: normal;font-weight: 400;src: url(fonts/ArchivoNarrow-Regular.ttf) format('truetype');}
 		@font-face {font-family:'Archivo';font-style: normal;font-weight: 600;src: url(fonts/ArchivoNarrow-Bold.ttf) format('truetype');}
-		@font-face {font-family:'PTSans';font-style: normal;font-weight: 400;src: url(fonts/PT_Sans-Web-Regular.ttf) format('truetype');}
-		@font-face {font-family:'PTSans';font-style: normal;font-weight: 600;src: url(fonts/PT_Sans-Web-Bold.ttf) format('truetype');}
+		@font-face {font-family:'PT Sans';font-style: normal;font-weight: 400;src: url(fonts/PT_Sans-Web-Regular.ttf) format('truetype');}
+		@font-face {font-family:'PT Sans';font-style: normal;font-weight: 600;src: url(fonts/PT_Sans-Web-Bold.ttf) format('truetype');}
 		@font-face {font-family:'Asap';font-style: normal;font-weight: 400;src: url(fonts/Asap-Regular.ttf) format('truetype');}
 		@font-face {font-family:'Asap';font-style: normal;font-weight: 600;src: url(fonts/Asap-Bold.ttf) format('truetype');}
-		@font-face {font-family:'BreeSerif';font-style: normal;font-weight: 400;src: url(fonts/BreeSerif-Regular.ttf) format('truetype');}
+		@font-face {font-family:'Bree Serif';font-style: normal;font-weight: 400;src: url(fonts/BreeSerif-Regular.ttf) format('truetype');}
 		@font-face {font-family:'Cabin';font-style: normal;font-weight: 400;src: url(fonts/Cabin-Regular.ttf) format('truetype');}
 		@font-face {font-family:'Cabin';font-style: normal;font-weight: 600;src: url(fonts/Cabin-Bold.ttf) format('truetype');}
 		@font-face {font-family:'Cuprum';font-style: normal;font-weight: 400;src: url(fonts/Cuprum-Regular.ttf) format('truetype');}
 		@font-face {font-family:'Cuprum';font-style: normal;font-weight: 600;src: url(fonts/Cuprum-Bold.ttf) format('truetype');}
 		@font-face {font-family:'Dosis';font-style: normal;font-weight: 400;src: url(fonts/Dosis-Regular.ttf) format('truetype');}
 		@font-face {font-family:'Dosis';font-style: normal;font-weight: 600;src: url(fonts/Dosis-Bold.ttf) format('truetype');}
-		@font-face {font-family:'FjallaOne';font-style: normal;font-weight: 400;src: url(fonts/FjallaOne-Regular.ttf) format('truetype');}
+		@font-face {font-family:'Fjalla One';font-style: normal;font-weight: 400;src: url(fonts/FjallaOne-Regular.ttf) format('truetype');}
 		@font-face {font-family:'Karma';font-style: normal;font-weight: 400;src: url(fonts/Karma-Regular.ttf) format('truetype');}
 		@font-face {font-family:'Karma';font-style: normal;font-weight: 600;src: url(fonts/Karma-Bold.ttf) format('truetype');}
 		@font-face {font-family:'Lato';font-style: normal;font-weight: 400;src: url(fonts/Lato-Regular.ttf) format('truetype');}
@@ -56,16 +54,16 @@
 		@font-face {font-family:'Lora';font-style: normal;font-weight: 600;src: url(fonts/Lora-Bold.ttf) format('truetype');}
 		@font-face {font-family:'Marvel';font-style: normal;font-weight: 400;src: url(fonts/Marvel-Regular.ttf) format('truetype');}
 		@font-face {font-family:'Marvel';font-style: normal;font-weight: 600;src: url(fonts/Marvel-Bold.ttf) format('truetype');}
-		@font-face {font-family:'NewsCycle';font-style: normal;font-weight: 400;src: url(fonts/NewsCycle-Regular.ttf) format('truetype');}
-		@font-face {font-family:'NewsCycle';font-style: normal;font-weight: 600;src: url(fonts/NewsCycle-Bold.ttf) format('truetype');}
+		@font-face {font-family:'News Cycle';font-style: normal;font-weight: 400;src: url(fonts/NewsCycle-Regular.ttf) format('truetype');}
+		@font-face {font-family:'News Cycle';font-style: normal;font-weight: 600;src: url(fonts/NewsCycle-Bold.ttf) format('truetype');}
 		@font-face {font-family:'Nunito';font-style: normal;font-weight: 400;src: url(fonts/Nunito-Regular.ttf) format('truetype');}
 		@font-face {font-family:'Nunito';font-style: normal;font-weight: 600;src: url(fonts/Nunito-Bold.ttf) format('truetype');}
 		@font-face {font-family:'Oswald';font-style: normal;font-weight: 400;src: url(fonts/Oswald-Regular.ttf) format('truetype');}
 		@font-face {font-family:'Oswald';font-style: normal;font-weight: 600;src: url(fonts/Oswald-Bold.ttf) format('truetype');}
-		@font-face {font-family:'RopaSans';font-style: normal;font-weight: 400;src: url(fonts/RopaSans-Regular.ttf) format('truetype');}
-		@font-face {font-family:'Rajdhani';font-style: normal;font-weight: 200;src: url(fonts/Rajdhani-Regular.ttf) format('truetype');}
-		@font-face {font-family:'Rajdhani';font-style: normal;font-weight: 400;src: url(fonts/Rajdhani-Medium.ttf) format('truetype');}
-		@font-face {font-family:'Rajdhani';font-style: normal;font-weight: 600;src: url(fonts/Rajdhani-Bold.ttf) format('truetype');}
+		@font-face {font-family:'Ropa Sans';font-style: normal;font-weight: 400;src: url(fonts/RopaSans-Regular.ttf) format('truetype');}
+		@font-face {font-family:'Rajdhani';font-style: normal;font-weight: 400;src: url(fonts/Rajdhani-Regular.ttf) format('truetype');}
+		@font-face {font-family:'Rajdhani';font-style: normal;font-weight: 500;src: url(fonts/Rajdhani-Medium.ttf) format('truetype');}
+		@font-face {font-family:'Rajdhani';font-style: normal;font-weight: 700;src: url(fonts/Rajdhani-Bold.ttf) format('truetype');}
 		@font-face {font-family:'Barlow';font-style: normal;font-weight: 200;src: url(fonts/Barlow-Light.ttf) format('truetype');}
 		@font-face {font-family:'Barlow';font-style: normal;font-weight: 600;src: url(fonts/Barlow-Bold.ttf) format('truetype');}
 		@font-face {font-family:'Barlow';font-style: normal;font-weight: 400;src: url(fonts/Barlow-Regular.ttf) format('truetype');}
@@ -587,21 +585,12 @@
 								<input type="text styled-input" placeholder="Set the maximum width of the legend." id='legwidth'>
 							</span>
 						</div>
-
-<!-- 						<div class='uibox'>
-						<div class='uibox_text'>Key</div>
-							<input id='topkey' type='radio' name='key' value='top'><label for='topkey'><span><span></span></span>Top</label>
-							<input id='floatkey' type='radio' name='key' value='float' checked><label for='floatkey'><span><span></span></span>Float</label>
-						</div> -->
-						<!-- <button type="button" class="btn btn-default" id='redraw2' onclick='$(".variable_select").trigger("change")'>Reset legend</button> -->
 					</div>
 					<div class='col-md-6'>
-<!-- 						<div class='uibox' id='PREVIEWbase'>
-						<div class='uibox_text'>Preview</div>
-							<div id='PREVIEW'>
-							Select your variables from the chart tab, then come back here to see a preview of the legend and to make modifications. Currently, no legend will be created.
-							</div>
-						</div> -->
+						<div>
+							<input type="checkbox" id="horizontalkey" name="horizontalkey" class="switch" />
+							<label for="horizontalkey">Horizontal key</label>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -641,7 +630,6 @@
 								</span>
 							</span>
 						</div>
-
 						<div class="labeled_ele">
 							<label>Point Color</label>
 							<span class='styled-select'>
@@ -652,7 +640,6 @@
 								</span>
 							</span>
 						</div>
-
 						<div class="labeled_ele">
 							<label>Point Labels</label>
 							<span class='styled-select'>
@@ -675,7 +662,6 @@
 								</span>
 							</span>
 						</div>
-
 						<div class="labeled_ele">
 							<label>Point Size</label>
 							<span class='styled-select'>
@@ -686,7 +672,6 @@
 								</span>
 							</span>
 						</div>
-
 						<div class="labeled_ele">
 							<label>Point Types</label>
 							<span class='styled-select'>
@@ -1655,7 +1640,7 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 // version of Playfair because of CORS. Firefox however can use them
 // offline.
 
-fonts=["Lato","PTSans","Verdana","Georgia","Palatino","Garamond","Bookman","Arial","Helvetica","Impact","Courier","Courier New","Times","Times New Roman","Macondo","Archivo","Asap","BreeSerif","Cabin","Cuprum","Dosis","FjallaOne","Karma","Lora","Marvel","NewsCycle","Nunito","Oswald","RopaSans","Rajdhani","Barlow"]
+fonts=["Lato","PT Sans","Verdana","Georgia","Palatino","Garamond","Bookman","Arial","Helvetica","Impact","Courier","Courier New","Times","Times New Roman","Macondo","Archivo","Asap","Bree Serif","Cabin","Cuprum","Dosis","Fjalla One","Karma","Lora","Marvel","News Cycle","Nunito","Oswald","Ropa Sans","Rajdhani","Barlow"]
 fonts.sort()
 
 ///////////////////////// COLORMENU SETUP //////////////////////////////

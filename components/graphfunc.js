@@ -78,7 +78,7 @@ function preview() {
 				return 0
 			}
 
-			facetdata=facetdata.sort(object_sort)
+			// facetdata=facetdata.sort(object_sort)
 		}
 
 		geom_dict['map']={'location':location,'geography':geography,'values':values,'grouping':{'category':category}}
@@ -218,6 +218,7 @@ function preview() {
 		var x_var=$("#shade_select_x").val()
 		var y_var=$("#shade_select_y").val()
 		var label=$("#shade_label").val()
+		if(label==''){label='Shading'}
 
 		if(x_var!==''){
 			var temp=x_var.split('],[')
@@ -365,7 +366,9 @@ function redraw(keep) {
 			// check legends box and retrieve whatever is in there as an object to pass to playfair
 			var legtitle=$("#legtitle").val()
 			var legwidth=$("#legwidth").val()
-			chartobject.legendoptions=[legtitle,legwidth]
+			var horizontal=document.getElementById('horizontalkey').checked
+			if(horizontal==false){var vertical=1}else{var vertical=0}
+			chartobject.legendoptions=[legtitle,legwidth,vertical]
 
 			// initialize styling, the header, and the footer. The footer loads an image (the logo)
 			// and so callouts after it need to be written as callbacks to the footer function.
@@ -389,9 +392,9 @@ function redraw(keep) {
 
 			// create the style object
 			if(typeof theme !== 'undefined'){
-				style=default_style(theme)
+				var style=default_style(theme)
 			} else {
-				style=default_style()
+				var style=default_style()
 			}
 
 			// logo
@@ -506,87 +509,105 @@ function redraw(keep) {
 			chartobject.xaxis({'label':xlabel,'number_of_ticks':5,'decimal':undefined,'format':undefined})
 			chartobject.yaxis({'label':ylabel,'number_of_ticks':5,'decimal':undefined,'format':undefined})
 
-			chartobject.prepheader(hed,dek)
-			chartobject.prepfooter(source,note,function(){
-				// draw the initial graph, dependent on current value of graph_type
-				// 5/24 changed this because... I'm not sure I want graph_type to decide anything
-				// it's still here so maybe this is the right way to go but right now there are only 2 options:
-				// maps and charts. I think maps should just override charts.
-				// if (graph_type=='Chart') {
-				if ($('#customx').val()!='' && $("#customxcheck").prop('checked')==true){
-					chartobject.xarray=$('#customx').val().split(',')
-				}
-				if ($('#customy').val()!='' && $("#customycheck").prop('checked')==true){
-					chartobject.yarray=$('#customy').val().split(',')
-				}
-
-				if ($('#xlimits').val()!='' && $("#xlimitscheck").prop('checked')==true){
-					chartobject.xlimits=$('#xlimits').val().split(',')
-				} 
-				if ($('#ylimits').val()!='' && $("#ylimitscheck").prop('checked')==true){
-					chartobject.ylimits=$('#ylimits').val().split(',')
-				} 
-
-				chartobject.chart(legend)
-
-				// push the calculated yaxis and xaxis to the front-end interface boxes
-				try{
-					if(Object.prototype.toString.call(chartobject.xarray[0])==='[object Date]'){
-						temp=[]
-						for(var i=0;i<chartobject.xarray.length;i++){
-							temp.push((chartobject.xarray[i].getUTCMonth()+1)+'/'+chartobject.xarray[i].getUTCDate()+'/'+chartobject.xarray[i].getUTCFullYear())
-						}
-						$('#customx').val(temp)
-					} else{
-						$('#customx').val(chartobject.xarray)
-					}
-				} catch(err){}
-
-				try{
-					if(Object.prototype.toString.call(chartobject.yarray[0])==='[object Date]'){
-						temp=[]
-						for(var i=0;i<chartobject.yarray.length;i++){
-							temp.push((chartobject.yarray[i].getUTCMonth()+1)+'/'+chartobject.yarray[i].getUTCDate()+'/'+chartobject.yarray[i].getUTCFullYear())
-						}
-						$('#customy').val(temp)
-					} else{
-						$('#customy').val(chartobject.yarray)
-					}
-				} catch(err){}
-
-				if(keep){
-					// bring annotations to front
-					var ann=grapharea.selectAll('[annotation]')
-
-					for(var i=0;i<ann.length;i++){
-						if(ann[i].attr('arrow')){
-							var color=ann[i].attr()['stroke']
-							var temparrow = grapharea.path('M0,0 L0,4 L6,2 L0,0').attr({fill:color})
-							var tempamarker = temparrow.marker(0,0,6,4,0,2).attr({fill:color});
-							ann[i].attr({'marker-end':tempamarker})
-						}
-						grapharea.append(ann[i])
-					}
-
-					// position key to match previous draw
-					var keys=grapharea.selectAll('[ident2="floatkey"]')
-					for(var i=0;i<keys.length;i++){
-						coords=keys[i].getBBox()
-						if(keys[i].type=='circle'){
-							keys[i].attr({cx:coords.cx+boundsx,cy:coords.cy+boundsy})
-						} else if (keys[i].type=='line'){
-							console.log(coords)
-							keys[i].attr({x1:coords.x+boundsx,y1:coords.y+boundsy,x2:coords.x2+boundsx,y2:coords.y2+boundsy})
-						} else if (keys[i].type=='text'){
-							keys[i].selectAll("tspan:not(:first-child)").attr({x:coords.x+boundsx,dy:parseFloat(Snap(keys[i]).attr('font-size'))})
-							keys[i].attr({x:coords.x+boundsx,y:coords.y+boundsy})
-						} else if (keys[i].type=='path'){
-							keys[i].transform('t'+boundsx+','+boundsy)
-						} else {
-							keys[i].attr({x:coords.x+boundsx,y:coords.y+boundsy})
-						}
+			// load necessary fonts
+			var fontloads=[]
+			for(var key in style){
+				for(var sub in theme[key]){
+					if(fonts.indexOf(style[key][sub])!=-1){
+						fontloads.push(style[key][sub])
 					}
 				}
+			}
+
+			fontloads=[...new Set(fontloads)]
+			console.log(fontloads)
+
+			var loadedfonts=[]
+			for(var i=0;i<fontloads.length;i++){
+				loadedfonts.push(new FontFaceObserver(fontloads[i]).load())
+			}
+
+			Promise.all(loadedfonts).then(function(){
+				console.log('loaded fonts successfully')
+				// draw footer and header
+				chartobject.prepheader(hed,dek)
+				chartobject.prepfooter(source,note,function(){
+					// draw the initial graph
+					if ($('#customx').val()!='' && $("#customxcheck").prop('checked')==true){
+						chartobject.xarray=$('#customx').val().split(',')
+					}
+					if ($('#customy').val()!='' && $("#customycheck").prop('checked')==true){
+						chartobject.yarray=$('#customy').val().split(',')
+					}
+
+					if ($('#xlimits').val()!='' && $("#xlimitscheck").prop('checked')==true){
+						chartobject.xlimits=$('#xlimits').val().split(',')
+					} 
+					if ($('#ylimits').val()!='' && $("#ylimitscheck").prop('checked')==true){
+						chartobject.ylimits=$('#ylimits').val().split(',')
+					} 
+
+					chartobject.chart(legend)
+
+					// push the calculated yaxis and xaxis to the front-end interface boxes
+					try{
+						if(Object.prototype.toString.call(chartobject.xarray[0])==='[object Date]'){
+							temp=[]
+							for(var i=0;i<chartobject.xarray.length;i++){
+								temp.push((chartobject.xarray[i].getUTCMonth()+1)+'/'+chartobject.xarray[i].getUTCDate()+'/'+chartobject.xarray[i].getUTCFullYear())
+							}
+							$('#customx').val(temp)
+						} else{
+							$('#customx').val(chartobject.xarray)
+						}
+					} catch(err){}
+
+					try{
+						if(Object.prototype.toString.call(chartobject.yarray[0])==='[object Date]'){
+							temp=[]
+							for(var i=0;i<chartobject.yarray.length;i++){
+								temp.push((chartobject.yarray[i].getUTCMonth()+1)+'/'+chartobject.yarray[i].getUTCDate()+'/'+chartobject.yarray[i].getUTCFullYear())
+							}
+							$('#customy').val(temp)
+						} else{
+							$('#customy').val(chartobject.yarray)
+						}
+					} catch(err){}
+
+					if(keep){
+						// bring annotations to front
+						var ann=grapharea.selectAll('[annotation]')
+
+						for(var i=0;i<ann.length;i++){
+							if(ann[i].attr('arrow')){
+								var color=ann[i].attr()['stroke']
+								var temparrow = grapharea.path('M0,0 L0,4 L6,2 L0,0').attr({fill:color})
+								var tempamarker = temparrow.marker(0,0,6,4,0,2).attr({fill:color});
+								ann[i].attr({'marker-end':tempamarker})
+							}
+							grapharea.append(ann[i])
+						}
+
+						// position key to match previous draw
+						var keys=grapharea.selectAll('[ident2="floatkey"]')
+						for(var i=0;i<keys.length;i++){
+							coords=keys[i].getBBox()
+							if(keys[i].type=='circle'){
+								keys[i].attr({cx:coords.cx+boundsx,cy:coords.cy+boundsy})
+							} else if (keys[i].type=='line'){
+								console.log(coords)
+								keys[i].attr({x1:coords.x+boundsx,y1:coords.y+boundsy,x2:coords.x2+boundsx,y2:coords.y2+boundsy})
+							} else if (keys[i].type=='text'){
+								keys[i].selectAll("tspan:not(:first-child)").attr({x:coords.x+boundsx,dy:parseFloat(Snap(keys[i]).attr('font-size'))})
+								keys[i].attr({x:coords.x+boundsx,y:coords.y+boundsy+chartobject.legends.legend_elementsize,dy:"-0.25em"})
+							} else if (keys[i].type=='path'){
+								keys[i].transform('t'+boundsx+','+boundsy)
+							} else {
+								keys[i].attr({x:coords.x+boundsx,y:coords.y+boundsy})
+							}
+						}
+					}
+				})
 			})
 		} 
 		else {

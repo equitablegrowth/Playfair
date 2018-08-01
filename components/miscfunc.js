@@ -1,6 +1,4 @@
 //////////////////// MISCELLANEOUS INTERFACE ///////////////////////////
-// This section contains playfair interface functions that do not merit
-// their own section and are not part of the graphic package itself.
 
 // detect width changes - if < 1200, then graphdiv needs to be align-right
 var width = $(window).width();
@@ -91,10 +89,6 @@ $('.panel-custom').on('show.bs.collapse', function () {
 $('.panel-custom').on('hide.bs.collapse', function () {
      $(this).removeClass('fun');
 });
-
-/////////////////////// END MISCELLANEOUS //////////////////////////////
-////////////////////////////////////////////////////////////////////////
-
 
 
 ///////////////////////////// THEMES ///////////////////////////////////
@@ -362,4 +356,9 @@ $( document ).ready(function() {
 		}
 	})
 })
+
+/////////////////////// END MISCELLANEOUS //////////////////////////////
+////////////////////////////////////////////////////////////////////////
+
+
 
