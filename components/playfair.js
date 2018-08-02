@@ -703,7 +703,7 @@ window.playfair = (function () {
 			// draw axes
 			if(chartobject.type=='chart'){
 				console.log('drawing axes with parameters: ',xaxis,yaxis,graph_obj.shiftx,graph_obj.shifty)
-				var axes=draw_axes(xaxis,yaxis,graph_obj.shiftx,graph_obj.shifty,bounds,0)
+				var axes=draw_axes(xaxis,yaxis,graph_obj.shiftx,graph_obj.shifty,bounds,0,1,1)
 			} else if(chartobject.type=='map'){
 				// don't need to do anything here for now, because the chart background is already filled in,
 				// but in case you do in the future for some reason
@@ -762,10 +762,66 @@ window.playfair = (function () {
 				temp.remove()
 			}
 
+			// if shared axis labels are on, get width of y-axis labels and height of x-axis labels to subtract from available
+			// plotting space so that all plots are the same size. Basically just the code from draw_axes
+			// y label
+			var ytextwidth=0
+			var xtextheight=0
+			if(chartobject.shared_axis==1){
+				for(var i=0;i<yvar.length;i++){
+					if(Object.prototype.toString.call(yvar[i])==='[object Date]'){
+						var string=formatDate(yvar[i],Math.max(...yvar)-Math.min(...yvar))
+					} else {
+						var string=String(yvar[i])
+					}
+					var temp=snapobj.text(0,0,string).attr({ident:'yaxis','font-size':chartobject.y_ticks.ytick_textsize,'font-weight':chartobject.y_ticks.ytick_textweight,'font-family':chartobject.y_ticks.ytick_textface,'text-anchor':'start'})
+					temp.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
+					var coords=temp.getBBox()
+					if(coords.width>ytextwidth){ytextwidth=coords.width}
+					temp.remove()
+				}
+
+				for(var i=0;i<xvar.length;i++){
+					maxwidth=chartobject.x_ticks.xtick_maxsize*chartobject.width
+					if(Object.prototype.toString.call(xvar[i])==='[object Date]'){
+						string=formatDate(xvar[i],Math.max(...xvar)-Math.min(...xvar))
+					} else {
+						string=String(xvar[i])
+					}
+					var lines=multitext(string,{ident:'xaxis','font-size':chartobject.x_ticks.xtick_textsize,'font-weight':chartobject.x_ticks.xtick_textweight,'font-family':chartobject.x_ticks.xtick_textface,dy:'0.3em','text-anchor':'middle'},maxwidth)
+					var temp=snapobj.text(0,0,lines).attr({fill:chartobject.x_ticks.xtick_textfill,ident:'xaxis','font-size':chartobject.x_ticks.xtick_textsize,'font-weight':chartobject.x_ticks.xtick_textweight,'font-family':chartobject.x_ticks.xtick_textface,'text-anchor':'middle',colorchange:'fill',context:'text_context_menu'})
+					temp.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
+					temp.selectAll("tspan:not(:first-child)").attr({x:temp.attr('x'),dy:parseFloat(chartobject.x_ticks.xtick_textsize)})
+					var coords=temp.getBBox()
+					if(coords.height*.8>xtextheight){xtextheight=coords.height*.8}
+					temp.remove()
+				}
+			}
+
 			// charting
 			for(var i=0;i<uniquefvar.length;i++){
 				// get bounds of potential graphing region
 				var bounds=get_bounds(this,column,row,graph_obj.facets.facet_columns,maxrows)
+
+				// check if shared_axis is on and decide based on row/column if this graph will have axis labels drawn
+				// adjust bounds accordingly.
+				if(chartobject.shared_axis==1){
+					if(column % graph_obj.facets.facet_columns==1){
+						var drawy=1
+						bounds[1]=bounds[1]+ytextwidth-(ytextwidth/graph_obj.facets.facet_columns)
+					} else {
+						var drawy=0
+						bounds[0]=bounds[0]+(column % graph_obj.facets.facet_columns)
+					}
+					if(i+1>uniquefvar.length-graph_obj.facets.facet_columns){
+						var drawx=1
+					} else {
+						var drawx=0
+					}
+				} else {
+					var drawx=1
+					var drawy=1
+				}
 
 				// draw the facet title and adjust the bounds appropriately
 				console.log(uniquefvar[i])
@@ -779,7 +835,7 @@ window.playfair = (function () {
 				// draw axes
 				if(chartobject.type=='chart'){
 					console.log('drawing axes with parameters: ',xaxis,yaxis,graph_obj.shiftx,graph_obj.shifty)
-					var axes=draw_axes(xaxis,yaxis,graph_obj.shiftx,graph_obj.shifty,bounds,i)
+					var axes=draw_axes(xaxis,yaxis,graph_obj.shiftx,graph_obj.shifty,bounds,i,drawx,drawy)
 				} else if(chartobject.type=='map'){
 					// don't need to do anything here for now, because the chart background is already filled in,
 					// but in case you do in the future for some reason
@@ -1376,9 +1432,9 @@ function draw_key(legend,playobj,snapobj,vertical,graphnum,bounds){
 
 			// element for key deletion
 			if(vertical==1){
-				var delrect=snapobj.rect(bounds[0],y,1,1).attr({fill:'red',fillOpacity:0.1,ident:'key'+graphnum,ident2:'floatkey',keyrow:i,delrect:1,pointerEvents:'none',delrecttype:'vertical'})
+				var delrect=snapobj.rect(bounds[0],y,1,1).attr({fill:'red',fillOpacity:0,ident:'key'+graphnum,ident2:'floatkey',keyrow:i,delrect:1,pointerEvents:'none',delrecttype:'vertical'})
 			} else {
-				var delrect=snapobj.rect(x,bounds[2]+yoffset+chartobject.legends.legend_bottompad,1,1).attr({fill:'red',fillOpacity:0.1,ident:'key'+graphnum,ident2:'floatkey',keyrow:i,delrect:1,pointerEvents:'none',delrecttype:'horizontal'})
+				var delrect=snapobj.rect(x,bounds[2]+yoffset+chartobject.legends.legend_bottompad,1,1).attr({fill:'red',fillOpacity:0,ident:'key'+graphnum,ident2:'floatkey',keyrow:i,delrect:1,pointerEvents:'none',delrecttype:'horizontal'})
 			}
 			g.append(delrect)
 
@@ -3531,7 +3587,8 @@ function get_bounds(playobj,column,row,totalcolumns,totalrows) {
 	return [xpixelmin,xpixelmax,ypixelmin,ypixelmax]
 }
 
-function draw_axes(xvar,yvar,shiftx,shifty,bounds,graphnum) {
+function draw_axes(xvar,yvar,shiftx,shifty,bounds,graphnum,drawx,drawy) {
+	console.log(drawx,drawy)
 	// console.log(xvar,yvar)
 	// draws the axes for a graph
 	// bounds is [xpixelmin,xpixelmax,ypixelmin,ypixelmax] from the get_bounds function
@@ -3551,50 +3608,52 @@ function draw_axes(xvar,yvar,shiftx,shifty,bounds,graphnum) {
 	// sitting at the bottom of the graph, then move up the correct amount when x-axis is
 	// drawn.
 
-	// y label
-	if (typeof(chartobject.ylabel)!=undefined){
-		var lines=multitext(String(chartobject.ylabel),{'font-size':chartobject.y_label.ylabel_textsize,'font-weight':chartobject.y_label.ylabel_textweight,'font-family':chartobject.y_label.ylabel_textface},chartobject.y_label.ylabel_maxlength)
-		var ylab=snapobj.text(xpixelmin+parseFloat(chartobject.y_label.ylabel_textsize)/2,(ypixelmax+ypixelmin)/2,lines).attr({fill:chartobject.y_label.ylabel_textfill,ident:'yaxis','font-size':chartobject.y_label.ylabel_textsize,'font-weight':chartobject.y_label.ylabel_textweight,'font-family':chartobject.y_label.ylabel_textface,dy:'0.3em','text-anchor':'middle',colorchange:'fill',context:'text_context_menu'})
-		ylab.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
-		ylab_coords=ylab.getBBox()
-		ylab.attr({y:ylab_coords.y-(ylab_coords.height/2),x:parseFloat(ylab.attr('x'))+(lines.length-1)*parseInt(chartobject.y_label.ylabel_textsize)/2})
-		ylab.selectAll("tspan:not(:first-child)").attr({x:ylab.attr('x'),dy:parseInt(chartobject.y_label.ylabel_textsize)})
-		// rotation does kinda weird things, so instead of rotating here it is done in the 2nd pass later
-		// ylab.transform('r270')
-		ylab_coords=ylab.getBBox()
-		ylab_width=ylab_coords.r0
-		var ylabexist=1
-		if(ylab_width==0){ylabexist=0}
-	}
-	else{var ylab_width=0;var ylabexist=0}
-
-	// y ticks and lines - no location, just figure out what the x offset is
-	var total_xoffset=xpixelmin+ylab_width
-	if(shifty==1){shifty=1}
-	else{shifty=0}
-
-	for(var i=0;i<yvar.length;i++){
-		if(Object.prototype.toString.call(yvar[i])==='[object Date]'){
-			var string=formatDate(yvar[i],Math.max(...yvar)-Math.min(...yvar))
-		} else {
-			var string=String(yvar[i])
+	if(drawy==1){
+		// y label
+		if (typeof(chartobject.ylabel)!=undefined){
+			var lines=multitext(String(chartobject.ylabel),{'font-size':chartobject.y_label.ylabel_textsize,'font-weight':chartobject.y_label.ylabel_textweight,'font-family':chartobject.y_label.ylabel_textface},chartobject.y_label.ylabel_maxlength)
+			var ylab=snapobj.text(xpixelmin+parseFloat(chartobject.y_label.ylabel_textsize)/2,(ypixelmax+ypixelmin)/2,lines).attr({fill:chartobject.y_label.ylabel_textfill,ident:'yaxis','font-size':chartobject.y_label.ylabel_textsize,'font-weight':chartobject.y_label.ylabel_textweight,'font-family':chartobject.y_label.ylabel_textface,dy:'0.3em','text-anchor':'middle',colorchange:'fill',context:'text_context_menu'})
+			ylab.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
+			ylab_coords=ylab.getBBox()
+			ylab.attr({y:ylab_coords.y-(ylab_coords.height/2),x:parseFloat(ylab.attr('x'))+(lines.length-1)*parseInt(chartobject.y_label.ylabel_textsize)/2})
+			ylab.selectAll("tspan:not(:first-child)").attr({x:ylab.attr('x'),dy:parseInt(chartobject.y_label.ylabel_textsize)})
+			ylab_coords=ylab.getBBox()
+			ylab_width=ylab_coords.height
+			var ylabexist=1
+			if(ylab_width==0){ylabexist=0}
 		}
-		var temp=snapobj.text(xpixelmin+ylab_width+chartobject.y_ticks.ytick_to_ylabel*ylabexist,0,string).attr({ident:'yaxis','font-size':chartobject.y_ticks.ytick_textsize,'font-weight':chartobject.y_ticks.ytick_textweight,'font-family':chartobject.y_ticks.ytick_textface,'text-anchor':'start'})
-		temp.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
-		var coords=temp.getBBox()
-		if(coords.x2>total_xoffset){total_xoffset=coords.x2} else {}
-		temp.remove()
+		else{var ylab_width=0;var ylabexist=0}
+
+		// y ticks and lines - no location, just figure out what the x offset is
+		var total_xoffset=xpixelmin+ylab_width
+		// if(shifty==1){shifty=1}
+		// else{shifty=0}
+
+		for(var i=0;i<yvar.length;i++){
+			if(Object.prototype.toString.call(yvar[i])==='[object Date]'){
+				var string=formatDate(yvar[i],Math.max(...yvar)-Math.min(...yvar))
+			} else {
+				var string=String(yvar[i])
+			}
+			var temp=snapobj.text(xpixelmin+ylab_width+chartobject.y_ticks.ytick_to_ylabel*ylabexist,0,string).attr({ident:'yaxis','font-size':chartobject.y_ticks.ytick_textsize,'font-weight':chartobject.y_ticks.ytick_textweight,'font-family':chartobject.y_ticks.ytick_textface,'text-anchor':'start'})
+			temp.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
+			var coords=temp.getBBox()
+			if(coords.x2>total_xoffset){total_xoffset=coords.x2}
+			temp.remove()
+		}
+	} else {
+		var total_xoffset=xpixelmin
 	}
 
 	// Subtract graph start x from xoffset and add ytick_to_yaxis to get the actual width of the xoffset.
 	// As a safeguard, if the yoffset width comes back huge, adjust it to 15% of graphing space.
 	// Long labels should wrap to be no larger than y_offset
-	// total_xoffset is now the width of all y-axis 'machiner' - labels, ticks, and space
+	// total_xoffset is now the width of all y-axis machinery - labels, ticks, and space
 	total_xoffset=total_xoffset-xpixelmin+chartobject.y_ticks.ytick_to_yaxis
 	if(total_xoffset>chartobject.y_ticks.ytick_maxsize*chartobject.width){total_xoffset=chartobject.y_ticks.ytick_maxsize*chartobject.width}
 
 	// now the full x-offset is known, can start drawing the x-axis. x label:
-	if (typeof(chartobject.xlabel)!=undefined){
+	if (typeof(chartobject.xlabel)!=undefined && drawx==1){
 		var lines=multitext(String(chartobject.xlabel),{'font-size':chartobject.x_label.xlabel_textsize,'font-weight':chartobject.x_label.xlabel_textweight,'font-family':chartobject.x_label.xlabel_textface},chartobject.x_label.xlabel_maxlength)
 		var xlab=snapobj.text((total_xoffset+xpixelmax+xpixelmin)/2,0,lines).attr({fill:chartobject.x_label.xlabel_textfill,ident:'xaxis','font-size':chartobject.x_label.xlabel_textsize,dy:'0.75em','font-weight':chartobject.x_label.xlabel_textweight,'font-family':chartobject.x_label.xlabel_textface,'text-anchor':'middle',colorchange:'fill',context:'text_context_menu'})
 		xlab.selectAll("tspan:not(:first-child)").attr({x:xlab.attr('x'),dy:parseInt(chartobject.x_label.xlabel_textsize)})
@@ -3604,8 +3663,7 @@ function draw_axes(xvar,yvar,shiftx,shifty,bounds,graphnum) {
 		xlab.attr({y:ypixelmax-xlab_height})
 		var xlabexist=1
 		if(xlab_height==0){xlabexist=0}
-	}
-	else{xlab_height=0;xlabexist=0}
+	} else{xlab_height=0;xlabexist=0}
 
 	// important parameters - the start and end of the x axis, domain, and x step size
 	var xstart_xcoord=total_xoffset+xpixelmin
@@ -3633,23 +3691,25 @@ function draw_axes(xvar,yvar,shiftx,shifty,bounds,graphnum) {
 	// x ticks and x lines - again no location, just figure out what the total y offset is
 	var xtickheight=0
 
-	for(var i=0;i<xvar.length;i++){
-		if(x_step<chartobject.x_ticks.xtick_maxsize*chartobject.width){maxwidth=x_step}
-		else{maxwidth=chartobject.x_ticks.xtick_maxsize*chartobject.width}
+	if(drawx==1){
+		for(var i=0;i<xvar.length;i++){
+			if(x_step<chartobject.x_ticks.xtick_maxsize*chartobject.width){maxwidth=x_step}
+			else{maxwidth=chartobject.x_ticks.xtick_maxsize*chartobject.width}
 
-		if(Object.prototype.toString.call(xvar[i])==='[object Date]'){
-			string=formatDate(xvar[i],Math.max(...xvar)-Math.min(...xvar))
-		} else {
-			string=String(xvar[i])
+			if(Object.prototype.toString.call(xvar[i])==='[object Date]'){
+				string=formatDate(xvar[i],Math.max(...xvar)-Math.min(...xvar))
+			} else {
+				string=String(xvar[i])
+			}
+
+			var lines=multitext(string,{ident:'xaxis','font-size':chartobject.x_ticks.xtick_textsize,'font-weight':chartobject.x_ticks.xtick_textweight,'font-family':chartobject.x_ticks.xtick_textface,dy:'0.3em','text-anchor':'middle'},maxwidth)
+			var temp=snapobj.text(0,parseInt(chartobject.x_ticks.xtick_textsize),lines).attr({fill:chartobject.x_ticks.xtick_textfill,ident:'xaxis','font-size':chartobject.x_ticks.xtick_textsize,'font-weight':chartobject.x_ticks.xtick_textweight,'font-family':chartobject.x_ticks.xtick_textface,'text-anchor':'middle',colorchange:'fill',context:'text_context_menu'})
+			temp.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
+			temp.selectAll("tspan:not(:first-child)").attr({x:temp.attr('x'),dy:parseFloat(chartobject.x_ticks.xtick_textsize)})
+			var coords=temp.getBBox()
+			if(coords.height*.8>xtickheight){xtickheight=coords.height*.8}
+			temp.remove()
 		}
-
-		var lines=multitext(string,{ident:'xaxis','font-size':chartobject.x_ticks.xtick_textsize,'font-weight':chartobject.x_ticks.xtick_textweight,'font-family':chartobject.x_ticks.xtick_textface,dy:'0.3em','text-anchor':'middle'},maxwidth)
-		var temp=snapobj.text(0,parseInt(chartobject.x_ticks.xtick_textsize),lines).attr({fill:chartobject.x_ticks.xtick_textfill,ident:'xaxis','font-size':chartobject.x_ticks.xtick_textsize,'font-weight':chartobject.x_ticks.xtick_textweight,'font-family':chartobject.x_ticks.xtick_textface,'text-anchor':'middle',colorchange:'fill',context:'text_context_menu'})
-		temp.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
-		temp.selectAll("tspan:not(:first-child)").attr({x:temp.attr('x'),dy:parseFloat(chartobject.x_ticks.xtick_textsize)})
-		var coords=temp.getBBox()
-		if(coords.height*.8>xtickheight){xtickheight=coords.height*.8}
-		temp.remove()
 	}
 
 	// now make a second pass on both axes and draw the actual ticks/lines/tick labels using known yoffset and xoffset
@@ -3658,21 +3718,23 @@ function draw_axes(xvar,yvar,shiftx,shifty,bounds,graphnum) {
 
 	for(var i=0;i<xvar.length;i++){
 		// x-axis labels
-		var mid=Math.abs((get_coord(xvar[0],chartobject.xlimits,[xstart_xcoord,xfinal_xcoord],xvar.dtype,xvar,0,chartobject.shiftx)-get_coord(xvar[1],chartobject.xlimits,[xstart_xcoord,xfinal_xcoord],xvar.dtype,xvar,0,chartobject.shiftx))/2)
-		var tempxmid=parseFloat(mid)+get_coord(xvar[i],chartobject.xlimits,[xstart_xcoord,xfinal_xcoord],xvar.dtype,xvar,0,chartobject.shiftx)
-
 		if(Object.prototype.toString.call(xvar[i])==='[object Date]'){
 			string=formatDate(xvar[i],Math.max(...xvar)-Math.min(...xvar))
 		} else {
 			string=String(xvar[i])
 		}
 
-		var lines=multitext(string,{fill:chartobject.x_ticks.xtick_textfill,ident:'xaxis','font-size':chartobject.x_ticks.xtick_textsize,'font-weight':chartobject.x_ticks.xtick_textweight,'font-family':chartobject.x_ticks.xtick_textface,dy:'0.75em','text-anchor':'middle',colorchange:'fill',context:'text_context_menu'},maxwidth)
 		var tempx=get_coord(xvar[i],chartobject.xlimits,[xstart_xcoord,xfinal_xcoord],xvar.dtype,xvar,0,chartobject.shiftx)
-		var temp=snapobj.text(tempx,ypixelmax-xlab_height-xlabexist*chartobject.x_ticks.xtick_to_xlabel-xtickheight,lines).attr({fill:chartobject.x_ticks.xtick_textfill,ident:'xaxis','font-size':chartobject.x_ticks.xtick_textsize,'font-weight':chartobject.x_ticks.xtick_textweight,'font-family':chartobject.x_ticks.xtick_textface,dy:'0.75em','text-anchor':'middle',colorchange:'fill',context:'text_context_menu'})
-		temp.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
-		temp.selectAll("tspan:not(:first-child)").attr({x:temp.attr('x'),dy:parseFloat(chartobject.x_ticks.xtick_textsize)})
-		var coords=temp.getBBox()
+		var mid=Math.abs((get_coord(xvar[0],chartobject.xlimits,[xstart_xcoord,xfinal_xcoord],xvar.dtype,xvar,0,chartobject.shiftx)-get_coord(xvar[1],chartobject.xlimits,[xstart_xcoord,xfinal_xcoord],xvar.dtype,xvar,0,chartobject.shiftx))/2)
+		var tempxmid=parseFloat(mid)+get_coord(xvar[i],chartobject.xlimits,[xstart_xcoord,xfinal_xcoord],xvar.dtype,xvar,0,chartobject.shiftx)
+		
+		if(drawx==1){
+			var lines=multitext(string,{fill:chartobject.x_ticks.xtick_textfill,ident:'xaxis','font-size':chartobject.x_ticks.xtick_textsize,'font-weight':chartobject.x_ticks.xtick_textweight,'font-family':chartobject.x_ticks.xtick_textface,dy:'0.75em','text-anchor':'middle',colorchange:'fill',context:'text_context_menu'},maxwidth)
+			var temp=snapobj.text(tempx,ypixelmax-xlab_height-xlabexist*chartobject.x_ticks.xtick_to_xlabel-xtickheight,lines).attr({fill:chartobject.x_ticks.xtick_textfill,ident:'xaxis','font-size':chartobject.x_ticks.xtick_textsize,'font-weight':chartobject.x_ticks.xtick_textweight,'font-family':chartobject.x_ticks.xtick_textface,dy:'0.75em','text-anchor':'middle',colorchange:'fill',context:'text_context_menu'})
+			temp.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
+			temp.selectAll("tspan:not(:first-child)").attr({x:temp.attr('x'),dy:parseFloat(chartobject.x_ticks.xtick_textsize)})
+			var coords=temp.getBBox()
+		}
 
 		// x-axis ticks, grid lines, and minor grid lines
 		y_start=ypixelmax-xlab_height-xlabexist*chartobject.x_ticks.xtick_to_xlabel-xtickheight-chartobject.x_ticks.xtick_to_xaxis-chartobject.x_ticks.xtick_length
@@ -3706,27 +3768,28 @@ function draw_axes(xvar,yvar,shiftx,shifty,bounds,graphnum) {
 	var maxwidth=(chartobject.y_ticks.ytick_maxsize*chartobject.width)-chartobject.grapharea.left_margin
 	// console.log(maxwidth)
 	for(var i=0;i<yvar.length;i++){
-		// y-axis labels		
-		var mid2=Math.abs((get_coord(yvar[0],chartobject.ylimits,[ystart_ycoord,yfinal_ycoord],yvar.dtype,yvar,1,chartobject.shifty)-get_coord(yvar[1],chartobject.ylimits,[ystart_ycoord,yfinal_ycoord],yvar.dtype,yvar,1,chartobject.shifty))/2)
-		var tempymid=get_coord(yvar[i],chartobject.ylimits,[ystart_ycoord,yfinal_ycoord],yvar.dtype,yvar,1,chartobject.shifty,chartobject.ybar)-parseFloat(mid2)
-		// console.log(tempymid,yvar[i],mid2)
 
 		if(Object.prototype.toString.call(yvar[i])==='[object Date]'){
 			string=formatDate(yvar[i],Math.max(...yvar)-Math.min(...yvar))
 		} else {
 			string=String(yvar[i])
+			console.log(string,yvar)
 		}
 
-		if (parseInt(string)>=1000 || parseInt(string)<=-1000){linesj=commas(string)}
+		// y-axis labels	
+		var mid2=Math.abs((get_coord(yvar[0],chartobject.ylimits,[ystart_ycoord,yfinal_ycoord],yvar.dtype,yvar,1,chartobject.shifty)-get_coord(yvar[1],chartobject.ylimits,[ystart_ycoord,yfinal_ycoord],yvar.dtype,yvar,1,chartobject.shifty))/2)
+		var tempymid=get_coord(yvar[i],chartobject.ylimits,[ystart_ycoord,yfinal_ycoord],yvar.dtype,yvar,1,chartobject.shifty,chartobject.ybar)-parseFloat(mid2)		
 		var tempy=get_coord(string,chartobject.ylimits,[ystart_ycoord,yfinal_ycoord],yvar.dtype,yvar,1,chartobject.shifty,chartobject.ybar)
+		console.log(tempy,string,chartobject.ylimits,[ystart_ycoord,yfinal_ycoord],yvar.dtype,yvar,1,chartobject.shifty,chartobject.ybar)
 
-		lines=multitext(string,{ident:'yaxis','font-size':chartobject.y_ticks.ytick_textsize,'font-weight':chartobject.y_ticks.ytick_textweight,'font-family':chartobject.y_ticks.ytick_textface,'text-anchor':'end'},maxwidth)
-		var temp=snapobj.text(xpixelmin+total_xoffset-chartobject.y_ticks.ytick_to_yaxis,tempy,lines).attr({fill:chartobject.y_ticks.ytick_textfill,ident:'yaxis','font-size':chartobject.y_ticks.ytick_textsize,'font-weight':chartobject.y_ticks.ytick_textweight,'font-family':chartobject.y_ticks.ytick_textface,dy:'0.3em','text-anchor':'end',colorchange:'fill',context:'text_context_menu'})
-		// console.log(temp.getBBox())
-		temp.selectAll("tspan:not(:first-child)").attr({x:temp.attr('x'),dy:parseInt(chartobject.y_ticks.ytick_textsize)})
-		temp.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
-		var coords=temp.getBBox()
-		// console.log("TICK COORDS",tempy,coords.y,coords.height,temp.getBBox())
+		if(drawy==1){
+			if (parseInt(string)>=1000 || parseInt(string)<=-1000){linesj=commas(string)}
+			lines=multitext(string,{ident:'yaxis','font-size':chartobject.y_ticks.ytick_textsize,'font-weight':chartobject.y_ticks.ytick_textweight,'font-family':chartobject.y_ticks.ytick_textface,'text-anchor':'end'},maxwidth)
+			var temp=snapobj.text(xpixelmin+total_xoffset-chartobject.y_ticks.ytick_to_yaxis,tempy,lines).attr({fill:chartobject.y_ticks.ytick_textfill,ident:'yaxis','font-size':chartobject.y_ticks.ytick_textsize,'font-weight':chartobject.y_ticks.ytick_textweight,'font-family':chartobject.y_ticks.ytick_textface,dy:'0.3em','text-anchor':'end',colorchange:'fill',context:'text_context_menu'})
+			temp.selectAll("tspan:not(:first-child)").attr({x:temp.attr('x'),dy:parseInt(chartobject.y_ticks.ytick_textsize)})
+			temp.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
+			var coords=temp.getBBox()
+		}
 
 		// y-axis ticks, grid lines, and minor grid lines
 		var temp_line=snapobj.line(xpixelmin+total_xoffset,tempy,xpixelmax,tempy).attr({stroke:chartobject.y_grids.ygrid_fill,'stroke-width':chartobject.y_grids.ygrid_thickness,'stroke-dasharray':chartobject.y_grids.ygrid_dasharray,opacity:chartobject.y_grids.ygrid_opacity,'shape-rendering':'crispEdges','obj_type':'gridline',graphnum:graphnum})
@@ -3745,16 +3808,11 @@ function draw_axes(xvar,yvar,shiftx,shifty,bounds,graphnum) {
 			} catch(err){}
 		}
 
-		// move the ylabel to the center of the y-axis and rotate
-		ylab.attr({y:ystart_ycoord+(yfinal_ycoord-ystart_ycoord)/2})
-		ylab.transform('r270')
-	}
-
-	// for top keys, shove the x-coord over so they are aligned with the start of the grid
-	key_elements=grapharea.selectAll('[ident2="keytop"]')
-	for(var i=0;i<key_elements.length;i++){
-		var item=key_elements[i]
-		item.attr({x:parseFloat(item.attr('x'))+parseFloat(xstart_xcoord)})
+		if(drawy==1){
+			// move the ylabel to the center of the y-axis and rotate
+			ylab.attr({y:ystart_ycoord+(yfinal_ycoord-ystart_ycoord)/2})
+			ylab.transform('r270')
+		}
 	}
 
 	return [xstart_xcoord,xfinal_xcoord,ystart_ycoord,yfinal_ycoord]

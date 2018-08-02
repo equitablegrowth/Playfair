@@ -504,6 +504,11 @@ function redraw(keep) {
 			} else {
 				chartobject.independent_axis=0
 			}
+			if($('#saxes').prop('checked')==true){
+				chartobject.shared_axis=1
+			} else {
+				chartobject.shared_axis=0
+			}
 
 			// initialize axes
 			chartobject.xaxis({'label':xlabel,'number_of_ticks':5,'decimal':undefined,'format':undefined})
