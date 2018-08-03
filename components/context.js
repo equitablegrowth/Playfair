@@ -195,7 +195,7 @@ function fadein(target) {
 	}}catch(err){}
 	opacity=parseFloat(item.attr('opacity'))
 
-	if(item.attr('ident')=='key'){
+	if(item.attr('ident').slice(0,3)=='key'){
 		group=item.attr('group')
 		snapobj.selectAll("[group='"+group+"']").attr({opacity:opacity+.1})
 	} else {
@@ -210,7 +210,7 @@ function fadeout(target) {
 	}}catch(err){}
 	opacity=parseFloat(item.attr('opacity'))
 
-	if(item.attr('ident')=='key'){
+	if(item.attr('ident').slice(0,3)=='key'){
 		group=item.attr('group')
 		snapobj.selectAll("[group='"+group+"']").attr({opacity:opacity-.1})
 	} else {
@@ -254,7 +254,7 @@ function change_color(target,color) {
 	console.log(item.attr('colorchange'))
 	if(item.attr('colorchange')=='fill'){
 		item.attr({fill:color})
-		if(item.attr('ident')=='key'){
+		if(item.attr('ident').slice(0,3)=='key'){
 			group=item.attr('group')
 			snapobj.selectAll("[group='"+group+"']").attr({fill:color})
 		}
@@ -266,14 +266,14 @@ function change_color(target,color) {
 			item.attr({'marker-end':tempamarker})
 		} else{
 			item.attr({stroke:color})
-			if(item.attr('ident')=='key'){
+			if(item.attr('ident').slice(0,3)=='key'){
 				group=item.attr('group')
 				snapobj.selectAll("[group='"+group+"']").attr({stroke:color})
 			}
 		}
 	} else if(item.attr('colorchange')=='both'){
 		item.attr({fill:color,stroke:color})
-		if(item.attr('ident')=='key'){
+		if(item.attr('ident').slice(0,3)=='key'){
 			group=item.attr('group')
 			snapobj.selectAll("[group='"+group+"']").attr({fill:color,stroke:color})
 		}
@@ -287,7 +287,7 @@ function change_color(target,color) {
 function change_linetype(target,attribute){
 	var item=Snap(target)
 	item.attr({'stroke-dasharray':attribute})
-	if(item.attr('ident')=='key'){
+	if(item.attr('ident').slice(0,3)=='key'){
 		group=item.attr('group')
 		snapobj.selectAll("[group='"+group+"']").attr({'stroke-dasharray':attribute})
 	}
@@ -532,7 +532,7 @@ function movetofront(e) {
 function pointsizeup(e) {
 	item=Snap(e)
 	item.attr({r:parseInt(item.attr('r'))+1})
-	if(item.attr('ident')=='key'){
+	if(item.attr('ident').slice(0,3)=='key'){
 		group=item.attr('group')
 		snapobj.selectAll("circle[group='"+group+"']").attr({'r':parseInt(item.attr('r'))})
 	}
@@ -542,7 +542,7 @@ function pointsizedown(e) {
 	item=Snap(e)
 	if(item.attr('r')>1){
 		item.attr({r:item.attr('r')-1})
-		if(item.attr('ident')=='key'){
+		if(item.attr('ident').slice(0,3)=='key'){
 			group=item.attr('group')
 			snapobj.selectAll("circle[group='"+group+"']").attr({'r':parseInt(item.attr('r'))})
 		}
@@ -557,20 +557,20 @@ function pointtype(e,type) {
 
 	if (type=='pointpoint' && sw!=0){
 		item.attr({'stroke-width':0,r:r-2,'fill-opacity':1})
-		if(item.attr('ident')=='key'){
+		if(item.attr('ident').slice(0,3)=='key'){
 			group=item.attr('group')
 			snapobj.selectAll("circle[group='"+group+"']").attr({'stroke-width':0,r:r-2,'fill-opacity':1})
 		}
 	} else if (type=='pointcircle'){
 		if (sw==0){
 			item.attr({'stroke-width':2,r:r+2,'fill-opacity':.2})
-			if(item.attr('ident')=='key'){
+			if(item.attr('ident').slice(0,3)=='key'){
 				group=item.attr('group')
 				snapobj.selectAll("circle[group='"+group+"']").attr({'stroke-width':2,r:r+2,'fill-opacity':.2})
 			}
 		} else {
 			item.attr({'stroke-width':2,'fill-opacity':.2})
-			if(item.attr('ident')=='key'){
+			if(item.attr('ident').slice(0,3)=='key'){
 				group=item.attr('group')
 				snapobj.selectAll("circle[group='"+group+"']").attr({'stroke-width':2,'fill-opacity':.2})
 			}
@@ -578,13 +578,13 @@ function pointtype(e,type) {
 	} else if (type=='pointcircleopen') {
 		if (sw==0){
 			item.attr({'stroke-width':1,r:r+2,'fill-opacity':0})
-			if(item.attr('ident')=='key'){
+			if(item.attr('ident').slice(0,3)=='key'){
 				group=item.attr('group')
 				snapobj.selectAll("circle[group='"+group+"']").attr({'stroke-width':1,r:r+2,'fill-opacity':0})
 			}
 		} else {
 			item.attr({'stroke-width':1,'fill-opacity':0})
-			if(item.attr('ident')=='key'){
+			if(item.attr('ident').slice(0,3)=='key'){
 				group=item.attr('group')
 				snapobj.selectAll("circle[group='"+group+"']").attr({'stroke-width':2,'fill-opacity':0})
 			}
@@ -596,7 +596,7 @@ function thinpath(e) {
 	item=Snap(e)
 	if (parseInt(item.attr('stroke-width'))>1){
 		item.attr({'stroke-width':parseInt(item.attr('stroke-width'))-1})
-		if(item.attr('ident')=='key'){
+		if(item.attr('ident').slice(0,3)=='key'){
 			group=item.attr('group')
 			snapobj.selectAll("path[group='"+group+"']").attr({'stroke-width':parseInt(item.attr('stroke-width'))})
 		}
@@ -606,7 +606,7 @@ function thinpath(e) {
 function thickpath(e) {
 	item=Snap(e)
 	item.attr({'stroke-width':parseInt(item.attr('stroke-width'))+1})
-	if(item.attr('ident')=='key'){
+	if(item.attr('ident').slice(0,3)=='key'){
 		group=item.attr('group')
 		snapobj.selectAll("path[group='"+group+"']").attr({'stroke-width':parseInt(item.attr('stroke-width'))})
 	}
@@ -616,7 +616,7 @@ function thincircle(e) {
 	item=Snap(e)
 	if (item.attr('r')>1){
 		item.attr({'r':parseFloat(item.attr('r'))-1})
-		if(item.attr('ident')=='key'){
+		if(item.attr('ident').slice(0,3)=='key'){
 			group=item.attr('group')
 			snapobj.selectAll("circle[group='"+group+"']").attr({'r':parseFloat(item.attr('r'))})
 		}
@@ -626,7 +626,7 @@ function thincircle(e) {
 function thickcircle(e) {
 	item=Snap(e)
 	item.attr({'r':parseFloat(item.attr('r'))+1})
-	if(item.attr('ident')=='key'){
+	if(item.attr('ident').slice(0,3)=='key'){
 		group=item.attr('group')
 		snapobj.selectAll("circle[group='"+group+"']").attr({'r':parseFloat(item.attr('r'))})
 	}

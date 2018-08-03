@@ -808,7 +808,7 @@ window.playfair = (function () {
 				// check if shared_axis is on and decide based on row/column if this graph will have axis labels drawn
 				// adjust bounds accordingly.
 				if(chartobject.shared_axis==1){
-					if(column % graph_obj.facets.facet_columns==1){
+					if(column==1){
 						var drawy=1
 						bounds[1]=bounds[1]+ytextwidth-(ytextwidth/graph_obj.facets.facet_columns)
 					} else {
@@ -816,7 +816,7 @@ window.playfair = (function () {
 						bounds[0]=bounds[0]+(ytextwidth/graph_obj.facets.facet_columns)*(graph_obj.facets.facet_columns-(column-1))
 						bounds[1]=bounds[1]+(ytextwidth/graph_obj.facets.facet_columns)*(graph_obj.facets.facet_columns-column)
 					}
-					if(i+1>uniquefvar.length-graph_obj.facets.facet_columns){
+					if(row==maxrows){
 						var drawx=1
 						bounds[2]=bounds[2]-xtextheight*((maxrows-1)/maxrows)
 					} else {
