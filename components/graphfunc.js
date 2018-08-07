@@ -499,11 +499,11 @@ function redraw(keep) {
 			} else {
 				chartobject.independent_key=0
 			}
-			if($('#iaxes').prop('checked')==true){
-				chartobject.independent_axis=1
-			} else {
-				chartobject.independent_axis=0
-			}
+			// if($('#iaxes').prop('checked')==true){
+			// 	chartobject.independent_axis=1
+			// } else {
+			// 	chartobject.independent_axis=0
+			// }
 			if($('#saxes').prop('checked')==true){
 				chartobject.shared_axis=1
 			} else {

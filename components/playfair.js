@@ -932,7 +932,9 @@ window.playfair = (function () {
 		}
 
 		// graph stroke
-		snapobj.rect(chartobject.x+chartobject.grapharea.graph_stroke_width/2,chartobject.y+chartobject.grapharea.graph_stroke_width/2,chartobject.width-chartobject.grapharea.graph_stroke_width,chartobject.height-chartobject.grapharea.graph_stroke_width).attr({strokeWidth:chartobject.grapharea.graph_stroke_width,stroke:chartobject.grapharea.graph_stroke_color,fill:'none'})
+		if(chartobject.grapharea.graph_stroke_width!=0){
+			snapobj.rect(chartobject.x+chartobject.grapharea.graph_stroke_width/2,chartobject.y+chartobject.grapharea.graph_stroke_width/2,chartobject.width-chartobject.grapharea.graph_stroke_width,chartobject.height-chartobject.grapharea.graph_stroke_width).attr({strokeWidth:chartobject.grapharea.graph_stroke_width,stroke:chartobject.grapharea.graph_stroke_color,fill:'none'})
+		}
 	}
 
 	Playfair.prototype.prepfooter = function(source,note,callback) {

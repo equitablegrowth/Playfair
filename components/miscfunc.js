@@ -278,7 +278,7 @@ function populate_settings(theme,cb){
 
 function export_settings(){
 	var set=$('#settings .v-nav .tab-content')
-	var savetheme={}
+	savetheme={}
 
 	for(var i=0;i<set.length;i++){
 		var id=set[i].id
@@ -290,25 +290,36 @@ function export_settings(){
 
 		for (var j=0;j<params.length;j++){
 			if($('#'+params[j]).val()==""){
-				savetheme[id.slice(5)][params[j]]=$('#'+params[j]).attr('placeholder')
+				if(isNaN(parseFloat($('#'+params[j]).attr('placeholder')))){
+					var attr=$('#'+params[j]).attr('placeholder')
+					var attr=attr.replace(/^"/g,'')
+					var attr=attr.replace(/"$/g,'')
+					var attr=attr.replace(/"/g,"'")
+					savetheme[id.slice(5)][params[j]]=attr
+				} else {
+					savetheme[id.slice(5)][params[j]]=parseFloat($('#'+params[j]).attr('placeholder'))
+				}
 			} else {
-				savetheme[id.slice(5)][params[j]]=$('#'+params[j]).val()
+				if(isNaN(parseFloat($('#'+params[j]).val()))){
+					var attr=$('#'+params[j]).val().replace(/"/g,'')
+					var attr=attr.replace(/^"/g,'')
+					var attr=attr.replace(/"$/g,'')
+					var attr=attr.replace(/"/g,"'")
+					savetheme[id.slice(5)][params[j]]=attr
+				} else {
+					savetheme[id.slice(5)][params[j]]=parseFloat($('#'+params[j]).val())
+				}
 			}
 		}
 	}
 
-	console.log(savetheme)
-
-	var data=encodeURIComponent(JSON.stringify(savetheme))
-	data=data.replace(/%5C/g,'')
-	data=data.replace(/%22%22/g,'%22')
-	data=data.replace(/%22%5B/g,'%5B')
-	data=data.replace(/%5D%22/g,'%5D')
-	data=data.replace(/%22([0-9.,]+)%22/g,'$1')
+	var data=JSON.stringify(savetheme)
+	data=data.replace(/'/g,'"')
+	data=data.replace(/"\[/g,'[')
+	data=data.replace(/]"/g,']')
 	
-	// console.log(data)
-	var neww=window.open("data:text/text,"+data,"_blank")
-	neww.focus()
+	var blob=new Blob([data],{type:'text/plain;charset-utf-8'})
+	saveAs(blob,'NewTheme.txt')
 }
 
 ///////////////////////// VERTICAL TABS ////////////////////////////////
