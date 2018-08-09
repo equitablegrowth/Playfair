@@ -110,9 +110,11 @@ $(document).ready(function(){
 					value=value.split('.')[0]
 					$('#themes').append($('<option>',{value:value}).text(value))
 				})
-
-				$("#themes").val('Equitable Growth')
+				// $('#themes').append($('<option>',{value:defaultTheme}).text(defaultTheme))
 				$('#themes').prop('disabled', false);
+				if(defaultTheme){
+					$("#themes").val(defaultTheme)
+				}
 				change_theme()
 			} catch(err){
 				change_theme()

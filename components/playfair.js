@@ -1047,7 +1047,7 @@ window.playfair = (function () {
 					graphobj.footer_height=source_height+logo_height+note_height+graphobj.footer.footer_toppad+graphobj.footer.footer_bottompad+graphobj.logo.logo_toppad+nts*graphobj.footer.note_to_source
 
 					// bump everything up to the top + toppad
-					var foot_fill=snapobj.rect(0,graphobj.y+graphobj.height-graphobj.footer_height,graphobj.y+graphobj.width,graphobj.footer_height).attr({id:'footerrect',fill:graphobj.footer.footerfill})
+					var foot_fill=snapobj.rect(0,Math.floor(graphobj.y+graphobj.height-graphobj.footer_height),graphobj.y+graphobj.width,graphobj.footer_height).attr({id:'footerrect',fill:graphobj.footer.footerfill})
 					console.log(graphobj.y+graphobj.height-graphobj.footer.footer_bottompad-logo_height,graphobj.y,graphobj.height,graphobj.footer.footer_bottompad,logo_height)
 					logo.attr({y:graphobj.y+graphobj.height-graphobj.footer.footer_bottompad-logo_height})
 					try{source.attr({y:graphobj.y+graphobj.height-graphobj.footer.footer_bottompad-logo_height-note_height-source_height-nts*graphobj.footer.note_to_source-graphobj.logo.logo_toppad})}catch(err){}
@@ -1062,7 +1062,7 @@ window.playfair = (function () {
 				}
 
 				if(logoposition=='right' || logoposition=='left'){
-					var foot_fill=snapobj.rect(0,graphobj.height-graphobj.footer_height,graphobj.width,graphobj.footer_height).attr({id:'footerrect',fill:graphobj.footer.footerfill})
+					var foot_fill=snapobj.rect(0,Math.floor(graphobj.height-graphobj.footer_height),graphobj.width,graphobj.footer_height).attr({id:'footerrect',fill:graphobj.footer.footerfill})
 					var foot_text=snapobj.selectAll("text[ident='foot']")
 					for (var i=0;i<foot_text.length;i++){
 						snapobj.append(foot_text[i])
@@ -1125,7 +1125,7 @@ window.playfair = (function () {
 				try{note.attr({y:graphobj.y+graphobj.height-graphobj.footer_height+graphobj.footer.footer_toppad+nts*graphobj.footer.note_to_source+source_height})}catch(err){}
 			}
 
-			var foot_fill=snapobj.rect(0,graphobj.height-graphobj.footer_height,graphobj.width,graphobj.footer_height).attr({id:'footerrect',fill:graphobj.footer.footerfill})
+			var foot_fill=snapobj.rect(0,Math.floor(graphobj.height-graphobj.footer_height),graphobj.width,graphobj.footer_height).attr({id:'footerrect',fill:graphobj.footer.footerfill})
 			snapobj.append(note)
 			snapobj.append(source)
 
@@ -1189,7 +1189,7 @@ window.playfair = (function () {
 		if(chartobject.hed=='' && chartobject.dek==''){chartobject.header.head_height=0}
 
 		// draw in background and move it to the back
-		var head_fill=snapobj.rect(0,0,chartobject.width,chartobject.header.head_height).attr({fill:chartobject.header.headerfill})
+		var head_fill=snapobj.rect(0,0,chartobject.width,Math.ceil(chartobject.header.head_height)).attr({fill:chartobject.header.headerfill})
 		snapobj.append(hed)
 		deks=snapobj.selectAll("text[ident='dek']")
 		for(var i=0;i<deks.length;i++){
@@ -1228,7 +1228,7 @@ window.playfair = (function () {
 // 3:{geom: "line", grouping: "type", group_value: "group b", group_variable: "z", xvar: "x", …}
 function construct_legend(){
 	var geom=preview()[0]
-	// console.log(geom)
+	var map=0
 	var legend=[chartobject.legendoptions]
 
 	// geom: {point:{xvar:x,yvar:y,grouping:{color:g1,type:g2}},line:{xvar:x,yvar:y,grouping:{color:g1,type:g2}}}
@@ -1237,6 +1237,7 @@ function construct_legend(){
 	var groupingvars_so_far=[]
 	var groupvarvalues_so_far=[]
 	for(var key in geom){
+		if(key=='map'){map=1}
 		var temp=geom[key]
 		// {point:{xvar:x,yvar:y,grouping:{color:g1,type:g2}},line:{xvar:x,yvar:y,grouping:{color:g1,type:g2}}}
 		var xvar=temp['xvar']
@@ -1328,12 +1329,16 @@ function construct_legend(){
 	}
 
 	var rows=legend.splice(1,)
-	rows=rows.sort(sortbyvalue)
-	rows=rows.sort(sortbygrouper)
+
+	if(map==1){
+		rows=rows.sort(sortbyvalue)
+	}
+	// rows=rows.sort(sortbygrouper)
 	var legend=[chartobject.legendoptions]
 	for(var i=0;i<rows.length;i++){
 		legend.push(rows[i])
 	}
+	console.log(legend)
 	return legend
 }
 
@@ -1341,7 +1346,7 @@ function construct_legend(){
 function draw_key(legend,playobj,snapobj,vertical,graphnum,bounds){
 	vertical=(typeof vertical!=='undefined') ? vertical:1;
 
-	//listener for drag events on a floating key
+	// listener for drag events on a floating key
 	// needs to listen only for its own group
 	var moveFuncfloat=function(dx,dy,posx,posy){
 		key_elements=grapharea.selectAll('[ident="key'+graphnum+'"]')
@@ -1440,10 +1445,11 @@ function draw_key(legend,playobj,snapobj,vertical,graphnum,bounds){
 
 			// element for key deletion
 			if(vertical==1){
-				var delrect=snapobj.rect(bounds[0],y,1,1).attr({fill:'red',fillOpacity:0,ident:'key'+graphnum,ident2:'floatkey',keyrow:i,delrect:1,pointerEvents:'none',delrecttype:'vertical'})
+				var delrect=snapobj.rect(bounds[0],y,1,1).attr({fill:'red',fillOpacity:0,ident:'key'+graphnum,ident2:'floatkey',keyrow:i,delrect:1,delrecttype:'vertical'})
 			} else {
-				var delrect=snapobj.rect(x,bounds[2]+yoffset+chartobject.legends.legend_bottompad,1,1).attr({fill:'red',fillOpacity:0,ident:'key'+graphnum,ident2:'floatkey',keyrow:i,delrect:1,pointerEvents:'none',delrecttype:'horizontal'})
+				var delrect=snapobj.rect(x,bounds[2]+yoffset+chartobject.legends.legend_bottompad,1,1).attr({fill:'red',fillOpacity:0,ident:'key'+graphnum,ident2:'floatkey',keyrow:i,delrect:1,delrecttype:'horizontal'})
 			}
+			delrect.drag(moveFuncfloat,function(){x=this.attr('x');y=this.attr('y');prevx=0;prevy=0});
 			g.append(delrect)
 
 			// text
@@ -1632,21 +1638,11 @@ function draw_key(legend,playobj,snapobj,vertical,graphnum,bounds){
 
 			if(vertical==1){
 				if(linetext.getBBox().x2-bounds[0]>longest){longest=linetext.getBBox().x2-bounds[0]}
-				delrect.attr({height:y-oldy})
+				delrect.attr({height:y-oldy,native_width:linetext.getBBox().x2-bounds[0]+playobj.legends.legend_rightpad})
 			} else {
-				delrect.attr({height:Math.max(linetext.getBBox().height,playobj.legends.legend_elementsize),width:linetext.getBBox().width+chartobject.legends.legend_elementsize+chartobject.legends.legend_element_to_text})
+				delrect.attr({height:Math.max(linetext.getBBox().height,playobj.legends.legend_elementsize),native_width:linetext.getBBox().width+chartobject.legends.legend_elementsize+chartobject.legends.legend_element_to_text})
 			}
 		}
-
-		// center title and expand floatkey box
-		// if(vertical==1){
-		// 	if(legend[0][1]!==''){longest=maxwidth}
-		// 	if(title){
-		// 		if(title.getBBox().width>parseFloat(longest)){
-		// 			longest=title.getBBox().width+playobj.legends.legend_leftpad
-		// 		}
-		// 	}
-		// }
 
 		if(vertical==1){
 			snapobj.selectAll("[delrect='1'][ident='key"+graphnum+"']").attr({width:longest+playobj.legends.legend_rightpad})
@@ -3138,13 +3134,13 @@ function draw_map(geom,snapobj,bounds){
 			var color_groups=get_color_groups_maps(geom)
 			for(var i=0;i<facetdata.length;i++){
 				var current=facetdata[i]
-				var location=current[geom.location].replace(/ /g,'')
+				var location=String(current[geom.location]).replace(/ /g,'')
 				var category=current[geom.grouping.category]
 				var color=chartobject.color_scales.sequential_color[color_groups.indexOf(category) % chartobject.color_scales.sequential_color.length]
 
 				// check class and id
-				try{g.select('.'+location).attr({fill:color,data_label:location,group:category})} catch(err){}
-				try{g.select('#'+location).attr({fill:color,data_label:location,group:category})} catch(err){}
+				try{g.select('[class="'+location+'"]').attr({fill:color,data_label:location,group:category})} catch(err){}
+				try{g.select('[id="'+location+'"]').attr({fill:color,data_label:location,group:category})} catch(err){}
 			}
 		}
 	})

@@ -77,7 +77,6 @@ function delkey(target) {
 	for(var i=0;i<remainingelements.length;i++){
 		var tempitem=Snap(remainingelements[i])
 		if(parseInt(tempitem.attr('keyrow'))>parseInt(rownum)){
-			console.log(tempitem)
 			if(tempitem.type=='circle'){
 				tempitem.attr({cy:tempitem.attr('cy')-rowheight})
 			} else if(tempitem.type=='line'){
@@ -95,6 +94,20 @@ function delkey(target) {
 			grapharea.select("[id='legendgroup"+graphnum.slice(3,4)+"']").remove()
 		}
 	}
+
+	// check native_width of remaining key elements and reduce width of keybox if necessary.
+	var delrects=snapobj.selectAll("[delrect='1'][ident='"+graphnum+"']")
+	var wid=0
+	for(var i=0;i<delrects.length;i++){
+		if(parseFloat(delrects[i].attr('native_width'))>wid){
+			wid=parseFloat(delrects[i].attr('native_width'))
+		}
+	}
+	if(chartobject.legendoptions[1]>wid){
+		wid=chartobject.legendoptions[1]
+	}
+	snapobj.select("[ident3='keybounder'][ident='"+graphnum+"']").attr({width:wid})
+	snapobj.selectAll("[delrect='1'][ident='"+graphnum+"']").attr({width:wid})
 }
 
 function boldtext(target) {

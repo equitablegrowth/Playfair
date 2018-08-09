@@ -296,7 +296,7 @@
 <!-- Header -->
 <div class='header'>
 	<h1 class='text-center'>playfair</h1>
-	<div class='h4'>compatible with <img height=20 src='img/chrome.png'>, <img height=25 src='img/firefox.png'>, and <img height=22 src='img/safari.png'><br>v2.4  <a href='changelog.html'>changelog</a></div>
+	<div class='h4'>compatible with <img height=20 src='img/chrome.png'>, <img height=25 src='img/firefox.png'>, and <img height=22 src='img/safari.png'><br>v2.5  <a href='changelog.html'>changelog</a></div>
 	<!-- Tabs -->
 	<ul class="nav nav-tabs" id='maintabs'>
 		<li class="active"><a data-toggle="tab" href="#data">Data</a></li>
@@ -1579,6 +1579,9 @@
 //////////////////////////////// BEGIN SCRIPT ////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
+// Uncomment and change this line if you want a theme to always show up pre-selected
+// var defaultTheme='newtheme'
+
 // Globals referenced by functions
 var loadresponse
 var loaded_data=0
@@ -1656,6 +1659,7 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 // offline.
 
 fonts=["Lato","PT Sans","Verdana","Georgia","Palatino","Garamond","Bookman","Arial","Helvetica","Impact","Courier","Courier New","Times","Times New Roman","Macondo","Archivo","Asap","Bree Serif","Cabin","Cuprum","Dosis","Fjalla One","Karma","Lora","Marvel","News Cycle","Nunito","Oswald","Ropa Sans","Rajdhani","Barlow"]
+webfonts=["Verdana","Georgia","Palatino","Garamond","Bookman","Arial","Helvetica","Impact","Courier","Courier New","Times","Times New Roman"]
 fonts.sort()
 
 ///////////////////////// COLORMENU SETUP //////////////////////////////

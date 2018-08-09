@@ -519,7 +519,9 @@ function redraw(keep) {
 			for(var key in style){
 				for(var sub in theme[key]){
 					if(fonts.indexOf(style[key][sub])!=-1){
-						fontloads.push(style[key][sub])
+						if(webfonts.indexOf(style[key][sub])==-1){
+							fontloads.push(style[key][sub])
+						}
 					}
 				}
 			}
@@ -613,6 +615,8 @@ function redraw(keep) {
 						}
 					}
 				})
+			}, function(){
+				alert("Couldn't load one or more fonts. Try again in a few seconds or check to see if your theme calls for fonts that Playfair does not have access to.")
 			})
 		} 
 		else {

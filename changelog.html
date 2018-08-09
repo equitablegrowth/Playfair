@@ -14,7 +14,7 @@ body{width:700px;margin-left:auto;margin-right:auto;padding-top:22px;padding-bot
 
 <body>
 <h2>playfair</h2>
-<h1>v2.4</h1>
+<h1>v2.5</h1>
 <ul>
 <li>You can now make small multiples! Add a variable to your dataset that separates out the graphs and use the small multiples pane. There are probably bugs.</li>
 <li>Better, more consistent, more correct placement of items according to parameters. You may find that existing themes need to be altered to achieve the exact positioning they had in the previous version.</li>
@@ -35,6 +35,8 @@ body{width:700px;margin-left:auto;margin-right:auto;padding-top:22px;padding-bot
 <li>Instead of editing legend items in the legend tab, edit them on graph by right-clicking and selecting the x to remove a key item.</li>
 <li>Fixed a bug where charts with dark backgrounds could show small seams between the header/chart region/footer</li>
 <li>Fixed a bug where themes could not be saved out in Chrome</li>
+<li>Fixed a bunch of bugs with maps, mostly related to keys for maps</li>
+<li>If you want a theme to always load as default, change the value of defaultTheme in playfair.html</li>
 </ul>
 
 <h1>v2.4</h1>
@@ -175,7 +177,6 @@ body{width:700px;margin-left:auto;margin-right:auto;padding-top:22px;padding-bot
 <li> Fixed a bug with loading a graph and rotated text</li>
 <li> Slightly changed the default leftmargin variable</li>
 <li> Data parser now ignores trailing carriage returns. Should make it a little more robust to human error when pasting in from excel.</li>
-<li> Disabled nologo graphs. Use a logo, or else!</li>
 <li> Contextual menus will now appear higher on the screen if they would be truncated by the bottom of your browser window</li>
 <li> You can now choose &#39;move to front&#39; in contextual menus to move a data element or path in front of other elements</li>
 <li> Fixed a bug where loading a graph with multiple trendlines would not load those trendlines into the frontend interface</li>
@@ -227,13 +228,11 @@ body{width:700px;margin-left:auto;margin-right:auto;padding-top:22px;padding-bot
 <li> You can delete callouts and arrows now (no seriously this time you really can)</li>
 <li> Now supports more of the date formats that I claimed it supported in the first place (thanks Ben)</li>
 <li> Recession shading now supported in Firefox</li>
-<li> Support for dates in the form &#39;1992q1&#39;</li>
 </ul>
 
 <h1>v0.6</h1>
 <ul>
 <li> Fixed a bug that made the logo appear blurry.</li>
-<li> New tools splash screen</li>
 </ul>
 
 <h1>v0.5</h1>
@@ -250,7 +249,7 @@ body{width:700px;margin-left:auto;margin-right:auto;padding-top:22px;padding-bot
 
 <h1>v0.3</h1>
 <ul>
-<li> You can now choose a custom height and width for you graph. You should generally stick to a width of 745 pixels as this is the width of columns on our website. Height can be anything though. Also of note  reducing the width won&#39;t do much for you. We currently lack the ability to flow text around an image, so you can&#39;t have a leftaligned graph with text around it. This feature is pretty experimental, see if you can break it maybe?</li>
+<li> You can now choose a custom height and width for you graph.</li>
 <li> You can now have multiple trend lines on a graph  just press the &#39;+&#39; button to bring up another one. I know the interface is a bit of a mess right now  bear with me. By default they will all be labeled &#39;Trend Line&#39; but you can rightclick to delete these text elements. You can also now have vertical trendlines by entering &#39;&#39; as the slope and the desired xintercept as the intercept. As with other line elements, you can rightclick a trend line  to make it dashed, thicker or thinner, or change the color.</li>
 <li> You can now delete callouts and arrows you have placed on the graph by rightclicking on them and picking &#39;delete&#39;.</li>
 <li> You can now change the visual appearance of points in scatter/line plots. In particular you can now select a smaller, solid point that looks better in time series. You can select this in the line/scatter styles section or by rightclicking on a point and selecting the point style you want.</li>
