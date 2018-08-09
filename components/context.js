@@ -8,6 +8,7 @@ $(function() {
 	$(svgarea).on("contextmenu", function (e) {
 		height2=window.innerHeight
 		width2=window.innerWidth
+		// var item=Snap(e.target)
 
 		legend_string=''
 		if(item.parent().node.id.slice(0,item.parent().node.id.length-1)=='legendgroup') {

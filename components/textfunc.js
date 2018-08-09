@@ -447,7 +447,7 @@ var down_listener=function(ev) {
 
 // listener for text
 var press_listener=function(ev) {
-	var keycode = (ev.charCode ? ev.keyCode : ev.which)
+	var keycode = (ev.which || ev.charCode || ev.keyCode || 0)
 	var modcode = (ev.keyCode)
 	// console.log(keycode)
 	// handle carriage returns
