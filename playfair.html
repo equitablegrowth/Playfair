@@ -328,7 +328,7 @@
 			<div class='tab-content'>
 				<div class='row'>
 					<div class='col-md-12'>
-						<textarea id='data_text' rows="6" onchange=loadData() placeholder='Paste your data into this box. You can paste directly from Excel or a CSV. Make sure you include the column headers and check the box that appears to make sure your data was parsed correctly.'></textarea>
+						<textarea id='data_text' rows="6" autocomplete="off" onchange=loadData() placeholder='Paste your data into this box. You can paste directly from Excel or a CSV. Make sure you include the column headers and check the box that appears to make sure your data was parsed correctly.'></textarea>
 					</div>
 				</div>
 
@@ -611,7 +611,7 @@
 				<li tab='chart_stackedbar'>Stacked Bars</li>
 				<li tab='chart_area'>Area</li>
 				<li tab='chart_text'>Text</li>
-				<li tab='chart_text'>Segments/Trend Lines</li>
+				<li tab='chart_text'>Segments/Trends</li>
 				<li tab='chart_text'>Shading</li>
 				<li tab='chart_text'>Steps</li>
 				<li tab='chart_text'>Rectangles</li>
@@ -1580,7 +1580,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // Uncomment and change this line if you want a theme to always show up pre-selected
-// var defaultTheme='newtheme'
+var defaultTheme='Equitable Growth'
 
 // Globals referenced by functions
 var loadresponse
