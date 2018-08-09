@@ -26,6 +26,7 @@ function changedimensions() {
 function preview() {
 	// set up geom_dict by looking at all the stuff in chart and gathering variables as appropriate
 	var geom_dict={}
+	var facet={}
 	var ready=0
 
 	if($("#map_location").val()!='none' & ($("#map_category").val()!='none' | $("#map_values").val()!='none')){
@@ -66,10 +67,30 @@ function preview() {
 				var a=datadict[i][values]
 				datadict[i][category]=pick_cat(a)
 			}
+
+			function object_sort(a,b){
+				if(a[geom.values]<b[geom.values]){
+					return -1
+				}
+				if(a[geom.values]>b[geom.values]){
+					return 1
+				}
+				return 0
+			}
+
+			// facetdata=facetdata.sort(object_sort)
 		}
 
 		geom_dict['map']={'location':location,'geography':geography,'values':values,'grouping':{'category':category}}
 		ready=1
+	}
+
+	if($("#facet_variable").val()!='none'){
+		var facet_variable=$("#facet_variable").val()
+		var facet_columns=$("#fcolumns").val()
+		if(facet_columns==''){facet_columns=1}
+
+		facet={'facet_variable':facet_variable,'facet_columns':facet_columns}
 	}
 
 	if($("#point_select_x").val()!='none' & $("#point_select_y").val()!='none'){
@@ -197,6 +218,7 @@ function preview() {
 		var x_var=$("#shade_select_x").val()
 		var y_var=$("#shade_select_y").val()
 		var label=$("#shade_label").val()
+		if(label==''){label='Shading'}
 
 		if(x_var!==''){
 			var temp=x_var.split('],[')
@@ -274,7 +296,7 @@ function preview() {
 		ready=1
 	}
 
-	return [geom_dict,ready]
+	return [geom_dict,ready,facet]
 }
 
 // redraw is the main graphing setup function. Gets variable values and passes them to playfair.js
@@ -296,6 +318,7 @@ function redraw(keep) {
 		var prev=preview()
 		var ready=prev[1]
 		var geom_dict=prev[0]
+		var facets=prev[2]
 
 		// grab all text elements from the design tab
 		var hed=$("#hed").val()
@@ -306,27 +329,6 @@ function redraw(keep) {
 		var ylabel=$("#ylabel").val()
 
 		if (ready==1) {
-			// check legends box and retrieve whatever is in there as an object to pass to playfair
-			var legtitle=$("#legtitle").val()
-			var legwidth=$("#legwidth").val()
-			var legend=[[legtitle,legwidth]]
-			var g=0
-			var o=0
-			$('#PREVIEW ul').each(function(){
-				var i=0
-				$(this).find('li').each(function(){
-					var ligeoms=$(this).attr('data-geom').split(',')
-					console.log(ligeoms)
-					for(var i=0;i<ligeoms.length;i++){
-						var item={'geom':ligeoms[i],'grouping':$(this).attr('data-grouping'),'group_value':$(this).attr('data-group_value'),group_variable:$(this).attr('data-group_variable'),xvar:$(this).attr('data-xvar'),yvar:$(this).attr('data-yvar'),groupnumeric:$(this).attr('data-groupnumeric'),position:i,lgroup:g,overall:o}
-						legend.push(item)
-					}
-					i=i+1
-					o=o+1
-				})
-				g=g+1
-			})
-
 			// initialize playfair.js. First use init_graph to set up workspace, then call the
 			// data method to set up data and variables.
 
@@ -359,7 +361,14 @@ function redraw(keep) {
 
 			chartobject=playfair.init_graph(grapharea,0,0,width,height)
 			console.log(geom_dict)
-			chartobject.data(final_data,geom_dict)
+			chartobject.data(final_data,geom_dict,facets)
+
+			// check legends box and retrieve whatever is in there as an object to pass to playfair
+			var legtitle=$("#legtitle").val()
+			var legwidth=$("#legwidth").val()
+			var horizontal=document.getElementById('horizontalkey').checked
+			if(horizontal==false){var vertical=1}else{var vertical=0}
+			chartobject.legendoptions=[legtitle,legwidth,vertical]
 
 			// initialize styling, the header, and the footer. The footer loads an image (the logo)
 			// and so callouts after it need to be written as callbacks to the footer function.
@@ -372,7 +381,8 @@ function redraw(keep) {
 			var yminorgrid=document.getElementById('yminorgrid').checked
 
 			// legend
-			var legendloc=$('input[name=key]:checked').val()
+			// var legendloc=$('input[name=key]:checked').val()
+			var legendloc="float"
 
 			// barchart specific
 			barspace=document.getElementById('spacing').checked
@@ -382,9 +392,9 @@ function redraw(keep) {
 
 			// create the style object
 			if(typeof theme !== 'undefined'){
-				style=default_style(theme)
+				var style=default_style(theme)
 			} else {
-				style=default_style()
+				var style=default_style()
 			}
 
 			// logo
@@ -483,92 +493,130 @@ function redraw(keep) {
 			change_colormenu(style)
 			change_linetypemenu(style)
 
+			// get independent axes and independent legends values
+			if($('#ilegends').prop('checked')==true){
+				chartobject.independent_key=1
+			} else {
+				chartobject.independent_key=0
+			}
+			// if($('#iaxes').prop('checked')==true){
+			// 	chartobject.independent_axis=1
+			// } else {
+			// 	chartobject.independent_axis=0
+			// }
+			if($('#saxes').prop('checked')==true){
+				chartobject.shared_axis=1
+			} else {
+				chartobject.shared_axis=0
+			}
+
 			// initialize axes
 			chartobject.xaxis({'label':xlabel,'number_of_ticks':5,'decimal':undefined,'format':undefined})
 			chartobject.yaxis({'label':ylabel,'number_of_ticks':5,'decimal':undefined,'format':undefined})
 
-			chartobject.prepheader(hed,dek)
-			chartobject.prepfooter(source,note,function(){
-				// draw the initial graph, dependent on current value of graph_type
-				// 5/24 changed this because... I'm not sure I want graph_type to decide anything
-				// it's still here so maybe this is the right way to go but right now there are only 2 options:
-				// maps and charts. I think maps should just override charts.
-				// if (graph_type=='Chart') {
-				if ($('#customx').val()!='' && $("#customxcheck").prop('checked')==true){
-					chartobject.xarray=$('#customx').val().split(',')
-				}
-				if ($('#customy').val()!='' && $("#customycheck").prop('checked')==true){
-					chartobject.yarray=$('#customy').val().split(',')
-				}
-
-				if ($('#xlimits').val()!='' && $("#xlimitscheck").prop('checked')==true){
-					chartobject.xlimits=$('#xlimits').val().split(',')
-				} 
-				if ($('#ylimits').val()!='' && $("#ylimitscheck").prop('checked')==true){
-					chartobject.ylimits=$('#ylimits').val().split(',')
-				} 
-
-				console.log(chartobject)
-				chartobject.chart(legend)
-
-				// push the calculated yaxis and xaxis to the front-end interface boxes
-				try{
-					if(Object.prototype.toString.call(chartobject.xarray[0])==='[object Date]'){
-						temp=[]
-						for(var i=0;i<chartobject.xarray.length;i++){
-							temp.push((chartobject.xarray[i].getUTCMonth()+1)+'/'+chartobject.xarray[i].getUTCDate()+'/'+chartobject.xarray[i].getUTCFullYear())
-						}
-						$('#customx').val(temp)
-					} else{
-						$('#customx').val(chartobject.xarray)
-					}
-				} catch(err){}
-
-				try{
-					if(Object.prototype.toString.call(chartobject.yarray[0])==='[object Date]'){
-						temp=[]
-						for(var i=0;i<chartobject.yarray.length;i++){
-							temp.push((chartobject.yarray[i].getUTCMonth()+1)+'/'+chartobject.yarray[i].getUTCDate()+'/'+chartobject.yarray[i].getUTCFullYear())
-						}
-						$('#customy').val(temp)
-					} else{
-						$('#customy').val(chartobject.yarray)
-					}
-				} catch(err){}
-
-				if(keep){
-					// bring annotations to front
-					var ann=grapharea.selectAll('[annotation]')
-
-					for(var i=0;i<ann.length;i++){
-						if(ann[i].attr('arrow')){
-							var color=ann[i].attr()['stroke']
-							var temparrow = grapharea.path('M0,0 L0,4 L6,2 L0,0').attr({fill:color})
-							var tempamarker = temparrow.marker(0,0,6,4,0,2).attr({fill:color});
-							ann[i].attr({'marker-end':tempamarker})
-						}
-						grapharea.append(ann[i])
-					}
-
-					// position key to match previous draw
-					var keys=grapharea.selectAll('[ident2="floatkey"]')
-					for(var i=0;i<keys.length;i++){
-						coords=keys[i].getBBox()
-						if(keys[i].type=='circle'){
-							keys[i].attr({cx:coords.cx+boundsx,cy:coords.cy+boundsy})
-						} else if (keys[i].type=='line'){
-							console.log(coords)
-							keys[i].attr({x1:coords.x+boundsx,y1:coords.y+boundsy,x2:coords.x2+boundsx,y2:coords.y2+boundsy})
-						} else if (keys[i].type=='text'){
-							keys[i].selectAll("tspan:not(:first-child)").attr({x:coords.x+boundsx,dy:parseFloat(Snap(keys[i]).attr('font-size'))})
-							keys[i].attr({x:coords.x+boundsx,y:coords.y+boundsy})
-						} else if (keys[i].type=='path'){
-							keys[i].transform('t'+boundsx+','+boundsy)
-						} else {
-							keys[i].attr({x:coords.x+boundsx,y:coords.y+boundsy})
+			// load necessary fonts
+			var fontloads=[]
+			for(var key in style){
+				for(var sub in theme[key]){
+					if(fonts.indexOf(style[key][sub])!=-1){
+						if(webfonts.indexOf(style[key][sub])==-1){
+							fontloads.push(style[key][sub])
 						}
 					}
 				}
+			}
+
+			fontloads=[...new Set(fontloads)]
+			console.log(fontloads)
+
+			var loadedfonts=[]
+			for(var i=0;i<fontloads.length;i++){
+				loadedfonts.push(new FontFaceObserver(fontloads[i]).load())
+			}
+
+			Promise.all(loadedfonts).then(function(){
+				console.log('loaded fonts successfully')
+				// draw footer and header
+				chartobject.prepheader(hed,dek)
+				chartobject.prepfooter(source,note,function(){
+					// draw the initial graph
+					if ($('#customx').val()!='' && $("#customxcheck").prop('checked')==true){
+						chartobject.xarray=$('#customx').val().split(',')
+					}
+					if ($('#customy').val()!='' && $("#customycheck").prop('checked')==true){
+						chartobject.yarray=$('#customy').val().split(',')
+					}
+
+					if ($('#xlimits').val()!='' && $("#xlimitscheck").prop('checked')==true){
+						chartobject.xlimits=$('#xlimits').val().split(',')
+					} 
+					if ($('#ylimits').val()!='' && $("#ylimitscheck").prop('checked')==true){
+						chartobject.ylimits=$('#ylimits').val().split(',')
+					} 
+
+					chartobject.chart(legend)
+
+					// push the calculated yaxis and xaxis to the front-end interface boxes
+					try{
+						if(Object.prototype.toString.call(chartobject.xarray[0])==='[object Date]'){
+							temp=[]
+							for(var i=0;i<chartobject.xarray.length;i++){
+								temp.push((chartobject.xarray[i].getUTCMonth()+1)+'/'+chartobject.xarray[i].getUTCDate()+'/'+chartobject.xarray[i].getUTCFullYear())
+							}
+							$('#customx').val(temp)
+						} else{
+							$('#customx').val(chartobject.xarray)
+						}
+					} catch(err){}
+
+					try{
+						if(Object.prototype.toString.call(chartobject.yarray[0])==='[object Date]'){
+							temp=[]
+							for(var i=0;i<chartobject.yarray.length;i++){
+								temp.push((chartobject.yarray[i].getUTCMonth()+1)+'/'+chartobject.yarray[i].getUTCDate()+'/'+chartobject.yarray[i].getUTCFullYear())
+							}
+							$('#customy').val(temp)
+						} else{
+							$('#customy').val(chartobject.yarray)
+						}
+					} catch(err){}
+
+					if(keep){
+						// bring annotations to front
+						var ann=grapharea.selectAll('[annotation]')
+
+						for(var i=0;i<ann.length;i++){
+							if(ann[i].attr('arrow')){
+								var color=ann[i].attr()['stroke']
+								var temparrow = grapharea.path('M0,0 L0,4 L6,2 L0,0').attr({fill:color})
+								var tempamarker = temparrow.marker(0,0,6,4,0,2).attr({fill:color});
+								ann[i].attr({'marker-end':tempamarker})
+							}
+							grapharea.append(ann[i])
+						}
+
+						// position key to match previous draw
+						var keys=grapharea.selectAll('[ident2="floatkey"]')
+						for(var i=0;i<keys.length;i++){
+							coords=keys[i].getBBox()
+							if(keys[i].type=='circle'){
+								keys[i].attr({cx:coords.cx+boundsx,cy:coords.cy+boundsy})
+							} else if (keys[i].type=='line'){
+								console.log(coords)
+								keys[i].attr({x1:coords.x+boundsx,y1:coords.y+boundsy,x2:coords.x2+boundsx,y2:coords.y2+boundsy})
+							} else if (keys[i].type=='text'){
+								keys[i].selectAll("tspan:not(:first-child)").attr({x:coords.x+boundsx,dy:parseFloat(Snap(keys[i]).attr('font-size'))})
+								keys[i].attr({x:coords.x+boundsx,y:coords.y+boundsy+chartobject.legends.legend_elementsize,dy:"-0.25em"})
+							} else if (keys[i].type=='path'){
+								keys[i].transform('t'+boundsx+','+boundsy)
+							} else {
+								keys[i].attr({x:coords.x+boundsx,y:coords.y+boundsy})
+							}
+						}
+					}
+				})
+			}, function(){
+				alert("Couldn't load one or more fonts. Try again in a few seconds or check to see if your theme calls for fonts that Playfair does not have access to.")
 			})
 		} 
 		else {

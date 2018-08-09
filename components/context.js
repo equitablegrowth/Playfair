@@ -2,7 +2,6 @@
 // Handling right-clicks on various graph elements to allow the user to
 // change text, label data, insert callouts and etc.
 
-
 $(function() {
 	var svgarea=document.getElementById('grapharea')
 	var doubleClicked = false;
@@ -10,20 +9,27 @@ $(function() {
 		height2=window.innerHeight
 		width2=window.innerWidth
 
+		legend_string=''
+		if(item.parent().node.id.slice(0,item.parent().node.id.length-1)=='legendgroup') {
+			// contextual menu add-on for legend
+			legend_string="<hr><ul class='contextMenu'><li class='highlight' onclick=delkey(clickedevent.target)><i class='fa fa-times'></i> Key Item</li></ul>"
+		}
+
 		if(doubleClicked == false && drawpath!=1) {
 			disableScroll()
 			if(e.target.attributes.context){
-				menu='#'+e.target.attributes.context.value
+				var menu='#'+e.target.attributes.context.value
 			} else if(e.target.nodeName=='tspan'){
-				menu='#text_context_menu'
+				var menu='#text_context_menu'
 			} else {
-				menu='#other_context_menu'
+				var menu='#other_context_menu'
 			}
 			console.log(e.target.attributes.context)
 			console.log(menu)
 
 			clickedevent=e
 			e.preventDefault();
+			$('.legendextras').append(legend_string)
 			$(menu).css("left", e.clientX-1);
 			$(menu).css("top", e.clientY-2);
 			$(menu).fadeIn(50, FocusContextOut());
@@ -38,12 +44,14 @@ $(function() {
 		} else {
 			e.preventDefault();
 			doubleClicked = false;
+			$('.legendextras').empty()
 			$(".contextMenuContainer").fadeOut(100);
 		}
 	});
 	function FocusContextOut() {
 		$(document).on("click", function () {
-			doubleClicked = false; 
+			doubleClicked = false;
+			$('.legendextras').empty()
 			$(".contextMenuContainer").fadeOut(100);
 			enableScroll()
 		});
@@ -56,6 +64,51 @@ $(function() {
 		e.preventDefault();
 	})
 })
+
+function delkey(target) {
+	var item=Snap(target)
+	try{if(target.nodeName=='tspan'){item=item.parent()}}catch(err){}
+	var graphnum=item.attr('ident')
+	var rownum=item.attr('keyrow')
+	var rowheight=grapharea.selectAll("[keyrow='"+rownum+"'][ident='"+graphnum+"'][delrect='1']").getBBox().height
+	grapharea.selectAll("[keyrow='"+rownum+"'][ident='"+graphnum+"']").remove()
+	grapharea.select("[ident='"+graphnum+"'][ident3='keybounder']").attr({height:grapharea.select("[ident='"+graphnum+"'][ident3='keybounder']").getBBox().height-rowheight})
+	var remainingelements=grapharea.selectAll("[ident='"+graphnum+"']")
+	for(var i=0;i<remainingelements.length;i++){
+		var tempitem=Snap(remainingelements[i])
+		if(parseInt(tempitem.attr('keyrow'))>parseInt(rownum)){
+			if(tempitem.type=='circle'){
+				tempitem.attr({cy:tempitem.attr('cy')-rowheight})
+			} else if(tempitem.type=='line'){
+				tempitem.attr({y1:tempitem.attr('y1')-rowheight,y2:tempitem.attr('y2')-rowheight})
+			} else if(tempitem.type=='text'){
+				// tempitem.selectAll("tspan:not(:first-child)").attr({y:coords.x-prevx+dx})
+				tempitem.attr({y:tempitem.attr('y')-rowheight})
+			} else {
+				tempitem.attr({y:tempitem.attr('y')-rowheight})
+			}
+		}
+
+		// delete keyboarder if all elements are gone.
+		if(grapharea.select("[id='legendgroup"+graphnum.slice(3,4)+"']").children().length==1){
+			grapharea.select("[id='legendgroup"+graphnum.slice(3,4)+"']").remove()
+		}
+	}
+
+	// check native_width of remaining key elements and reduce width of keybox if necessary.
+	var delrects=snapobj.selectAll("[delrect='1'][ident='"+graphnum+"']")
+	var wid=0
+	for(var i=0;i<delrects.length;i++){
+		if(parseFloat(delrects[i].attr('native_width'))>wid){
+			wid=parseFloat(delrects[i].attr('native_width'))
+		}
+	}
+	if(chartobject.legendoptions[1]>wid){
+		wid=chartobject.legendoptions[1]
+	}
+	snapobj.select("[ident3='keybounder'][ident='"+graphnum+"']").attr({width:wid})
+	snapobj.selectAll("[delrect='1'][ident='"+graphnum+"']").attr({width:wid})
+}
 
 function boldtext(target) {
 	var item=Snap(target)
@@ -155,7 +208,7 @@ function fadein(target) {
 	}}catch(err){}
 	opacity=parseFloat(item.attr('opacity'))
 
-	if(item.attr('ident')=='key'){
+	if(item.attr('ident').slice(0,3)=='key'){
 		group=item.attr('group')
 		snapobj.selectAll("[group='"+group+"']").attr({opacity:opacity+.1})
 	} else {
@@ -170,7 +223,7 @@ function fadeout(target) {
 	}}catch(err){}
 	opacity=parseFloat(item.attr('opacity'))
 
-	if(item.attr('ident')=='key'){
+	if(item.attr('ident').slice(0,3)=='key'){
 		group=item.attr('group')
 		snapobj.selectAll("[group='"+group+"']").attr({opacity:opacity-.1})
 	} else {
@@ -199,7 +252,7 @@ function addtext(target) {
 		var annofill='black'
 	}
 
-	var text=grapharea.text(target.clientX-svgx,target.clientY-svgy,'Text Annotation').attr({'font-family':annoface,'font-size':annosize,'text-anchor':'start','fill':annofill,'font-weight':annoweight,'dominant-baseline':'text-before-edge',cursor:'pointer',colorchange:'fill',context:'text_context_menu',annotation:1})
+	var text=grapharea.text(target.clientX-svgx,target.clientY-svgy,'Text Annotation').attr({'font-family':annoface,'font-size':annosize,'text-anchor':'start','fill':annofill,'font-weight':annoweight,dy:'0.7em',cursor:'pointer',colorchange:'fill',context:'text_context_menu',annotation:1})
 	console.log(text,annosize)
 	text.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 }
@@ -214,7 +267,7 @@ function change_color(target,color) {
 	console.log(item.attr('colorchange'))
 	if(item.attr('colorchange')=='fill'){
 		item.attr({fill:color})
-		if(item.attr('ident')=='key'){
+		if(item.attr('ident').slice(0,3)=='key'){
 			group=item.attr('group')
 			snapobj.selectAll("[group='"+group+"']").attr({fill:color})
 		}
@@ -226,14 +279,14 @@ function change_color(target,color) {
 			item.attr({'marker-end':tempamarker})
 		} else{
 			item.attr({stroke:color})
-			if(item.attr('ident')=='key'){
+			if(item.attr('ident').slice(0,3)=='key'){
 				group=item.attr('group')
 				snapobj.selectAll("[group='"+group+"']").attr({stroke:color})
 			}
 		}
 	} else if(item.attr('colorchange')=='both'){
 		item.attr({fill:color,stroke:color})
-		if(item.attr('ident')=='key'){
+		if(item.attr('ident').slice(0,3)=='key'){
 			group=item.attr('group')
 			snapobj.selectAll("[group='"+group+"']").attr({fill:color,stroke:color})
 		}
@@ -247,7 +300,7 @@ function change_color(target,color) {
 function change_linetype(target,attribute){
 	var item=Snap(target)
 	item.attr({'stroke-dasharray':attribute})
-	if(item.attr('ident')=='key'){
+	if(item.attr('ident').slice(0,3)=='key'){
 		group=item.attr('group')
 		snapobj.selectAll("[group='"+group+"']").attr({'stroke-dasharray':attribute})
 	}
@@ -259,19 +312,19 @@ function labeldata(target) {
 		coords=item.getBBox()
 		if(item.attr('orient')=='vertical'){
 			if(item.attr('data_label')<0){
-				var datalabel=grapharea.text(coords.x+coords.width/2,coords.y2,item.attr('data_label')).attr({ident:'foot','font-family':chartobject.data_labels.dataface,'font-size':chartobject.data_labels.datasize,'font-weight':chartobject.data_labels.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'middle',colorchange:'fill',context:'text_context_menu',annotation:1})
+				var datalabel=grapharea.text(coords.x+coords.width/2,coords.y2,item.attr('data_label')).attr({ident:'foot','font-family':chartobject.data_labels.dataface,'font-size':chartobject.data_labels.datasize,'font-weight':chartobject.data_labels.dataweight,dy:'0.7em','text-anchor':'middle',colorchange:'fill',context:'text_context_menu',annotation:1})
 				datalabel.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 			} else {
-				var datalabel=grapharea.text(coords.x+coords.width/2,coords.y-parseInt(chartobject.data_labels.datasize)*1.15,item.attr('data_label')).attr({ident:'foot','font-family':chartobject.data_labels.dataface,'font-size':chartobject.data_labels.datasize,'font-weight':chartobject.data_labels.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'middle',colorchange:'fill',context:'text_context_menu',annotation:1})
+				var datalabel=grapharea.text(coords.x+coords.width/2,coords.y-parseInt(chartobject.data_labels.datasize)*1.15,item.attr('data_label')).attr({ident:'foot','font-family':chartobject.data_labels.dataface,'font-size':chartobject.data_labels.datasize,'font-weight':chartobject.data_labels.dataweight,dy:'0.7em','text-anchor':'middle',colorchange:'fill',context:'text_context_menu',annotation:1})
 				datalabel.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 			}
 		}
 		if(item.attr('orient')=='horizontal'){
 			if(item.attr('data_label')<0){
-				var datalabel=grapharea.text(coords.x-5,coords.y+coords.height/2-parseInt(chartobject.data_labels.datasize),item.attr('data_label')).attr({ident:'foot','font-family':chartobject.data_labels.dataface,'font-size':chartobject.data_labels.datasize,'font-weight':chartobject.data_labels.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu',annotation:1})
+				var datalabel=grapharea.text(coords.x-5,coords.y+coords.height/2-parseInt(chartobject.data_labels.datasize),item.attr('data_label')).attr({ident:'foot','font-family':chartobject.data_labels.dataface,'font-size':chartobject.data_labels.datasize,'font-weight':chartobject.data_labels.dataweight,dy:'0.7em','text-anchor':'start',colorchange:'fill',context:'text_context_menu',annotation:1})
 				datalabel.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 			} else {
-				var datalabel=grapharea.text(coords.x+coords.width+5,coords.y+coords.height/2-parseInt(chartobject.data_labels.datasize),item.attr('data_label')).attr({ident:'foot','font-family':chartobject.data_labels.dataface,'font-size':chartobject.data_labels.datasize,'font-weight':chartobject.data_labels.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu',annotation:1})
+				var datalabel=grapharea.text(coords.x+coords.width+5,coords.y+coords.height/2-parseInt(chartobject.data_labels.datasize),item.attr('data_label')).attr({ident:'foot','font-family':chartobject.data_labels.dataface,'font-size':chartobject.data_labels.datasize,'font-weight':chartobject.data_labels.dataweight,dy:'0.7em','text-anchor':'start',colorchange:'fill',context:'text_context_menu',annotation:1})
 				datalabel.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 			}
 		}
@@ -283,12 +336,12 @@ function labeldata(target) {
 		coords=item.getBBox()
 		console.log(coords)
 		y=parseFloat(item.realPath.split(',')[item.realPath.split(',').length-1])
-		var datalabel=grapharea.text(coords.x2+5,y-parseInt(chartobject.data_labels.datasize)+3,item.attr('data_label')).attr({ident:'foot','font-family':chartobject.data_labels.dataface,'font-size':chartobject.data_labels.datasize,'font-weight':chartobject.data_labels.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'start',colorchange:'fill',context:'text_context_menu',annotation:1})
+		var datalabel=grapharea.text(coords.x2+5,y-parseInt(chartobject.data_labels.datasize)+3,item.attr('data_label')).attr({ident:'foot','font-family':chartobject.data_labels.dataface,'font-size':chartobject.data_labels.datasize,'font-weight':chartobject.data_labels.dataweight,dy:'0.7em','text-anchor':'start',colorchange:'fill',context:'text_context_menu',annotation:1})
 		datalabel.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 	}
 	else {
 		coords=item.getBBox()
-		var datalabel=grapharea.text(coords.x+coords.width/2,coords.y-parseInt(chartobject.data_labels.datasize)-3,item.attr('data_label')).attr({ident:'foot','font-family':chartobject.data_labels.dataface,'font-size':chartobject.data_labels.datasize,'font-weight':chartobject.data_labels.dataweight,'dominant-baseline':'text-before-edge','text-anchor':'middle',colorchange:'fill',context:'text_context_menu',annotation:1})
+		var datalabel=grapharea.text(coords.x+coords.width/2,coords.y-parseInt(chartobject.data_labels.datasize)-3,item.attr('data_label')).attr({ident:'foot','font-family':chartobject.data_labels.dataface,'font-size':chartobject.data_labels.datasize,'font-weight':chartobject.data_labels.dataweight,dy:'0.7em','text-anchor':'middle',colorchange:'fill',context:'text_context_menu',annotation:1})
 		datalabel.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 	}
 }
@@ -492,7 +545,7 @@ function movetofront(e) {
 function pointsizeup(e) {
 	item=Snap(e)
 	item.attr({r:parseInt(item.attr('r'))+1})
-	if(item.attr('ident')=='key'){
+	if(item.attr('ident').slice(0,3)=='key'){
 		group=item.attr('group')
 		snapobj.selectAll("circle[group='"+group+"']").attr({'r':parseInt(item.attr('r'))})
 	}
@@ -502,7 +555,7 @@ function pointsizedown(e) {
 	item=Snap(e)
 	if(item.attr('r')>1){
 		item.attr({r:item.attr('r')-1})
-		if(item.attr('ident')=='key'){
+		if(item.attr('ident').slice(0,3)=='key'){
 			group=item.attr('group')
 			snapobj.selectAll("circle[group='"+group+"']").attr({'r':parseInt(item.attr('r'))})
 		}
@@ -517,20 +570,20 @@ function pointtype(e,type) {
 
 	if (type=='pointpoint' && sw!=0){
 		item.attr({'stroke-width':0,r:r-2,'fill-opacity':1})
-		if(item.attr('ident')=='key'){
+		if(item.attr('ident').slice(0,3)=='key'){
 			group=item.attr('group')
 			snapobj.selectAll("circle[group='"+group+"']").attr({'stroke-width':0,r:r-2,'fill-opacity':1})
 		}
 	} else if (type=='pointcircle'){
 		if (sw==0){
 			item.attr({'stroke-width':2,r:r+2,'fill-opacity':.2})
-			if(item.attr('ident')=='key'){
+			if(item.attr('ident').slice(0,3)=='key'){
 				group=item.attr('group')
 				snapobj.selectAll("circle[group='"+group+"']").attr({'stroke-width':2,r:r+2,'fill-opacity':.2})
 			}
 		} else {
 			item.attr({'stroke-width':2,'fill-opacity':.2})
-			if(item.attr('ident')=='key'){
+			if(item.attr('ident').slice(0,3)=='key'){
 				group=item.attr('group')
 				snapobj.selectAll("circle[group='"+group+"']").attr({'stroke-width':2,'fill-opacity':.2})
 			}
@@ -538,13 +591,13 @@ function pointtype(e,type) {
 	} else if (type=='pointcircleopen') {
 		if (sw==0){
 			item.attr({'stroke-width':1,r:r+2,'fill-opacity':0})
-			if(item.attr('ident')=='key'){
+			if(item.attr('ident').slice(0,3)=='key'){
 				group=item.attr('group')
 				snapobj.selectAll("circle[group='"+group+"']").attr({'stroke-width':1,r:r+2,'fill-opacity':0})
 			}
 		} else {
 			item.attr({'stroke-width':1,'fill-opacity':0})
-			if(item.attr('ident')=='key'){
+			if(item.attr('ident').slice(0,3)=='key'){
 				group=item.attr('group')
 				snapobj.selectAll("circle[group='"+group+"']").attr({'stroke-width':2,'fill-opacity':0})
 			}
@@ -556,7 +609,7 @@ function thinpath(e) {
 	item=Snap(e)
 	if (parseInt(item.attr('stroke-width'))>1){
 		item.attr({'stroke-width':parseInt(item.attr('stroke-width'))-1})
-		if(item.attr('ident')=='key'){
+		if(item.attr('ident').slice(0,3)=='key'){
 			group=item.attr('group')
 			snapobj.selectAll("path[group='"+group+"']").attr({'stroke-width':parseInt(item.attr('stroke-width'))})
 		}
@@ -566,7 +619,7 @@ function thinpath(e) {
 function thickpath(e) {
 	item=Snap(e)
 	item.attr({'stroke-width':parseInt(item.attr('stroke-width'))+1})
-	if(item.attr('ident')=='key'){
+	if(item.attr('ident').slice(0,3)=='key'){
 		group=item.attr('group')
 		snapobj.selectAll("path[group='"+group+"']").attr({'stroke-width':parseInt(item.attr('stroke-width'))})
 	}
@@ -576,7 +629,7 @@ function thincircle(e) {
 	item=Snap(e)
 	if (item.attr('r')>1){
 		item.attr({'r':parseFloat(item.attr('r'))-1})
-		if(item.attr('ident')=='key'){
+		if(item.attr('ident').slice(0,3)=='key'){
 			group=item.attr('group')
 			snapobj.selectAll("circle[group='"+group+"']").attr({'r':parseFloat(item.attr('r'))})
 		}
@@ -586,7 +639,7 @@ function thincircle(e) {
 function thickcircle(e) {
 	item=Snap(e)
 	item.attr({'r':parseFloat(item.attr('r'))+1})
-	if(item.attr('ident')=='key'){
+	if(item.attr('ident').slice(0,3)=='key'){
 		group=item.attr('group')
 		snapobj.selectAll("circle[group='"+group+"']").attr({'r':parseFloat(item.attr('r'))})
 	}

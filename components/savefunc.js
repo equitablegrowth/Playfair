@@ -13,35 +13,9 @@ function savepng() {
 }
 
 function savesvg() {
-	// this is kinda dumb but... illustrator doesn't recognize dominant_baseline or something
-	// so before saving it out as a svg, all text has to be converted to the auto baseline.
-	var alltext=grapharea.selectAll('text')
-	for (var i=0;i<alltext.length;i++){
-		trans=alltext[i].attr('transform')
-		alltext[i].attr({transform:''})
-		coords=alltext[i].getBBox()
-		alltext[i].attr({'dominant-baseline':'auto'})
-		coords2=alltext[i].getBBox()
-		alltext[i].attr({y:2*coords.y-coords2.y})
-		if(trans==""){trans=trans.string}
-		alltext[i].attr({transform:trans})
-	}
-
 	// export
 	var svg = document.getElementById("grapharea").parentNode.innerHTML
 	saveAs(new Blob([svg], {type:"application/svg+xml"}), 'Playfair_graph.svg')
-
-	// change everything back to text-before-edge
-	for (var i=0;i<alltext.length;i++){
-		trans=alltext[i].attr('transform')
-		alltext[i].attr({transform:''})
-		coords=alltext[i].getBBox()
-		alltext[i].attr({'dominant-baseline':'text-before-edge'})
-		coords2=alltext[i].getBBox()
-		alltext[i].attr({y:coords.y})
-		if(trans==""){trans=trans.string}
-		alltext[i].attr({transform:trans})
-	}
 }
 
 function cloudsave() {
@@ -329,7 +303,7 @@ function load_populate(response) {
 		$('#grapharea').attr('height',height)
 		$('#grapharea').attr('width',width)
 
-		// insert the returned svg into the svg slot
+		// insert the returned svg into the svg element
 		document.getElementById("grapharea").innerHTML=svg
 
 		var moveFuncfloat=function(dx,dy,posx,posy){
