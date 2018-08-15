@@ -835,6 +835,7 @@ window.playfair = (function () {
 				var temp=snapobj.text((bounds[0]+bounds[1])/2,bounds[2],lines).attr({ident:'fhead','font-size':graph_obj.small_multiples.header_textsize,'font-weight':graph_obj.small_multiples.header_textweight,'font-family':graph_obj.small_multiples.header_textface,dy:'0.75em','text-anchor':'middle',context:'text_context_menu',colorchange:'fill'})
 				temp.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
 				temp.selectAll("tspan:not(:first-child)").attr({x:temp.attr('x'),dy:parseFloat(graph_obj.small_multiples.header_textsize)})
+				console.log('heights',max_title_height,temp.getBBox().height)
 				temp.attr({y:parseFloat(temp.attr('y'))+(max_title_height-temp.getBBox().height)})
 				bounds[2]=bounds[2]+max_title_height+parseFloat(graph_obj.small_multiples.header_to_graph)
 
@@ -1786,11 +1787,11 @@ function draw_trends(axes,trend,snapobj){
 		console.log(pathcoords)
 
 		// finally add the text
-		var trendtext=snapobj.text((x_loc1+x_loc2)/2,(y_loc1+y_loc2)/2+chartobject.trend_geom.trend_to_text,'Trendline').attr({fill:chartobject.trend_geom.trend_textcolor,'font-family':chartobject.trend_geom.trend_textface,'font-weight':chartobject.trend_geom.trend_textweight,dy:'0.75em','text-anchor':'middle','colorchange':'fill',context:'text_context_menu',fontSize:chartobject.trend_geom.trend_textsize})
-		trendtext.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
-		var coords=trendtext.getBBox()
-		var inclincation=-(Math.atan(parseFloat(unitslope))*360)/(2*Math.PI)
-		trendtext.transform('r'+inclincation+' '+coords.cx+' '+coords.cy)
+		// var trendtext=snapobj.text((x_loc1+x_loc2)/2,(y_loc1+y_loc2)/2+chartobject.trend_geom.trend_to_text,'Trendline').attr({fill:chartobject.trend_geom.trend_textcolor,'font-family':chartobject.trend_geom.trend_textface,'font-weight':chartobject.trend_geom.trend_textweight,dy:'0.75em','text-anchor':'middle','colorchange':'fill',context:'text_context_menu',fontSize:chartobject.trend_geom.trend_textsize})
+		// trendtext.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve")
+		// var coords=trendtext.getBBox()
+		// var inclincation=-(Math.atan(parseFloat(unitslope))*360)/(2*Math.PI)
+		// trendtext.transform('r'+inclincation+' '+coords.cx+' '+coords.cy)
 	}
 }
 
